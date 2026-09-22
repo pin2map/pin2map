@@ -53,7 +53,7 @@
 (function(){
 if(!window.L){var fs=document.getElementById('formStatus');if(fs)fs.textContent='Die Kartenbibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen und die Seite neu laden.';return}
 var input=document.getElementById('input'), form=document.getElementById('formScreen'), screen=document.getElementById('mapScreen'), formStatus=document.getElementById('formStatus'), mapStatus=document.getElementById('mapStatus');
-var defaults='# 🔹 [blau] Kategorie1\n\n\n# 🔻 [rot] Kategorie2\n';
+var defaults='# 📍 [rot] Rot\n\n# 🔹 [blau] Blau\n\n# 🅿️ [blau] Aufenthalt\n\n# 🌲 [grün] Grün\n\n# 😀 [gelb] Gelb\n\n# 🔸 [orange] Orange\n\n# 🏛️ [violett] Violett\n\n# 🏁 [grau] Grau\n\n# 🐂 [braun] Braun\n';
 var map=null,baseLayer=null,categoryLayers={},allBounds=null;
 var baseMaps={standard:['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true,attribution:'&copy; OpenStreetMap contributors'}],topo:['https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,crossOrigin:true,attribution:'&copy; OpenStreetMap contributors | OpenTopoMap'}],satellite:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,crossOrigin:true,attribution:'Tiles &copy; Esri'}],humanitarian:['https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true,attribution:'&copy; OpenStreetMap contributors | HOT'}]};
 var named={blau:'#1976d2',rot:'#d32f2f','grün':'#388e3c',gruen:'#388e3c',orange:'#f57c00',gelb:'#fbc02d',lila:'#7b1fa2',violett:'#7b1fa2','türkis':'#00838f',tuerkis:'#00838f',braun:'#5d4037',grau:'#616161',schwarz:'#212121',pink:'#c2185b'};
