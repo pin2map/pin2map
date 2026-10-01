@@ -525,17 +525,22 @@ function resetAreaKeyboardDialog(){
  if(!box)return;
  box.classList.remove('keyboard-visible');
  box.style.removeProperty('top');box.style.removeProperty('bottom');
- box.style.removeProperty('height');box.style.removeProperty('max-height')
+ box.style.removeProperty('height');box.style.removeProperty('max-height');box.style.removeProperty('overflow-y')
 }
 function syncAreaDialogToKeyboard(){
  var box=document.getElementById('areaSearchBox'),field=document.getElementById('manualAreaQuery'),vv=window.visualViewport;
  if(!box||!field)return;
  if(document.activeElement!==field||box.style.display==='none'||!vv){resetAreaKeyboardDialog();return}
- var keyboard=Math.max(0,window.innerHeight-(vv.height+vv.offsetTop));
- var usable=Math.max(220,vv.height-16);
+ /* iPhone: fixed-Elemente beziehen sich bereits auf den Visual Viewport.
+    Deshalb keine berechnete Tastaturhöhe als bottom-Offset verwenden.
+    Stattdessen den Dialog vollständig in den aktuell sichtbaren Bereich legen. */
+ var margin=8;
+ var usable=Math.max(220,vv.height-margin*2);
  box.classList.add('keyboard-visible');
- box.style.setProperty('bottom',(keyboard+8)+'px','important');
- box.style.setProperty('max-height',usable+'px','important')
+ box.style.setProperty('top',(vv.offsetTop+margin)+'px','important');
+ box.style.setProperty('bottom','auto','important');
+ box.style.setProperty('max-height',usable+'px','important');
+ box.style.setProperty('overflow-y','auto','important')
 }
 (function(){var field=document.getElementById('manualAreaQuery');if(!field)return;field.addEventListener('focus',function(){setTimeout(syncAreaDialogToKeyboard,60);setTimeout(syncAreaDialogToKeyboard,260)});field.addEventListener('blur',function(){setTimeout(syncAreaDialogToKeyboard,80)});if(window.visualViewport){window.visualViewport.addEventListener('resize',syncAreaDialogToKeyboard);window.visualViewport.addEventListener('scroll',syncAreaDialogToKeyboard)}})();
 
