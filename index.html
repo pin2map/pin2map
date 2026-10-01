@@ -178,6 +178,24 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 }
 @media(max-width:390px){.route-info{right:8px!important}}
 </style>
+
+<style id="v52-touch-scale-focus">
+/* Maßstab mittig direkt unter der oberen Ortseingabe. */
+.leaflet-control-scale{
+ position:fixed!important;
+ left:50%!important;
+ top:max(76px,calc(env(safe-area-inset-top) + 76px))!important;
+ bottom:auto!important;
+ transform:translateX(-50%)!important;
+ margin:0!important;
+ z-index:1090!important;
+ white-space:nowrap!important;
+ pointer-events:none!important;
+}
+@media(max-width:600px){
+ .leaflet-control-scale{top:max(72px,calc(env(safe-area-inset-top) + 72px))!important}
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
 <h1>Adressen & Kategorien auf einer Karte</h1>
@@ -257,7 +275,7 @@ function selectPlaceResult(q,results,onChosen,onCancel){
  if(!results||!results.length){onChosen(null);return}
  if(results.length===1){onChosen(results[0]);return}
  var box=document.getElementById('placeResultChooser'),wrap=document.getElementById('placeResultButtons');wrap.innerHTML='';
- results.forEach(function(r){var b=document.createElement('button');b.type='button';b.style.cssText='display:block;width:100%;text-align:left;margin:0 0 7px;padding:10px;border:1px solid #ddd;border-radius:9px;background:#fff;color:#111';b.innerHTML='<b>'+esc(r.name||String(r.display_name||'').split(',')[0]||q)+'</b><div style="font-size:12px;color:#666;margin-top:3px">'+esc(r.display_name||'')+'</div>';b.onclick=function(){box.style.display='none';onChosen(r)};wrap.appendChild(b)});
+ results.forEach(function(r){var b=document.createElement('button');b.type='button';b.style.cssText='display:block;width:100%;text-align:left;margin:0 0 7px;padding:10px;border:1px solid #ddd;border-radius:9px;background:#fff;color:#111';b.innerHTML='<b>'+esc(r.name||String(r.display_name||'').split(',')[0]||q)+'</b><div style="font-size:12px;color:#666;margin-top:3px">'+esc(r.display_name||'')+'</div>';b.onclick=function(){box.style.display='none';var qp=document.getElementById('quickPlace');if(qp)qp.blur();onChosen(r)};wrap.appendChild(b)});
  document.getElementById('placeResultCancel').onclick=function(){box.style.display='none';if(onCancel)onCancel()};box.style.display='block'
 }
 function searchPlaceForPin(q,statusEl,after){
@@ -590,9 +608,32 @@ function installMapPinGestures(){
  map.on('contextmenu',function(e){if(e.originalEvent){e.originalEvent.preventDefault();e.originalEvent.stopPropagation()}addPinAt(e.latlng)});
  var timer=null,start=null,moved=false;
  function clearPress(){if(timer){clearTimeout(timer);timer=null}}
- map.on('touchstart',function(e){if(!e.originalEvent||!e.originalEvent.touches||e.originalEvent.touches.length!==1)return;moved=false;var t=e.originalEvent.touches[0],ll=e.latlng;start={x:t.clientX,y:t.clientY};clearPress();timer=setTimeout(function(){timer=null;if(!moved)addPinAt(ll)},650)});
- map.on('touchmove',function(e){if(!start||!e.originalEvent||!e.originalEvent.touches||!e.originalEvent.touches.length)return;var t=e.originalEvent.touches[0];if(Math.abs(t.clientX-start.x)>10||Math.abs(t.clientY-start.y)>10){moved=true;clearPress()}});
- map.on('touchend touchcancel',function(){clearPress();start=null});
+ map.on('pin2map-old-touchstart',function(e){if(!e.originalEvent||!e.originalEvent.touches||e.originalEvent.touches.length!==1)return;moved=false;var t=e.originalEvent.touches[0],ll=e.latlng;start={x:t.clientX,y:t.clientY};clearPress();timer=setTimeout(function(){timer=null;if(!moved)addPinAt(ll)},650)});
+ map.on('pin2map-old-touchmove',function(e){if(!start||!e.originalEvent||!e.originalEvent.touches||!e.originalEvent.touches.length)return;var t=e.originalEvent.touches[0];if(Math.abs(t.clientX-start.x)>10||Math.abs(t.clientY-start.y)>10){moved=true;clearPress()}});
+ map.on('pin2map-old-touchend pin2map-old-touchcancel',function(){clearPress();start=null});
+
+ if(mapEl&&!mapEl.dataset.pin2mapLongPressV52){
+  mapEl.dataset.pin2mapLongPressV52='1';
+  var domTimer=null,domStart=null,domMoved=false;
+  function domClear(){if(domTimer){clearTimeout(domTimer);domTimer=null}}
+  mapEl.addEventListener('touchstart',function(ev){
+   if(!ev.touches||ev.touches.length!==1)return;
+   var target=ev.target;
+   if(target&&target.closest&&target.closest('.leaflet-control,.map-ui-control,.topbar,.legend,.bottom,.label-toggle,.route-info,.leaflet-marker-icon,.leaflet-tooltip,.leaflet-popup'))return;
+   var t=ev.touches[0];domStart={x:t.clientX,y:t.clientY};domMoved=false;domClear();
+   domTimer=setTimeout(function(){
+    domTimer=null;if(domMoved||!domStart)return;
+    var rect=mapEl.getBoundingClientRect(),pt=L.point(domStart.x-rect.left,domStart.y-rect.top),ll=map.containerPointToLatLng(pt);
+    addPinAt(ll);
+   },650);
+  },{passive:true});
+  mapEl.addEventListener('touchmove',function(ev){
+   if(!domStart||!ev.touches||!ev.touches.length)return;var t=ev.touches[0];
+   if(Math.abs(t.clientX-domStart.x)>10||Math.abs(t.clientY-domStart.y)>10){domMoved=true;domClear()}
+  },{passive:true});
+  mapEl.addEventListener('touchend',function(){domClear();domStart=null},{passive:true});
+  mapEl.addEventListener('touchcancel',function(){domClear();domStart=null},{passive:true});
+ }
  document.getElementById('pinCategoryCancel').onclick=function(){document.getElementById('pinCategoryChooser').style.display='none'}
 }
 
@@ -855,8 +896,8 @@ function noteMissing(x){miss++;missed.push(x.query);var box=document.getElementB
 function next(){if(idx>=items.length){if(allBounds&&allBounds.isValid())map.fitBounds(allBounds,{padding:[45,45],maxZoom:14});mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.');if(!miss)setTimeout(function(){mapStatus.textContent=''},3000);return}var x=items[idx],num=idx+1;mapStatus.textContent='Suche '+num+' von '+items.length+': '+x.query;geocode(x.query,x.area).then(function(a){if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var poly=L.geoJSON(a[0].geojson,{renderer:L.canvas({padding:0.5}),style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;renderedAreas.push({layer:poly,item:x});{var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker}allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,numbered)}).bindPopup(pinPopupHtml(x,a[0].display_name)).addTo(categoryLayers[x.category]);x._pinLayer=marker;allBounds.extend(p);marker.bindTooltip((numbered?num+'. ':'')+x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});if(numbered){var row=document.createElement('div');row.className='address-row';row.innerHTML='<b>'+num+'.</b> '+esc(x.query);document.getElementById('addressList').appendChild(row)}}}).catch(function(){noteMissing(x)}).then(function(){idx++;sleep(1050).then(next)})}next()}
 document.getElementById('go').onclick=function(){var items=parse(input.value);if(!items.length){formStatus.textContent='Bitte mindestens eine Adresse oder Fläche eingeben.';return}form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);build(items)},150)};
 document.getElementById('back').onclick=function(){screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
-function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else{clearMap();var q=document.getElementById('quickPlace');if(q){try{q.focus({preventScroll:true})}catch(e){q.focus()}}}},150)}
-function submitQuickPlace(){var el=document.getElementById('quickPlace'),q=el.value.trim();if(!q)return;searchPlaceForPin(q,mapStatus,function(){el.value=''})}
+function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else{clearMap();var q=document.getElementById('quickPlace');if(q)q.blur()}},150)}
+function submitQuickPlace(){var el=document.getElementById('quickPlace'),q=el.value.trim();if(!q)return;el.blur();searchPlaceForPin(q,mapStatus,function(){el.value='';el.blur()})}
 document.getElementById('quickPlaceBtn').onclick=submitQuickPlace;document.getElementById('quickPlace').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitQuickPlace()}});
 setTimeout(openMapInitially,0);
 
