@@ -1031,6 +1031,21 @@ document.getElementById('back').onclick=function(){screen.style.display='none';f
 function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else{clearMap();var q=document.getElementById('quickPlace');if(q)q.blur()}},150)}
 function submitQuickPlace(){var el=document.getElementById('quickPlace'),q=el.value.trim();if(!q)return;el.blur();searchPlaceForPin(q,mapStatus,function(){el.value='';el.blur()})}
 document.getElementById('quickPlaceBtn').onclick=submitQuickPlace;document.getElementById('quickPlace').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitQuickPlace()}});
+function importListFromUrl(){
+ try{
+  var params=new URLSearchParams(window.location.search),data=params.get('data');
+  if(data===null)return false;
+  data=String(data||'');
+  if(!data.trim())return false;
+  input.value=data;
+  /* Parameter nach der Übernahme entfernen, ohne die Seite neu zu laden. */
+  params.delete('data');
+  var clean=window.location.pathname+(params.toString()?'?'+params.toString():'')+window.location.hash;
+  if(window.history&&history.replaceState)history.replaceState(null,'',clean);
+  return true
+ }catch(e){return false}
+}
+var importedFromUrl=importListFromUrl();
 setTimeout(openMapInitially,0);
 
 document.getElementById('clear').onclick=function(){input.value=defaults;formStatus.textContent=''};
