@@ -126,6 +126,58 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .route-info #routeClear::after{content:"❌";font-size:20px;line-height:40px}
 }
 </style>
+
+<style id="v50-mobile-layout">
+/* Untere Bedienung: Zoom unten, Maßstab stets frei darüber. */
+.leaflet-bottom.leaflet-left{bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}
+.leaflet-control-zoom{margin-bottom:0!important}
+.leaflet-control-scale{position:absolute!important;left:0!important;bottom:116px!important;margin:0!important;white-space:nowrap!important}
+/* Screenshot unten rechts; Beschriftungen direkt darüber. */
+#copyMap{right:max(8px,env(safe-area-inset-right))!important;bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}
+.label-toggle{right:max(8px,env(safe-area-inset-right))!important;bottom:max(58px,calc(env(safe-area-inset-bottom) + 58px))!important}
+@media(max-width:600px){
+ /* Routing darf die mittleren Listenbuttons überdecken, hält aber Zoom und Screenshot frei. */
+ .route-info{
+   left:68px!important;right:68px!important;transform:none!important;
+   bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important;
+   width:auto!important;max-width:none!important;
+   padding:11px 54px 11px 12px!important;
+   border-radius:14px!important;z-index:1250!important;
+ }
+ .route-info #routeClear{
+   right:8px!important;top:8px!important;width:40px!important;height:40px!important;
+   background:#f2f2f2!important;color:#d70015!important;border:1px solid #d1d1d6!important;
+   box-shadow:none!important;
+ }
+ .route-info #routeClear::after{content:"❌"!important;font-size:20px!important;line-height:38px!important}
+ .route-summary{padding-right:2px!important}
+ .route-legs{max-height:min(24vh,190px)!important}
+}
+@media(max-width:390px){
+ .route-info{left:64px!important;right:64px!important;padding-right:50px!important}
+}
+</style>
+
+<style id="v51-top-right-controls">
+/* Rechte Kartenbedienung: Screenshot oben rechts, Beschriftungen direkt darunter. */
+#copyMap{
+  top:max(10px,env(safe-area-inset-top))!important;
+  right:max(10px,env(safe-area-inset-right))!important;
+  bottom:auto!important;
+}
+.label-toggle{
+  top:max(66px,calc(env(safe-area-inset-top) + 66px))!important;
+  right:max(10px,env(safe-area-inset-right))!important;
+  bottom:auto!important;
+}
+@media(max-width:600px){
+  #copyMap{top:max(8px,env(safe-area-inset-top))!important;right:max(8px,env(safe-area-inset-right))!important;bottom:auto!important}
+  .label-toggle{top:max(64px,calc(env(safe-area-inset-top) + 64px))!important;right:max(8px,env(safe-area-inset-right))!important;bottom:auto!important}
+  /* Unten rechts muss kein Screenshot-Button mehr freigehalten werden. */
+  .route-info{right:12px!important}
+}
+@media(max-width:390px){.route-info{right:8px!important}}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
 <h1>Adressen & Kategorien auf einer Karte</h1>
