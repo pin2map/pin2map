@@ -37,7 +37,7 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 #actionRenameArea,#actionChangeAreaCategory{background:#666!important;color:#fff!important}
 #actionRemoveArea{background:#e53935!important;color:#fff!important}
 #mapActionChooser.area-context{width:min(250px,calc(100vw - 32px))!important}
-#mapActionChooser.area-context #actionCancel{display:none!important}
+#mapActionChooser.area-context #actionCancel{display:block!important;width:100%!important;margin-top:8px!important;background:#e5e5ea!important;color:#111!important}
 @media (pointer:coarse),(max-width:600px){
  #mapActionChooser.area-context{width:min(242px,calc(var(--app-vw) - 28px))!important}
 }
@@ -294,8 +294,7 @@ function addPinAt(ll){
  cb.textContent=pendingContextAreas.length>1?'Kategorie ändern …':'Kategorie ändern';
  var chooser=document.getElementById('mapActionChooser');
  chooser.classList.toggle('area-context',pendingContextAreas.length>0);
- chooser.style.display='block';
- if(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)armMapActionTouchReleaseGuard()
+ chooser.style.display='block'
 }
 document.getElementById('actionAddPin').onclick=function(){
  document.getElementById('mapActionChooser').style.display='none';
@@ -927,24 +926,7 @@ if(window.visualViewport){
 document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(syncVisibleViewport,50)});
 
 /* Kontextmenü schließen, wenn außerhalb getippt/geklickt wird. */
-var mapActionChooser=document.getElementById('mapActionChooser');
-var ignoreOutsideCloseUntil=0;
-function armMapActionTouchReleaseGuard(){
- ignoreOutsideCloseUntil=Date.now()+450;
-}
-function closeMapActionChooserIfOutside(e){
- if(!mapActionChooser||mapActionChooser.style.display==='none'||!mapActionChooser.style.display)return;
- if(mapActionChooser.contains(e.target))return;
- if(Date.now()<ignoreOutsideCloseUntil)return;
- mapActionChooser.style.display='none';
- mapActionChooser.classList.remove('area-context');
- if(e.cancelable)e.preventDefault();
- e.stopPropagation();
- if(e.stopImmediatePropagation)e.stopImmediatePropagation()
-}
-document.addEventListener('pointerdown',closeMapActionChooserIfOutside,true);
-document.addEventListener('mousedown',closeMapActionChooserIfOutside,true);
-document.addEventListener('touchstart',closeMapActionChooserIfOutside,{capture:true,passive:false});
+
 
 })();
 </script>
