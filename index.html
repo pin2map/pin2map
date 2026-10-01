@@ -234,10 +234,10 @@ function prepareAreaGeoJSON(g){
   /* Auf iPad/iPhone zählt nicht nur die Einzelgeometrie, sondern die bereits
      geladene Gesamtsumme. Erst bei großen Karten wird stufenweise stärker vereinfacht. */
   var projected=areaPointTotal+raw,tol=areaTolerance(g),factor=1;
-  if(projected>180000)factor=1.90;
-  else if(projected>130000)factor=1.55;
-  else if(projected>90000)factor=1.30;
-  else if(projected>60000)factor=1.15;
+  if(projected>180000)factor=1.60;
+  else if(projected>130000)factor=1.35;
+  else if(projected>90000)factor=1.18;
+  else if(projected>60000)factor=1.08;
   if(raw<=12000&&factor===1)r={geometry:g,before:raw,after:raw};
   else r=simplifyAreaWithTolerance(g,tol*factor)
  }
