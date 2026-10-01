@@ -85,6 +85,31 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 }
 </style>
 
+
+<style id="mobile-action-dialog-cancel-fix">
+/* Mobil: allgemeiner Long-Press-Dialog vollständig anzeigen */
+@media (pointer:coarse), (max-width:600px){
+  #mapActionChooser{
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    padding-bottom:16px!important;
+  }
+  #mapActionChooser #actionCancel{
+    display:block!important;
+    position:static!important;
+    visibility:visible!important;
+    opacity:1!important;
+    width:100%!important;
+    min-height:42px!important;
+    margin:8px 0 0!important;
+    background:#e5e5ea!important;
+    color:#111!important;
+    pointer-events:auto!important;
+  }
+}
+</style>
+
 </head><body>
 <main id="formScreen" class="wrap">
 <h1>Adressen & Kategorien auf einer Karte</h1>
