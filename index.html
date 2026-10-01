@@ -102,6 +102,30 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .route-info{width:calc(var(--app-vw) - 16px)!important;max-width:calc(var(--app-vw) - 16px)!important}
 }
 </style>
+
+<style id="v49-iphone-fixes">
+/* iOS: native Auswahl-/Nachschlagen-Callouts auf der Kartenoberfläche vermeiden */
+#mapScreen,#map,#map .leaflet-container,#map .leaflet-pane,#map .leaflet-interactive{
+ -webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;
+}
+/* Untere Hauptbuttons näher an den sichtbaren unteren Rand. */
+.bottom{bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}
+#copyMap{bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}
+/* Leaflet-Zoomblock etwas höher, damit auch Minus sicher frei bleibt. */
+.leaflet-bottom.leaflet-left{bottom:max(92px,calc(env(safe-area-inset-bottom) + 92px))!important}
+/* Beschriftungsbutton bleibt rechts innerhalb der Safe Area. */
+.label-toggle{right:max(8px,env(safe-area-inset-right))!important}
+@media(max-width:600px){
+ .route-info{position:absolute!important;display:none;flex-direction:block!important;padding:12px!important;padding-right:58px!important;gap:0!important}
+ .route-info[style*="display: flex"],.route-info[style*="display:flex"]{display:block!important}
+ .route-main{width:100%!important}
+ .route-summary{font-size:16px!important;line-height:1.3!important}
+ .route-pin-state{font-size:13px!important;line-height:1.35!important;margin-top:2px!important}
+ .route-legs{font-size:13px!important;line-height:1.35!important;max-height:min(30vh,230px)!important;margin-top:8px!important}
+ .route-info #routeClear{position:absolute!important;right:9px!important;top:9px!important;width:40px!important;height:40px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;line-height:40px!important}
+ .route-info #routeClear::after{content:"❌";font-size:20px;line-height:40px}
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
 <h1>Adressen & Kategorien auf einer Karte</h1>
@@ -223,27 +247,13 @@ function insertIntoCategory(text,categoryIndex){
  lines.splice(at,0,text);input.value=lines.join('\n')
 }
 function chooseCategory(ll){
- var cats=categoryDefinitions(),box=document.getElementById('pinCategoryChooser'),buttons=document.getElementById('pinCategoryButtons');
- var title=box.querySelector('div');if(title)title.textContent='Kategorie für neuen Pin wählen';
- if(!cats.length){var t=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);insertIntoCategory(t,0);addNewItemDirectly(t);return}
- buttons.innerHTML='';
- cats.forEach(function(c,i){
-   var b=document.createElement('button');
-   b.type='button'; b.textContent=c.symbol||''; b.title=c.name;
-   b.setAttribute('aria-label',c.name);
-   b.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;padding:8px;border:1px solid #d1d1d6;border-radius:11px;background:'+hexToRgba(c.color,.28)+';font-size:30px;line-height:1;cursor:pointer';
-   b.onclick=function(){box.style.display='none';var t=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);insertIntoCategory(t,i);addNewItemDirectly(t)};
-   buttons.appendChild(b)
- });
- box.style.display='block'
+ var t=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);
+ insertIntoCategory(t,0);
+ addNewItemDirectly(t)
 }
 function chooseCategoryForText(text){
- var cats=categoryDefinitions(),box=document.getElementById('pinCategoryChooser'),buttons=document.getElementById('pinCategoryButtons');
- var title=box.querySelector('div');if(title)title.textContent='Kategorie für neuen Pin wählen';
- if(!cats.length){insertIntoCategory(text,0);addNewItemDirectly(text);return}
- buttons.innerHTML='';
- cats.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'';b.title=c.name;b.setAttribute('aria-label',c.name);b.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;padding:8px;border:1px solid #d1d1d6;border-radius:11px;background:'+hexToRgba(c.color,.28)+';font-size:30px;line-height:1;cursor:pointer';b.onclick=function(){box.style.display='none';insertIntoCategory(text,i);addNewItemDirectly(text)};buttons.appendChild(b)});
- box.style.display='block'
+ insertIntoCategory(text,0);
+ addNewItemDirectly(text)
 }
 function chooseCategoryForArea(area){
  document.getElementById('areaSearchBox').style.display='none';
@@ -518,7 +528,14 @@ function findAreasAt(ll){
  })
 }
 function installMapPinGestures(){
- map.on('contextmenu',function(e){if(e.originalEvent)e.originalEvent.preventDefault();addPinAt(e.latlng)});
+ var mapEl=document.getElementById('map');
+ if(mapEl&&!mapEl.dataset.pin2mapCalloutGuard){
+  mapEl.dataset.pin2mapCalloutGuard='1';
+  mapEl.addEventListener('contextmenu',function(ev){ev.preventDefault();ev.stopPropagation()},true);
+  mapEl.addEventListener('selectstart',function(ev){ev.preventDefault()},true);
+  mapEl.addEventListener('dragstart',function(ev){ev.preventDefault()},true);
+ }
+ map.on('contextmenu',function(e){if(e.originalEvent){e.originalEvent.preventDefault();e.originalEvent.stopPropagation()}addPinAt(e.latlng)});
  var timer=null,start=null,moved=false;
  function clearPress(){if(timer){clearTimeout(timer);timer=null}}
  map.on('touchstart',function(e){if(!e.originalEvent||!e.originalEvent.touches||e.originalEvent.touches.length!==1)return;moved=false;var t=e.originalEvent.touches[0],ll=e.latlng;start={x:t.clientX,y:t.clientY};clearPress();timer=setTimeout(function(){timer=null;if(!moved)addPinAt(ll)},650)});
