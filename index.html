@@ -538,13 +538,15 @@ function installMapPinGestures(){
  /* Mobile Long-Press direkt am DOM: nach Öffnen bleibt der Dialog bis NACH touchend gesperrt. */
  if(!mapEl.dataset.pin2mapLongPressV53){
   mapEl.dataset.pin2mapLongPressV53='1';
-  var timer=null,start=null,moved=false,longPressOpened=false;
+  var timer=null,start=null,moved=false,longPressOpened=false,uiTouch=false;
   var lastOneTap=0,lastTwoTap=0;
   function clearTimer(){if(timer){clearTimeout(timer);timer=null}}
-  function blockedTarget(target){return target&&target.closest&&target.closest('.leaflet-control,.map-ui-control,.topbar,.legend,.bottom,.label-toggle,.route-info,.leaflet-marker-icon,.leaflet-tooltip,.leaflet-popup')}
+  function blockedTarget(target){return target&&target.closest&&target.closest('.leaflet-control,.map-ui-control,.topbar,.legend,.bottom,.label-toggle,.route-info,.leaflet-marker-icon,.leaflet-tooltip,.leaflet-popup,#mapActionChooser,#areaClickChooser,#areaSearchBox,#pinCategoryChooser,#placeResultChooser,#categoryEditor,#pinNameEditor,#areaNameEditor,#clipboardPreview')}
   mapEl.addEventListener('touchstart',function(ev){
    if(!ev.touches)return;
-   if(ev.touches.length===1&&!blockedTarget(ev.target)){
+   uiTouch=!!blockedTarget(ev.target);
+   if(uiTouch){clearTimer();start=null;moved=false;longPressOpened=false;return}
+   if(ev.touches.length===1){
     var t=ev.touches[0];start={x:t.clientX,y:t.clientY};moved=false;longPressOpened=false;clearTimer();
     timer=setTimeout(function(){
      timer=null;if(moved||!start)return;
@@ -560,6 +562,7 @@ function installMapPinGestures(){
   },{passive:true});
   mapEl.addEventListener('touchend',function(ev){
    clearTimer();
+   if(uiTouch){uiTouch=false;start=null;moved=false;longPressOpened=false;return}
    if(longPressOpened){
     /* Nur das Loslassen des auslösenden Long-Press abfangen.
        Der nächste Touch auf das bereits offene Menü muss sofort funktionieren. */
@@ -578,7 +581,7 @@ function installMapPinGestures(){
    }
    start=null;moved=false;
   },{passive:false});
-  mapEl.addEventListener('touchcancel',function(){clearTimer();start=null;moved=false;longPressOpened=false},{passive:true});
+  mapEl.addEventListener('touchcancel',function(){clearTimer();start=null;moved=false;longPressOpened=false;uiTouch=false},{passive:true});
 
   /* Zweifinger-Doppeltipp: zwei kurze 2-Finger-Taps hintereinander = -1 Zoomstufe. */
   var twoActive=false,twoMoved=false,twoCenter=null,twoStart=null;
@@ -597,6 +600,18 @@ function installMapPinGestures(){
    twoActive=false;twoCenter=null;twoStart=null;
   },{passive:true});
  }
+
+  /* Dialog-Touches gehören ausschließlich dem Dialog, nicht der Leaflet-Karte. */
+  ['mapActionChooser','areaClickChooser','areaSearchBox','pinCategoryChooser','placeResultChooser',
+   'categoryEditor','pinNameEditor','areaNameEditor','clipboardPreview'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el||el.dataset.touchIsolation)return;
+    el.dataset.touchIsolation='1';
+    el.addEventListener('touchstart',function(ev){ev.stopPropagation()},{passive:true});
+    el.addEventListener('touchmove',function(ev){ev.stopPropagation()},{passive:true});
+    el.addEventListener('touchend',function(ev){ev.stopPropagation()},{passive:true});
+  });
+
  document.getElementById('pinCategoryCancel').onclick=function(){document.getElementById('pinCategoryChooser').style.display='none'}
 }
 var areaDeleteItems={},areaDeleteId=0;
