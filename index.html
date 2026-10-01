@@ -48,6 +48,60 @@
 .list-round,.back,#quickPlaceBtn{background:#777!important;color:#fff!important}
 button.v43-pressed,.leaflet-control-zoom a.v43-pressed{background:#0a84ff!important;color:#fff!important}
 </style>
+
+<style id="v48-iphone-responsive">
+:root{--app-vw:100vw;--app-vh:100dvh;--edge:10px}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+#mapScreen{left:0!important;top:0!important;right:auto!important;bottom:auto!important;width:var(--app-vw)!important;max-width:100vw!important;height:var(--app-vh)!important;max-height:100dvh!important;overflow:hidden!important}
+#map{width:100%!important;height:100%!important}
+#mapScreen>*{box-sizing:border-box}
+.topbar{left:50%!important;right:auto!important;max-width:calc(var(--app-vw) - 132px)!important;width:min(430px,calc(var(--app-vw) - 132px))!important}
+#mapStyleButton{left:max(var(--edge),env(safe-area-inset-left))!important}
+#mapStyleMenu{left:max(var(--edge),env(safe-area-inset-left))!important;max-width:calc(var(--app-vw) - 20px)!important}
+#copyMap{right:max(var(--edge),env(safe-area-inset-right))!important;bottom:max(76px,calc(env(safe-area-inset-bottom) + 76px))!important}
+.label-toggle{right:max(var(--edge),env(safe-area-inset-right))!important;bottom:max(132px,calc(env(safe-area-inset-bottom) + 132px))!important}
+.bottom{bottom:max(12px,calc(env(safe-area-inset-bottom) + 12px))!important;max-width:calc(var(--app-vw) - 20px)!important}
+.mapStatus,.not-found{right:max(var(--edge),env(safe-area-inset-right))!important;max-width:calc(var(--app-vw) - 20px)!important}
+.address-list{right:max(var(--edge),env(safe-area-inset-right))!important}
+.legend{left:max(6px,env(safe-area-inset-left))!important}
+.leaflet-bottom.leaflet-left{left:max(0px,env(safe-area-inset-left))!important;bottom:max(68px,calc(env(safe-area-inset-bottom) + 68px))!important}
+.leaflet-control-scale{margin-bottom:0!important}
+#autoZoomButton{left:max(10px,env(safe-area-inset-left))!important}
+/* Alle zentrierten Dialoge strikt innerhalb der sichtbaren Breite halten. */
+#placeResultChooser,#pinCategoryChooser,#areaClickChooser,#categoryEditor,#pinNameEditor,#areaNameEditor,#mapActionChooser,#areaSearchBox,#clipboardPreview{
+ width:calc(var(--app-vw) - 32px)!important;max-width:560px!important;min-width:0!important;max-height:calc(var(--app-vh) - 80px)!important;overflow:auto!important;
+}
+#categoryEditor,#pinNameEditor,#areaNameEditor,#mapActionChooser{max-width:390px!important}
+#pinCategoryChooser{max-width:520px!important}
+#categoryEditor input,#categoryEditor button,#pinNameEditor input,#pinNameEditor button,#areaNameEditor input,#areaNameEditor button{max-width:100%!important}
+.route-info{left:50%!important;right:auto!important;bottom:max(70px,calc(env(safe-area-inset-bottom) + 70px))!important;width:min(520px,calc(var(--app-vw) - 24px))!important;max-width:calc(var(--app-vw) - 24px)!important;display:none;flex-direction:column!important;align-items:stretch!important;gap:8px!important;padding:10px 12px!important}
+.route-info[style*="display: flex"],.route-info[style*="display:flex"]{display:flex!important}
+.route-main{width:100%!important;min-width:0!important}
+.route-summary{font-size:15px!important;line-height:1.25!important;white-space:normal!important}
+.route-pin-state{line-height:1.3!important;overflow-wrap:anywhere!important}
+.route-legs{max-height:min(28vh,220px)!important;width:100%!important;overflow:auto!important}
+.route-leg{line-height:1.35!important;overflow-wrap:anywhere!important}
+.route-info #routeClear{display:block!important;width:100%!important;margin:0!important;padding:9px 10px!important}
+@media(max-width:600px){
+ :root{--edge:8px}
+ .topbar{top:max(8px,env(safe-area-inset-top))!important;width:calc(var(--app-vw) - 132px)!important;max-width:calc(var(--app-vw) - 132px)!important}
+ .quick-place{width:100%!important}
+ .quick-place input{font-size:16px!important}
+ .legend{top:78px!important;max-width:calc(var(--app-vw) - 16px)!important;max-height:34vh!important}
+ .chip{font-size:13px!important;max-width:calc(var(--app-vw) - 16px)!important}
+ .address-list{top:78px!important;max-width:48vw!important;max-height:34vh!important}
+ #pinCategoryButtons{gap:7px!important}
+ #pinCategoryButtons button{min-width:0!important;padding:10px 4px!important}
+ .clipboard-preview-actions{grid-template-columns:1fr!important}
+}
+@media(max-width:390px){
+ .topbar{width:calc(var(--app-vw) - 124px)!important;max-width:calc(var(--app-vw) - 124px)!important}
+ .quick-place{gap:4px!important;padding:6px!important}
+ .quick-place input{padding:8px!important}
+ #quickPlaceBtn{padding:8px 12px!important}
+ .route-info{width:calc(var(--app-vw) - 16px)!important;max-width:calc(var(--app-vw) - 16px)!important}
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
 <h1>Adressen & Kategorien auf einer Karte</h1>
@@ -801,4 +855,24 @@ document.getElementById('copyListBtn').onclick=function(){
  function flash(el){if(!el||el.disabled)return;el.classList.add('v43-pressed');setTimeout(function(){el.classList.remove('v43-pressed')},180)}
  document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('button,.leaflet-control-zoom a');if(el)flash(el)},true);
 })();
-</script></body></html>
+</script>
+<script id="v48-visual-viewport">
+(function(){
+ function syncVisibleViewport(){
+  var vv=window.visualViewport;
+  var w=vv&&vv.width?vv.width:window.innerWidth;
+  var h=vv&&vv.height?vv.height:window.innerHeight;
+  document.documentElement.style.setProperty('--app-vw',Math.round(w)+'px');
+  document.documentElement.style.setProperty('--app-vh',Math.round(h)+'px');
+  var ms=document.getElementById('mapScreen');
+  if(ms&&ms.style.display!=='none'&&window.map&&map.invalidateSize){setTimeout(function(){map.invalidateSize(false)},0)}
+  if(typeof positionAutoZoomButton==='function')setTimeout(positionAutoZoomButton,0);
+ }
+ syncVisibleViewport();
+ window.addEventListener('resize',syncVisibleViewport,{passive:true});
+ window.addEventListener('orientationchange',function(){setTimeout(syncVisibleViewport,180)},{passive:true});
+ if(window.visualViewport){visualViewport.addEventListener('resize',syncVisibleViewport,{passive:true});visualViewport.addEventListener('scroll',syncVisibleViewport,{passive:true})}
+ document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(syncVisibleViewport,50)});
+})();
+</script>
+</body></html>
