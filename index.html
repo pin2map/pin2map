@@ -12,11 +12,41 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{background:#f5f5f7;color:#1d1d1f}.wrap{max-width:900px;margin:auto;padding:20px}h1{font-size:1.6rem}.hint{color:#666;line-height:1.5}code{background:#e8e8ed;padding:2px 5px;border-radius:5px}textarea{width:100%;min-height:360px;padding:14px;border:1px solid #bbb;border-radius:12px;font:16px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:#fff;color:#111;resize:vertical}.options{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0}.options label{background:#fff;border:1px solid #ccc;border-radius:10px;padding:10px 12px;color:#111}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}button{border:0;border-radius:10px;padding:12px 17px;font-size:16px;font-weight:600;background:#007aff;color:#fff;touch-action:manipulation;-webkit-tap-highlight-color:transparent}button:disabled{opacity:.55}button.secondary{background:#666}
-#mapScreen{display:none;position:fixed;inset:0;z-index:1000;background:#ddd;width:100%;height:100vh;height:100dvh;overflow:hidden}#map{position:absolute;inset:0}.topbar{position:absolute;z-index:1100;top:max(8px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;gap:8px;padding:7px;background:rgba(255,255,255,.94);border-radius:12px;box-shadow:0 2px 12px #0003;color:#111}.topbar select,.topbar button{font:600 14px -apple-system,sans-serif;border:0;border-radius:8px;padding:9px}.topbar select{background:#eee;color:#111}.legend{position:absolute;z-index:1100;left:10px;top:72px;display:flex;gap:6px;flex-direction:column;max-height:55vh;overflow:auto}.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.94);color:#111;border-radius:999px;padding:6px 10px;box-shadow:0 1px 5px #0002;font-size:13px;white-space:nowrap}.swatch{width:12px;height:12px;border-radius:3px;border:1px solid #0003}.bottom{position:absolute;z-index:1200;bottom:max(12px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%)}.back{border-radius:999px;padding:12px 22px;background:rgba(20,20,20,.9)}.mapStatus{position:absolute;z-index:1100;right:10px;bottom:75px;max-width:70vw;background:rgba(255,255,255,.94);color:#111;padding:7px 10px;border-radius:9px;font-size:12px}.mapStatus:empty{display:none}.address-list{position:absolute;z-index:1100;right:10px;top:72px;max-width:min(390px,42vw);max-height:55vh;overflow:auto;background:rgba(255,255,255,.94);color:#111;border-radius:12px;padding:8px 10px;box-shadow:0 1px 5px #0002;font-size:12px}.address-list:empty{display:none}.address-row{padding:4px 0;border-bottom:1px solid #ddd}.emoji-marker{background:transparent;border:0}.emoji-pin{width:36px;height:36px;border-radius:50% 50% 50% 0;background:#fff;border:2px solid #555;box-shadow:0 2px 6px #0005;display:flex;align-items:center;justify-content:center;font-size:21px;transform:rotate(-45deg)}.emoji-pin span{transform:rotate(45deg)}.number-pin{font-size:15px;font-weight:800;color:#111}.address-label{background:rgba(255,255,255,.94);border:1px solid #777;border-radius:5px;color:#111;font-weight:600;padding:3px 6px;white-space:nowrap}.leaflet-control-scale{margin-bottom:68px!important}.leaflet-control-scale-line{background:rgba(255,255,255,.92)!important;color:#111!important;border-color:#111!important;border-top:none!important;font-weight:600!important}
+#mapScreen{display:none;position:fixed;inset:0;z-index:1000;background:#ddd;width:100%;height:100vh;height:100dvh;overflow:hidden}#map{position:absolute;inset:0}.topbar{position:absolute;z-index:1100;top:max(8px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:grid;grid-template-columns:max-content max-content;gap:8px;padding:7px;background:rgba(255,255,255,.94);border-radius:12px;box-shadow:0 2px 12px #0003;color:#111;width:max-content;max-width:calc(100vw - 16px)}.topbar select,.topbar button{font:600 14px -apple-system,sans-serif;border:0;border-radius:8px;padding:9px}.quick-place{grid-column:1 / -1;display:flex;gap:6px;width:100%;min-width:0;box-sizing:border-box}.quick-place input{flex:1;min-width:0;border:1px solid #bbb;border-radius:8px;padding:9px;font:14px -apple-system,sans-serif}.quick-place button{white-space:nowrap}.topbar select{background:#eee;color:#111}.legend{position:absolute;z-index:1100;left:10px;top:72px;display:flex;gap:6px;flex-direction:column;max-height:55vh;overflow:auto}.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.94);color:#111;border-radius:999px;padding:6px 10px;box-shadow:0 1px 5px #0002;font-size:13px;white-space:nowrap}.swatch{width:12px;height:12px;border-radius:3px;border:1px solid #0003}.bottom{position:absolute;z-index:1200;bottom:max(12px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px}.back{border-radius:999px;padding:12px 22px;background:rgba(20,20,20,.9)}.list-round{width:46px;height:46px;padding:0!important;border-radius:50%!important;background:rgba(20,20,20,.9)!important;color:#fff!important;font-size:25px!important;line-height:46px!important;text-align:center;box-shadow:0 2px 10px #0003}.clipboard-preview{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5900;width:min(560px,90vw);max-height:82vh;overflow:auto;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005}.clipboard-preview textarea{width:100%;height:min(45vh,360px);box-sizing:border-box;resize:vertical;padding:10px;border:1px solid #bbb;border-radius:9px;font:13px ui-monospace,SFMono-Regular,Menlo,monospace;background:#f7f7f7;color:#111}.clipboard-preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.clipboard-preview-actions button{margin:0}.clipboard-preview-actions .cancel{background:#666}.mapStatus{position:absolute;z-index:1100;right:10px;bottom:75px;max-width:70vw;background:rgba(255,255,255,.94);color:#111;padding:7px 10px;border-radius:9px;font-size:12px}.mapStatus:empty{display:none}.address-list{position:absolute;z-index:1100;right:10px;top:72px;max-width:min(390px,42vw);max-height:55vh;overflow:auto;background:rgba(255,255,255,.94);color:#111;border-radius:12px;padding:8px 10px;box-shadow:0 1px 5px #0002;font-size:12px}.address-list:empty{display:none}.address-row{padding:4px 0;border-bottom:1px solid #ddd}.not-found{position:absolute;z-index:1100;right:10px;bottom:75px;max-width:min(360px,55vw);max-height:30vh;overflow:auto;background:rgba(255,245,245,.96);color:#b00020;border:1px solid #e0a0a8;border-radius:10px;padding:8px 10px;box-shadow:0 1px 5px #0002;font-size:12px}.not-found:empty{display:none}.emoji-marker{background:transparent;border:0}.emoji-pin{width:36px;height:36px;border-radius:50% 50% 50% 0;background:#fff;border:2px solid #555;box-shadow:0 2px 6px #0005;display:flex;align-items:center;justify-content:center;font-size:21px;transform:rotate(-45deg)}.emoji-pin span{transform:rotate(45deg)}.number-pin{font-size:15px;font-weight:800;color:#111}.address-label{background:rgba(255,255,255,.94);border:1px solid #777;border-radius:5px;color:#111;font-weight:600;padding:3px 6px;white-space:nowrap}.leaflet-control-scale{margin-bottom:68px!important}.leaflet-control-scale-line{background:rgba(255,255,255,.92)!important;color:#111!important;border-color:#111!important;border-top:none!important;font-weight:600!important}
 @media(max-width:600px){.wrap{padding:max(14px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom))}.topbar{width:calc(100vw - 12px);justify-content:center;flex-wrap:wrap}.legend,.address-list{top:112px;max-height:42vh}.legend{left:max(6px,env(safe-area-inset-left))}.address-list{right:max(6px,env(safe-area-inset-right));max-width:52vw}.topbar button,.topbar select{min-height:42px}.back{min-height:46px}.mapStatus{bottom:max(74px,calc(env(safe-area-inset-bottom) + 62px));max-width:88vw}}
 @media(orientation:landscape) and (max-height:500px){.legend,.address-list{top:68px;max-height:52vh}.topbar{top:max(4px,env(safe-area-inset-top));width:auto;flex-wrap:nowrap}.bottom{bottom:max(6px,env(safe-area-inset-bottom))}.leaflet-control-scale{margin-bottom:56px!important}}
 
 .area-label-wrap{background:transparent!important;border:0!important}.area-label{display:inline-block;white-space:nowrap;transform:translate(-50%,-50%);background:rgba(255,255,255,.88);border:1px solid rgba(0,0,0,.35);border-radius:4px;padding:3px 6px;font:600 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+
+/* v26: Kartenbedienung */
+.leaflet-bottom.leaflet-right{bottom:58px;right:10px}
+.leaflet-control-zoom{border:0!important;box-shadow:0 2px 10px #0003!important;background:transparent!important}
+.leaflet-control-zoom a{width:46px!important;height:46px!important;line-height:44px!important;font-size:27px!important;border:0!important;border-radius:50%!important;margin-top:8px!important;background:rgba(255,255,255,.96)!important;color:#111!important;box-shadow:0 1px 5px #0003!important}
+.leaflet-control-zoom a:first-child,.leaflet-control-zoom a:last-child{border-radius:50%!important}
+.label-toggle{position:absolute;z-index:1200;right:18px;bottom:max(174px,calc(env(safe-area-inset-bottom) + 174px));width:46px;height:46px;padding:0;border-radius:50%;background:rgba(255,255,255,.96);color:#111;font-size:22px;box-shadow:0 2px 10px #0003}
+.label-toggle.off{opacity:.55}
+#mapScreen.labels-hidden .address-label,#mapScreen.labels-hidden .area-label-wrap{display:none!important}#mapScreen.hide-address-labels .address-label{display:none!important}#mapScreen.hide-area-labels .area-label-wrap{display:none!important}
+
+.route-info{position:absolute;z-index:1250;left:50%;bottom:max(72px,calc(env(safe-area-inset-bottom) + 72px));transform:translateX(-50%);display:none;align-items:flex-start;gap:10px;background:rgba(255,255,255,.96);color:#111;padding:9px 11px;border-radius:12px;box-shadow:0 2px 12px #0003;font:600 14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;max-width:calc(100vw - 36px)}.route-info button{padding:7px 9px;border:0;border-radius:8px;background:#e53935;color:#fff;font-weight:700;white-space:nowrap}.route-main{min-width:0}.route-summary{cursor:pointer;user-select:none}.route-pin-state{font-size:12px;color:#555;font-weight:500;white-space:normal}.route-legs{display:block;margin-top:8px;padding-top:7px;border-top:1px solid #ddd;font-size:12px;font-weight:500;max-height:32vh;overflow:auto}.route-legs.open{display:block}.route-leg{padding:4px 0;white-space:normal}.route-hint{font-size:11px;color:#777;font-weight:500;margin-top:2px}
+</style>
+
+<style id="v42-controls">
+.topbar{grid-template-columns:1fr!important;width:min(430px,calc(100vw - 132px))!important;padding:0!important;background:transparent!important;box-shadow:none!important}
+.quick-place{grid-column:1!important;background:rgba(255,255,255,.94);padding:7px;border-radius:12px;box-shadow:0 2px 12px #0003}
+.map-round-control{position:absolute;z-index:1210;width:46px;height:46px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.96);color:#111;font:22px/46px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;box-shadow:0 2px 10px #0003;cursor:pointer}
+#mapStyleButton{left:max(10px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top))}
+#mapStyleMenu{display:none;position:absolute;z-index:1300;left:max(10px,env(safe-area-inset-left));top:max(64px,calc(env(safe-area-inset-top) + 64px));background:rgba(255,255,255,.98);color:#111;padding:7px;border-radius:14px;box-shadow:0 3px 14px #0004;min-width:150px}
+#mapStyleMenu button{display:block;width:100%;margin:0;padding:9px 11px;border:0;border-radius:9px;background:transparent;color:#111;text-align:left;font:600 14px -apple-system,sans-serif}
+#mapStyleMenu button.active{background:#e5e5ea}
+#copyMap{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));font-size:21px}
+#autoZoomButton{right:max(12px,env(safe-area-inset-right));bottom:max(68px,calc(env(safe-area-inset-bottom) + 68px));font-size:18px}
+@media(max-width:600px){.topbar{width:min(430px,calc(100vw - 124px))!important}.legend,.address-list{top:72px!important}}
+</style>
+
+<style id="v43-controls">
+#autoZoomButton{left:10px!important;right:auto!important;bottom:auto!important;font-size:24px!important;font-weight:800!important}
+.list-round,.back,#quickPlaceBtn{background:#777!important;color:#fff!important}
+button.v43-pressed,.leaflet-control-zoom a.v43-pressed{background:#0a84ff!important;color:#fff!important}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
@@ -40,44 +70,735 @@
 # 🏁 [grau] Grau
 
 # 🐂 [braun] Braun</textarea>
-<div class="buttons"><button id="go">Karte anzeigen</button><button id="clear" class="secondary">Adressen löschen</button></div><p id="formStatus" class="hint"></p>
+<div class="buttons"><button id="go">Karte anzeigen</button><button id="clear" class="secondary">Adressen löschen</button><button id="addCategoryBtn" type="button">Kategorie hinzufügen</button><button id="copyListBtn" type="button">Liste kopieren</button></div><p id="formStatus" class="hint"></p>
 </main>
 <section id="mapScreen">
 <div id="map"></div>
-<div class="topbar"><select id="mapStyle"><option value="standard">Standard</option><option value="topo">Topografisch</option><option value="satellite">Satellit</option><option value="humanitarian">Humanitarian</option></select><button id="copyMap">📋 Karte kopieren</button></div>
-<div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div class="bottom"><button id="back" class="back">← Zurück</button></div>
+<div class="topbar"><div class="quick-place"><input id="quickPlace" type="search" placeholder="Weiteren Ort eingeben …" autocomplete="off"><button type="button" id="quickPlaceBtn">＋</button></div></div>
+<button type="button" id="mapStyleButton" class="map-round-control map-ui-control" title="Ansichtsart wählen" aria-label="Ansichtsart wählen">🗺️</button>
+<div id="mapStyleMenu" class="map-ui-control" aria-label="Ansichtsart"><button type="button" data-map-style="standard">Standard</button><button type="button" data-map-style="topo">Topografisch</button><button type="button" data-map-style="satellite">Satellit</button><button type="button" data-map-style="humanitarian">Humanitarian</button></div>
+<select id="mapStyle" aria-hidden="true" tabindex="-1" style="display:none"><option value="standard">Standard</option><option value="topo">Topografisch</option><option value="satellite">Satellit</option><option value="humanitarian">Humanitarian</option></select>
+<button type="button" id="autoZoomButton" class="map-round-control map-ui-control" title="Autozoom" aria-label="Autozoom">✓</button>
+<button type="button" id="copyMap" class="map-round-control map-ui-control" title="Karte kopieren" aria-label="Karte kopieren">📸</button>
+<div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div id="routeSummary" class="route-summary">Route</div><div id="routeEndpoints" class="route-pin-state"></div><div id="routeHint" class="route-hint" style="display:none"></div><div id="routeLegs" class="route-legs"></div></div><button type="button" id="routeClear">Route entfernen</button></div><div id="notFoundList" class="not-found"></div><div id="placeResultChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5600;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(520px,90vw);max-height:78vh;overflow:auto"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Ort auswählen</div><div id="placeResultButtons"></div><button type="button" id="placeResultCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="pinCategoryChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5100;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(300px,82vw);max-width:88vw;max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Kategorie für neuen Pin wählen</div><div id="pinCategoryButtons" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"></div><button type="button" id="pinCategoryCancel" style="width:100%;margin-top:10px;padding:9px;border:0;border-radius:9px;background:#e5e5ea;font-weight:600">Abbrechen</button></div><div id="areaClickChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5400;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(380px,88vw);max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Fläche auswählen</div><div id="areaClickButtons"></div><button type="button" id="areaClickCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="categoryEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5700;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Kategorie bearbeiten</div><label style="display:block;margin:8px 0">Name<input id="categoryEditName" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:16px"></label><label style="display:block;margin:8px 0">Symbol<input id="categoryEditSymbol" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:22px"></label><label style="display:flex;align-items:center;gap:10px;margin:10px 0">Farbe<input id="categoryEditColor" type="color" style="width:58px;height:40px;border:0;background:transparent"><span id="categoryEditColorText"></span></label><button type="button" id="categoryEditSave" style="width:100%;margin-top:8px;background:#0a84ff">Änderungen übernehmen</button><button type="button" id="categoryEditCancel" style="width:100%;margin-top:8px;background:#666">Abbrechen</button></div><div id="pinNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Pin umbenennen</div><input id="pinNameInput" type="text" autocomplete="off" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="pinNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="pinNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="areaNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Fläche umbenennen</div><input id="areaNameInput" type="text" autocomplete="off" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="areaNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="areaNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="mapActionChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5200;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(310px,84vw);max-width:90vw;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Aktion wählen</div><button type="button" id="actionAddPin" style="display:block;width:100%;margin-bottom:8px">📍 Pin setzen</button><button type="button" id="actionFindAreas" style="display:block;width:100%;margin-bottom:8px;background:#34a853">🗺️ Gebiete suchen</button><button type="button" id="actionRenameArea" style="display:none;width:100%;margin-bottom:8px;background:#666">Name ändern</button><button type="button" id="actionChangeAreaCategory" style="display:none;width:100%;margin-bottom:8px;background:#34a853">Kategorie ändern</button><button type="button" id="actionRemoveArea" style="display:none;width:100%;margin-bottom:8px;background:#e53935">Fläche entfernen</button><button type="button" id="actionCancel" style="display:block;width:100%;background:#e5e5ea;color:#111">Abbrechen</button></div><div id="areaSearchBox" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5300;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(520px,90vw);max-height:78vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;font-size:16px;margin-bottom:5px">Von OSM erkannte Gebiete</div><div id="areaSearchPoint" style="color:#666;font-size:12px;margin-bottom:10px"></div><div id="areaSearchResults"></div>
+<div style="margin-top:14px;padding-top:12px;border-top:2px solid #ddd">
+  <div style="font-weight:700;font-size:15px;margin-bottom:8px">🔎 Weiteres Gebiet suchen</div>
+  <div style="display:flex;gap:7px">
+    <input id="manualAreaQuery" type="search" placeholder="z. B. Rønne Plantage" autocomplete="off" style="flex:1;min-width:0;padding:9px 10px;border:1px solid #bbb;border-radius:9px;font-size:16px">
+    <button type="button" id="manualAreaSearchBtn" style="width:auto;padding:9px 14px;margin:0">Suchen</button>
+  </div>
+  <div id="manualAreaResults"></div>
+</div><button type="button" id="areaSearchClose" style="display:block;width:100%;margin-top:12px;background:#666">Schließen</button></div><div id="pinProgress" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5000;background:rgba(255,255,255,.96);color:#111;padding:14px 18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.28);font:600 15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;max-width:min(360px,82vw);pointer-events:none">⏳ Angeklickte Position wird ermittelt und der Pin gesetzt …</div><button type="button" id="labelToggle" class="label-toggle" title="Beschriftungen ein-/ausblenden" aria-label="Beschriftungen ein-/ausblenden">🏷️</button><div class="bottom"><button type="button" id="pasteMapList" class="list-round" title="Liste aus Zwischenablage importieren" aria-label="Liste aus Zwischenablage importieren">↑</button><button id="back" class="back">Liste</button><button type="button" id="copyMapList" class="list-round" title="Liste exportieren" aria-label="Liste exportieren">↓</button></div><div id="clipboardPreview" class="clipboard-preview"><div style="font-weight:700;font-size:17px;margin-bottom:6px">Liste aus Zwischenablage importieren</div><div style="font-size:13px;color:#555;margin-bottom:9px">Folgender Inhalt würde die aktuelle Liste ersetzen:</div><textarea id="clipboardPreviewText" readonly></textarea><div class="clipboard-preview-actions"><button type="button" id="clipboardImportConfirm">Importieren</button><button type="button" id="clipboardImportCancel" class="cancel">Abbrechen</button></div></div>
 </section>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+(function(){
+ function flash(el){if(!el||el.disabled)return;el.classList.add('v43-pressed');setTimeout(function(){el.classList.remove('v43-pressed')},180)}
+ document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('button,.leaflet-control-zoom a');if(el)flash(el)},true);
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+(function(){
+ function flash(el){if(!el||el.disabled)return;el.classList.add('v43-pressed');setTimeout(function(){el.classList.remove('v43-pressed')},180)}
+ document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('button,.leaflet-control-zoom a');if(el)flash(el)},true);
+})();
+</script>
 <script>
 (function(){
 if(!window.L){var fs=document.getElementById('formStatus');if(fs)fs.textContent='Die Kartenbibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen und die Seite neu laden.';return}
 var input=document.getElementById('input'), form=document.getElementById('formScreen'), screen=document.getElementById('mapScreen'), formStatus=document.getElementById('formStatus'), mapStatus=document.getElementById('mapStatus');
 var defaults='# 📍 [rot] Rot\n\n# 🔹 [blau] Blau\n\n# 🅿️ [blau] Aufenthalt\n\n# 🌲 [grün] Grün\n\n# 😀 [gelb] Gelb\n\n# 🔸 [orange] Orange\n\n# 🏛️ [violett] Violett\n\n# 🏁 [grau] Grau\n\n# 🐂 [braun] Braun\n';
-var map=null,baseLayer=null,categoryLayers={},allBounds=null;
+var map=null,baseLayer=null,categoryLayers={},allBounds=null,renderedAreas=[];
 var baseMaps={standard:['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true,attribution:'&copy; OpenStreetMap contributors'}],topo:['https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,crossOrigin:true,attribution:'&copy; OpenStreetMap contributors | OpenTopoMap'}],satellite:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,crossOrigin:true,attribution:'Tiles &copy; Esri'}],humanitarian:['https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true,attribution:'&copy; OpenStreetMap contributors | HOT'}]};
 var named={blau:'#1976d2',rot:'#d32f2f','grün':'#388e3c',gruen:'#388e3c',orange:'#f57c00',gelb:'#fbc02d',lila:'#7b1fa2',violett:'#7b1fa2','türkis':'#00838f',tuerkis:'#00838f',braun:'#5d4037',grau:'#616161',schwarz:'#212121',pink:'#c2185b'};
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function color(v){v=(v||'').toLowerCase().trim();return named[v]||(/^#[0-9a-f]{3}([0-9a-f]{3})?$/.test(v)?v:'#1976d2')}
-function parse(s){var lines=s.replace(/\r/g,'').split('\n'),cat={name:'Ohne Kategorie',symbol:'📍',color:'#1976d2'},out=[];for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;if(line.charAt(0)==='#'){var t=line.slice(1).trim(),m=t.match(/\[([^\]]+)\]/),col=color(m?m[1]:''),clean=m?t.replace(m[0],'').trim():t,parts=clean.split(/\s+/),sym='📍';if(parts.length>1){sym=parts.shift();clean=parts.join(' ')}cat={name:clean||'Kategorie',symbol:sym,color:col};continue}var area=line.charAt(0)==='@',raw=(area?line.slice(1):line).trim(),q=raw,label='';var lm=raw.match(/\s*\(([^()]*)\)\s*$/);if(lm){label=lm[1].trim();q=raw.slice(0,lm.index).trim()}if(q)out.push({query:q,label:label||q,area:area,category:cat.name,symbol:cat.symbol,color:cat.color})}return out}
-function ensureMap(){if(map)return;map=L.map('map',{preferCanvas:true}).setView([51.1,10.4],6);L.control.scale({position:'bottomleft',metric:true,imperial:false,maxWidth:160}).addTo(map);setBase(document.getElementById('mapStyle').value)}
+function windowColor(v){return color(v)}
+function parse(s){var lines=s.replace(/\r/g,'').split('\n'),cat={name:'Ohne Kategorie',symbol:'📍',color:'#1976d2'},out=[];for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;if(line.charAt(0)==='#'){var t=line.slice(1).trim(),m=t.match(/\[([^\]]+)\]/),col=color(m?m[1]:''),clean=m?t.replace(m[0],'').trim():t,parts=clean.split(/\s+/),sym='📍';if(parts.length>1){sym=parts.shift();clean=parts.join(' ')}cat={name:clean||'Kategorie',symbol:sym,color:col};continue}var area=line.charAt(0)==='@',raw=(area?line.slice(1):line).trim(),q=raw,label='';var lm=raw.match(/\s*\(([^()]*)\)\s*$/);if(lm){label=lm[1].trim();q=raw.slice(0,lm.index).trim()}if(q)out.push({query:q,label:label||q,area:area,category:cat.name,symbol:cat.symbol,color:cat.color,sourceLine:raw,sourceFullLine:line})}return out}
+function ensureMap(){if(map)return;map=L.map('map',{preferCanvas:true,zoomControl:false}).setView([51.1,10.4],6);L.control.zoom({position:'bottomleft'}).addTo(map);L.control.scale({position:'bottomleft',metric:true,imperial:false,maxWidth:160}).addTo(map);setBase(document.getElementById('mapStyle').value);installMapPinGestures();setTimeout(positionAutoZoomButton,0)}
 function setBase(k){if(!map)return;if(baseLayer)map.removeLayer(baseLayer);var b=baseMaps[k]||baseMaps.standard;baseLayer=L.tileLayer(b[0],b[1]);baseLayer.on('tileerror',function(){mapStatus.textContent='Einige Kartenkacheln konnten nicht geladen werden.'});baseLayer.addTo(map);try{localStorage.setItem('mapStyle',k)}catch(e){}}
-function clearMap(){if(!map)return;for(var k in categoryLayers){map.removeLayer(categoryLayers[k])}categoryLayers={};document.getElementById('legend').innerHTML='';document.getElementById('addressList').innerHTML='';allBounds=L.latLngBounds([])}
+function clearMap(){if(!map)return;for(var k in categoryLayers){map.removeLayer(categoryLayers[k])}categoryLayers={};renderedAreas=[];document.getElementById('legend').innerHTML='';document.getElementById('addressList').innerHTML='';document.getElementById('notFoundList').innerHTML='';allBounds=L.latLngBounds([])}
 function icon(sym,num,useNum){var inside=useNum?'<span class="number-pin">'+num+'</span>':'<span>'+esc(sym)+'</span>';return L.divIcon({className:'emoji-marker',html:'<div class="emoji-pin">'+inside+'</div>',iconSize:[36,36],iconAnchor:[18,36]})}
-function geocode(q,area){var u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1'+(area?'&polygon_geojson=1':'')+'&q='+encodeURIComponent(q),controller=window.AbortController?new AbortController():null,timer=controller?setTimeout(function(){controller.abort()},12000):null,opts={headers:{'Accept-Language':'de'}};if(controller)opts.signal=controller.signal;return fetch(u,opts).then(function(r){if(timer)clearTimeout(timer);if(!r.ok)throw new Error('Adresssuche HTTP '+r.status);return r.json()}).catch(function(e){if(timer)clearTimeout(timer);throw e})}
+function geocode(q,area){
+ var cm=String(q).trim().match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+ if(cm&&!area){return Promise.resolve([{lat:cm[1],lon:cm[2],display_name:q}])}
+ var u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit='+(area?'1':'8')+(area?'&polygon_geojson=1':'')+'&addressdetails=1&q='+encodeURIComponent(q),controller=window.AbortController?new AbortController():null,timer=controller?setTimeout(function(){controller.abort()},12000):null,opts={headers:{'Accept-Language':'de'}};if(controller)opts.signal=controller.signal;return fetch(u,opts).then(function(r){if(timer)clearTimeout(timer);if(!r.ok)throw new Error('Adresssuche HTTP '+r.status);return r.json()}).catch(function(e){if(timer)clearTimeout(timer);throw e})}
 function sleep(ms){return new Promise(function(resolve){setTimeout(resolve,ms)})}
-function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');Object.keys(cats).forEach(function(name){var v=cats[name],lab=document.createElement('label'),cb=document.createElement('input'),sw=document.createElement('span');lab.className='chip';cb.type='checkbox';cb.checked=true;sw.className='swatch';sw.style.background=v.color;cb.onchange=function(){var l=categoryLayers[name];if(cb.checked)l.addTo(map);else map.removeLayer(l)};lab.appendChild(cb);lab.appendChild(sw);lab.appendChild(document.createTextNode(v.symbol+' '+name+' ('+v.count+')'));box.appendChild(lab)})}
-function build(items){clearMap();buildLegend(items);var numbered=document.getElementById('numberAddresses').checked,labelled=document.getElementById('labelAddresses').checked,areasLabelled=document.getElementById('labelAreas').checked,idx=0,miss=0;for(var i=0;i<items.length;i++){if(!categoryLayers[items[i].category])categoryLayers[items[i].category]=L.layerGroup().addTo(map)}
-function next(){if(idx>=items.length){if(allBounds&&allBounds.isValid())map.fitBounds(allBounds,{padding:[45,45],maxZoom:14});mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.');setTimeout(function(){mapStatus.textContent=''},3000);return}var x=items[idx],num=idx+1;mapStatus.textContent='Suche '+num+' von '+items.length+': '+x.query;geocode(x.query,x.area).then(function(a){if(!a.length){miss++;return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var poly=L.geoJSON(a[0].geojson,{renderer:L.canvas({padding:0.5}),style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).bindPopup('<b>'+esc(x.label)+'</b>').addTo(categoryLayers[x.category]);if(areasLabelled){var center=poly.getBounds().getCenter();L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category])}allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,numbered)}).bindPopup('<b>'+esc(x.label)+'</b><br>'+esc(a[0].display_name)).addTo(categoryLayers[x.category]);allBounds.extend(p);if(labelled)marker.bindTooltip((numbered?num+'. ':'')+x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});if(numbered){var row=document.createElement('div');row.className='address-row';row.innerHTML='<b>'+num+'.</b> '+esc(x.query);document.getElementById('addressList').appendChild(row)}}}).catch(function(){miss++}).then(function(){idx++;sleep(1050).then(next)})}next()}
+function selectPlaceResult(q,results,onChosen,onCancel){
+ if(!results||!results.length){onChosen(null);return}
+ if(results.length===1){onChosen(results[0]);return}
+ var box=document.getElementById('placeResultChooser'),wrap=document.getElementById('placeResultButtons');wrap.innerHTML='';
+ results.forEach(function(r){var b=document.createElement('button');b.type='button';b.style.cssText='display:block;width:100%;text-align:left;margin:0 0 7px;padding:10px;border:1px solid #ddd;border-radius:9px;background:#fff;color:#111';b.innerHTML='<b>'+esc(r.name||String(r.display_name||'').split(',')[0]||q)+'</b><div style="font-size:12px;color:#666;margin-top:3px">'+esc(r.display_name||'')+'</div>';b.onclick=function(){box.style.display='none';onChosen(r)};wrap.appendChild(b)});
+ document.getElementById('placeResultCancel').onclick=function(){box.style.display='none';if(onCancel)onCancel()};box.style.display='block'
+}
+function searchPlaceForPin(q,statusEl,after){
+ if(statusEl)statusEl.textContent='Suche …';
+ geocode(q,false).then(function(a){if(!a.length){if(statusEl)statusEl.textContent='⚠️ Ort nicht gefunden.';return}if(statusEl)statusEl.textContent='';selectPlaceResult(q,a,function(r){if(!r)return;if(after)after(r);var lat=parseFloat(r.lat),lon=parseFloat(r.lon);map.setView([lat,lon],12);var chosenLabel=(r.name||String(r.display_name||'').split(',')[0]||q);chooseCategoryForText(lat.toFixed(6)+', '+lon.toFixed(6)+' ('+chosenLabel+')')},function(){if(statusEl)statusEl.textContent=''})}).catch(function(){if(statusEl)statusEl.textContent='⚠️ Ort konnte nicht gefunden werden.'})
+}
+
+
+
+function syncQuickPlaceWidth(){var quick=document.querySelector('.quick-place');if(quick){quick.style.width='100%';quick.style.flexBasis='auto'}}
+window.addEventListener('resize',syncQuickPlaceWidth);setTimeout(syncQuickPlaceWidth,0);
+function hexToRgba(color,alpha){
+ var c=String(color||'#888888').trim(),m;
+ if((m=c.match(/^#([0-9a-f]{3})$/i))){c='#'+m[1][0]+m[1][0]+m[1][1]+m[1][1]+m[1][2]+m[1][2]}
+ if((m=c.match(/^#([0-9a-f]{6})$/i))){var n=parseInt(m[1],16);return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+alpha+')'}
+ return c
+}
+function categoryDefinitions(){
+ var lines=input.value.replace(/\r/g,'').split('\n'),out=[];
+ for(var i=0;i<lines.length;i++){
+   var line=lines[i].trim();
+   if(line.charAt(0)!=='#')continue;
+   var txt=line.slice(1).trim(),symbol='';
+   var cm=txt.match(/\[([^\]]+)\]/),catColor=windowColor(cm?cm[1]:'');
+   if(cm)txt=txt.replace(cm[0],'').trim();
+   var parts=txt.split(/\s+/);
+   if(parts.length>1){symbol=parts.shift();txt=parts.join(' ')}
+   var name=txt||'Kategorie';
+   out.push({lineIndex:i,name:name,symbol:symbol,color:catColor})
+ }
+ return out
+}
+function insertIntoCategory(text,categoryIndex){
+ var lines=input.value.replace(/\r/g,'').split('\n'),cats=[];
+ for(var i=0;i<lines.length;i++)if(lines[i].trim().charAt(0)==='#')cats.push(i);
+ if(!cats.length){lines.unshift('# 📍 [rot] Rot','');cats=[0]}
+ var ci=Math.max(0,Math.min(categoryIndex,cats.length-1)),at=(ci+1<cats.length?cats[ci+1]:lines.length);
+ while(at>cats[ci]+1&&!lines[at-1].trim())at--;
+ lines.splice(at,0,text);input.value=lines.join('\n')
+}
+function chooseCategory(ll){
+ var cats=categoryDefinitions(),box=document.getElementById('pinCategoryChooser'),buttons=document.getElementById('pinCategoryButtons');
+ var title=box.querySelector('div');if(title)title.textContent='Kategorie für neuen Pin wählen';
+ if(!cats.length){var t=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);insertIntoCategory(t,0);addNewItemDirectly(t);return}
+ buttons.innerHTML='';
+ cats.forEach(function(c,i){
+   var b=document.createElement('button');
+   b.type='button'; b.textContent=c.symbol||''; b.title=c.name;
+   b.setAttribute('aria-label',c.name);
+   b.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;padding:8px;border:1px solid #d1d1d6;border-radius:11px;background:'+hexToRgba(c.color,.28)+';font-size:30px;line-height:1;cursor:pointer';
+   b.onclick=function(){box.style.display='none';var t=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);insertIntoCategory(t,i);addNewItemDirectly(t)};
+   buttons.appendChild(b)
+ });
+ box.style.display='block'
+}
+function chooseCategoryForText(text){
+ var cats=categoryDefinitions(),box=document.getElementById('pinCategoryChooser'),buttons=document.getElementById('pinCategoryButtons');
+ var title=box.querySelector('div');if(title)title.textContent='Kategorie für neuen Pin wählen';
+ if(!cats.length){insertIntoCategory(text,0);addNewItemDirectly(text);return}
+ buttons.innerHTML='';
+ cats.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'';b.title=c.name;b.setAttribute('aria-label',c.name);b.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;padding:8px;border:1px solid #d1d1d6;border-radius:11px;background:'+hexToRgba(c.color,.28)+';font-size:30px;line-height:1;cursor:pointer';b.onclick=function(){box.style.display='none';insertIntoCategory(text,i);addNewItemDirectly(text)};buttons.appendChild(b)});
+ box.style.display='block'
+}
+function chooseCategoryForArea(area){
+ document.getElementById('areaSearchBox').style.display='none';
+ var cats=categoryDefinitions(),box=document.getElementById('pinCategoryChooser'),buttons=document.getElementById('pinCategoryButtons');
+ pendingAreaSelection=area;
+ var title=box.querySelector('div');
+ if(title)title.textContent='Kategorie für Fläche wählen';
+ if(!cats.length){insertAreaIntoCategory(area,0);return}
+ buttons.innerHTML='';
+ cats.forEach(function(c,i){
+  var b=document.createElement('button');
+  b.type='button';b.textContent=c.symbol||'';b.title=c.name;b.setAttribute('aria-label',c.name);
+  b.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;padding:8px;border:1px solid #d1d1d6;border-radius:11px;background:'+hexToRgba(c.color,.28)+';font-size:30px;line-height:1;cursor:pointer';
+  b.onclick=function(){box.style.display='none';insertAreaIntoCategory(area,i)};
+  buttons.appendChild(b)
+ });
+ box.style.display='block'
+}
+function insertAreaIntoCategory(area,categoryIndex){
+ var text='@'+area.query;
+ if(area.label&&area.label!==area.query)text+=' ('+area.label+')';
+ insertIntoCategory(text,categoryIndex);
+ document.getElementById('areaSearchBox').style.display='none';
+ pendingAreaSelection=null;
+ var title=document.querySelector('#pinCategoryChooser > div');
+ if(title)title.textContent='Kategorie für neuen Pin wählen';
+ addNewItemDirectly(text)
+}
+function findParsedItemByFullLine(fullLine){
+ var items=parse(input.value),target=String(fullLine||'').trim();
+ for(var i=items.length-1;i>=0;i--)if(String(items[i].sourceFullLine||'').trim()===target)return items[i];
+ return null
+}
+function ensureCategoryLayer(it){
+ if(!categoryLayers[it.category])categoryLayers[it.category]=L.layerGroup().addTo(map);
+ return categoryLayers[it.category]
+}
+function autoZoomLoadedLayers(){
+ if(!map)return;
+ var bounds=L.latLngBounds([]),pointCount=0,hasArea=false;
+ function addLayer(layer){
+  if(!layer)return;
+  if(layer.getBounds){
+   try{var b=layer.getBounds();if(b&&b.isValid&&b.isValid()){bounds.extend(b);hasArea=true;return}}catch(e){}
+  }
+  if(layer.getLatLng){
+   try{var ll=layer.getLatLng();if(ll){bounds.extend(ll);pointCount++}}catch(e){}
+  }
+  if(layer.eachLayer)layer.eachLayer(addLayer)
+ }
+ for(var k in categoryLayers)if(categoryLayers[k])addLayer(categoryLayers[k]);
+ if(routeLayer)addLayer(routeLayer);
+ if(!bounds.isValid())return;
+ if(!hasArea&&pointCount===1){map.setView(bounds.getCenter(),Math.min(map.getZoom()>0?map.getZoom():12,14));return}
+ map.fitBounds(bounds,{padding:[45,45],maxZoom:14})
+}
+function refreshAfterDirectAdd(){
+ var items=parse(input.value),box=document.getElementById('legend');box.innerHTML='';buildLegend(items);
+ var al=document.getElementById('addressList');if(al)al.innerHTML='';
+ var numbered=document.getElementById('numberAddresses').checked;if(numbered&&al){var n=0;items.forEach(function(x){n++;if(!x.area){var row=document.createElement('div');row.className='address-row';row.innerHTML='<b>'+n+'.</b> '+esc(x.query);al.appendChild(row)}})}
+}
+function addNewItemDirectly(fullLine){
+ var it=findParsedItemByFullLine(fullLine);if(!it)return;
+ var progress=document.getElementById('pinProgress');
+ progress.textContent=it.area?'⏳ Neue Fläche wird geladen …':'⏳ Neuer Pin wird gesetzt …';progress.style.display='block';
+ ensureCategoryLayer(it);
+ var numbered=document.getElementById('numberAddresses').checked;
+ var items=parse(input.value),num=1;for(var i=0;i<items.length;i++){if(items[i].area)continue;if(items[i].sourceFullLine===it.sourceFullLine)break;num++}
+ geocode(it.query,it.area).then(function(a){
+  if(!a.length)throw new Error('Nicht gefunden');
+  var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];
+  if(it.area){
+   if(!a[0].geojson)throw new Error('Keine Flächengeometrie');
+   var poly=L.geoJSON(a[0].geojson,{renderer:L.canvas({padding:0.5}),style:{color:it.color,weight:2,fillColor:it.color,fillOpacity:.28}}).addTo(categoryLayers[it.category]);
+   it._areaLayer=poly;renderedAreas.push({layer:poly,item:it});
+   var center=poly.getBounds().getCenter();
+   var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(it.label)+'</div>',iconSize:null})}).addTo(categoryLayers[it.category]);
+   it._areaLabelLayer=areaLabelMarker;
+  }else{
+   var marker=L.marker(p,{icon:icon(it.symbol,num,numbered)}).bindPopup(pinPopupHtml(it,a[0].display_name)).addTo(categoryLayers[it.category]);
+   it._pinLayer=marker;
+   marker.bindTooltip((numbered?num+'. ':'')+it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});
+  }
+  refreshAfterDirectAdd();autoZoomLoadedLayers();mapStatus.textContent=it.area?'Fläche hinzugefügt.':'Pin hinzugefügt.';setTimeout(function(){mapStatus.textContent=''},1800)
+ }).catch(function(){
+  var nf=document.getElementById('notFoundList');nf.innerHTML='<b>⚠️ Nicht gefunden</b><br>• '+esc(it.query);mapStatus.textContent='⚠️ '+it.query+' nicht gefunden.'
+ }).then(function(){progress.style.display='none'})
+}
+var pendingMapActionLatLng=null;
+var pendingAreaSelection=null;
+var pendingContextAreas=[];
+function addPinAt(ll){
+ pendingMapActionLatLng=ll;
+ pendingContextAreas=areasAtLatLng(ll);
+ var rb=document.getElementById('actionRemoveArea'),cb=document.getElementById('actionChangeAreaCategory'),nb=document.getElementById('actionRenameArea');
+ rb.style.display=pendingContextAreas.length?'block':'none';
+ cb.style.display=pendingContextAreas.length?'block':'none';
+ nb.style.display=pendingContextAreas.length?'block':'none';
+ rb.textContent=pendingContextAreas.length>1?'Fläche entfernen …':'Fläche entfernen';
+ cb.textContent=pendingContextAreas.length>1?'Kategorie ändern …':'Kategorie ändern';
+ document.getElementById('mapActionChooser').style.display='block'
+}
+document.getElementById('actionAddPin').onclick=function(){
+ document.getElementById('mapActionChooser').style.display='none';
+ if(pendingMapActionLatLng)chooseCategory(pendingMapActionLatLng)
+};
+document.getElementById('actionFindAreas').onclick=function(){
+ document.getElementById('mapActionChooser').style.display='none';
+ if(pendingMapActionLatLng)findAreasAt(pendingMapActionLatLng)
+};
+document.getElementById('actionRenameArea').onclick=function(){
+ document.getElementById('mapActionChooser').style.display='none';
+ if(!pendingContextAreas.length)return;
+ if(pendingContextAreas.length===1){openAreaNameEditor(pendingContextAreas[0].item);return}
+ var box=document.getElementById('areaClickChooser'),buttons=document.getElementById('areaClickButtons');
+ buttons.innerHTML='';
+ pendingContextAreas.forEach(function(a){
+  var b=document.createElement('button');b.type='button';b.textContent=a.item.label||a.item.query;
+  b.style.cssText='display:block;width:100%;margin:7px 0;background:#fff;color:#111;border:1px solid #ccc;text-align:left';
+  b.onclick=function(){box.style.display='none';openAreaNameEditor(a.item)};
+  buttons.appendChild(b)
+ });
+ box.style.display='block'
+};
+document.getElementById('actionChangeAreaCategory').onclick=function(){
+ document.getElementById('mapActionChooser').style.display='none';
+ if(!pendingContextAreas.length)return;
+ if(pendingContextAreas.length===1){openAreaCategoryChange(pendingContextAreas[0].item);return}
+ var box=document.getElementById('areaClickChooser'),buttons=document.getElementById('areaClickButtons');
+ buttons.innerHTML='';
+ pendingContextAreas.forEach(function(a){
+  var b=document.createElement('button');b.type='button';b.textContent=a.item.label||a.item.query;
+  b.style.cssText='display:block;width:100%;margin:7px 0;background:#fff;color:#111;border:1px solid #ccc;text-align:left';
+  b.onclick=function(){box.style.display='none';openAreaCategoryChange(a.item)};
+  buttons.appendChild(b)
+ });
+ box.style.display='block'
+};
+document.getElementById('actionRemoveArea').onclick=function(){
+ document.getElementById('mapActionChooser').style.display='none';
+ if(!pendingContextAreas.length)return;
+ if(pendingContextAreas.length===1){
+  var a=pendingContextAreas[0],id='areaDel'+(++areaDeleteId);areaDeleteItems[id]=a.item;
+  deleteAreaById(id);return
+ }
+ var box=document.getElementById('areaClickChooser'),buttons=document.getElementById('areaClickButtons');
+ buttons.innerHTML='';
+ pendingContextAreas.forEach(function(a){
+  var b=document.createElement('button');b.type='button';b.textContent=a.item.label||a.item.query;
+  b.style.cssText='display:block;width:100%;margin:7px 0;background:#fff;color:#111;border:1px solid #ccc;text-align:left';
+  b.onclick=function(){
+   box.style.display='none';
+   var id='areaDel'+(++areaDeleteId);areaDeleteItems[id]=a.item;deleteAreaById(id)
+  };
+  buttons.appendChild(b)
+ });
+ box.style.display='block'
+};
+document.getElementById('actionCancel').onclick=function(){document.getElementById('mapActionChooser').style.display='none'};
+document.getElementById('manualAreaSearchBtn').onclick=manualAreaSearch;
+document.getElementById('manualAreaQuery').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();manualAreaSearch()}});
+document.getElementById('areaSearchClose').onclick=function(){document.getElementById('areaSearchBox').style.display='none'};
+
+function osmTypeLabel(k){
+ var labels={
+  country:'🌍 Staat',state:'🗺️ Bundesland/Region',region:'🗺️ Region',
+  state_district:'🗺️ Regierungs-/Verwaltungsbezirk',county:'🗺️ Kreis',
+  municipality:'🏘️ Gemeinde',city:'🏙️ Stadt',town:'🏘️ Stadt',
+  village:'🏘️ Ort',borough:'🏘️ Stadtbezirk',suburb:'🏘️ Stadtteil',
+  city_district:'🏘️ Stadtbezirk',quarter:'🏘️ Quartier',neighbourhood:'🏘️ Nachbarschaft',
+  hamlet:'🏘️ Ortsteil',locality:'📍 Örtlichkeit',
+  natural:'🌱 Natur',water:'🌊 Gewässer',waterway:'🌊 Wasserlauf',
+  protected_area:'🌿 Schutzgebiet',national_park:'🏞️ Nationalpark'
+ };
+ return labels[k]||'🗺️ '+k
+}
+function manualAreaSearch(){
+ var q=document.getElementById('manualAreaQuery').value.trim();
+ var res=document.getElementById('manualAreaResults');
+ if(!q){res.innerHTML='';return}
+ res.innerHTML='<div style="padding:10px 0;color:#666">⏳ Suche läuft …</div>';
+ var url='https://nominatim.openstreetmap.org/search?format=jsonv2&polygon_geojson=1&addressdetails=1&limit=12&q='+encodeURIComponent(q);
+ fetch(url,{headers:{'Accept-Language':'de'}}).then(function(r){
+  if(!r.ok)throw new Error('HTTP '+r.status);return r.json()
+ }).then(function(data){
+  res.innerHTML='';
+  var rows=(data||[]).filter(function(x){
+   return x.geojson&&(x.geojson.type==='Polygon'||x.geojson.type==='MultiPolygon')
+  });
+  if(!rows.length){
+   res.innerHTML='<div style="padding:10px 0;color:#666">Keine passende Fläche gefunden.</div>';
+   return
+  }
+  rows.forEach(function(x){
+   var name=x.name||((x.display_name||'').split(',')[0])||q;
+   var detail=x.display_name||((x.category||x.class||'')+' · '+(x.type||''));
+   var d=document.createElement('div');
+   d.style.cssText='padding:10px 0;border-bottom:1px solid #ddd;cursor:pointer';
+   d.setAttribute('role','button');d.setAttribute('tabindex','0');
+   d.innerHTML='<div style="font-weight:700">🗺️ '+esc(name)+'</div>'+
+    '<div style="font-size:11px;color:#666;margin-top:3px;word-break:break-word">'+esc(detail)+'</div>'+
+    '<div style="font-size:11px;color:#007aff;margin-top:3px">Antippen, um diese Fläche hinzuzufügen</div>';
+   d.onclick=function(){chooseCategoryForArea({query:name,label:name})};
+   d.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();d.click()}};
+   res.appendChild(d)
+  })
+ }).catch(function(){
+  res.innerHTML='<div style="padding:10px 0;color:#b00020">Suche fehlgeschlagen. Bitte später erneut versuchen.</div>'
+ })
+}
+function findAreasAt(ll){
+ var box=document.getElementById('areaSearchBox'),res=document.getElementById('areaSearchResults');
+ document.getElementById('areaSearchPoint').textContent=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);
+ res.innerHTML='<div style="padding:12px 0">⏳ Nominatim wird abgefragt …</div>';
+ document.getElementById('manualAreaQuery').value='';
+ document.getElementById('manualAreaResults').innerHTML='';
+ box.style.display='block';
+
+ var url='https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&zoom=18&lat='+
+  encodeURIComponent(ll.lat)+'&lon='+encodeURIComponent(ll.lng);
+ var controller=window.AbortController?new AbortController():null;
+ var timer=controller?setTimeout(function(){controller.abort()},12000):null;
+ var opts={headers:{'Accept-Language':'de'}};
+ if(controller)opts.signal=controller.signal;
+
+ fetch(url,opts).then(function(r){
+  if(timer)clearTimeout(timer);
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json()
+ }).then(function(data){
+  var rows=[],seen={};
+  function add(kind,name,extra){
+   if(!name)return;
+   var key=kind+'|'+name;if(seen[key])return;seen[key]=1;
+   rows.push({kind:kind,name:name,extra:extra||'',query:name,label:name})
+  }
+
+  if(data.name){
+   add(data.type||data.category||'OSM-Objekt',data.name,
+    'OSM '+(data.osm_type||'')+' '+(data.osm_id||'')+
+    (data.category?' · category='+data.category:'')+(data.type?' · type='+data.type:''))
+  }
+
+  var a=data.address||{};
+  var order=['neighbourhood','quarter','suburb','city_district','borough','village','town','city',
+             'municipality','county','state_district','region','state','country'];
+  for(var i=0;i<order.length;i++){
+   var k=order[i];
+   if(a[k])add(k,a[k],k+(a.country_code?' · '+a.country_code.toUpperCase():''))
+  }
+
+  if(!rows.length){
+   res.innerHTML='<div style="padding:10px 0">Nominatim hat für diesen Punkt keine Gebietshierarchie zurückgegeben.</div>';
+   return
+  }
+  res.innerHTML='';
+  rows.forEach(function(x){
+   var d=document.createElement('div');
+   d.style.cssText='padding:9px 0;border-bottom:1px solid #ddd;cursor:pointer;border-radius:8px';
+   d.setAttribute('role','button');d.setAttribute('tabindex','0');
+   d.innerHTML='<div style="font-weight:700">'+esc(osmTypeLabel(x.kind))+' — '+esc(x.name)+'</div>'+
+    '<div style="font-size:11px;color:#666;margin-top:3px;word-break:break-word">'+esc(x.extra)+'</div>'+
+    '<div style="font-size:11px;color:#007aff;margin-top:3px">Antippen, um diese Fläche hinzuzufügen</div>';
+   d.onclick=function(){chooseCategoryForArea({query:x.query,label:x.label})};
+   d.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();d.click()}};
+   res.appendChild(d)
+  });
+ }).catch(function(e){
+  if(timer)clearTimeout(timer);
+  res.innerHTML='<div style="padding:10px 0;color:#b00020"><b>Abfrage fehlgeschlagen.</b><br>'+
+   esc(e.name==='AbortError'?'Zeitüberschreitung':e.message)+'</div>'
+ })
+}
+function installMapPinGestures(){
+ map.on('contextmenu',function(e){if(e.originalEvent)e.originalEvent.preventDefault();addPinAt(e.latlng)});
+ var timer=null,start=null,moved=false;
+ function clearPress(){if(timer){clearTimeout(timer);timer=null}}
+ map.on('touchstart',function(e){if(!e.originalEvent||!e.originalEvent.touches||e.originalEvent.touches.length!==1)return;moved=false;var t=e.originalEvent.touches[0],ll=e.latlng;start={x:t.clientX,y:t.clientY};clearPress();timer=setTimeout(function(){timer=null;if(!moved)addPinAt(ll)},650)});
+ map.on('touchmove',function(e){if(!start||!e.originalEvent||!e.originalEvent.touches||!e.originalEvent.touches.length)return;var t=e.originalEvent.touches[0];if(Math.abs(t.clientX-start.x)>10||Math.abs(t.clientY-start.y)>10){moved=true;clearPress()}});
+ map.on('touchend touchcancel',function(){clearPress();start=null});
+ document.getElementById('pinCategoryCancel').onclick=function(){document.getElementById('pinCategoryChooser').style.display='none'}
+}
+
+var areaDeleteItems={},areaDeleteId=0;
+function pointInRing(lat,lng,ring){
+ var inside=false;
+ for(var i=0,j=ring.length-1;i<ring.length;j=i++){
+  var xi=ring[i].lng,yi=ring[i].lat,xj=ring[j].lng,yj=ring[j].lat;
+  var hit=((yi>lat)!=(yj>lat))&&(lng<(xj-xi)*(lat-yi)/(yj-yi)+xi);
+  if(hit)inside=!inside
+ }
+ return inside
+}
+function pointInLatLngs(lat,lng,lls){
+ if(!lls||!lls.length)return false;
+ if(lls[0]&&typeof lls[0].lat==='number')return pointInRing(lat,lng,lls);
+ for(var i=0;i<lls.length;i++)if(pointInLatLngs(lat,lng,lls[i]))return true;
+ return false
+}
+function areasAtLatLng(ll){
+ var out=[];
+ for(var i=0;i<renderedAreas.length;i++){
+  var a=renderedAreas[i],layers=a.layer.getLayers?a.layer.getLayers():[a.layer],hit=false;
+  for(var j=0;j<layers.length&&!hit;j++){
+   if(layers[j].getLatLngs&&pointInLatLngs(ll.lat,ll.lng,layers[j].getLatLngs()))hit=true
+  }
+  if(hit)out.push(a)
+ }
+ return out
+}
+function showAreaChoice(ll){return false}
+document.getElementById('areaClickCancel').onclick=function(){document.getElementById('areaClickChooser').style.display='none'};
+function areaPopupHtml(it){
+ var id='areaDel'+(++areaDeleteId);areaDeleteItems[id]=it;
+ return '<div><div style="margin-bottom:9px;max-width:280px;word-break:break-word"><b>'+escHtml(it.label||it.query)+'</b></div><button type="button" data-change-area-category="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#34a853;color:white;font-weight:700">Kategorie ändern</button><button type="button" data-delete-area="'+id+'" style="display:block;width:100%;padding:8px 10px;border:0;border-radius:8px;background:#e53935;color:white;font-weight:700">Fläche entfernen</button></div>'
+}
+function refreshAfterDirectDelete(){
+ var items=parse(input.value),box=document.getElementById('legend');box.innerHTML='';buildLegend(items);
+ var al=document.getElementById('addressList');if(al)al.innerHTML='';
+ var numbered=document.getElementById('numberAddresses').checked;if(numbered&&al){var n=0;items.forEach(function(x){n++;if(!x.area){var row=document.createElement('div');row.className='address-row';row.innerHTML='<b>'+n+'.</b> '+esc(x.query);al.appendChild(row)}})}
+}
+function deleteAreaById(id){
+ var it=areaDeleteItems[id];if(!it)return;
+ var lines=input.value.replace(/\r/g,'').split('\n');
+ var target=String(it.sourceFullLine||('@'+String(it.sourceLine||''))).trim();
+ for(var i=0;i<lines.length;i++){
+  if(lines[i].trim()===target){lines.splice(i,1);input.value=lines.join('\n');break}
+ }
+ if(map)map.closePopup();
+ if(it._areaLayer){
+  var grp=categoryLayers[it.category];
+  if(grp&&grp.removeLayer)grp.removeLayer(it._areaLayer);else if(map&&map.hasLayer(it._areaLayer))map.removeLayer(it._areaLayer)
+ }
+ if(it._areaLabelLayer){
+  var grp2=categoryLayers[it.category];
+  if(grp2&&grp2.removeLayer)grp2.removeLayer(it._areaLabelLayer);else if(map&&map.hasLayer(it._areaLabelLayer))map.removeLayer(it._areaLabelLayer)
+ }
+ renderedAreas=renderedAreas.filter(function(a){return a.item!==it});
+ delete areaDeleteItems[id];
+ refreshAfterDirectDelete();autoZoomLoadedLayers()
+}
+document.addEventListener('click',function(e){
+ var btn=e.target&&e.target.closest?e.target.closest('[data-delete-area]'):null;
+ if(!btn)return;e.preventDefault();e.stopPropagation();deleteAreaById(btn.getAttribute('data-delete-area'))
+});
+var pinDeleteItems={},pinDeleteId=0;
+function escHtml(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function pinPopupHtml(it){
+ var id='pinDel'+(++pinDeleteId);pinDeleteItems[id]=it;
+ return '<div><div style="margin-bottom:9px;max-width:280px;word-break:break-word">'+escHtml(it.query)+'</div><button type="button" data-copy-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#0a84ff;color:white;font-weight:700">Kopieren</button><fieldset style="margin:0 0 7px;padding:5px 7px 7px;border:1px solid #c7c7cc;border-radius:10px"><legend style="padding:0 5px;color:#777;font-size:11px;font-weight:600">Routing</legend><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px"><button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:#e5e5ea;color:#111;font-size:21px;font-weight:700">►</button><button type="button" data-route-waypoint="'+id+'" title="Zwischenziel" aria-label="Zwischenziel" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:#e5e5ea;color:#111;font-size:19px;font-weight:700">+</button><button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:#e5e5ea;color:#111;font-size:21px;font-weight:700">⦿</button></div></fieldset><button type="button" data-rename-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#666;color:white;font-weight:700">Name ändern</button><button type="button" data-change-pin-category="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#34a853;color:white;font-weight:700">Kategorie ändern</button><button type="button" data-delete-pin="'+id+'" style="display:block;width:100%;padding:8px 10px;border:0;border-radius:8px;background:#e53935;color:white;font-weight:700">Pin entfernen</button></div>'
+}
+document.addEventListener('click',function(e){
+ var btn=e.target&&e.target.closest?e.target.closest('[data-copy-pin]'):null;
+ if(!btn)return;
+ e.preventDefault();e.stopPropagation();
+ var it=pinDeleteItems[btn.getAttribute('data-copy-pin')];
+ if(!it)return;
+ var txt=String(it.query||'');
+ if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(txt).then(function(){
+   var old=btn.textContent;btn.textContent='Kopiert ✓';setTimeout(function(){btn.textContent=old},1200)
+  }).catch(function(){fallbackCopyText(txt,btn)})
+ }else fallbackCopyText(txt,btn)
+});
+function fallbackCopyText(txt,btn){
+ var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+ document.body.appendChild(ta);ta.focus();ta.select();
+ try{document.execCommand('copy');var old=btn.textContent;btn.textContent='Kopiert ✓';setTimeout(function(){btn.textContent=old},1200)}catch(e){}
+ document.body.removeChild(ta)
+}
+document.addEventListener('click',function(e){
+ var btn=e.target&&e.target.closest?e.target.closest('[data-delete-pin]'):null;
+ if(!btn)return;
+ e.preventDefault();e.stopPropagation();
+ deletePinById(btn.getAttribute('data-delete-pin'));
+});
+function deletePinById(id){
+ var it=pinDeleteItems[id];if(!it)return;
+ if(it===routeStartItem||it===routeTargetItem||routeWaypoints.indexOf(it)>=0)clearRoute(false);
+ var lines=input.value.replace(/\r/g,'').split('\n'),target=String(it.sourceLine||'').trim();
+ for(var i=0;i<lines.length;i++){
+  if(lines[i].trim()===target){lines.splice(i,1);input.value=lines.join('\n');break}
+ }
+ if(map)map.closePopup();
+ if(it._pinLayer){
+  var grp=categoryLayers[it.category];
+  if(grp&&grp.removeLayer)grp.removeLayer(it._pinLayer);else if(map&&map.hasLayer(it._pinLayer))map.removeLayer(it._pinLayer)
+ }
+ delete pinDeleteItems[id];
+ refreshAfterDirectDelete();autoZoomLoadedLayers()
+}
+var pendingPinRename=null;
+function pinNumberForItem(it){
+ var items=parse(input.value),n=0,target=String(it.sourceFullLine||'').trim();
+ for(var i=0;i<items.length;i++){if(items[i].area)continue;n++;if(String(items[i].sourceFullLine||'').trim()===target)return n}
+ return n||1
+}
+function openPinNameEditor(it){
+ pendingPinRename=it;if(map)map.closePopup();
+ var box=document.getElementById('pinNameEditor'),field=document.getElementById('pinNameInput');
+ field.value=(it.label&&it.label!==it.query)?it.label:'';box.style.display='block';
+ setTimeout(function(){try{field.focus({preventScroll:true})}catch(e){field.focus()}field.select()},40)
+}
+function savePinName(){
+ var it=pendingPinRename;if(!it)return;
+ var field=document.getElementById('pinNameInput'),name=String(field.value||'').trim(),oldFull=String(it.sourceFullLine||it.sourceLine||'').trim(),num=pinNumberForItem(it);
+ var newRaw=String(it.query||'').trim()+(name?' ('+name+')':''),lines=input.value.replace(/\r/g,'').split('\n');
+ for(var i=0;i<lines.length;i++){if(lines[i].trim()===oldFull){lines[i]=newRaw;break}}
+ input.value=lines.join('\n');it.label=name||it.query;it.sourceLine=newRaw;it.sourceFullLine=newRaw;
+ if(it._pinLayer){
+  var numbered=document.getElementById('numberAddresses').checked;
+  if(it._pinLayer.getTooltip())it._pinLayer.setTooltipContent((numbered?num+'. ':'')+it.label);
+  it._pinLayer.setPopupContent(pinPopupHtml(it))
+ }
+ document.getElementById('pinNameEditor').style.display='none';pendingPinRename=null;refreshAfterDirectDelete();
+ if(routeStartItem||routeTargetItem||routeWaypoints.length){var routeItems=(routeStartItem?[routeStartItem]:[]).concat(routeWaypoints).concat(routeTargetItem?[routeTargetItem]:[]);document.getElementById('routeEndpoints').textContent=routeItems.map(routeItemName).join(' → ')}
+ mapStatus.textContent='✓ Name geändert.';setTimeout(function(){if(mapStatus.textContent==='✓ Name geändert.')mapStatus.textContent=''},1500)
+}
+document.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('[data-rename-pin]'):null;if(!b)return;e.preventDefault();e.stopPropagation();var it=pinDeleteItems[b.getAttribute('data-rename-pin')];if(it)openPinNameEditor(it)});
+document.getElementById('pinNameCancel').onclick=function(){document.getElementById('pinNameEditor').style.display='none';pendingPinRename=null};
+document.getElementById('pinNameSave').onclick=savePinName;
+document.getElementById('pinNameInput').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();savePinName()}else if(e.key==='Escape'){document.getElementById('pinNameCancel').click()}});
+var pendingAreaRename=null;
+function openAreaNameEditor(it){
+ pendingAreaRename=it;if(map)map.closePopup();
+ var box=document.getElementById('areaNameEditor'),field=document.getElementById('areaNameInput');
+ field.value=(it.label&&it.label!==it.query)?it.label:'';box.style.display='block';
+ setTimeout(function(){try{field.focus({preventScroll:true})}catch(e){field.focus()}field.select()},40)
+}
+function saveAreaName(){
+ var it=pendingAreaRename;if(!it)return;
+ var field=document.getElementById('areaNameInput'),name=String(field.value||'').trim(),oldFull=String(it.sourceFullLine||('@'+String(it.sourceLine||''))).trim();
+ var newRaw=String(it.query||'').trim()+(name?' ('+name+')':''),newFull='@'+newRaw,lines=input.value.replace(/\r/g,'').split('\n');
+ for(var i=0;i<lines.length;i++){if(lines[i].trim()===oldFull){lines[i]=newFull;break}}
+ input.value=lines.join('\n');it.label=name||it.query;it.sourceLine=newRaw;it.sourceFullLine=newFull;
+ if(it._areaLabelLayer&&it._areaLabelLayer.setIcon){it._areaLabelLayer.setIcon(L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(it.label)+'</div>',iconSize:null}))}
+ document.getElementById('areaNameEditor').style.display='none';pendingAreaRename=null;refreshAfterDirectDelete();
+ mapStatus.textContent='✓ Name geändert.';setTimeout(function(){if(mapStatus.textContent==='✓ Name geändert.')mapStatus.textContent=''},1500)
+}
+document.getElementById('areaNameCancel').onclick=function(){document.getElementById('areaNameEditor').style.display='none';pendingAreaRename=null};
+document.getElementById('areaNameSave').onclick=saveAreaName;
+document.getElementById('areaNameInput').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveAreaName()}else if(e.key==='Escape'){document.getElementById('areaNameCancel').click()}});
+var routeStartItem=null,routeTargetItem=null,routeWaypoints=[],routeLayer=null;
+function routeItemName(it){return String((it&&it.label)||(it&&it.query)||'Pin')}
+function clearRoute(keepPoints){
+ if(routeLayer&&map&&map.hasLayer(routeLayer))map.removeLayer(routeLayer);routeLayer=null;
+ document.getElementById('routeInfo').style.display='none';var rl=document.getElementById('routeLegs');if(rl){rl.classList.remove('open');rl.innerHTML=''}
+ if(!keepPoints){routeStartItem=null;routeTargetItem=null;routeWaypoints=[]}
+}
+function formatRouteDuration(sec){var m=Math.round(sec/60),h=Math.floor(m/60),r=m%60;return h?(h+' h '+(r?r+' min':'')):(m+' min')}
+function calculateRoute(){
+ if(!routeStartItem||!routeTargetItem||!routeStartItem._pinLayer||!routeTargetItem._pinLayer)return;
+ var routeItems=[routeStartItem].concat(routeWaypoints).concat([routeTargetItem]);
+ for(var ri=0;ri<routeItems.length;ri++)if(!routeItems[ri]||!routeItems[ri]._pinLayer)return;
+ var coords=routeItems.map(function(it){var ll=it._pinLayer.getLatLng();return ll.lng+','+ll.lat}).join(';');
+ clearRoute(true);mapStatus.textContent='Berechne Route …';
+ var url='https://router.project-osrm.org/route/v1/driving/'+coords+'?alternatives=false&steps=false&geometries=geojson&overview=full';
+ fetch(url,{headers:{'Accept':'application/json'}}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){
+  if(d.code!=='Ok'||!d.routes||!d.routes.length)throw new Error(d.message||'Keine Route');
+  var rt=d.routes[0];routeLayer=L.geoJSON(rt.geometry,{style:{color:'#0a84ff',weight:6,opacity:.82}}).addTo(map);
+  var km=rt.distance/1000,dist=km<10?km.toFixed(1):Math.round(km).toLocaleString('de-DE');
+  document.getElementById('routeSummary').textContent='🚗 '+dist+' km · ca. '+formatRouteDuration(rt.duration);
+  document.getElementById('routeEndpoints').textContent=routeItems.map(routeItemName).join(' → ');
+  var legsBox=document.getElementById('routeLegs');legsBox.innerHTML='';legsBox.classList.add('open');
+  if(rt.legs&&rt.legs.length){rt.legs.forEach(function(leg,i){var a=routeItemName(routeItems[i]),b=routeItemName(routeItems[i+1]),lkm=leg.distance/1000,ldist=lkm<10?lkm.toFixed(1):Math.round(lkm).toLocaleString('de-DE'),row=document.createElement('div');row.className='route-leg';row.textContent=(i+1)+'. '+a+' → '+b+' · '+ldist+' km · '+formatRouteDuration(leg.duration);legsBox.appendChild(row)})}
+  document.getElementById('routeHint').style.display='none';
+  document.getElementById('routeInfo').style.display='flex';
+  var bounds=routeLayer.getBounds();if(bounds&&bounds.isValid())map.fitBounds(bounds,{padding:[55,55],maxZoom:14});
+  mapStatus.textContent='';
+ }).catch(function(){mapStatus.textContent='⚠️ Route konnte nicht berechnet werden.'})
+}
+document.getElementById('routeClear').onclick=function(){clearRoute(false);mapStatus.textContent='Route entfernt.';setTimeout(function(){if(mapStatus.textContent==='Route entfernt.')mapStatus.textContent=''},1500)};
+document.getElementById('routeSummary').onclick=function(){};
+document.addEventListener('click',function(e){
+ var b=e.target&&e.target.closest?e.target.closest('[data-route-start]'):null;if(!b)return;e.preventDefault();e.stopPropagation();
+ var it=pinDeleteItems[b.getAttribute('data-route-start')];if(!it)return;routeStartItem=it;if(map)map.closePopup();clearRoute(true);mapStatus.textContent='🚩 Start: '+routeItemName(it);if(routeTargetItem)calculateRoute()
+});
+document.addEventListener('click',function(e){
+ var b=e.target&&e.target.closest?e.target.closest('[data-route-waypoint]'):null;if(!b)return;e.preventDefault();e.stopPropagation();
+ var it=pinDeleteItems[b.getAttribute('data-route-waypoint')];if(!it)return;
+ if(it===routeStartItem||it===routeTargetItem||routeWaypoints.indexOf(it)>=0){if(map)map.closePopup();mapStatus.textContent='Dieser Pin ist bereits Teil der Route.';return}
+ routeWaypoints.push(it);if(map)map.closePopup();mapStatus.textContent='➕ Zwischenziel '+routeWaypoints.length+': '+routeItemName(it);if(routeStartItem&&routeTargetItem)calculateRoute()
+});
+document.addEventListener('click',function(e){
+ var b=e.target&&e.target.closest?e.target.closest('[data-route-target]'):null;if(!b)return;e.preventDefault();e.stopPropagation();
+ var it=pinDeleteItems[b.getAttribute('data-route-target')];if(!it)return;routeTargetItem=it;if(map)map.closePopup();if(routeStartItem)calculateRoute();else mapStatus.textContent='Bitte zuerst einen Start-Pin festlegen.'
+});
+var pendingPinCategoryChange=null,pendingCategoryEditName=null;
+function moveSourceLineToCategory(it,categoryIndex){
+ var lines=input.value.replace(/\r/g,'').split('\n'),target=String(it.sourceFullLine||it.sourceLine||'').trim(),old=-1;
+ for(var i=0;i<lines.length;i++){if(lines[i].trim()===target){old=i;break}}
+ if(old>=0)lines.splice(old,1);
+ var cats=[];for(var j=0;j<lines.length;j++)if(lines[j].trim().charAt(0)==='#')cats.push(j);
+ if(!cats.length){lines.unshift('# 📍 [rot] Rot','');cats=[0]}
+ var ci=Math.max(0,Math.min(categoryIndex,cats.length-1)),at=(ci+1<cats.length?cats[ci+1]:lines.length);
+ while(at>cats[ci]+1&&!lines[at-1].trim())at--;
+ lines.splice(at,0,target);input.value=lines.join('\n')
+}
+function openPinCategoryChange(it){
+ var cats=categoryDefinitions(),box=document.getElementById('pinCategoryChooser'),buttons=document.getElementById('pinCategoryButtons'),title=box.querySelector('div');
+ pendingPinCategoryChange=it;if(title)title.textContent='Neue Kategorie für Pin wählen';buttons.innerHTML='';
+ cats.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'';b.title=c.name;b.setAttribute('aria-label',c.name);b.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;padding:8px;border:1px solid #d1d1d6;border-radius:11px;background:'+hexToRgba(c.color,.28)+';font-size:30px;line-height:1;cursor:pointer';b.onclick=function(){
+   box.style.display='none';if(map)map.closePopup();var oldCat=it.category,oldGrp=categoryLayers[oldCat];moveSourceLineToCategory(it,i);
+   if(oldGrp&&it._pinLayer)oldGrp.removeLayer(it._pinLayer);if(!categoryLayers[c.name])categoryLayers[c.name]=L.layerGroup().addTo(map);if(it._pinLayer){it._pinLayer.setIcon(icon(c.symbol,1,false));categoryLayers[c.name].addLayer(it._pinLayer)}
+   it.category=c.name;it.symbol=c.symbol;it.color=c.color;it._pinLayer&&it._pinLayer.setPopupContent(pinPopupHtml(it));pendingPinCategoryChange=null;refreshAfterDirectDelete();autoZoomLoadedLayers()
+  };buttons.appendChild(b)});box.style.display='block'
+}
+document.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('[data-change-pin-category]'):null;if(!b)return;e.preventDefault();e.stopPropagation();var it=pinDeleteItems[b.getAttribute('data-change-pin-category')];if(it)openPinCategoryChange(it)});
+function openAreaCategoryChange(it){
+ var cats=categoryDefinitions(),box=document.getElementById('pinCategoryChooser'),buttons=document.getElementById('pinCategoryButtons'),title=box.querySelector('div');
+ if(title)title.textContent='Neue Kategorie für Fläche wählen';buttons.innerHTML='';
+ cats.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'';b.title=c.name;b.setAttribute('aria-label',c.name);b.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;padding:8px;border:1px solid #d1d1d6;border-radius:11px;background:'+hexToRgba(c.color,.28)+';font-size:30px;line-height:1;cursor:pointer';b.onclick=function(){
+  box.style.display='none';if(map)map.closePopup();var oldCat=it.category,oldGrp=categoryLayers[oldCat];moveSourceLineToCategory(it,i);
+  if(oldGrp&&it._areaLayer)oldGrp.removeLayer(it._areaLayer);if(oldGrp&&it._areaLabelLayer)oldGrp.removeLayer(it._areaLabelLayer);
+  if(!categoryLayers[c.name])categoryLayers[c.name]=L.layerGroup().addTo(map);
+  if(it._areaLayer){it._areaLayer.setStyle({color:c.color,fillColor:c.color});categoryLayers[c.name].addLayer(it._areaLayer)}
+  if(it._areaLabelLayer)categoryLayers[c.name].addLayer(it._areaLabelLayer);
+  it.category=c.name;it.symbol=c.symbol;it.color=c.color;
+  refreshAfterDirectDelete();
+ };buttons.appendChild(b)});box.style.display='block'
+}
+document.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('[data-change-area-category]'):null;if(!b)return;e.preventDefault();e.stopPropagation();var it=areaDeleteItems[b.getAttribute('data-change-area-category')];if(it)openAreaCategoryChange(it)});
+function openCategoryEditor(name,v){
+ pendingCategoryEditName=name;document.getElementById('categoryEditName').value=name;document.getElementById('categoryEditSymbol').value=v.symbol||'';document.getElementById('categoryEditColor').value=v.color||'#1976d2';document.getElementById('categoryEditColorText').textContent=v.color||'';document.getElementById('categoryEditor').style.display='block'
+}
+document.getElementById('categoryEditColor').oninput=function(){document.getElementById('categoryEditColorText').textContent=this.value};
+document.getElementById('categoryEditCancel').onclick=function(){document.getElementById('categoryEditor').style.display='none';pendingCategoryEditName=null};
+document.getElementById('categoryEditSave').onclick=function(){
+ var oldName=pendingCategoryEditName;if(!oldName)return;var newName=document.getElementById('categoryEditName').value.trim()||oldName,sym=document.getElementById('categoryEditSymbol').value.trim()||'📍',col=document.getElementById('categoryEditColor').value;
+ var lines=input.value.replace(/\r/g,'').split('\n'),defs=categoryDefinitions(),def=null;for(var d=0;d<defs.length;d++)if(defs[d].name===oldName){def=defs[d];break}if(def)lines[def.lineIndex]='# '+sym+' ['+col+'] '+newName;input.value=lines.join('\n');
+ var grp=categoryLayers[oldName];if(grp){grp.eachLayer(function(layer){if(layer.setStyle)try{layer.setStyle({color:col,fillColor:col})}catch(e){};if(layer.setIcon&&layer.getLatLng&&!layer.getBounds){var el=layer.getElement&&layer.getElement();if(el&&el.classList&&el.classList.contains('area-label-wrap'))return;try{layer.setIcon(icon(sym,1,false))}catch(e){}}});if(newName!==oldName){categoryLayers[newName]=grp;delete categoryLayers[oldName]}}
+ for(var k in pinDeleteItems){var pi=pinDeleteItems[k];if(pi&&pi.category===oldName){pi.category=newName;pi.symbol=sym;pi.color=col;if(pi._pinLayer)pi._pinLayer.setPopupContent(pinPopupHtml(pi))}}
+ for(var a=0;a<renderedAreas.length;a++){var ai=renderedAreas[a].item;if(ai&&ai.category===oldName){ai.category=newName;ai.symbol=sym;ai.color=col}}
+ for(var q in areaDeleteItems){var ar=areaDeleteItems[q];if(ar&&ar.category===oldName){ar.category=newName;ar.symbol=sym;ar.color=col}}
+ document.getElementById('categoryEditor').style.display='none';pendingCategoryEditName=null;refreshAfterDirectDelete()
+};
+function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');Object.keys(cats).forEach(function(name){var v=cats[name],lab=document.createElement('div'),cb=document.createElement('input'),sw=document.createElement('span'),txt=document.createElement('span');lab.className='chip';lab.style.cursor='pointer';cb.type='checkbox';cb.checked=map&&categoryLayers[name]?map.hasLayer(categoryLayers[name]):true;sw.className='swatch';sw.style.background=v.color;txt.textContent=v.symbol+' '+name+' ('+v.count+')';cb.onclick=function(e){e.stopPropagation()};cb.onchange=function(){var l=categoryLayers[name];if(!l)return;if(cb.checked)l.addTo(map);else map.removeLayer(l)};lab.onclick=function(e){if(e.target===cb)return;openCategoryEditor(name,v)};lab.appendChild(cb);lab.appendChild(sw);lab.appendChild(txt);box.appendChild(lab)})}
+function build(items){clearMap();buildLegend(items);var numbered=document.getElementById('numberAddresses').checked,labelled=document.getElementById('labelAddresses').checked,areasLabelled=document.getElementById('labelAreas').checked,idx=0,miss=0,missed=[];screen.classList.remove('labels-hidden');screen.classList.toggle('hide-address-labels',!labelled);screen.classList.toggle('hide-area-labels',!areasLabelled);labelToggle.classList.toggle('off',!labelled&&!areasLabelled);for(var i=0;i<items.length;i++){if(!categoryLayers[items[i].category])categoryLayers[items[i].category]=L.layerGroup().addTo(map)}
+function noteMissing(x){miss++;missed.push(x.query);var box=document.getElementById('notFoundList');box.innerHTML='<b>⚠️ Nicht gefunden ('+missed.length+')</b><br>'+missed.map(function(v){return '• '+esc(v)}).join('<br>')}
+function next(){if(idx>=items.length){if(allBounds&&allBounds.isValid())map.fitBounds(allBounds,{padding:[45,45],maxZoom:14});mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.');if(!miss)setTimeout(function(){mapStatus.textContent=''},3000);return}var x=items[idx],num=idx+1;mapStatus.textContent='Suche '+num+' von '+items.length+': '+x.query;geocode(x.query,x.area).then(function(a){if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var poly=L.geoJSON(a[0].geojson,{renderer:L.canvas({padding:0.5}),style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;renderedAreas.push({layer:poly,item:x});{var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker}allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,numbered)}).bindPopup(pinPopupHtml(x,a[0].display_name)).addTo(categoryLayers[x.category]);x._pinLayer=marker;allBounds.extend(p);marker.bindTooltip((numbered?num+'. ':'')+x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});if(numbered){var row=document.createElement('div');row.className='address-row';row.innerHTML='<b>'+num+'.</b> '+esc(x.query);document.getElementById('addressList').appendChild(row)}}}).catch(function(){noteMissing(x)}).then(function(){idx++;sleep(1050).then(next)})}next()}
 document.getElementById('go').onclick=function(){var items=parse(input.value);if(!items.length){formStatus.textContent='Bitte mindestens eine Adresse oder Fläche eingeben.';return}form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);build(items)},150)};
 document.getElementById('back').onclick=function(){screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
+function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else{clearMap();var q=document.getElementById('quickPlace');if(q){try{q.focus({preventScroll:true})}catch(e){q.focus()}}}},150)}
+function submitQuickPlace(){var el=document.getElementById('quickPlace'),q=el.value.trim();if(!q)return;searchPlaceForPin(q,mapStatus,function(){el.value=''})}
+document.getElementById('quickPlaceBtn').onclick=submitQuickPlace;document.getElementById('quickPlace').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitQuickPlace()}});
+setTimeout(openMapInitially,0);
+
 document.getElementById('clear').onclick=function(){input.value=defaults;formStatus.textContent=''};
+var labelToggle=document.getElementById('labelToggle');
+labelToggle.onclick=function(){
+ var hidden=screen.classList.contains('labels-hidden');
+ var typeHidden=screen.classList.contains('hide-address-labels')||screen.classList.contains('hide-area-labels');
+ if(hidden||typeHidden){
+  screen.classList.remove('labels-hidden','hide-address-labels','hide-area-labels');
+  labelToggle.classList.remove('off');
+  labelToggle.title='Beschriftungen ausblenden';
+ }else{
+  screen.classList.add('labels-hidden');
+  labelToggle.classList.add('off');
+  labelToggle.title='Beschriftungen anzeigen';
+ }
+};
 var styleSel=document.getElementById('mapStyle');try{var saved=localStorage.getItem('mapStyle');if(saved&&baseMaps[saved])styleSel.value=saved}catch(e){}styleSel.onchange=function(){setBase(this.value)};
-function renderMapPng(){map.invalidateSize(true);return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})}).then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})}).then(function(){return html2canvas(screen,{useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:Math.min(window.devicePixelRatio||1,2),ignoreElements:function(el){return el.classList&&(el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus'))}})}).then(function(canvas){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})})}
+var mapStyleButton=document.getElementById('mapStyleButton'),mapStyleMenu=document.getElementById('mapStyleMenu');
+function syncMapStyleMenu(){var bs=mapStyleMenu.querySelectorAll('[data-map-style]');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('active',bs[i].getAttribute('data-map-style')===styleSel.value)}
+mapStyleButton.onclick=function(e){e.stopPropagation();syncMapStyleMenu();mapStyleMenu.style.display=mapStyleMenu.style.display==='block'?'none':'block'};
+mapStyleMenu.onclick=function(e){var b=e.target.closest('[data-map-style]');if(!b)return;styleSel.value=b.getAttribute('data-map-style');setBase(styleSel.value);syncMapStyleMenu();mapStyleMenu.style.display='none'};
+document.addEventListener('click',function(e){if(mapStyleMenu.style.display==='block'&&!mapStyleMenu.contains(e.target)&&e.target!==mapStyleButton)mapStyleMenu.style.display='none'});
+document.getElementById('autoZoomButton').onclick=function(){autoZoomLoadedLayers();mapStatus.textContent='✓ Autozoom';setTimeout(function(){if(mapStatus.textContent==='✓ Autozoom')mapStatus.textContent=''},1200)};
+function positionAutoZoomButton(){
+ var b=document.getElementById('autoZoomButton'),z=screen.querySelector('.leaflet-control-zoom');
+ if(!b||!z||screen.style.display==='none')return;
+ var sr=screen.getBoundingClientRect(),zr=z.getBoundingClientRect();
+ b.style.left=Math.max(10,zr.left-sr.left)+'px';
+ b.style.top=Math.max(10,zr.top-sr.top-b.offsetHeight-8)+'px';
+}
+window.addEventListener('resize',function(){setTimeout(positionAutoZoomButton,0)});
+window.addEventListener('orientationchange',function(){setTimeout(positionAutoZoomButton,180)});
+if(map)map.on('resize',positionAutoZoomButton);
+setTimeout(positionAutoZoomButton,100);
+
+function renderMapPng(){map.invalidateSize(true);return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})}).then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})}).then(function(){return html2canvas(screen,{useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:Math.min(window.devicePixelRatio||1,2),ignoreElements:function(el){return el.classList&&(el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus')||el.classList.contains('map-ui-control'))}})}).then(function(canvas){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})})}
+document.getElementById('copyMapList').onclick=function(){var txt=input.value;function done(){mapStatus.textContent='✓ Liste wurde kopiert.';setTimeout(function(){if(mapStatus.textContent==='✓ Liste wurde kopiert.')mapStatus.textContent=''},1800)}function fallback(){var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done()}catch(e){mapStatus.textContent='Liste konnte nicht kopiert werden.'}document.body.removeChild(ta)}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(fallback);else fallback()};
+var clipboardPreview=document.getElementById('clipboardPreview'),clipboardPreviewText=document.getElementById('clipboardPreviewText');
+document.getElementById('pasteMapList').onclick=function(){var btn=this;if(!navigator.clipboard||!navigator.clipboard.readText){mapStatus.textContent='Zwischenablage kann hier nicht direkt gelesen werden. Bitte Safari über HTTPS verwenden.';return}btn.disabled=true;mapStatus.textContent='Lese Liste aus Zwischenablage …';navigator.clipboard.readText().then(function(txt){txt=String(txt||'');if(!txt.trim())throw new Error('empty');clipboardPreviewText.value=txt;clipboardPreview.style.display='block';mapStatus.textContent=''}).catch(function(e){mapStatus.textContent=e&&e.message==='empty'?'Die Zwischenablage enthält keine Liste.':'Import nicht möglich. Bitte Zugriff auf die Zwischenablage erlauben.'}).then(function(){btn.disabled=false})};
+document.getElementById('clipboardImportCancel').onclick=function(){clipboardPreview.style.display='none';clipboardPreviewText.value=''};
+document.getElementById('clipboardImportConfirm').onclick=function(){var txt=clipboardPreviewText.value;clipboardPreview.style.display='none';clipboardPreviewText.value='';input.value=txt;clearRoute(false);var items=parse(input.value);if(!items.length){clearMap();mapStatus.textContent='Die importierte Liste enthält keine Kartenobjekte.';return}Promise.resolve(build(items)).then(function(){mapStatus.textContent='✓ Liste wurde importiert.';setTimeout(function(){if(mapStatus.textContent==='✓ Liste wurde importiert.')mapStatus.textContent=''},1800)}).catch(function(){mapStatus.textContent='Liste wurde importiert; beim Aufbau der Karte trat ein Fehler auf.'})};
 document.getElementById('copyMap').onclick=function(){var btn=this;if(!window.html2canvas){mapStatus.textContent='Die Screenshot-Funktion konnte nicht geladen werden. Bitte Seite neu laden.';return}if(!navigator.clipboard||!window.ClipboardItem||!navigator.clipboard.write){mapStatus.textContent='Bild-Zwischenablage wird in diesem Browser nicht unterstützt. Bitte die Seite in Safari über HTTPS öffnen.';return}btn.disabled=true;mapStatus.textContent='Erzeuge Kartenbild …';var item;try{item=new ClipboardItem({'image/png':renderMapPng()})}catch(e){mapStatus.textContent='Kopieren wird von diesem Browser nicht unterstützt.';btn.disabled=false;return}navigator.clipboard.write([item]).then(function(){mapStatus.textContent='✓ Karte kopiert.'}).catch(function(){mapStatus.textContent='Kopieren nicht möglich. Bitte in Safari über HTTPS öffnen und erneut tippen.'}).then(function(){btn.disabled=false})};
 function refreshMapSize(){if(map&&screen.style.display!=='none')setTimeout(function(){map.invalidateSize(true)},180)}
 window.addEventListener('resize',refreshMapSize);
 window.addEventListener('orientationchange',function(){setTimeout(refreshMapSize,350)});
 document.addEventListener('visibilitychange',function(){if(!document.hidden)refreshMapSize()});
+})();
+
+document.getElementById('addCategoryBtn').onclick=function(){
+ var v=input.value.replace(/\r/g,'').replace(/\s+$/,'');
+ if(v)v+='\n\n';
+ input.value=v+'# 💠 [ hellblau ] Kategorie\n\n';
+ input.focus();input.setSelectionRange(input.value.length,input.value.length)
+};
+document.getElementById('copyListBtn').onclick=function(){
+ var btn=this,txt=input.value;
+ function ok(){var old=btn.textContent;btn.textContent='Kopiert ✓';setTimeout(function(){btn.textContent=old},1200)}
+ function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');ok()}catch(e){}document.body.removeChild(ta)}
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok).catch(fb);else fb()
+};
+
+(function(){
+ function flash(el){if(!el||el.disabled)return;el.classList.add('v43-pressed');setTimeout(function(){el.classList.remove('v43-pressed')},180)}
+ document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('button,.leaflet-control-zoom a');if(el)flash(el)},true);
 })();
 </script></body></html>
