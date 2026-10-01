@@ -104,6 +104,8 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
   }
 }
 </style>
+<style id="ios-area-keyboard-fix">#areaSearchBox.keyboard-visible{bottom:auto!important;transform:translateX(-50%)!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}</style>
+
 <meta name="pin2map-build" content="v8-clean">
 
 
@@ -483,7 +485,14 @@ document.getElementById('actionRemoveArea').onclick=function(){
 document.getElementById('actionCancel').onclick=function(){document.getElementById('mapActionChooser').style.display='none'};
 document.getElementById('manualAreaSearchBtn').onclick=manualAreaSearch;
 document.getElementById('manualAreaQuery').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();manualAreaSearch()}});
-document.getElementById('areaSearchClose').onclick=function(){document.getElementById('areaSearchBox').style.display='none'};
+document.getElementById('areaSearchClose').onclick=function(){var b=document.getElementById('areaSearchBox');b.style.display='none';b.classList.remove('keyboard-visible');b.style.removeProperty('top');b.style.removeProperty('max-height')};
+function syncAreaDialogToKeyboard(){
+ var box=document.getElementById('areaSearchBox'),field=document.getElementById('manualAreaQuery');if(!box||!field||box.style.display==='none')return;
+ var vv=window.visualViewport,focused=document.activeElement===field;if(!focused||!vv){box.classList.remove('keyboard-visible');box.style.removeProperty('top');box.style.removeProperty('max-height');return}
+ var top=Math.max(8,vv.offsetTop+8),avail=Math.max(180,vv.height-16);box.classList.add('keyboard-visible');box.style.setProperty('top',top+'px','important');box.style.setProperty('max-height',avail+'px','important');
+ requestAnimationFrame(function(){var br=box.getBoundingClientRect(),fr=field.getBoundingClientRect();if(fr.bottom>br.bottom-12)box.scrollTop+=fr.bottom-(br.bottom-12);else if(fr.top<br.top+12)box.scrollTop-=br.top+12-fr.top})
+}
+(function(){var field=document.getElementById('manualAreaQuery');if(!field)return;field.addEventListener('focus',function(){setTimeout(syncAreaDialogToKeyboard,60);setTimeout(syncAreaDialogToKeyboard,260)});field.addEventListener('blur',function(){setTimeout(syncAreaDialogToKeyboard,80)});if(window.visualViewport){window.visualViewport.addEventListener('resize',syncAreaDialogToKeyboard);window.visualViewport.addEventListener('scroll',syncAreaDialogToKeyboard)}})();
 
 function osmTypeLabel(k){
  var labels={
