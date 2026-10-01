@@ -143,6 +143,18 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
  }
 }
 </style>
+
+<style id="ios-area-compact-keyboard">
+@media (pointer:coarse) and (max-width:600px){
+ #areaSearchBox.keyboard-visible #areaSearchPoint,
+ #areaSearchBox.keyboard-visible #areaSearchResults{
+  display:none!important;
+ }
+ #areaSearchBox.keyboard-visible{
+  overflow-y:auto!important;
+ }
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
 <h1>Adressen & Kategorien auf einer Karte</h1>
