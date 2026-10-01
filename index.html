@@ -128,6 +128,21 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
  }
 }
 </style>
+
+<style id="ios-focus-zoom-fix">
+/* iPhone Safari zoomt fokussierte Formularfelder mit kleiner Schrift automatisch hinein.
+   16px verhindert diesen Seitenzoom; dadurch bleiben nach der Tastatur auch andere Dialoge
+   im normalen Maßstab. iPad/Desktop bleiben unverändert. */
+@media (pointer:coarse) and (max-width:600px){
+ #manualAreaQuery,
+ #quickPlaceInput,
+ #clipboardPreviewText,
+ #pinNameInput,
+ #areaNameInput{
+  font-size:16px!important;
+ }
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
 <h1>Adressen & Kategorien auf einer Karte</h1>
