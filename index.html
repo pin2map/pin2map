@@ -10,222 +10,75 @@
 <meta name="format-detection" content="telephone=no">
 <title>Adressen & Kategorien auf Karte</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<style>
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{background:#f5f5f7;color:#1d1d1f}.wrap{max-width:900px;margin:auto;padding:20px}h1{font-size:1.6rem}.hint{color:#666;line-height:1.5}code{background:#e8e8ed;padding:2px 5px;border-radius:5px}textarea{width:100%;min-height:360px;padding:14px;border:1px solid #bbb;border-radius:12px;font:16px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:#fff;color:#111;resize:vertical}.options{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0}.options label{background:#fff;border:1px solid #ccc;border-radius:10px;padding:10px 12px;color:#111}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}button{border:0;border-radius:10px;padding:12px 17px;font-size:16px;font-weight:600;background:#007aff;color:#fff;touch-action:manipulation;-webkit-tap-highlight-color:transparent}button:disabled{opacity:.55}button.secondary{background:#666}
-#mapScreen{display:none;position:fixed;inset:0;z-index:1000;background:#ddd;width:100%;height:100vh;height:100dvh;overflow:hidden}#map{position:absolute;inset:0}.topbar{position:absolute;z-index:1100;top:max(8px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:grid;grid-template-columns:max-content max-content;gap:8px;padding:7px;background:rgba(255,255,255,.94);border-radius:12px;box-shadow:0 2px 12px #0003;color:#111;width:max-content;max-width:calc(100vw - 16px)}.topbar select,.topbar button{font:600 14px -apple-system,sans-serif;border:0;border-radius:8px;padding:9px}.quick-place{grid-column:1 / -1;display:flex;gap:6px;width:100%;min-width:0;box-sizing:border-box}.quick-place input{flex:1;min-width:0;border:1px solid #bbb;border-radius:8px;padding:9px;font:14px -apple-system,sans-serif}.quick-place button{white-space:nowrap}.topbar select{background:#eee;color:#111}.legend{position:absolute;z-index:1100;left:10px;top:72px;display:flex;gap:6px;flex-direction:column;max-height:55vh;overflow:auto}.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.94);color:#111;border-radius:999px;padding:6px 10px;box-shadow:0 1px 5px #0002;font-size:13px;white-space:nowrap}.swatch{width:12px;height:12px;border-radius:3px;border:1px solid #0003}.bottom{position:absolute;z-index:1200;bottom:max(12px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px}.back{border-radius:999px;padding:12px 22px;background:rgba(20,20,20,.9)}.list-round{width:46px;height:46px;padding:0!important;border-radius:50%!important;background:rgba(20,20,20,.9)!important;color:#fff!important;font-size:25px!important;line-height:46px!important;text-align:center;box-shadow:0 2px 10px #0003}.clipboard-preview{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5900;width:min(560px,90vw);max-height:82vh;overflow:auto;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005}.clipboard-preview textarea{width:100%;height:min(45vh,360px);box-sizing:border-box;resize:vertical;padding:10px;border:1px solid #bbb;border-radius:9px;font:13px ui-monospace,SFMono-Regular,Menlo,monospace;background:#f7f7f7;color:#111}.clipboard-preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.clipboard-preview-actions button{margin:0}.clipboard-preview-actions .cancel{background:#666}.mapStatus{position:absolute;z-index:1100;right:10px;bottom:75px;max-width:70vw;background:rgba(255,255,255,.94);color:#111;padding:7px 10px;border-radius:9px;font-size:12px}.mapStatus:empty{display:none}.address-list{position:absolute;z-index:1100;right:10px;top:72px;max-width:min(390px,42vw);max-height:55vh;overflow:auto;background:rgba(255,255,255,.94);color:#111;border-radius:12px;padding:8px 10px;box-shadow:0 1px 5px #0002;font-size:12px}.address-list:empty{display:none}.address-row{padding:4px 0;border-bottom:1px solid #ddd}.not-found{position:absolute;z-index:1100;right:10px;bottom:75px;max-width:min(360px,55vw);max-height:30vh;overflow:auto;background:rgba(255,245,245,.96);color:#b00020;border:1px solid #e0a0a8;border-radius:10px;padding:8px 10px;box-shadow:0 1px 5px #0002;font-size:12px}.not-found:empty{display:none}.emoji-marker{background:transparent;border:0}.emoji-pin{width:36px;height:36px;border-radius:50% 50% 50% 0;background:#fff;border:2px solid #555;box-shadow:0 2px 6px #0005;display:flex;align-items:center;justify-content:center;font-size:21px;transform:rotate(-45deg)}.emoji-pin span{transform:rotate(45deg)}.number-pin{font-size:15px;font-weight:800;color:#111}.address-label{background:rgba(255,255,255,.94);border:1px solid #777;border-radius:5px;color:#111;font-weight:600;padding:3px 6px;white-space:nowrap}.leaflet-control-scale{margin-bottom:68px!important}.leaflet-control-scale-line{background:rgba(255,255,255,.92)!important;color:#111!important;border-color:#111!important;border-top:none!important;font-weight:600!important}
-@media(max-width:600px){.wrap{padding:max(14px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom))}.topbar{width:calc(100vw - 12px);justify-content:center;flex-wrap:wrap}.legend,.address-list{top:112px;max-height:42vh}.legend{left:max(6px,env(safe-area-inset-left))}.address-list{right:max(6px,env(safe-area-inset-right));max-width:52vw}.topbar button,.topbar select{min-height:42px}.back{min-height:46px}.mapStatus{bottom:max(74px,calc(env(safe-area-inset-bottom) + 62px));max-width:88vw}}
-@media(orientation:landscape) and (max-height:500px){.legend,.address-list{top:68px;max-height:52vh}.topbar{top:max(4px,env(safe-area-inset-top));width:auto;flex-wrap:nowrap}.bottom{bottom:max(6px,env(safe-area-inset-bottom))}.leaflet-control-scale{margin-bottom:56px!important}}
 
-.area-label-wrap{background:transparent!important;border:0!important}.area-label{display:inline-block;white-space:nowrap;transform:translate(-50%,-50%);background:rgba(255,255,255,.88);border:1px solid rgba(0,0,0,.35);border-radius:4px;padding:3px 6px;font:600 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 
-/* v26: Kartenbedienung */
-.leaflet-bottom.leaflet-right{bottom:58px;right:10px}
-.leaflet-control-zoom{border:0!important;box-shadow:0 2px 10px #0003!important;background:transparent!important}
-.leaflet-control-zoom a{width:46px!important;height:46px!important;line-height:44px!important;font-size:27px!important;border:0!important;border-radius:50%!important;margin-top:8px!important;background:rgba(255,255,255,.96)!important;color:#111!important;box-shadow:0 1px 5px #0003!important}
-.leaflet-control-zoom a:first-child,.leaflet-control-zoom a:last-child{border-radius:50%!important}
-.label-toggle{position:absolute;z-index:1200;right:18px;bottom:max(174px,calc(env(safe-area-inset-bottom) + 174px));width:46px;height:46px;padding:0;border-radius:50%;background:rgba(255,255,255,.96);color:#111;font-size:22px;box-shadow:0 2px 10px #0003}
-.label-toggle.off{opacity:.55}
-#mapScreen.labels-hidden .address-label,#mapScreen.labels-hidden .area-label-wrap{display:none!important}#mapScreen.hide-address-labels .address-label{display:none!important}#mapScreen.hide-area-labels .area-label-wrap{display:none!important}
 
-.route-info{position:absolute;z-index:1250;left:50%;bottom:max(72px,calc(env(safe-area-inset-bottom) + 72px));transform:translateX(-50%);display:none;align-items:flex-start;gap:10px;background:rgba(255,255,255,.96);color:#111;padding:9px 11px;border-radius:12px;box-shadow:0 2px 12px #0003;font:600 14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;max-width:calc(100vw - 36px)}.route-info button{padding:7px 9px;border:0;border-radius:8px;background:#e53935;color:#fff;font-weight:700;white-space:nowrap}.route-main{min-width:0}.route-summary{cursor:pointer;user-select:none}.route-pin-state{font-size:12px;color:#555;font-weight:500;white-space:normal}.route-legs{display:block;margin-top:8px;padding-top:7px;border-top:1px solid #ddd;font-size:12px;font-weight:500;max-height:32vh;overflow:auto}.route-legs.open{display:block}.route-leg{padding:4px 0;white-space:normal}.route-hint{font-size:11px;color:#777;font-weight:500;margin-top:2px}
-</style>
 
-<style id="v42-controls">
-.topbar{grid-template-columns:1fr!important;width:min(430px,calc(100vw - 132px))!important;padding:0!important;background:transparent!important;box-shadow:none!important}
-.quick-place{grid-column:1!important;background:rgba(255,255,255,.94);padding:7px;border-radius:12px;box-shadow:0 2px 12px #0003}
-.map-round-control{position:absolute;z-index:1210;width:46px;height:46px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.96);color:#111;font:22px/46px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;box-shadow:0 2px 10px #0003;cursor:pointer}
-#mapStyleButton{left:max(10px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top))}
-#mapStyleMenu{display:none;position:absolute;z-index:1300;left:max(10px,env(safe-area-inset-left));top:max(64px,calc(env(safe-area-inset-top) + 64px));background:rgba(255,255,255,.98);color:#111;padding:7px;border-radius:14px;box-shadow:0 3px 14px #0004;min-width:150px}
-#mapStyleMenu button{display:block;width:100%;margin:0;padding:9px 11px;border:0;border-radius:9px;background:transparent;color:#111;text-align:left;font:600 14px -apple-system,sans-serif}
-#mapStyleMenu button.active{background:#e5e5ea}
-#copyMap{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));font-size:21px}
-#autoZoomButton{right:max(12px,env(safe-area-inset-right));bottom:max(68px,calc(env(safe-area-inset-bottom) + 68px));font-size:18px}
-@media(max-width:600px){.topbar{width:min(430px,calc(100vw - 124px))!important}.legend,.address-list{top:72px!important}}
-</style>
 
-<style id="v43-controls">
-#autoZoomButton{left:10px!important;right:auto!important;bottom:auto!important;font-size:24px!important;font-weight:800!important}
-.list-round,.back,#quickPlaceBtn{background:#777!important;color:#fff!important}
-button.v43-pressed,.leaflet-control-zoom a.v43-pressed{background:#0a84ff!important;color:#fff!important}
-</style>
 
-<style id="v48-iphone-responsive">
-:root{--app-vw:100vw;--app-vh:100dvh;--edge:10px}
-html,body{width:100%;max-width:100%;overflow-x:hidden}
-#mapScreen{left:0!important;top:0!important;right:auto!important;bottom:auto!important;width:var(--app-vw)!important;max-width:100vw!important;height:var(--app-vh)!important;max-height:100dvh!important;overflow:hidden!important}
-#map{width:100%!important;height:100%!important}
-#mapScreen>*{box-sizing:border-box}
-.topbar{left:50%!important;right:auto!important;max-width:calc(var(--app-vw) - 132px)!important;width:min(430px,calc(var(--app-vw) - 132px))!important}
-#mapStyleButton{left:max(var(--edge),env(safe-area-inset-left))!important}
-#mapStyleMenu{left:max(var(--edge),env(safe-area-inset-left))!important;max-width:calc(var(--app-vw) - 20px)!important}
-#copyMap{right:max(var(--edge),env(safe-area-inset-right))!important;bottom:max(76px,calc(env(safe-area-inset-bottom) + 76px))!important}
-.label-toggle{right:max(var(--edge),env(safe-area-inset-right))!important;bottom:max(132px,calc(env(safe-area-inset-bottom) + 132px))!important}
-.bottom{bottom:max(12px,calc(env(safe-area-inset-bottom) + 12px))!important;max-width:calc(var(--app-vw) - 20px)!important}
-.mapStatus,.not-found{right:max(var(--edge),env(safe-area-inset-right))!important;max-width:calc(var(--app-vw) - 20px)!important}
-.address-list{right:max(var(--edge),env(safe-area-inset-right))!important}
-.legend{left:max(6px,env(safe-area-inset-left))!important}
-.leaflet-bottom.leaflet-left{left:max(0px,env(safe-area-inset-left))!important;bottom:max(68px,calc(env(safe-area-inset-bottom) + 68px))!important}
-.leaflet-control-scale{margin-bottom:0!important}
-#autoZoomButton{left:max(10px,env(safe-area-inset-left))!important}
-/* Alle zentrierten Dialoge strikt innerhalb der sichtbaren Breite halten. */
-#placeResultChooser,#pinCategoryChooser,#areaClickChooser,#categoryEditor,#pinNameEditor,#areaNameEditor,#mapActionChooser,#areaSearchBox,#clipboardPreview{
- width:calc(var(--app-vw) - 32px)!important;max-width:560px!important;min-width:0!important;max-height:calc(var(--app-vh) - 80px)!important;overflow:auto!important;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style id="pin2map-styles">
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{background:#f5f5f7;color:#1d1d1f}.wrap{max-width:900px;margin:auto;padding:20px}h1{font-size:1.6rem}.hint{color:#666;line-height:1.5}code{background:#e8e8ed;padding:2px 5px;border-radius:5px}textarea{width:100%;min-height:360px;padding:14px;border:1px solid #bbb;border-radius:12px;font:16px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:#fff;color:#111;resize:vertical}.options{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0}.options label{background:#fff;border:1px solid #ccc;border-radius:10px;padding:10px 12px;color:#111}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}button{border:0;border-radius:10px;padding:12px 17px;font-size:16px;font-weight:400;background:#007aff;color:#fff;touch-action:manipulation;-webkit-tap-highlight-color:transparent}button:disabled{opacity:.55}button.secondary{background:#666}#mapScreen{display:none;position:fixed;inset:0;z-index:1000;background:#ddd;width:100%;height:100vh;height:100dvh;overflow:hidden}#map{position:absolute;inset:0}.topbar{position:absolute;z-index:1100;top:max(8px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:grid;grid-template-columns:max-content max-content;gap:8px;padding:7px;background:rgba(255,255,255,.94);border-radius:12px;box-shadow:0 2px 12px #0003;color:#111;width:max-content;max-width:calc(100vw - 16px)}.topbar select,.topbar button{font:600 14px -apple-system,sans-serif;border:0;border-radius:8px;padding:9px}.quick-place{grid-column:1 / -1;display:flex;gap:6px;width:100%;min-width:0;box-sizing:border-box}.quick-place input{flex:1;min-width:0;border:1px solid #bbb;border-radius:8px;padding:9px;font:14px -apple-system,sans-serif}.quick-place button{white-space:nowrap}.topbar select{background:#eee;color:#111}.legend{position:absolute;z-index:1100;left:10px;top:72px;display:flex;gap:6px;flex-direction:column;max-height:55vh;overflow:auto}.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.94);color:#111;border-radius:999px;padding:6px 10px;box-shadow:0 1px 5px #0002;font-size:13px;white-space:nowrap}.swatch{width:12px;height:12px;border-radius:3px;border:1px solid #0003}.bottom{position:absolute;z-index:1200;bottom:max(12px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px}.back{border-radius:999px;padding:12px 22px;background:rgba(20,20,20,.9)}.list-round{width:46px;height:46px;padding:0!important;border-radius:50%!important;background:rgba(20,20,20,.9)!important;color:#fff!important;font-size:25px!important;line-height:46px!important;text-align:center;box-shadow:0 2px 10px #0003}.clipboard-preview{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5900;width:min(560px,90vw);max-height:82vh;overflow:auto;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005}.clipboard-preview textarea{width:100%;height:min(45vh,360px);box-sizing:border-box;resize:vertical;padding:10px;border:1px solid #bbb;border-radius:9px;font:13px ui-monospace,SFMono-Regular,Menlo,monospace;background:#f7f7f7;color:#111}.clipboard-preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.clipboard-preview-actions button{margin:0}.clipboard-preview-actions .cancel{background:#666}.mapStatus{position:absolute;z-index:1100;right:10px;bottom:75px;max-width:70vw;background:rgba(255,255,255,.94);color:#111;padding:7px 10px;border-radius:9px;font-size:12px}.mapStatus:empty{display:none}.address-list{position:absolute;z-index:1100;right:10px;top:72px;max-width:min(390px,42vw);max-height:55vh;overflow:auto;background:rgba(255,255,255,.94);color:#111;border-radius:12px;padding:8px 10px;box-shadow:0 1px 5px #0002;font-size:12px}.address-list:empty{display:none}.address-row{padding:4px 0;border-bottom:1px solid #ddd}.not-found{position:absolute;z-index:1100;right:10px;bottom:75px;max-width:min(360px,55vw);max-height:30vh;overflow:auto;background:rgba(255,245,245,.96);color:#b00020;border:1px solid #e0a0a8;border-radius:10px;padding:8px 10px;box-shadow:0 1px 5px #0002;font-size:12px}.not-found:empty{display:none}.emoji-marker{background:transparent;border:0}.emoji-pin{width:36px;height:36px;border-radius:50% 50% 50% 0;background:#fff;border:2px solid #555;box-shadow:0 2px 6px #0005;display:flex;align-items:center;justify-content:center;font-size:21px;transform:rotate(-45deg)}.emoji-pin span{transform:rotate(45deg)}.number-pin{font-size:15px;font-weight:800;color:#111}.address-label{background:rgba(255,255,255,.94);border:1px solid #777;border-radius:5px;color:#111;font-weight:600;padding:3px 6px;white-space:nowrap}.leaflet-control-scale{margin-bottom:68px!important}.leaflet-control-scale-line{background:rgba(255,255,255,.92)!important;color:#111!important;border-color:#111!important;border-top:none!important;font-weight:600!important}@media(max-width:600px){.wrap{padding:max(14px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom))}.topbar{width:calc(100vw - 12px);justify-content:center;flex-wrap:wrap}.legend,.address-list{top:112px;max-height:42vh}.legend{left:max(6px,env(safe-area-inset-left))}.address-list{right:max(6px,env(safe-area-inset-right));max-width:52vw}.topbar button,.topbar select{min-height:42px}.back{min-height:46px}.mapStatus{bottom:max(74px,calc(env(safe-area-inset-bottom) + 62px));max-width:88vw}}@media(orientation:landscape) and (max-height:500px){.legend,.address-list{top:68px;max-height:52vh}.topbar{top:max(4px,env(safe-area-inset-top));width:auto;flex-wrap:nowrap}.bottom{bottom:max(6px,env(safe-area-inset-bottom))}.leaflet-control-scale{margin-bottom:56px!important}}.area-label-wrap{background:transparent!important;border:0!important}.area-label{display:inline-block;white-space:nowrap;transform:translate(-50%,-50%);background:rgba(255,255,255,.88);border:1px solid rgba(0,0,0,.35);border-radius:4px;padding:3px 6px;font:600 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;box-shadow:0 1px 3px rgba(0,0,0,.2)}.leaflet-bottom.leaflet-right{bottom:58px;right:10px}.leaflet-control-zoom{border:0!important;box-shadow:0 2px 10px #0003!important;background:transparent!important}.leaflet-control-zoom a{width:46px!important;height:46px!important;line-height:44px!important;font-size:27px!important;border:0!important;border-radius:50%!important;margin-top:8px!important;background:rgba(255,255,255,.96)!important;color:#111!important;box-shadow:0 1px 5px #0003!important}.leaflet-control-zoom a:first-child,.leaflet-control-zoom a:last-child{border-radius:50%!important}.label-toggle{position:absolute;z-index:1200;right:18px;bottom:max(174px,calc(env(safe-area-inset-bottom) + 174px));width:46px;height:46px;padding:0;border-radius:50%;background:rgba(255,255,255,.96);color:#111;font-size:22px;box-shadow:0 2px 10px #0003}.label-toggle.off{opacity:.55}#mapScreen.labels-hidden .address-label,#mapScreen.labels-hidden .area-label-wrap{display:none!important}#mapScreen.hide-address-labels .address-label{display:none!important}#mapScreen.hide-area-labels .area-label-wrap{display:none!important}.route-info{position:absolute;z-index:1250;left:50%;bottom:max(72px,calc(env(safe-area-inset-bottom) + 72px));transform:translateX(-50%);display:none;align-items:flex-start;gap:10px;background:rgba(255,255,255,.96);color:#111;padding:9px 11px;border-radius:12px;box-shadow:0 2px 12px #0003;font:600 14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;max-width:calc(100vw - 36px)}.route-info button{padding:7px 9px;border:0;border-radius:8px;background:#e53935;color:#fff;font-weight:400;white-space:nowrap}.route-main{min-width:0}.route-summary{cursor:pointer;user-select:none}.route-pin-state{font-size:12px;color:#555;font-weight:500;white-space:normal}.route-legs{display:block;margin-top:8px;padding-top:7px;border-top:1px solid #ddd;font-size:12px;font-weight:500;max-height:32vh;overflow:auto}.route-legs.open{display:block}.route-leg{padding:4px 0;white-space:normal}.route-hint{font-size:11px;color:#777;font-weight:500;margin-top:2px}.topbar{grid-template-columns:1fr!important;width:min(430px,calc(100vw - 132px))!important;padding:0!important;background:transparent!important;box-shadow:none!important}.quick-place{grid-column:1!important;background:rgba(255,255,255,.94);padding:7px;border-radius:12px;box-shadow:0 2px 12px #0003}.map-round-control{position:absolute;z-index:1210;width:46px;height:46px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.96);color:#111;font:22px/46px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;box-shadow:0 2px 10px #0003;cursor:pointer}#mapStyleButton{left:max(10px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top))}#mapStyleMenu{display:none;position:absolute;z-index:1300;left:max(10px,env(safe-area-inset-left));top:max(64px,calc(env(safe-area-inset-top) + 64px));background:rgba(255,255,255,.98);color:#111;padding:7px;border-radius:14px;box-shadow:0 3px 14px #0004;min-width:150px}#mapStyleMenu button{display:block;width:100%;margin:0;padding:9px 11px;border:0;border-radius:9px;background:transparent;color:#111;text-align:left;font:600 14px -apple-system,sans-serif}#mapStyleMenu button.active{background:#e5e5ea}#copyMap{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));font-size:21px}#autoZoomButton{right:max(12px,env(safe-area-inset-right));bottom:max(68px,calc(env(safe-area-inset-bottom) + 68px));font-size:18px}@media(max-width:600px){.topbar{width:min(430px,calc(100vw - 124px))!important}.legend,.address-list{top:72px!important}}#autoZoomButton{left:10px!important;right:auto!important;bottom:auto!important;font-size:24px!important;font-weight:800!important}.list-round,.back,#quickPlaceBtn{background:#34a853!important;color:#fff!important}button.v43-pressed,.leaflet-control-zoom a.v43-pressed{background:#0a84ff!important;color:#fff!important}:root{--app-vw:100vw;--app-vh:100dvh;--edge:10px}html,body{width:100%;max-width:100%;overflow-x:hidden}#mapScreen{left:0!important;top:0!important;right:auto!important;bottom:auto!important;width:var(--app-vw)!important;max-width:100vw!important;height:var(--app-vh)!important;max-height:100dvh!important;overflow:hidden!important}#map{width:100%!important;height:100%!important}#mapScreen>*{box-sizing:border-box}.topbar{left:50%!important;right:auto!important;max-width:calc(var(--app-vw) - 132px)!important;width:min(430px,calc(var(--app-vw) - 132px))!important}#mapStyleButton{left:max(var(--edge),env(safe-area-inset-left))!important}#mapStyleMenu{left:max(var(--edge),env(safe-area-inset-left))!important;max-width:calc(var(--app-vw) - 20px)!important}#copyMap{right:max(var(--edge),env(safe-area-inset-right))!important;bottom:max(76px,calc(env(safe-area-inset-bottom) + 76px))!important}.label-toggle{right:max(var(--edge),env(safe-area-inset-right))!important;bottom:max(132px,calc(env(safe-area-inset-bottom) + 132px))!important}.bottom{bottom:max(12px,calc(env(safe-area-inset-bottom) + 12px))!important;max-width:calc(var(--app-vw) - 20px)!important}.mapStatus,.not-found{right:max(var(--edge),env(safe-area-inset-right))!important;max-width:calc(var(--app-vw) - 20px)!important}.address-list{right:max(var(--edge),env(safe-area-inset-right))!important}.legend{left:max(6px,env(safe-area-inset-left))!important}.leaflet-bottom.leaflet-left{left:max(0px,env(safe-area-inset-left))!important;bottom:max(68px,calc(env(safe-area-inset-bottom) + 68px))!important}.leaflet-control-scale{margin-bottom:0!important}#autoZoomButton{left:max(10px,env(safe-area-inset-left))!important}#placeResultChooser,#pinCategoryChooser,#areaClickChooser,#categoryEditor,#pinNameEditor,#areaNameEditor,#mapActionChooser,#areaSearchBox,#clipboardPreview{width:calc(var(--app-vw) - 32px)!important;max-width:560px!important;min-width:0!important;max-height:calc(var(--app-vh) - 80px)!important;overflow:auto!important;}#categoryEditor,#pinNameEditor,#areaNameEditor,#mapActionChooser{max-width:390px!important}#pinCategoryChooser{max-width:520px!important}#categoryEditor input,#categoryEditor button,#pinNameEditor input,#pinNameEditor button,#areaNameEditor input,#areaNameEditor button{max-width:100%!important}.route-info{left:50%!important;right:auto!important;bottom:max(70px,calc(env(safe-area-inset-bottom) + 70px))!important;width:min(520px,calc(var(--app-vw) - 24px))!important;max-width:calc(var(--app-vw) - 24px)!important;display:none;flex-direction:column!important;align-items:stretch!important;gap:8px!important;padding:10px 12px!important}.route-info[style*="display:flex"],.route-info[style*="display:flex"]{display:flex!important}.route-main{width:100%!important;min-width:0!important}.route-summary{font-size:15px!important;line-height:1.25!important;white-space:normal!important}.route-pin-state{line-height:1.3!important;overflow-wrap:anywhere!important}.route-legs{max-height:min(28vh,220px)!important;width:100%!important;overflow:auto!important}.route-leg{line-height:1.35!important;overflow-wrap:anywhere!important}.route-info #routeClear{display:block!important;width:100%!important;margin:0!important;padding:9px 10px!important}@media(max-width:600px){:root{--edge:8px}.topbar{top:max(8px,env(safe-area-inset-top))!important;width:calc(var(--app-vw) - 132px)!important;max-width:calc(var(--app-vw) - 132px)!important}.quick-place{width:100%!important}.quick-place input{font-size:16px!important}.legend{top:78px!important;max-width:calc(var(--app-vw) - 16px)!important;max-height:34vh!important}.chip{font-size:13px!important;max-width:calc(var(--app-vw) - 16px)!important}.address-list{top:78px!important;max-width:48vw!important;max-height:34vh!important}#pinCategoryButtons{gap:7px!important}#pinCategoryButtons button{min-width:0!important;padding:10px 4px!important}.clipboard-preview-actions{grid-template-columns:1fr!important}}@media(max-width:390px){.topbar{width:calc(var(--app-vw) - 124px)!important;max-width:calc(var(--app-vw) - 124px)!important}.quick-place{gap:4px!important;padding:6px!important}.quick-place input{padding:8px!important}#quickPlaceBtn{padding:8px 12px!important}.route-info{width:calc(var(--app-vw) - 16px)!important;max-width:calc(var(--app-vw) - 16px)!important}}#mapScreen,#map,#map .leaflet-container,#map .leaflet-pane,#map .leaflet-interactive{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;}.bottom{bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}#copyMap{bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}.leaflet-bottom.leaflet-left{bottom:max(92px,calc(env(safe-area-inset-bottom) + 92px))!important}.label-toggle{right:max(8px,env(safe-area-inset-right))!important}@media(max-width:600px){.route-info{position:absolute!important;display:none;flex-direction:block!important;padding:12px!important;padding-right:58px!important;gap:0!important}.route-info[style*="display:flex"],.route-info[style*="display:flex"]{display:block!important}.route-main{width:100%!important}.route-summary{font-size:16px!important;line-height:1.3!important}.route-pin-state{font-size:13px!important;line-height:1.35!important;margin-top:2px!important}.route-legs{font-size:13px!important;line-height:1.35!important;max-height:min(30vh,230px)!important;margin-top:8px!important}.route-info #routeClear{position:absolute!important;right:9px!important;top:9px!important;width:40px!important;height:40px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;line-height:40px!important}.route-info #routeClear::after{content:"❌";font-size:20px;line-height:40px}}.leaflet-bottom.leaflet-left{bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}.leaflet-control-zoom{margin-bottom:0!important}.leaflet-control-scale{position:absolute!important;left:0!important;bottom:116px!important;margin:0!important;white-space:nowrap!important}#copyMap{right:max(8px,env(safe-area-inset-right))!important;bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}.label-toggle{right:max(8px,env(safe-area-inset-right))!important;bottom:max(58px,calc(env(safe-area-inset-bottom) + 58px))!important}@media(max-width:600px){.route-info{left:68px!important;right:68px!important;transform:none!important;bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important;width:auto!important;max-width:none!important;padding:11px 54px 11px 12px!important;border-radius:14px!important;z-index:1250!important;}.route-info #routeClear{right:8px!important;top:8px!important;width:40px!important;height:40px!important;background:#f2f2f2!important;color:#d70015!important;border:1px solid #d1d1d6!important;box-shadow:none!important;}.route-info #routeClear::after{content:"❌"!important;font-size:20px!important;line-height:38px!important}.route-summary{padding-right:2px!important}.route-legs{max-height:min(24vh,190px)!important}}@media(max-width:390px){.route-info{left:64px!important;right:64px!important;padding-right:50px!important}}#copyMap{top:max(10px,env(safe-area-inset-top))!important;right:max(10px,env(safe-area-inset-right))!important;bottom:auto!important;}.label-toggle{top:max(66px,calc(env(safe-area-inset-top) + 66px))!important;right:max(10px,env(safe-area-inset-right))!important;bottom:auto!important;}@media(max-width:600px){#copyMap{top:max(8px,env(safe-area-inset-top))!important;right:max(8px,env(safe-area-inset-right))!important;bottom:auto!important}.label-toggle{top:max(64px,calc(env(safe-area-inset-top) + 64px))!important;right:max(8px,env(safe-area-inset-right))!important;bottom:auto!important}.route-info{right:12px!important}}@media(max-width:390px){.route-info{right:8px!important}}.leaflet-control-scale{position:fixed!important;left:50%!important;top:max(76px,calc(env(safe-area-inset-top) + 76px))!important;bottom:auto!important;transform:translateX(-50%)!important;margin:0!important;z-index:1090!important;white-space:nowrap!important;pointer-events:none!important;}@media(max-width:600px){.leaflet-control-scale{top:max(72px,calc(env(safe-area-inset-top) + 72px))!important}}@media (pointer:coarse),(max-width:600px){#mapActionChooser,#areaClickChooser,#areaSearchBox{top:max(8px,env(safe-area-inset-top))!important;bottom:auto!important;transform:translateX(-50%)!important;max-height:calc(var(--app-vh) - max(16px,env(safe-area-inset-top)) - 16px)!important;z-index:7000!important;}#mapActionChooser.longpress-arming{pointer-events:none!important}}#mapActionChooser.area-context{min-width:0!important;width:min(250px,calc(100vw - 32px))!important;max-width:calc(100vw - 32px)!important;}@media (pointer:coarse),(max-width:600px){#mapActionChooser.area-context{width:min(242px,calc(var(--app-vw) - 28px))!important}}#addCategoryBtn.list-category-btn{background:#34a853!important;color:#fff!important}#clear.list-delete-btn{background:#e53935!important;color:#fff!important}#cancelListBtn.list-cancel-btn{background:#e5e5ea!important;color:#111!important}:root{--ui-primary:#007aff;--ui-neutral:#777;--ui-cancel:#e5e5ea;--ui-danger:#e53935;--ui-success:#34a853;--ui-border:#d1d1d6;--ui-radius:10px;--dialog-radius:14px}#placeResultChooser,#pinCategoryChooser,#areaClickChooser,#categoryEditor,#pinNameEditor,#areaNameEditor,#mapActionChooser,#areaSearchBox,#clipboardPreview{border-radius:var(--dialog-radius)!important;box-shadow:0 5px 22px rgba(0,0,0,.32)!important;color:#111!important}#placeResultCancel,#pinCategoryCancel,#areaClickCancel,#categoryEditCancel,#pinNameCancel,#areaNameCancel,#actionCancel,#areaSearchClose,#clipboardImportCancel{background:var(--ui-cancel)!important;color:#111!important;border:0!important}#categoryEditSave,#pinNameSave,#areaNameSave,#clipboardImportConfirm{background:var(--ui-primary)!important;color:#fff!important}#actionRemoveArea{background:var(--ui-danger)!important;color:#fff!important}#actionWikipediaArea{background:#fff!important;color:#111!important;border:1px solid var(--ui-border)!important}#mapActionChooser button,#areaClickChooser button,#placeResultChooser button,#categoryEditor button,#pinNameEditor button,#areaNameEditor button,#areaSearchBox button,#clipboardPreview button{border-radius:var(--ui-radius)!important;min-height:42px}
+button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!important}
+#quickPlaceBtn,#addCategoryBtn.list-category-btn,#actionAddPin,#actionFindAreas{background:#34a853!important;color:#fff!important}
+#actionRenameArea,#actionChangeAreaCategory{background:#666!important;color:#fff!important}
+#actionRemoveArea{background:#e53935!important;color:#fff!important}
+#mapActionChooser.area-context{width:min(250px,calc(100vw - 32px))!important}
+#mapActionChooser.area-context #actionCancel{display:none!important}
+@media (pointer:coarse),(max-width:600px){
+ #mapActionChooser.area-context{width:min(242px,calc(var(--app-vw) - 28px))!important}
 }
-#categoryEditor,#pinNameEditor,#areaNameEditor,#mapActionChooser{max-width:390px!important}
-#pinCategoryChooser{max-width:520px!important}
-#categoryEditor input,#categoryEditor button,#pinNameEditor input,#pinNameEditor button,#areaNameEditor input,#areaNameEditor button{max-width:100%!important}
-.route-info{left:50%!important;right:auto!important;bottom:max(70px,calc(env(safe-area-inset-bottom) + 70px))!important;width:min(520px,calc(var(--app-vw) - 24px))!important;max-width:calc(var(--app-vw) - 24px)!important;display:none;flex-direction:column!important;align-items:stretch!important;gap:8px!important;padding:10px 12px!important}
-.route-info[style*="display: flex"],.route-info[style*="display:flex"]{display:flex!important}
-.route-main{width:100%!important;min-width:0!important}
-.route-summary{font-size:15px!important;line-height:1.25!important;white-space:normal!important}
-.route-pin-state{line-height:1.3!important;overflow-wrap:anywhere!important}
-.route-legs{max-height:min(28vh,220px)!important;width:100%!important;overflow:auto!important}
-.route-leg{line-height:1.35!important;overflow-wrap:anywhere!important}
-.route-info #routeClear{display:block!important;width:100%!important;margin:0!important;padding:9px 10px!important}
-@media(max-width:600px){
- :root{--edge:8px}
- .topbar{top:max(8px,env(safe-area-inset-top))!important;width:calc(var(--app-vw) - 132px)!important;max-width:calc(var(--app-vw) - 132px)!important}
- .quick-place{width:100%!important}
- .quick-place input{font-size:16px!important}
- .legend{top:78px!important;max-width:calc(var(--app-vw) - 16px)!important;max-height:34vh!important}
- .chip{font-size:13px!important;max-width:calc(var(--app-vw) - 16px)!important}
- .address-list{top:78px!important;max-width:48vw!important;max-height:34vh!important}
- #pinCategoryButtons{gap:7px!important}
- #pinCategoryButtons button{min-width:0!important;padding:10px 4px!important}
- .clipboard-preview-actions{grid-template-columns:1fr!important}
+/* Untere Hauptaktionen: Import, Liste, Export */
+#pasteMapList,#back,#copyMapList{background:#007aff!important;color:#fff!important}
+/* Im Pin-Popup soll "Name ändern" grün sein. */
+.leaflet-popup-content button[data-rename-pin]{background:#34a853!important;color:#fff!important}
+/* Bestehendes bearbeiten: grau */
+.leaflet-popup-content button[data-rename-pin],
+.leaflet-popup-content button[data-change-pin-category]{
+  background:#666!important;
+  color:#fff!important;
 }
-@media(max-width:390px){
- .topbar{width:calc(var(--app-vw) - 124px)!important;max-width:calc(var(--app-vw) - 124px)!important}
- .quick-place{gap:4px!important;padding:6px!important}
- .quick-place input{padding:8px!important}
- #quickPlaceBtn{padding:8px 12px!important}
- .route-info{width:calc(var(--app-vw) - 16px)!important;max-width:calc(var(--app-vw) - 16px)!important}
+/* Permanente Kartenaktionen: weiß/schwarz */
+#pasteMapList,#back,#copyMapList{
+  background:rgba(255,255,255,.96)!important;
+  color:#111!important;
+}
+#quickPlaceBtn{
+  background:rgba(255,255,255,.96)!important;
+  color:#111!important;
+}
+#quickPlaceBtn{
+  border:1px solid #bbb!important;
+}
+/* Änderungsaktionen: wie Abbrechen hellgrau, mit schwarzer Schrift */
+#mapActionChooser #actionRenameArea,
+#mapActionChooser #actionChangeAreaCategory,
+.leaflet-popup-content button[data-rename-pin],
+.leaflet-popup-content button[data-change-pin-category],
+#categoryEditSave{
+  background:#e5e5ea!important;
+  color:#111!important;
 }
 </style>
-
-<style id="v49-iphone-fixes">
-/* iOS: native Auswahl-/Nachschlagen-Callouts auf der Kartenoberfläche vermeiden */
-#mapScreen,#map,#map .leaflet-container,#map .leaflet-pane,#map .leaflet-interactive{
- -webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;
-}
-/* Untere Hauptbuttons näher an den sichtbaren unteren Rand. */
-.bottom{bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}
-#copyMap{bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}
-/* Leaflet-Zoomblock etwas höher, damit auch Minus sicher frei bleibt. */
-.leaflet-bottom.leaflet-left{bottom:max(92px,calc(env(safe-area-inset-bottom) + 92px))!important}
-/* Beschriftungsbutton bleibt rechts innerhalb der Safe Area. */
-.label-toggle{right:max(8px,env(safe-area-inset-right))!important}
-@media(max-width:600px){
- .route-info{position:absolute!important;display:none;flex-direction:block!important;padding:12px!important;padding-right:58px!important;gap:0!important}
- .route-info[style*="display: flex"],.route-info[style*="display:flex"]{display:block!important}
- .route-main{width:100%!important}
- .route-summary{font-size:16px!important;line-height:1.3!important}
- .route-pin-state{font-size:13px!important;line-height:1.35!important;margin-top:2px!important}
- .route-legs{font-size:13px!important;line-height:1.35!important;max-height:min(30vh,230px)!important;margin-top:8px!important}
- .route-info #routeClear{position:absolute!important;right:9px!important;top:9px!important;width:40px!important;height:40px!important;padding:0!important;margin:0!important;border-radius:50%!important;font-size:0!important;line-height:40px!important}
- .route-info #routeClear::after{content:"❌";font-size:20px;line-height:40px}
-}
-</style>
-
-<style id="v50-mobile-layout">
-/* Untere Bedienung: Zoom unten, Maßstab stets frei darüber. */
-.leaflet-bottom.leaflet-left{bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}
-.leaflet-control-zoom{margin-bottom:0!important}
-.leaflet-control-scale{position:absolute!important;left:0!important;bottom:116px!important;margin:0!important;white-space:nowrap!important}
-/* Screenshot unten rechts; Beschriftungen direkt darüber. */
-#copyMap{right:max(8px,env(safe-area-inset-right))!important;bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important}
-.label-toggle{right:max(8px,env(safe-area-inset-right))!important;bottom:max(58px,calc(env(safe-area-inset-bottom) + 58px))!important}
-@media(max-width:600px){
- /* Routing darf die mittleren Listenbuttons überdecken, hält aber Zoom und Screenshot frei. */
- .route-info{
-   left:68px!important;right:68px!important;transform:none!important;
-   bottom:max(4px,calc(env(safe-area-inset-bottom) + 4px))!important;
-   width:auto!important;max-width:none!important;
-   padding:11px 54px 11px 12px!important;
-   border-radius:14px!important;z-index:1250!important;
- }
- .route-info #routeClear{
-   right:8px!important;top:8px!important;width:40px!important;height:40px!important;
-   background:#f2f2f2!important;color:#d70015!important;border:1px solid #d1d1d6!important;
-   box-shadow:none!important;
- }
- .route-info #routeClear::after{content:"❌"!important;font-size:20px!important;line-height:38px!important}
- .route-summary{padding-right:2px!important}
- .route-legs{max-height:min(24vh,190px)!important}
-}
-@media(max-width:390px){
- .route-info{left:64px!important;right:64px!important;padding-right:50px!important}
-}
-</style>
-
-<style id="v51-top-right-controls">
-/* Rechte Kartenbedienung: Screenshot oben rechts, Beschriftungen direkt darunter. */
-#copyMap{
-  top:max(10px,env(safe-area-inset-top))!important;
-  right:max(10px,env(safe-area-inset-right))!important;
-  bottom:auto!important;
-}
-.label-toggle{
-  top:max(66px,calc(env(safe-area-inset-top) + 66px))!important;
-  right:max(10px,env(safe-area-inset-right))!important;
-  bottom:auto!important;
-}
-@media(max-width:600px){
-  #copyMap{top:max(8px,env(safe-area-inset-top))!important;right:max(8px,env(safe-area-inset-right))!important;bottom:auto!important}
-  .label-toggle{top:max(64px,calc(env(safe-area-inset-top) + 64px))!important;right:max(8px,env(safe-area-inset-right))!important;bottom:auto!important}
-  /* Unten rechts muss kein Screenshot-Button mehr freigehalten werden. */
-  .route-info{right:12px!important}
-}
-@media(max-width:390px){.route-info{right:8px!important}}
-</style>
-
-<style id="v52-touch-scale-focus">
-/* Maßstab mittig direkt unter der oberen Ortseingabe. */
-.leaflet-control-scale{
- position:fixed!important;
- left:50%!important;
- top:max(76px,calc(env(safe-area-inset-top) + 76px))!important;
- bottom:auto!important;
- transform:translateX(-50%)!important;
- margin:0!important;
- z-index:1090!important;
- white-space:nowrap!important;
- pointer-events:none!important;
-}
-@media(max-width:600px){
- .leaflet-control-scale{top:max(72px,calc(env(safe-area-inset-top) + 72px))!important}
-}
-</style>
-
-<style id="v53-context-gesture-screenshot-fixes">
-/* Mobile Kontextdialoge oben statt unter dem Long-Press-Finger. */
-@media (pointer:coarse), (max-width:600px){
- #mapActionChooser,#areaClickChooser,#areaSearchBox{
-   top:max(8px,env(safe-area-inset-top))!important;
-   bottom:auto!important;
-   transform:translateX(-50%)!important;
-   max-height:calc(var(--app-vh) - max(16px,env(safe-area-inset-top)) - 16px)!important;
-   z-index:7000!important;
- }
- #mapActionChooser.longpress-arming{pointer-events:none!important}
-}
-
-<style id="v55-area-dialog">
-#mapActionChooser.area-context{
-  min-width:0!important;
-  width:min(286px,calc(100vw - 32px))!important;
-  max-width:calc(100vw - 32px)!important;
-}
-@media (pointer:coarse), (max-width:600px){
- #mapActionChooser.area-context{width:min(274px,calc(var(--app-vw) - 28px))!important}
-}
-</style>
-</style>
+<meta name="pin2map-build" content="v8-clean">
 </head><body>
 <main id="formScreen" class="wrap">
 <h1>Adressen & Kategorien auf einer Karte</h1>
 <p class="hint">Eine Adresse pro Zeile. <code>@</code> vor einem Eintrag zeichnet eine Fläche. Eine eigene Beschriftung kann am Zeilenende in Klammern stehen, z. B. <code>Stuttgart (Oberzentrum)</code> oder <code>@Bodensee (Lake Constance)</code>. Kategorien: <code># 🔹 [blau] Kategorie1</code>. Farben können Namen oder Hex-Werte sein.</p>
-<div class="options"><label><input type="checkbox" id="numberAddresses"> Adressen durchnummerieren</label><label><input type="checkbox" id="labelAddresses"> Pins mit Adresse beschriften</label><label><input type="checkbox" id="labelAreas"> Flächen beschriften</label></div>
+<div class="options"><label><input type="checkbox" id="numberAddresses"> Adressen durchnummerieren</label></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [rot] Rot
 
 # 🔹 [blau] Blau
@@ -243,7 +96,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 # 🏁 [grau] Grau
 
 # 🐂 [braun] Braun</textarea>
-<div class="buttons"><button id="go">Karte anzeigen</button><button id="clear" class="secondary">Adressen löschen</button><button id="addCategoryBtn" type="button">Kategorie hinzufügen</button><button id="copyListBtn" type="button">Liste kopieren</button></div><p id="formStatus" class="hint"></p>
+<div class="buttons"><button id="go">Karte anzeigen</button><button id="addCategoryBtn" type="button" class="list-category-btn">Kategorien hinzufügen</button><button id="clear" type="button" class="list-delete-btn">Liste löschen</button><button id="cancelListBtn" type="button" class="list-cancel-btn">Abbrechen</button></div><p id="formStatus" class="hint"></p>
 </main>
 <section id="mapScreen">
 <div id="map"></div>
@@ -253,7 +106,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <select id="mapStyle" aria-hidden="true" tabindex="-1" style="display:none"><option value="standard">Standard</option><option value="topo">Topografisch</option><option value="satellite">Satellit</option><option value="humanitarian">Humanitarian</option></select>
 <button type="button" id="autoZoomButton" class="map-round-control map-ui-control" title="Autozoom" aria-label="Autozoom">✓</button>
 <button type="button" id="copyMap" class="map-round-control map-ui-control" title="Karte kopieren" aria-label="Karte kopieren">📸</button>
-<div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div id="routeSummary" class="route-summary">Route</div><div id="routeEndpoints" class="route-pin-state"></div><div id="routeHint" class="route-hint" style="display:none"></div><div id="routeLegs" class="route-legs"></div></div><button type="button" id="routeClear">Route entfernen</button></div><div id="notFoundList" class="not-found"></div><div id="placeResultChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5600;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(520px,90vw);max-height:78vh;overflow:auto"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Ort auswählen</div><div id="placeResultButtons"></div><button type="button" id="placeResultCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="pinCategoryChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5100;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(300px,82vw);max-width:88vw;max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Kategorie für neuen Pin wählen</div><div id="pinCategoryButtons" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"></div><button type="button" id="pinCategoryCancel" style="width:100%;margin-top:10px;padding:9px;border:0;border-radius:9px;background:#e5e5ea;font-weight:600">Abbrechen</button></div><div id="areaClickChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5400;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(380px,88vw);max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Fläche auswählen</div><div id="areaClickButtons"></div><button type="button" id="areaClickCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="categoryEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5700;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Kategorie bearbeiten</div><label style="display:block;margin:8px 0">Name<input id="categoryEditName" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:16px"></label><label style="display:block;margin:8px 0">Symbol<input id="categoryEditSymbol" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:22px"></label><label style="display:flex;align-items:center;gap:10px;margin:10px 0">Farbe<input id="categoryEditColor" type="color" style="width:58px;height:40px;border:0;background:transparent"><span id="categoryEditColorText"></span></label><button type="button" id="categoryEditSave" style="width:100%;margin-top:8px;background:#0a84ff">Änderungen übernehmen</button><button type="button" id="categoryEditCancel" style="width:100%;margin-top:8px;background:#666">Abbrechen</button></div><div id="pinNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Pin umbenennen</div><input id="pinNameInput" type="text" autocomplete="off" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="pinNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="pinNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="areaNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Fläche umbenennen</div><input id="areaNameInput" type="text" autocomplete="off" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="areaNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="areaNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="mapActionChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5200;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(310px,84vw);max-width:90vw;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Aktion wählen</div><button type="button" id="actionAddPin" style="display:block;width:100%;margin-bottom:8px">📍 Pin setzen</button><button type="button" id="actionWikipediaArea" style="display:none;width:100%;margin-bottom:8px;background:#fff;color:#111;border:1px solid #c7c7cc">ⓦ Wikipedia</button><button type="button" id="actionFindAreas" style="display:block;width:100%;margin-bottom:8px;background:#34a853">🗺️ Gebiete suchen</button><button type="button" id="actionRenameArea" style="display:none;width:100%;margin-bottom:8px;background:#666">Name ändern</button><button type="button" id="actionChangeAreaCategory" style="display:none;width:100%;margin-bottom:8px;background:#34a853">Kategorie ändern</button><button type="button" id="actionRemoveArea" style="display:none;width:100%;margin-bottom:8px;background:#e53935">Fläche entfernen</button><button type="button" id="actionCancel" style="display:block;width:100%;background:#e5e5ea;color:#111">Abbrechen</button></div><div id="areaSearchBox" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5300;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(520px,90vw);max-height:78vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;font-size:16px;margin-bottom:5px">Von OSM erkannte Gebiete</div><div id="areaSearchPoint" style="color:#666;font-size:12px;margin-bottom:10px"></div><div id="areaSearchResults"></div>
+<div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div id="routeSummary" class="route-summary">Route</div><div id="routeEndpoints" class="route-pin-state"></div><div id="routeHint" class="route-hint" style="display:none"></div><div id="routeLegs" class="route-legs"></div></div><button type="button" id="routeClear">Route entfernen</button></div><div id="notFoundList" class="not-found"></div><div id="placeResultChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5600;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(520px,90vw);max-height:78vh;overflow:auto"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Ort auswählen</div><div id="placeResultButtons"></div><button type="button" id="placeResultCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="pinCategoryChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5100;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(300px,82vw);max-width:88vw;max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Kategorie für neuen Pin wählen</div><div id="pinCategoryButtons" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"></div><button type="button" id="pinCategoryCancel" style="width:100%;margin-top:10px;padding:9px;border:0;border-radius:9px;background:#e5e5ea;font-weight:400">Abbrechen</button></div><div id="areaClickChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5400;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(380px,88vw);max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Fläche auswählen</div><div id="areaClickButtons"></div><button type="button" id="areaClickCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="categoryEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5700;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Kategorie bearbeiten</div><label style="display:block;margin:8px 0">Name<input id="categoryEditName" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:16px"></label><label style="display:block;margin:8px 0">Symbol<input id="categoryEditSymbol" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:22px"></label><label style="display:flex;align-items:center;gap:10px;margin:10px 0">Farbe<input id="categoryEditColor" type="color" style="width:58px;height:40px;border:0;background:transparent"><span id="categoryEditColorText"></span></label><button type="button" id="categoryEditSave" style="width:100%;margin-top:8px;background:#666">Änderungen übernehmen</button><button type="button" id="categoryEditCancel" style="width:100%;margin-top:8px;background:#666">Abbrechen</button></div><div id="pinNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Pin umbenennen</div><input id="pinNameInput" type="text" autocomplete="off" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="pinNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="pinNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="areaNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Fläche umbenennen</div><input id="areaNameInput" type="text" autocomplete="off" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="areaNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="areaNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="mapActionChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5200;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(310px,84vw);max-width:90vw;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Aktion wählen</div><button type="button" id="actionAddPin" style="display:block;width:100%;margin-bottom:8px;background:#34a853">📍 Pin setzen</button><button type="button" id="actionWikipediaArea" style="display:none;width:100%;margin-bottom:8px;background:#fff;color:#111;border:1px solid #c7c7cc">ⓦ Wikipedia</button><button type="button" id="actionFindAreas" style="display:block;width:100%;margin-bottom:8px;background:#34a853">🗺️ Gebiete suchen</button><button type="button" id="actionRenameArea" style="display:none;width:100%;margin-bottom:8px;background:#666">Name ändern</button><button type="button" id="actionChangeAreaCategory" style="display:none;width:100%;margin-bottom:8px;background:#666">Kategorie ändern</button><button type="button" id="actionRemoveArea" style="display:none;width:100%;margin-bottom:8px;background:#e53935">Fläche entfernen</button><button type="button" id="actionCancel" style="display:none">Abbrechen</button></div><div id="areaSearchBox" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5300;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(520px,90vw);max-height:78vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;font-size:16px;margin-bottom:5px">Von OSM erkannte Gebiete</div><div id="areaSearchPoint" style="color:#666;font-size:12px;margin-bottom:10px"></div><div id="areaSearchResults"></div>
 <div style="margin-top:14px;padding-top:12px;border-top:2px solid #ddd">
   <div style="font-weight:700;font-size:15px;margin-bottom:8px">🔎 Weiteres Gebiet suchen</div>
   <div style="display:flex;gap:7px">
@@ -263,18 +116,8 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
   <div id="manualAreaResults"></div>
 </div><button type="button" id="areaSearchClose" style="display:block;width:100%;margin-top:12px;background:#666">Schließen</button></div><div id="pinProgress" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5000;background:rgba(255,255,255,.96);color:#111;padding:14px 18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.28);font:600 15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;max-width:min(360px,82vw);pointer-events:none">⏳ Angeklickte Position wird ermittelt und der Pin gesetzt …</div><button type="button" id="labelToggle" class="label-toggle" title="Beschriftungen ein-/ausblenden" aria-label="Beschriftungen ein-/ausblenden">🏷️</button><div class="bottom"><button type="button" id="pasteMapList" class="list-round" title="Liste aus Zwischenablage importieren" aria-label="Liste aus Zwischenablage importieren">↑</button><button id="back" class="back">Liste</button><button type="button" id="copyMapList" class="list-round" title="Liste exportieren" aria-label="Liste exportieren">↓</button></div><div id="clipboardPreview" class="clipboard-preview"><div style="font-weight:700;font-size:17px;margin-bottom:6px">Liste aus Zwischenablage importieren</div><div style="font-size:13px;color:#555;margin-bottom:9px">Folgender Inhalt würde die aktuelle Liste ersetzen:</div><textarea id="clipboardPreviewText" readonly></textarea><div class="clipboard-preview-actions"><button type="button" id="clipboardImportConfirm">Importieren</button><button type="button" id="clipboardImportCancel" class="cancel">Abbrechen</button></div></div>
 </section>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-(function(){
- function flash(el){if(!el||el.disabled)return;el.classList.add('v43-pressed');setTimeout(function(){el.classList.remove('v43-pressed')},180)}
- document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('button,.leaflet-control-zoom a');if(el)flash(el)},true);
-})();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
-(function(){
- function flash(el){if(!el||el.disabled)return;el.classList.add('v43-pressed');setTimeout(function(){el.classList.remove('v43-pressed')},180)}
- document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('button,.leaflet-control-zoom a');if(el)flash(el)},true);
-})();
-</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 (function(){
 if(!window.L){var fs=document.getElementById('formStatus');if(fs)fs.textContent='Die Kartenbibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen und die Seite neu laden.';return}
@@ -285,7 +128,6 @@ var baseMaps={standard:['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoo
 var named={blau:'#1976d2',rot:'#d32f2f','grün':'#388e3c',gruen:'#388e3c',orange:'#f57c00',gelb:'#fbc02d',lila:'#7b1fa2',violett:'#7b1fa2','türkis':'#00838f',tuerkis:'#00838f',braun:'#5d4037',grau:'#616161',schwarz:'#212121',pink:'#c2185b'};
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function color(v){v=(v||'').toLowerCase().trim();return named[v]||(/^#[0-9a-f]{3}([0-9a-f]{3})?$/.test(v)?v:'#1976d2')}
-function windowColor(v){return color(v)}
 function parse(s){var lines=s.replace(/\r/g,'').split('\n'),cat={name:'Ohne Kategorie',symbol:'📍',color:'#1976d2'},out=[];for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;if(line.charAt(0)==='#'){var t=line.slice(1).trim(),m=t.match(/\[([^\]]+)\]/),col=color(m?m[1]:''),clean=m?t.replace(m[0],'').trim():t,parts=clean.split(/\s+/),sym='📍';if(parts.length>1){sym=parts.shift();clean=parts.join(' ')}cat={name:clean||'Kategorie',symbol:sym,color:col};continue}var area=line.charAt(0)==='@',raw=(area?line.slice(1):line).trim(),q=raw,label='';var lm=raw.match(/\s*\(([^()]*)\)\s*$/);if(lm){label=lm[1].trim();q=raw.slice(0,lm.index).trim()}if(q)out.push({query:q,label:label||q,area:area,category:cat.name,symbol:cat.symbol,color:cat.color,sourceLine:raw,sourceFullLine:line})}return out}
 function ensureMap(){if(map)return;map=L.map('map',{preferCanvas:true,zoomControl:false}).setView([51.1,10.4],6);L.control.zoom({position:'bottomleft'}).addTo(map);L.control.scale({position:'bottomleft',metric:true,imperial:false,maxWidth:160}).addTo(map);setBase(document.getElementById('mapStyle').value);installMapPinGestures();setTimeout(positionAutoZoomButton,0)}
 function setBase(k){if(!map)return;if(baseLayer)map.removeLayer(baseLayer);var b=baseMaps[k]||baseMaps.standard;baseLayer=L.tileLayer(b[0],b[1]);baseLayer.on('tileerror',function(){mapStatus.textContent='Einige Kartenkacheln konnten nicht geladen werden.'});baseLayer.addTo(map);try{localStorage.setItem('mapStyle',k)}catch(e){}}
@@ -324,7 +166,7 @@ function categoryDefinitions(){
    var line=lines[i].trim();
    if(line.charAt(0)!=='#')continue;
    var txt=line.slice(1).trim(),symbol='';
-   var cm=txt.match(/\[([^\]]+)\]/),catColor=windowColor(cm?cm[1]:'');
+   var cm=txt.match(/\[([^\]]+)\]/),catColor=color(cm?cm[1]:'');
    if(cm)txt=txt.replace(cm[0],'').trim();
    var parts=txt.split(/\s+/);
    if(parts.length>1){symbol=parts.shift();txt=parts.join(' ')}
@@ -753,7 +595,7 @@ function showAreaChoice(ll){return false}
 document.getElementById('areaClickCancel').onclick=function(){document.getElementById('areaClickChooser').style.display='none'};
 function areaPopupHtml(it){
  var id='areaDel'+(++areaDeleteId);areaDeleteItems[id]=it;
- return '<div><div style="margin-bottom:9px;max-width:280px;word-break:break-word"><b>'+escHtml(it.label||it.query)+'</b></div><button type="button" data-wikipedia-area="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:1px solid #c7c7cc;border-radius:8px;background:#fff;color:#111;font-weight:700">ⓦ Wikipedia</button><button type="button" data-change-area-category="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#34a853;color:white;font-weight:700">Kategorie ändern</button><button type="button" data-delete-area="'+id+'" style="display:block;width:100%;padding:8px 10px;border:0;border-radius:8px;background:#e53935;color:white;font-weight:700">Fläche entfernen</button></div>'
+ return '<div><div style="margin-bottom:9px;max-width:280px;word-break:break-word"><b>'+escHtml(it.label||it.query)+'</b></div><button type="button" data-wikipedia-area="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:1px solid #c7c7cc;border-radius:8px;background:#fff;color:#111;font-weight:400">ⓦ Wikipedia</button><button type="button" data-change-area-category="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#34a853;color:white;font-weight:400">Kategorie ändern</button><button type="button" data-delete-area="'+id+'" style="display:block;width:100%;padding:8px 10px;border:0;border-radius:8px;background:#e53935;color:white;font-weight:400">Fläche entfernen</button></div>'
 }
 function refreshAfterDirectDelete(){
  var items=parse(input.value),box=document.getElementById('legend');box.innerHTML='';buildLegend(items);
@@ -788,7 +630,7 @@ var pinDeleteItems={},pinDeleteId=0;
 function escHtml(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function pinPopupHtml(it){
  var id='pinDel'+(++pinDeleteId);pinDeleteItems[id]=it;
- return '<div><div style="margin-bottom:9px;max-width:280px;word-break:break-word">'+escHtml(it.query)+'</div><button type="button" data-copy-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#0a84ff;color:white;font-weight:700">Kopieren</button><button type="button" data-wikipedia-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:1px solid #c7c7cc;border-radius:8px;background:#fff;color:#111;font-weight:700">ⓦ Wikipedia</button><fieldset style="margin:0 0 7px;padding:5px 7px 7px;border:1px solid #c7c7cc;border-radius:10px"><legend style="padding:0 5px;color:#777;font-size:11px;font-weight:600">Routing</legend><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px"><button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:#e5e5ea;color:#111;font-size:21px;font-weight:700">►</button><button type="button" data-route-waypoint="'+id+'" title="Zwischenziel" aria-label="Zwischenziel" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:#e5e5ea;color:#111;font-size:19px;font-weight:700">+</button><button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:#e5e5ea;color:#111;font-size:21px;font-weight:700">⦿</button></div></fieldset><button type="button" data-rename-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#666;color:white;font-weight:700">Name ändern</button><button type="button" data-change-pin-category="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#34a853;color:white;font-weight:700">Kategorie ändern</button><button type="button" data-delete-pin="'+id+'" style="display:block;width:100%;padding:8px 10px;border:0;border-radius:8px;background:#e53935;color:white;font-weight:700">Pin entfernen</button></div>'
+ return '<div><div style="margin-bottom:9px;max-width:280px;word-break:break-word">'+escHtml(it.query)+'</div><button type="button" data-copy-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#0a84ff;color:white;font-weight:400">Kopieren</button><button type="button" data-wikipedia-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:1px solid #c7c7cc;border-radius:8px;background:#fff;color:#111;font-weight:400">ⓦ Wikipedia</button><fieldset style="margin:0 0 7px;padding:5px 7px 7px;border:1px solid #c7c7cc;border-radius:10px"><legend style="padding:0 5px;color:#777;font-size:11px;font-weight:600">Routing</legend><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px"><button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:#e5e5ea;color:#111;font-size:21px;font-weight:400">►</button><button type="button" data-route-waypoint="'+id+'" title="Zwischenziel" aria-label="Zwischenziel" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:#e5e5ea;color:#111;font-size:19px;font-weight:400">+</button><button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:#e5e5ea;color:#111;font-size:21px;font-weight:400">⦿</button></div></fieldset><button type="button" data-rename-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#666;color:white;font-weight:400">Name ändern</button><button type="button" data-change-pin-category="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#34a853;color:white;font-weight:400">Kategorie ändern</button><button type="button" data-delete-pin="'+id+'" style="display:block;width:100%;padding:8px 10px;border:0;border-radius:8px;background:#e53935;color:white;font-weight:400">Pin entfernen</button></div>'
 }
 document.addEventListener('click',function(e){
  var btn=e.target&&e.target.closest?e.target.closest('[data-wikipedia-pin]'):null;if(!btn)return;e.preventDefault();e.stopPropagation();var it=pinDeleteItems[btn.getAttribute('data-wikipedia-pin')];if(it)openWikipediaForItem(it)
@@ -985,7 +827,7 @@ function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=it
 function build(items){clearMap();buildLegend(items);var numbered=document.getElementById('numberAddresses').checked,labelled=document.getElementById('labelAddresses').checked,areasLabelled=document.getElementById('labelAreas').checked,idx=0,miss=0,missed=[];screen.classList.remove('labels-hidden');screen.classList.toggle('hide-address-labels',!labelled);screen.classList.toggle('hide-area-labels',!areasLabelled);labelToggle.classList.toggle('off',!labelled&&!areasLabelled);for(var i=0;i<items.length;i++){if(!categoryLayers[items[i].category])categoryLayers[items[i].category]=L.layerGroup().addTo(map)}
 function noteMissing(x){miss++;missed.push(x.query);var box=document.getElementById('notFoundList');box.innerHTML='<b>⚠️ Nicht gefunden ('+missed.length+')</b><br>'+missed.map(function(v){return '• '+esc(v)}).join('<br>')}
 function next(){if(idx>=items.length){if(allBounds&&allBounds.isValid())map.fitBounds(allBounds,{padding:[45,45],maxZoom:14});mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.');if(!miss)setTimeout(function(){mapStatus.textContent=''},3000);return}var x=items[idx],num=idx+1;mapStatus.textContent='Suche '+num+' von '+items.length+': '+x.query;geocode(x.query,x.area).then(function(a){if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var poly=L.geoJSON(a[0].geojson,{renderer:L.canvas({padding:0.5}),style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;renderedAreas.push({layer:poly,item:x});{var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker}allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,numbered)}).bindPopup(pinPopupHtml(x,a[0].display_name)).addTo(categoryLayers[x.category]);x._pinLayer=marker;allBounds.extend(p);marker.bindTooltip((numbered?num+'. ':'')+x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});if(numbered){var row=document.createElement('div');row.className='address-row';row.innerHTML='<b>'+num+'.</b> '+esc(x.query);document.getElementById('addressList').appendChild(row)}}}).catch(function(){noteMissing(x)}).then(function(){idx++;sleep(1050).then(next)})}next()}
-document.getElementById('go').onclick=function(){var items=parse(input.value);if(!items.length){formStatus.textContent='Bitte mindestens eine Adresse oder Fläche eingeben.';return}form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);build(items)},150)};
+document.getElementById('go').onclick=function(){var items=parse(input.value);formStatus.textContent='';form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);if(items.length)build(items);else clearMap()},150)};
 document.getElementById('back').onclick=function(){screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
 function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else{clearMap();var q=document.getElementById('quickPlace');if(q)q.blur()}},150)}
 function submitQuickPlace(){var el=document.getElementById('quickPlace'),q=el.value.trim();if(!q)return;el.blur();searchPlaceForPin(q,mapStatus,function(){el.value='';el.blur()})}
@@ -1037,43 +879,68 @@ function refreshMapSize(){if(map&&screen.style.display!=='none')setTimeout(funct
 window.addEventListener('resize',refreshMapSize);
 window.addEventListener('orientationchange',function(){setTimeout(refreshMapSize,350)});
 document.addEventListener('visibilitychange',function(){if(!document.hidden)refreshMapSize()});
-})();
 
+/* Listenansicht */
 document.getElementById('addCategoryBtn').onclick=function(){
  var v=input.value.replace(/\r/g,'').replace(/\s+$/,'');
  if(v)v+='\n\n';
  input.value=v+'# 💠 [ hellblau ] Kategorie\n\n';
  input.focus();input.setSelectionRange(input.value.length,input.value.length)
 };
-document.getElementById('copyListBtn').onclick=function(){
- var btn=this,txt=input.value;
- function ok(){var old=btn.textContent;btn.textContent='Kopiert ✓';setTimeout(function(){btn.textContent=old},1200)}
- function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');ok()}catch(e){}document.body.removeChild(ta)}
- if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok).catch(fb);else fb()
+document.getElementById('cancelListBtn').onclick=function(){
+ form.style.display='none';
+ screen.style.display='block';
+ document.body.style.overflow='hidden';
+ formStatus.textContent='';
+ if(map)setTimeout(function(){map.invalidateSize(false)},0)
 };
 
-(function(){
- function flash(el){if(!el||el.disabled)return;el.classList.add('v43-pressed');setTimeout(function(){el.classList.remove('v43-pressed')},180)}
- document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('button,.leaflet-control-zoom a');if(el)flash(el)},true);
+/* Kurzes visuelles Feedback für Buttons und Leaflet-Zoom. */
+function flashPressed(el){
+ if(!el||el.disabled)return;
+ el.classList.add('v43-pressed');
+ setTimeout(function(){el.classList.remove('v43-pressed')},180)
+}
+document.addEventListener('click',function(e){
+ var el=e.target.closest&&e.target.closest('button,.leaflet-control-zoom a');
+ if(el)flashPressed(el)
+},true);
+
+/* Sichtbaren Viewport (insbesondere Safari/iOS) synchronisieren. */
+function syncVisibleViewport(){
+ var vv=window.visualViewport;
+ var w=vv&&vv.width?vv.width:window.innerWidth;
+ var h=vv&&vv.height?vv.height:window.innerHeight;
+ document.documentElement.style.setProperty('--app-vw',Math.round(w)+'px');
+ document.documentElement.style.setProperty('--app-vh',Math.round(h)+'px');
+ if(map&&screen.style.display!=='none')setTimeout(function(){map.invalidateSize(false)},0);
+ setTimeout(positionAutoZoomButton,0)
+}
+syncVisibleViewport();
+window.addEventListener('resize',syncVisibleViewport,{passive:true});
+window.addEventListener('orientationchange',function(){setTimeout(syncVisibleViewport,180)},{passive:true});
+if(window.visualViewport){
+ visualViewport.addEventListener('resize',syncVisibleViewport,{passive:true});
+ visualViewport.addEventListener('scroll',syncVisibleViewport,{passive:true})
+}
+document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(syncVisibleViewport,50)});
+
+/* Kontextmenü schließen, wenn außerhalb getippt/geklickt wird. */
+var mapActionChooser=document.getElementById('mapActionChooser');
+function closeMapActionChooserIfOutside(e){
+ if(!mapActionChooser||mapActionChooser.style.display==='none'||!mapActionChooser.style.display)return;
+ if(mapActionChooser.contains(e.target))return;
+ mapActionChooser.style.display='none';
+ mapActionChooser.classList.remove('area-context');
+ if(e.cancelable)e.preventDefault();
+ e.stopPropagation();
+ if(e.stopImmediatePropagation)e.stopImmediatePropagation()
+}
+document.addEventListener('pointerdown',closeMapActionChooserIfOutside,true);
+document.addEventListener('mousedown',closeMapActionChooserIfOutside,true);
+document.addEventListener('touchstart',closeMapActionChooserIfOutside,{capture:true,passive:false});
+
 })();
 </script>
-<script id="v48-visual-viewport">
-(function(){
- function syncVisibleViewport(){
-  var vv=window.visualViewport;
-  var w=vv&&vv.width?vv.width:window.innerWidth;
-  var h=vv&&vv.height?vv.height:window.innerHeight;
-  document.documentElement.style.setProperty('--app-vw',Math.round(w)+'px');
-  document.documentElement.style.setProperty('--app-vh',Math.round(h)+'px');
-  var ms=document.getElementById('mapScreen');
-  if(ms&&ms.style.display!=='none'&&window.map&&map.invalidateSize){setTimeout(function(){map.invalidateSize(false)},0)}
-  if(typeof positionAutoZoomButton==='function')setTimeout(positionAutoZoomButton,0);
- }
- syncVisibleViewport();
- window.addEventListener('resize',syncVisibleViewport,{passive:true});
- window.addEventListener('orientationchange',function(){setTimeout(syncVisibleViewport,180)},{passive:true});
- if(window.visualViewport){visualViewport.addEventListener('resize',syncVisibleViewport,{passive:true});visualViewport.addEventListener('scroll',syncVisibleViewport,{passive:true})}
- document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(syncVisibleViewport,50)});
-})();
-</script>
+
 </body></html>
