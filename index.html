@@ -196,6 +196,20 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .leaflet-control-scale{top:max(72px,calc(env(safe-area-inset-top) + 72px))!important}
 }
 </style>
+
+<style id="v53-context-gesture-screenshot-fixes">
+/* Mobile Kontextdialoge oben statt unter dem Long-Press-Finger. */
+@media (pointer:coarse), (max-width:600px){
+ #mapActionChooser,#areaClickChooser,#areaSearchBox{
+   top:max(8px,env(safe-area-inset-top))!important;
+   bottom:auto!important;
+   transform:translateX(-50%)!important;
+   max-height:calc(var(--app-vh) - max(16px,env(safe-area-inset-top)) - 16px)!important;
+   z-index:7000!important;
+ }
+ #mapActionChooser.longpress-arming{pointer-events:none!important}
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
 <h1>Adressen & Kategorien auf einer Karte</h1>
@@ -599,44 +613,87 @@ function findAreasAt(ll){
 }
 function installMapPinGestures(){
  var mapEl=document.getElementById('map');
- if(mapEl&&!mapEl.dataset.pin2mapCalloutGuard){
-  mapEl.dataset.pin2mapCalloutGuard='1';
-  mapEl.addEventListener('contextmenu',function(ev){ev.preventDefault();ev.stopPropagation()},true);
+ if(!mapEl)return;
+
+ /* Browser-Auswahl/Callout auf der Karte unterdrücken, aber unser Kontextmenü selbst auslösen. */
+ if(!mapEl.dataset.pin2mapContextV53){
+  mapEl.dataset.pin2mapContextV53='1';
+  mapEl.addEventListener('contextmenu',function(ev){
+   ev.preventDefault();ev.stopPropagation();
+   var target=ev.target;
+   if(target&&target.closest&&target.closest('.leaflet-control,.map-ui-control,.topbar,.legend,.bottom,.label-toggle,.route-info,.leaflet-marker-icon,.leaflet-tooltip,.leaflet-popup'))return;
+   var rect=mapEl.getBoundingClientRect();
+   addPinAt(map.containerPointToLatLng(L.point(ev.clientX-rect.left,ev.clientY-rect.top)));
+  },true);
   mapEl.addEventListener('selectstart',function(ev){ev.preventDefault()},true);
   mapEl.addEventListener('dragstart',function(ev){ev.preventDefault()},true);
  }
- map.on('contextmenu',function(e){if(e.originalEvent){e.originalEvent.preventDefault();e.originalEvent.stopPropagation()}addPinAt(e.latlng)});
- var timer=null,start=null,moved=false;
- function clearPress(){if(timer){clearTimeout(timer);timer=null}}
- map.on('pin2map-old-touchstart',function(e){if(!e.originalEvent||!e.originalEvent.touches||e.originalEvent.touches.length!==1)return;moved=false;var t=e.originalEvent.touches[0],ll=e.latlng;start={x:t.clientX,y:t.clientY};clearPress();timer=setTimeout(function(){timer=null;if(!moved)addPinAt(ll)},650)});
- map.on('pin2map-old-touchmove',function(e){if(!start||!e.originalEvent||!e.originalEvent.touches||!e.originalEvent.touches.length)return;var t=e.originalEvent.touches[0];if(Math.abs(t.clientX-start.x)>10||Math.abs(t.clientY-start.y)>10){moved=true;clearPress()}});
- map.on('pin2map-old-touchend pin2map-old-touchcancel',function(){clearPress();start=null});
 
- if(mapEl&&!mapEl.dataset.pin2mapLongPressV52){
-  mapEl.dataset.pin2mapLongPressV52='1';
-  var domTimer=null,domStart=null,domMoved=false;
-  function domClear(){if(domTimer){clearTimeout(domTimer);domTimer=null}}
+ /* Mobile Long-Press direkt am DOM: nach Öffnen bleibt der Dialog bis NACH touchend gesperrt. */
+ if(!mapEl.dataset.pin2mapLongPressV53){
+  mapEl.dataset.pin2mapLongPressV53='1';
+  var timer=null,start=null,moved=false,longPressOpened=false;
+  var lastOneTap=0,lastTwoTap=0;
+  function clearTimer(){if(timer){clearTimeout(timer);timer=null}}
+  function blockedTarget(target){return target&&target.closest&&target.closest('.leaflet-control,.map-ui-control,.topbar,.legend,.bottom,.label-toggle,.route-info,.leaflet-marker-icon,.leaflet-tooltip,.leaflet-popup')}
   mapEl.addEventListener('touchstart',function(ev){
-   if(!ev.touches||ev.touches.length!==1)return;
-   var target=ev.target;
-   if(target&&target.closest&&target.closest('.leaflet-control,.map-ui-control,.topbar,.legend,.bottom,.label-toggle,.route-info,.leaflet-marker-icon,.leaflet-tooltip,.leaflet-popup'))return;
-   var t=ev.touches[0];domStart={x:t.clientX,y:t.clientY};domMoved=false;domClear();
-   domTimer=setTimeout(function(){
-    domTimer=null;if(domMoved||!domStart)return;
-    var rect=mapEl.getBoundingClientRect(),pt=L.point(domStart.x-rect.left,domStart.y-rect.top),ll=map.containerPointToLatLng(pt);
-    addPinAt(ll);
-   },650);
+   if(!ev.touches)return;
+   if(ev.touches.length===1&&!blockedTarget(ev.target)){
+    var t=ev.touches[0];start={x:t.clientX,y:t.clientY};moved=false;longPressOpened=false;clearTimer();
+    timer=setTimeout(function(){
+     timer=null;if(moved||!start)return;
+     var rect=mapEl.getBoundingClientRect(),pt=L.point(start.x-rect.left,start.y-rect.top),ll=map.containerPointToLatLng(pt);
+     longPressOpened=true;
+     addPinAt(ll);
+     document.getElementById('mapActionChooser').classList.add('longpress-arming');
+    },650);
+   }else{clearTimer();start=null;moved=false}
   },{passive:true});
   mapEl.addEventListener('touchmove',function(ev){
-   if(!domStart||!ev.touches||!ev.touches.length)return;var t=ev.touches[0];
-   if(Math.abs(t.clientX-domStart.x)>10||Math.abs(t.clientY-domStart.y)>10){domMoved=true;domClear()}
+   if(!start||!ev.touches||!ev.touches.length)return;var t=ev.touches[0];
+   if(Math.abs(t.clientX-start.x)>10||Math.abs(t.clientY-start.y)>10){moved=true;clearTimer()}
   },{passive:true});
-  mapEl.addEventListener('touchend',function(){domClear();domStart=null},{passive:true});
-  mapEl.addEventListener('touchcancel',function(){domClear();domStart=null},{passive:true});
+  mapEl.addEventListener('touchend',function(ev){
+   clearTimer();
+   if(longPressOpened){
+    /* Das Loslassen, das den Long-Press beendet, darf keine Menüaktion auslösen. */
+    ev.preventDefault();ev.stopPropagation();
+    setTimeout(function(){document.getElementById('mapActionChooser').classList.remove('longpress-arming')},180);
+    longPressOpened=false;start=null;moved=false;return;
+   }
+   if(!moved){
+    var now=Date.now(),changed=ev.changedTouches&&ev.changedTouches[0];
+    /* Einfinger-Doppeltipp: +1 Zoomstufe. */
+    if(ev.touches&&ev.touches.length===0&&changed){
+     if(now-lastOneTap<330){
+      var rect=mapEl.getBoundingClientRect(),pt=L.point(changed.clientX-rect.left,changed.clientY-rect.top),ll=map.containerPointToLatLng(pt);
+      map.setZoomAround(ll,map.getZoom()+1);lastOneTap=0;
+     }else lastOneTap=now;
+    }
+   }
+   start=null;moved=false;
+  },{passive:false});
+  mapEl.addEventListener('touchcancel',function(){clearTimer();start=null;moved=false;longPressOpened=false;document.getElementById('mapActionChooser').classList.remove('longpress-arming')},{passive:true});
+
+  /* Zweifinger-Doppeltipp: zwei kurze 2-Finger-Taps hintereinander = -1 Zoomstufe. */
+  var twoActive=false,twoMoved=false,twoCenter=null,twoStart=null;
+  mapEl.addEventListener('touchstart',function(ev){
+   if(ev.touches&&ev.touches.length===2&&!blockedTarget(ev.target)){
+    clearTimer();start=null;twoActive=true;twoMoved=false;
+    var a=ev.touches[0],b=ev.touches[1];twoCenter={x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2};twoStart=twoCenter;
+   }
+  },{passive:true});
+  mapEl.addEventListener('touchmove',function(ev){
+   if(twoActive&&ev.touches&&ev.touches.length===2){var a=ev.touches[0],b=ev.touches[1],c={x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2};if(Math.abs(c.x-twoStart.x)>12||Math.abs(c.y-twoStart.y)>12)twoMoved=true}
+  },{passive:true});
+  mapEl.addEventListener('touchend',function(){
+   if(!twoActive)return;
+   if(!twoMoved&&twoCenter){var now=Date.now();if(now-lastTwoTap<420){var rect=mapEl.getBoundingClientRect(),ll=map.containerPointToLatLng(L.point(twoCenter.x-rect.left,twoCenter.y-rect.top));map.setZoomAround(ll,map.getZoom()-1);lastTwoTap=0}else lastTwoTap=now}
+   twoActive=false;twoCenter=null;twoStart=null;
+  },{passive:true});
  }
  document.getElementById('pinCategoryCancel').onclick=function(){document.getElementById('pinCategoryChooser').style.display='none'}
 }
-
 var areaDeleteItems={},areaDeleteId=0;
 function pointInRing(lat,lng,ring){
  var inside=false;
@@ -935,7 +992,7 @@ window.addEventListener('orientationchange',function(){setTimeout(positionAutoZo
 if(map)map.on('resize',positionAutoZoomButton);
 setTimeout(positionAutoZoomButton,100);
 
-function renderMapPng(){map.invalidateSize(true);return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})}).then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})}).then(function(){return html2canvas(screen,{useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:Math.min(window.devicePixelRatio||1,2),ignoreElements:function(el){return el.classList&&(el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus')||el.classList.contains('map-ui-control'))}})}).then(function(canvas){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})})}
+function renderMapPng(){map.invalidateSize(true);return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})}).then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})}).then(function(){return html2canvas(screen,{useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:Math.min(window.devicePixelRatio||1,2),ignoreElements:function(el){return el.classList&&(el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus')||el.classList.contains('map-ui-control')||el.classList.contains('leaflet-control-zoom')||el.classList.contains('label-toggle')||el.id==='autoZoomButton')}})}).then(function(canvas){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})})}
 document.getElementById('copyMapList').onclick=function(){var txt=input.value;function done(){mapStatus.textContent='✓ Liste wurde kopiert.';setTimeout(function(){if(mapStatus.textContent==='✓ Liste wurde kopiert.')mapStatus.textContent=''},1800)}function fallback(){var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done()}catch(e){mapStatus.textContent='Liste konnte nicht kopiert werden.'}document.body.removeChild(ta)}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(fallback);else fallback()};
 var clipboardPreview=document.getElementById('clipboardPreview'),clipboardPreviewText=document.getElementById('clipboardPreviewText');
 document.getElementById('pasteMapList').onclick=function(){var btn=this;if(!navigator.clipboard||!navigator.clipboard.readText){mapStatus.textContent='Zwischenablage kann hier nicht direkt gelesen werden. Bitte Safari über HTTPS verwenden.';return}btn.disabled=true;mapStatus.textContent='Lese Liste aus Zwischenablage …';navigator.clipboard.readText().then(function(txt){txt=String(txt||'');if(!txt.trim())throw new Error('empty');clipboardPreviewText.value=txt;clipboardPreview.style.display='block';mapStatus.textContent=''}).catch(function(e){mapStatus.textContent=e&&e.message==='empty'?'Die Zwischenablage enthält keine Liste.':'Import nicht möglich. Bitte Zugriff auf die Zwischenablage erlauben.'}).then(function(){btn.disabled=false})};
