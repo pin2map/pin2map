@@ -117,7 +117,7 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
   left:50%!important;
   right:auto!important;
   top:auto!important;
-  bottom:8px!important;
+  bottom:auto!important;
   transform:translateX(-50%)!important;
   width:calc(100vw - 32px)!important;
   max-width:560px!important;
@@ -505,27 +505,22 @@ document.getElementById('actionCancel').onclick=function(){document.getElementBy
 document.getElementById('manualAreaSearchBtn').onclick=manualAreaSearch;
 document.getElementById('manualAreaQuery').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();manualAreaSearch()}});
 document.getElementById('areaSearchClose').onclick=function(){var b=document.getElementById('areaSearchBox');b.style.display='none';b.classList.remove('keyboard-visible');b.style.removeProperty('top');b.style.removeProperty('bottom');b.style.removeProperty('height');b.style.removeProperty('max-height')};
+function resetAreaKeyboardDialog(){
+ var box=document.getElementById('areaSearchBox');
+ if(!box)return;
+ box.classList.remove('keyboard-visible');
+ box.style.removeProperty('top');box.style.removeProperty('bottom');
+ box.style.removeProperty('height');box.style.removeProperty('max-height')
+}
 function syncAreaDialogToKeyboard(){
  var box=document.getElementById('areaSearchBox'),field=document.getElementById('manualAreaQuery'),vv=window.visualViewport;
  if(!box||!field)return;
- var focused=document.activeElement===field;
- if(!focused||!vv||box.style.display==='none'){
-  box.classList.remove('keyboard-visible');
-  box.style.removeProperty('bottom');
-  box.style.removeProperty('height');
-  box.style.removeProperty('max-height');
-  return
- }
- /* Bei geöffneter iOS-Tastatur nicht mehr gegen Safaris Fokus-Scrollen mit top
-    arbeiten: Dialog unten im sichtbaren Visual Viewport verankern. */
+ if(document.activeElement!==field||box.style.display==='none'||!vv){resetAreaKeyboardDialog();return}
  var keyboard=Math.max(0,window.innerHeight-(vv.height+vv.offsetTop));
  var usable=Math.max(220,vv.height-16);
  box.classList.add('keyboard-visible');
  box.style.setProperty('bottom',(keyboard+8)+'px','important');
- box.style.setProperty('max-height',usable+'px','important');
- requestAnimationFrame(function(){
-  try{field.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'})}catch(e){}
- })
+ box.style.setProperty('max-height',usable+'px','important')
 }
 (function(){var field=document.getElementById('manualAreaQuery');if(!field)return;field.addEventListener('focus',function(){setTimeout(syncAreaDialogToKeyboard,60);setTimeout(syncAreaDialogToKeyboard,260)});field.addEventListener('blur',function(){setTimeout(syncAreaDialogToKeyboard,80)});if(window.visualViewport){window.visualViewport.addEventListener('resize',syncAreaDialogToKeyboard);window.visualViewport.addEventListener('scroll',syncAreaDialogToKeyboard)}})();
 
@@ -1043,7 +1038,7 @@ setTimeout(positionAutoZoomButton,100);
 function renderMapPng(){map.invalidateSize(true);return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})}).then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})}).then(function(){return html2canvas(screen,{useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:Math.min(window.devicePixelRatio||1,2),ignoreElements:function(el){return el.classList&&(el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus')||el.classList.contains('map-ui-control')||el.classList.contains('leaflet-control-zoom')||el.classList.contains('label-toggle')||el.id==='autoZoomButton')}})}).then(function(canvas){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})})}
 document.getElementById('copyMapList').onclick=function(){var txt=input.value;function done(){mapStatus.textContent='✓ Liste wurde kopiert.';setTimeout(function(){if(mapStatus.textContent==='✓ Liste wurde kopiert.')mapStatus.textContent=''},1800)}function fallback(){var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done()}catch(e){mapStatus.textContent='Liste konnte nicht kopiert werden.'}document.body.removeChild(ta)}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(fallback);else fallback()};
 var clipboardPreview=document.getElementById('clipboardPreview'),clipboardPreviewText=document.getElementById('clipboardPreviewText');
-document.getElementById('pasteMapList').onclick=function(){var btn=this;if(!navigator.clipboard||!navigator.clipboard.readText){mapStatus.textContent='Zwischenablage kann hier nicht direkt gelesen werden. Bitte Safari über HTTPS verwenden.';return}btn.disabled=true;mapStatus.textContent='Lese Liste aus Zwischenablage …';navigator.clipboard.readText().then(function(txt){txt=String(txt||'');if(!txt.trim())throw new Error('empty');clipboardPreviewText.value=txt;clipboardPreview.style.display='block';mapStatus.textContent=''}).catch(function(e){mapStatus.textContent=e&&e.message==='empty'?'Die Zwischenablage enthält keine Liste.':'Import nicht möglich. Bitte Zugriff auf die Zwischenablage erlauben.'}).then(function(){btn.disabled=false})};
+document.getElementById('pasteMapList').onclick=function(){resetAreaKeyboardDialog();var btn=this;if(!navigator.clipboard||!navigator.clipboard.readText){mapStatus.textContent='Zwischenablage kann hier nicht direkt gelesen werden. Bitte Safari über HTTPS verwenden.';return}btn.disabled=true;mapStatus.textContent='Lese Liste aus Zwischenablage …';navigator.clipboard.readText().then(function(txt){txt=String(txt||'');if(!txt.trim())throw new Error('empty');resetAreaKeyboardDialog();clipboardPreviewText.value=txt;clipboardPreview.style.display='block';mapStatus.textContent=''}).catch(function(e){mapStatus.textContent=e&&e.message==='empty'?'Die Zwischenablage enthält keine Liste.':'Import nicht möglich. Bitte Zugriff auf die Zwischenablage erlauben.'}).then(function(){btn.disabled=false})};
 document.getElementById('clipboardImportCancel').onclick=function(){clipboardPreview.style.display='none';clipboardPreviewText.value=''};
 document.getElementById('clipboardImportConfirm').onclick=function(){var txt=clipboardPreviewText.value;clipboardPreview.style.display='none';clipboardPreviewText.value='';input.value=txt;clearRoute(false);var items=parse(input.value);if(!items.length){clearMap();mapStatus.textContent='Die importierte Liste enthält keine Kartenobjekte.';return}Promise.resolve(build(items)).then(function(){mapStatus.textContent='✓ Liste wurde importiert.';setTimeout(function(){if(mapStatus.textContent==='✓ Liste wurde importiert.')mapStatus.textContent=''},1800)}).catch(function(){mapStatus.textContent='Liste wurde importiert; beim Aufbau der Karte trat ein Fehler auf.'})};
 document.getElementById('copyMap').onclick=function(){var btn=this;if(!window.html2canvas){mapStatus.textContent='Die Screenshot-Funktion konnte nicht geladen werden. Bitte Seite neu laden.';return}if(!navigator.clipboard||!window.ClipboardItem||!navigator.clipboard.write){mapStatus.textContent='Bild-Zwischenablage wird in diesem Browser nicht unterstützt. Bitte die Seite in Safari über HTTPS öffnen.';return}btn.disabled=true;mapStatus.textContent='Erzeuge Kartenbild …';var item;try{item=new ClipboardItem({'image/png':renderMapPng()})}catch(e){mapStatus.textContent='Kopieren wird von diesem Browser nicht unterstützt.';btn.disabled=false;return}navigator.clipboard.write([item]).then(function(){mapStatus.textContent='✓ Karte kopiert.'}).catch(function(){mapStatus.textContent='Kopieren nicht möglich. Bitte in Safari über HTTPS öffnen und erneut tippen.'}).then(function(){btn.disabled=false})};
