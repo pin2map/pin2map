@@ -307,9 +307,16 @@ function selectPlaceResult(q,results,onChosen,onCancel){
  results.forEach(function(r){var b=document.createElement('button');b.type='button';b.style.cssText='display:block;width:100%;text-align:left;margin:0 0 7px;padding:10px;border:1px solid #ddd;border-radius:9px;background:#fff;color:#111';b.innerHTML='<b>'+esc(r.name||String(r.display_name||'').split(',')[0]||q)+'</b><div style="font-size:12px;color:#666;margin-top:3px">'+esc(r.display_name||'')+'</div>';b.onclick=function(){box.style.display='none';var qp=document.getElementById('quickPlace');if(qp)qp.blur();onChosen(r)};wrap.appendChild(b)});
  document.getElementById('placeResultCancel').onclick=function(){box.style.display='none';if(onCancel)onCancel()};box.style.display='block'
 }
+function automaticPlaceLabel(r,q){
+ var a=(r&&r.address)||{},road=a.road||a.pedestrian||a.residential||a.footway||a.path||'';
+ var house=a.house_number||'';
+ if(road&&house)return road+' '+house;
+ if(road)return road;
+ return (r&&r.name)||String((r&&r.display_name)||'').split(',')[0]||q
+}
 function searchPlaceForPin(q,statusEl,after){
  if(statusEl)statusEl.textContent='Suche …';
- geocode(q,false).then(function(a){if(!a.length){if(statusEl)statusEl.textContent='⚠️ Ort nicht gefunden.';return}if(statusEl)statusEl.textContent='';selectPlaceResult(q,a,function(r){if(!r)return;if(after)after(r);var lat=parseFloat(r.lat),lon=parseFloat(r.lon);var chosenLabel=(r.name||String(r.display_name||'').split(',')[0]||q);chooseCategoryForText(lat.toFixed(6)+', '+lon.toFixed(6)+' ('+chosenLabel+')')},function(){if(statusEl)statusEl.textContent=''})}).catch(function(){if(statusEl)statusEl.textContent='⚠️ Ort konnte nicht gefunden werden.'})
+ geocode(q,false).then(function(a){if(!a.length){if(statusEl)statusEl.textContent='⚠️ Ort nicht gefunden.';return}if(statusEl)statusEl.textContent='';selectPlaceResult(q,a,function(r){if(!r)return;if(after)after(r);var lat=parseFloat(r.lat),lon=parseFloat(r.lon);var chosenLabel=automaticPlaceLabel(r,q);chooseCategoryForText(lat.toFixed(6)+', '+lon.toFixed(6)+' ('+chosenLabel+')')},function(){if(statusEl)statusEl.textContent=''})}).catch(function(){if(statusEl)statusEl.textContent='⚠️ Ort konnte nicht gefunden werden.'})
 }
 
 
