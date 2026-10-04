@@ -557,6 +557,26 @@ function syncAreaDialogToKeyboard(){
 }
 (function(){var field=document.getElementById('manualAreaQuery');if(!field)return;field.addEventListener('focus',function(){setTimeout(syncAreaDialogToKeyboard,60);setTimeout(syncAreaDialogToKeyboard,260)});field.addEventListener('blur',function(){setTimeout(syncAreaDialogToKeyboard,80)});if(window.visualViewport){window.visualViewport.addEventListener('resize',syncAreaDialogToKeyboard);window.visualViewport.addEventListener('scroll',syncAreaDialogToKeyboard)}})();
 
+function isDesktopAreaDialog(){
+ return !(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)&&window.innerWidth>600
+}
+function centerAreaSearchBoxDesktop(){
+ if(!isDesktopAreaDialog())return;
+ var box=document.getElementById('areaSearchBox');
+ if(!box||box.style.display==='none')return;
+ /* Erst nach dem DOM-Layout zentrieren: die OSM-Treffer werden asynchron eingefügt
+    und ändern die Dialoghöhe gegenüber dem anfänglichen Ladezustand deutlich. */
+ requestAnimationFrame(function(){requestAnimationFrame(function(){
+  if(!box||box.style.display==='none'||!isDesktopAreaDialog())return;
+  box.classList.remove('keyboard-visible');
+  box.style.removeProperty('bottom');
+  box.style.removeProperty('height');
+  box.style.setProperty('top','50%');
+  box.style.setProperty('transform','translate(-50%,-50%)');
+  box.style.setProperty('max-height','calc(100vh - 24px)');
+  box.style.setProperty('overflow-y','auto');
+ })})
+}
 function osmTypeLabel(k){
  var labels={
   country:'🌍 Staat',state:'🗺️ Bundesland/Region',region:'🗺️ Region',
@@ -611,6 +631,7 @@ function findAreasAt(ll){
  document.getElementById('manualAreaQuery').value='';
  document.getElementById('manualAreaResults').innerHTML='';
  box.style.display='block';
+ centerAreaSearchBoxDesktop();
 
  var url='https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&zoom=18&lat='+
   encodeURIComponent(ll.lat)+'&lon='+encodeURIComponent(ll.lng);
@@ -647,6 +668,7 @@ function findAreasAt(ll){
 
   if(!rows.length){
    res.innerHTML='<div style="padding:10px 0">Nominatim hat für diesen Punkt keine Gebietshierarchie zurückgegeben.</div>';
+   centerAreaSearchBoxDesktop();
    return
   }
   res.innerHTML='';
@@ -661,10 +683,12 @@ function findAreasAt(ll){
    d.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();d.click()}};
    res.appendChild(d)
   });
+  centerAreaSearchBoxDesktop();
  }).catch(function(e){
   if(timer)clearTimeout(timer);
   res.innerHTML='<div style="padding:10px 0;color:#b00020"><b>Abfrage fehlgeschlagen.</b><br>'+
-   esc(e.name==='AbortError'?'Zeitüberschreitung':e.message)+'</div>'
+   esc(e.name==='AbortError'?'Zeitüberschreitung':e.message)+'</div>';
+  centerAreaSearchBoxDesktop()
  })
 }
 function installMapPinGestures(){
