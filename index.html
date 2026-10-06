@@ -1232,10 +1232,16 @@ function collectProjectCache(){
  return cache
 }
 function projectDocument(){return {format:'pin2map',version:1,savedAt:new Date().toISOString(),list:input.value,options:{numberAddresses:document.getElementById('numberAddresses').checked,labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache()}}
-function safeProjectFilename(){var first=parse(input.value).filter(function(x){return !x.area})[0]||parse(input.value)[0],base=(first&&(first.label||first.query))||'pin2map';base=String(base).replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,60)||'pin2map';return base+'.pin2map'}
+function safeProjectFilename(){
+ var items=parse(input.value),first=items.filter(function(x){return !x.area})[0]||items[0],base=(first&&(first.label||first.query))||'pin2map';
+ base=String(base).replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,60)||'pin2map';
+ var d=new Date(),pad=function(n){return String(n).padStart(2,'0')};
+ var stamp=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+ return stamp+'-'+base+'.pin2map'
+}
 function savePin2MapProject(){
- var doc=projectDocument(),blob=new Blob([JSON.stringify(doc)],{type:'application/json'}),name=safeProjectFilename();
- /* Bewusst kein navigator.share: 💾 soll eine Datei speichern statt das iOS-Teilen-Menü zu öffnen. */
+ var doc=projectDocument(),blob=new Blob([JSON.stringify(doc)],{type:'application/octet-stream'}),name=safeProjectFilename();
+ /* Generischer Binärtyp: iOS soll die .pin2map-Datei herunterladen/sichern statt JSON als Dokument vorzuschauen. */
  downloadProjectBlob(blob,name)
 }
 function downloadProjectBlob(blob,name){var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500);mapStatus.textContent='✓ pin2map-Datei gespeichert.'}
