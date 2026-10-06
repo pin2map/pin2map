@@ -156,6 +156,7 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
   font-size:16px!important;
  }
 }
+.list-name-option{align-items:center!important}.list-name-option label{background:transparent!important;border:0!important;padding:0!important;font-weight:600}.list-name-option input{flex:1;min-width:220px;max-width:520px;padding:10px 12px;border:1px solid #ccc;border-radius:10px;background:#fff;color:#111;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}@media(max-width:600px){.list-name-option{display:grid!important;grid-template-columns:1fr!important;gap:6px!important}.list-name-option input{width:100%;max-width:none;min-width:0}.buttons button{flex:1 1 auto}}
 </style>
 
 <style id="ios-area-compact-keyboard">
@@ -171,9 +172,8 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1>Adressen & Kategorien auf einer Karte</h1>
-<p class="hint">Eine Adresse pro Zeile. <code>@</code> vor einem Eintrag zeichnet eine Fläche. Eine eigene Beschriftung kann am Zeilenende in Klammern stehen, z. B. <code>Stuttgart (Oberzentrum)</code> oder <code>@Bodensee (Lake Constance)</code>. Kategorien: <code># 🔹 [blau] Kategorie1</code>. Farben können Namen oder Hex-Werte sein.</p>
-<div class="options"><label><input type="checkbox" id="numberAddresses"> Adressen durchnummerieren</label></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
+<h1 style="font-weight:400">pin2map (Version 8)</h1>
+<div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [rot] Rot
 
 # 🔹 [blau] Blau
@@ -191,7 +191,7 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 # 🏁 [grau] Grau
 
 # 🐂 [braun] Braun</textarea>
-<div class="buttons"><button id="go">Karte anzeigen</button><button id="addCategoryBtn" type="button" class="list-category-btn">Kategorien hinzufügen</button><button id="clear" type="button" class="list-delete-btn">Liste löschen</button><button id="cancelListBtn" type="button" class="list-cancel-btn">Abbrechen</button></div><p id="formStatus" class="hint"></p>
+<div class="buttons"><button id="addCategoryBtn" type="button" class="list-category-btn">＋Kategorie</button><button id="clear" type="button" class="list-delete-btn">✖️Liste</button><button id="cancelListBtn" type="button" class="list-cancel-btn">Abbrechen</button><button id="go">Karte</button></div><p id="formStatus" class="hint"></p>
 </main>
 <section id="mapScreen">
 <div id="map"></div>
@@ -220,6 +220,10 @@ var input=document.getElementById('input'), form=document.getElementById('formSc
 var defaults='# 📍 [rot] Rot\n\n# 🔹 [blau] Blau\n\n# 🅿️ [blau] Aufenthalt\n\n# 🌲 [grün] Grün\n\n# 😀 [gelb] Gelb\n\n# 🔸 [orange] Orange\n\n# 🏛️ [violett] Violett\n\n# 🏁 [grau] Grau\n\n# 🐂 [braun] Braun\n';
 var map=null,baseLayer=null,categoryLayers={},allBounds=null,renderedAreas=[],areaRenderer=null,buildGeneration=0,areaPointTotal=0;
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
+var currentProjectName=''; /* Dateiname ohne .pin2map des geöffneten bzw. zuletzt gespeicherten Projekts. */
+function cleanProjectBaseName(value){return String(value||'').replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,100)}
+function setCurrentProjectName(value){currentProjectName=cleanProjectBaseName(value);var field=document.getElementById('listNameInput');if(field&&field.value!==currentProjectName)field.value=currentProjectName}
+function syncProjectNameFromListField(){var field=document.getElementById('listNameInput');if(field)setCurrentProjectName(field.value)}
 var baseMaps={standard:['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true,attribution:'&copy; OpenStreetMap contributors'}],topo:['https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,crossOrigin:true,attribution:'&copy; OpenStreetMap contributors | OpenTopoMap'}],satellite:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,crossOrigin:true,attribution:'Tiles &copy; Esri'}],humanitarian:['https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true,attribution:'&copy; OpenStreetMap contributors | HOT'}]};
 var named={blau:'#1976d2',rot:'#d32f2f','grün':'#388e3c',gruen:'#388e3c',orange:'#f57c00',gelb:'#fbc02d',lila:'#7b1fa2',violett:'#7b1fa2','türkis':'#00838f',tuerkis:'#00838f',braun:'#5d4037',grau:'#616161',schwarz:'#212121',pink:'#c2185b'};
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -443,14 +447,13 @@ function autoZoomLoadedLayers(){
 function refreshAfterDirectAdd(){
  var items=parse(input.value),box=document.getElementById('legend');box.innerHTML='';buildLegend(items);
  var al=document.getElementById('addressList');if(al)al.innerHTML='';
- var numbered=document.getElementById('numberAddresses').checked;if(numbered&&al){var n=0;items.forEach(function(x){n++;if(!x.area){var row=document.createElement('div');row.className='address-row';row.innerHTML='<b>'+n+'.</b> '+esc(x.query);al.appendChild(row)}})}
+
 }
 function addNewItemDirectly(fullLine){
  var it=findParsedItemByFullLine(fullLine);if(!it)return;
  var progress=document.getElementById('pinProgress');
  progress.textContent=it.area?'⏳ Neue Fläche wird geladen …':'⏳ Neuer Pin wird gesetzt …';progress.style.display='block';
  ensureCategoryLayer(it);
- var numbered=document.getElementById('numberAddresses').checked;
  var items=parse(input.value),num=1;for(var i=0;i<items.length;i++){if(items[i].area)continue;if(items[i].sourceFullLine===it.sourceFullLine)break;num++}
  resolveItemData(it).then(function(a){
   if(!a.length)throw new Error('Nicht gefunden');
@@ -464,9 +467,9 @@ function addNewItemDirectly(fullLine){
    var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(it.label)+'</div>',iconSize:null})}).addTo(categoryLayers[it.category]);
    it._areaLabelLayer=areaLabelMarker;
   }else{
-   var marker=L.marker(p,{icon:icon(it.symbol,num,numbered)}).bindPopup(pinPopupHtml(it,a[0].display_name)).addTo(categoryLayers[it.category]);
+   var marker=L.marker(p,{icon:icon(it.symbol,num,false)}).bindPopup(pinPopupHtml(it,a[0].display_name)).addTo(categoryLayers[it.category]);
    it._pinLayer=marker;
-   marker.bindTooltip((numbered?num+'. ':'')+it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});
+   marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});
   }
   refreshAfterDirectAdd();autoZoomLoadedLayers();mapStatus.textContent=it.area?'Fläche hinzugefügt.':'Pin hinzugefügt.';setTimeout(function(){mapStatus.textContent=''},1800)
  }).catch(function(){
@@ -855,7 +858,7 @@ function areaPopupHtml(it){
 function refreshAfterDirectDelete(){
  var items=parse(input.value),box=document.getElementById('legend');box.innerHTML='';buildLegend(items);
  var al=document.getElementById('addressList');if(al)al.innerHTML='';
- var numbered=document.getElementById('numberAddresses').checked;if(numbered&&al){var n=0;items.forEach(function(x){n++;if(!x.area){var row=document.createElement('div');row.className='address-row';row.innerHTML='<b>'+n+'.</b> '+esc(x.query);al.appendChild(row)}})}
+
 }
 function deleteAreaById(id){
  var it=areaDeleteItems[id];if(!it)return;
@@ -952,8 +955,7 @@ function savePinName(){
  for(var i=0;i<lines.length;i++){if(lines[i].trim()===oldFull){lines[i]=newRaw;break}}
  input.value=lines.join('\n');it.label=name||it.query;it.sourceLine=newRaw;it.sourceFullLine=newRaw;
  if(it._pinLayer){
-  var numbered=document.getElementById('numberAddresses').checked;
-  if(it._pinLayer.getTooltip())it._pinLayer.setTooltipContent((numbered?num+'. ':'')+it.label);
+   if(it._pinLayer.getTooltip())it._pinLayer.setTooltipContent(it.label);
   it._pinLayer.setPopupContent(pinPopupHtml(it))
  }
  document.getElementById('pinNameEditor').style.display='none';pendingPinRename=null;refreshAfterDirectDelete();
@@ -1156,9 +1158,9 @@ document.getElementById('categoryEditSave').onclick=function(){
  document.getElementById('categoryEditor').style.display='none';pendingCategoryEditName=null;refreshAfterDirectDelete()
 };
 function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');Object.keys(cats).forEach(function(name){var v=cats[name],lab=document.createElement('div'),cb=document.createElement('input'),sw=document.createElement('span'),txt=document.createElement('span');lab.className='chip';lab.style.cursor='pointer';cb.type='checkbox';cb.checked=map&&categoryLayers[name]?map.hasLayer(categoryLayers[name]):true;sw.className='swatch';sw.style.background=v.color;txt.textContent=v.symbol+' '+name+' ('+v.count+')';cb.onclick=function(e){e.stopPropagation()};cb.onchange=function(){var l=categoryLayers[name];if(!l)return;if(cb.checked)l.addTo(map);else map.removeLayer(l)};lab.onclick=function(e){if(e.target===cb)return;openCategoryEditor(name,v)};lab.appendChild(cb);lab.appendChild(sw);lab.appendChild(txt);box.appendChild(lab)})}
-function build(items){clearMap();var myBuild=++buildGeneration;buildLegend(items);var numbered=document.getElementById('numberAddresses').checked,labelled=document.getElementById('labelAddresses').checked,areasLabelled=document.getElementById('labelAreas').checked,idx=0,miss=0,missed=[],areaPoints=0;screen.classList.remove('labels-hidden');screen.classList.toggle('hide-address-labels',!labelled);screen.classList.toggle('hide-area-labels',!areasLabelled);labelToggle.classList.toggle('off',!labelled&&!areasLabelled);for(var i=0;i<items.length;i++){if(!categoryLayers[items[i].category])categoryLayers[items[i].category]=L.layerGroup().addTo(map)}
+function build(items){clearMap();var myBuild=++buildGeneration;buildLegend(items);var labelled=document.getElementById('labelAddresses').checked,areasLabelled=document.getElementById('labelAreas').checked,idx=0,miss=0,missed=[],areaPoints=0;screen.classList.remove('labels-hidden');screen.classList.toggle('hide-address-labels',!labelled);screen.classList.toggle('hide-area-labels',!areasLabelled);labelToggle.classList.toggle('off',!labelled&&!areasLabelled);for(var i=0;i<items.length;i++){if(!categoryLayers[items[i].category])categoryLayers[items[i].category]=L.layerGroup().addTo(map)}
 function noteMissing(x){if(myBuild!==buildGeneration)return;miss++;missed.push(x.query);var box=document.getElementById('notFoundList');box.innerHTML='<b>⚠️ Nicht gefunden ('+missed.length+')</b><br>'+missed.map(function(v){return '• '+esc(v)}).join('<br>')}
-function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){autoZoomLoadedLayers();mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.')+(areaPoints?' Flächenpunkte: '+areaPoints.toLocaleString('de-DE')+(isConstrainedTouchDevice()?' (mobil angepasst)':'')+'.':'');if(!miss)setTimeout(function(){if(myBuild===buildGeneration)mapStatus.textContent=''},5000);return}var x=items[idx],num=idx+1;mapStatus.textContent=(activeProjectCache&&activeProjectCache[projectCacheKey(x)]?'Lade ':'Suche ')+num+' von '+items.length+': '+x.query;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,numbered)}).bindPopup(pinPopupHtml(x,a[0].display_name)).addTo(categoryLayers[x.category]);x._pinLayer=marker;allBounds.extend(p);marker.bindTooltip((numbered?num+'. ':'')+x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});if(numbered){var row=document.createElement('div');row.className='address-row';row.innerHTML='<b>'+num+'.</b> '+esc(x.query);document.getElementById('addressList').appendChild(row)}}}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep(x._fromProjectCache?0:1050).then(next)})}next()}
+function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){autoZoomLoadedLayers();mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.')+(areaPoints?' Flächenpunkte: '+areaPoints.toLocaleString('de-DE')+(isConstrainedTouchDevice()?' (mobil angepasst)':'')+'.':'');if(!miss)setTimeout(function(){if(myBuild===buildGeneration)mapStatus.textContent=''},5000);return}var x=items[idx],num=idx+1;mapStatus.textContent=(activeProjectCache&&activeProjectCache[projectCacheKey(x)]?'Lade ':'Suche ')+num+' von '+items.length+': '+x.query;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(pinPopupHtml(x,a[0].display_name)).addTo(categoryLayers[x.category]);x._pinLayer=marker;allBounds.extend(p);marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'})}}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep(x._fromProjectCache?0:1050).then(next)})}next()}
 document.getElementById('go').onclick=function(){var items=parse(input.value);formStatus.textContent='';form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);if(items.length)build(items);else clearMap()},150)};
 document.getElementById('back').onclick=function(){screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
 function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length){build(items);if(importedFromUrl)clearImportedDataFromUrl()}else{clearMap();var q=document.getElementById('quickPlace');if(q)q.blur()}},150)}
@@ -1244,17 +1246,19 @@ function collectProjectCache(){
  }
  return cache
 }
-function projectDocument(){return {format:'pin2map',version:1,list:input.value,options:{numberAddresses:document.getElementById('numberAddresses').checked,labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache()}}
+function projectDocument(){return {format:'pin2map',version:1,list:input.value,options:{labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache()}}
 function suggestedProjectName(){
  var items=parse(input.value),first=items.filter(function(x){return !x.area})[0]||items[0],base=(first&&(first.label||first.query))||'pin2map';
  base=String(base).replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,60)||'pin2map';
  return base
 }
 function requestedProjectFilename(){
- var entered=window.prompt('Name der pin2map-Datei:',suggestedProjectName());
+ syncProjectNameFromListField();
+ var entered=window.prompt('Name der pin2map-Datei:',currentProjectName||suggestedProjectName());
  if(entered===null)return null;
  var base=String(entered).replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,100);
  if(!base){mapStatus.textContent='⚠️ Bitte einen Dateinamen eingeben.';return null}
+ setCurrentProjectName(base);
  return base+'.pin2map'
 }
 function savePin2MapProject(){
@@ -1277,13 +1281,14 @@ function downloadProjectBlob(blob,name){var u=URL.createObjectURL(blob),a=docume
 function openPin2MapProject(doc){
  if(!doc||doc.format!=='pin2map'||typeof doc.list!=='string')throw new Error('Keine gültige pin2map-Datei.');
  input.value=doc.list;activeProjectCache=(doc.cache&&typeof doc.cache==='object')?doc.cache:{};
- if(doc.options){document.getElementById('numberAddresses').checked=!!doc.options.numberAddresses;document.getElementById('labelAddresses').checked=doc.options.labelAddresses!==false;document.getElementById('labelAreas').checked=doc.options.labelAreas!==false;if(doc.options.mapStyle&&baseMaps[doc.options.mapStyle]){document.getElementById('mapStyle').value=doc.options.mapStyle;if(map)setBase(doc.options.mapStyle)}}
+ if(doc.options){document.getElementById('labelAddresses').checked=doc.options.labelAddresses!==false;document.getElementById('labelAreas').checked=doc.options.labelAreas!==false;if(doc.options.mapStyle&&baseMaps[doc.options.mapStyle]){document.getElementById('mapStyle').value=doc.options.mapStyle;if(map)setBase(doc.options.mapStyle)}}
  clearRoute(false);form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();
  setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else clearMap();setTimeout(function(){if(doc.view&&Array.isArray(doc.view.center)&&doc.view.center.length===2&&isFinite(doc.view.zoom))map.setView(doc.view.center,doc.view.zoom);mapStatus.textContent='✓ pin2map-Projekt geladen.'},80)},80)
 }
+var listNameInput=document.getElementById('listNameInput');if(listNameInput){listNameInput.addEventListener('input',function(){setCurrentProjectName(this.value)})}
 document.getElementById('saveProjectFile').onclick=savePin2MapProject;
 document.getElementById('openProjectFile').onclick=function(){var f=document.getElementById('projectFileInput');f.value='';f.click()};
-document.getElementById('projectFileInput').onchange=function(){var file=this.files&&this.files[0];if(!file)return;mapStatus.textContent='Öffne pin2map-Projekt …';file.text().then(function(txt){if(txt.indexOf('PIN2MAP\n')===0)txt=txt.slice(8);return JSON.parse(txt)}).then(openPin2MapProject).catch(function(){mapStatus.textContent='⚠️ Die Datei konnte nicht als pin2map-Projekt geöffnet werden.'})};
+document.getElementById('projectFileInput').onchange=function(){var file=this.files&&this.files[0];if(!file)return;var openedName=String(file.name||'').replace(/\.pin2map$/i,'').trim();mapStatus.textContent='Öffne pin2map-Projekt …';file.text().then(function(txt){if(txt.indexOf('PIN2MAP\n')===0)txt=txt.slice(8);return JSON.parse(txt)}).then(function(doc){if(openedName)setCurrentProjectName(openedName);openPin2MapProject(doc)}).catch(function(){mapStatus.textContent='⚠️ Die Datei konnte nicht als pin2map-Projekt geöffnet werden.'})};
 
 function renderMapPng(){map.invalidateSize(true);return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})}).then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})}).then(function(){return html2canvas(screen,{useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:Math.min(window.devicePixelRatio||1,2),ignoreElements:function(el){return el.classList&&(el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus')||el.classList.contains('map-ui-control')||el.classList.contains('leaflet-control-zoom')||el.classList.contains('label-toggle')||el.id==='autoZoomButton')}})}).then(function(canvas){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})})}
 document.getElementById('copyMap').onclick=function(){var btn=this;if(!window.html2canvas){mapStatus.textContent='Die Screenshot-Funktion konnte nicht geladen werden. Bitte Seite neu laden.';return}if(!navigator.clipboard||!window.ClipboardItem||!navigator.clipboard.write){mapStatus.textContent='Bild-Zwischenablage wird in diesem Browser nicht unterstützt. Bitte die Seite in Safari über HTTPS öffnen.';return}btn.disabled=true;mapStatus.textContent='Erzeuge Kartenbild …';var item;try{item=new ClipboardItem({'image/png':renderMapPng()})}catch(e){mapStatus.textContent='Kopieren wird von diesem Browser nicht unterstützt.';btn.disabled=false;return}navigator.clipboard.write([item]).then(function(){mapStatus.textContent='✓ Karte kopiert.'}).catch(function(){mapStatus.textContent='Kopieren nicht möglich. Bitte in Safari über HTTPS öffnen und erneut tippen.'}).then(function(){btn.disabled=false})};
