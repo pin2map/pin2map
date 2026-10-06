@@ -997,7 +997,7 @@ function openRouteInAppleMaps(){
  for(var j=1;j<items.length-1;j++){var w=items[j]._pinLayer.getLatLng();p.append('waypoint',w.lat+','+w.lng)}
  p.set('destination',z.lat+','+z.lng);
  p.set('mode',routeMode==='bicycle'?'cycling':routeMode==='pedestrian'?'walking':routeMode==='transit'?'transit':'driving');
- window.open('https://maps.apple.com/directions?'+p.toString(),'_blank','noopener');
+ window.location.href='https://maps.apple.com/directions?'+p.toString();
 }
 function clearRoute(keepPoints){
  if(routeLayer&&map&&map.hasLayer(routeLayer))map.removeLayer(routeLayer);routeLayer=null;
@@ -1244,16 +1244,23 @@ function collectProjectCache(){
  }
  return cache
 }
-function projectDocument(){return {format:'pin2map',version:1,savedAt:new Date().toISOString(),list:input.value,options:{numberAddresses:document.getElementById('numberAddresses').checked,labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache()}}
-function safeProjectFilename(){
+function projectDocument(){return {format:'pin2map',version:1,list:input.value,options:{numberAddresses:document.getElementById('numberAddresses').checked,labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache()}}
+function suggestedProjectName(){
  var items=parse(input.value),first=items.filter(function(x){return !x.area})[0]||items[0],base=(first&&(first.label||first.query))||'pin2map';
- base=String(base).replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,60)||'pin2map';
- var d=new Date(),pad=function(n){return String(n).padStart(2,'0')};
- var stamp=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
- return stamp+'-'+base+'.pin2map'
+ base=String(base).replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,60)||'pin2map';
+ return base
+}
+function requestedProjectFilename(){
+ var entered=window.prompt('Name der pin2map-Datei:',suggestedProjectName());
+ if(entered===null)return null;
+ var base=String(entered).replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,100);
+ if(!base){mapStatus.textContent='⚠️ Bitte einen Dateinamen eingeben.';return null}
+ return base+'.pin2map'
 }
 function savePin2MapProject(){
- var doc=projectDocument(),payload=JSON.stringify(doc),blob=new Blob([payload],{type:'application/json'}),name=safeProjectFilename();
+ var name=requestedProjectFilename();
+ if(!name)return;
+ var doc=projectDocument(),payload=JSON.stringify(doc),blob=new Blob([payload],{type:'application/json'});
  /* iPhone/iPad: native File-Übergabe an iOS; Desktop: direkter Browser-Download. */
  if(isConstrainedTouchDevice()&&navigator.share&&navigator.canShare){
   try{
@@ -1279,7 +1286,6 @@ document.getElementById('openProjectFile').onclick=function(){var f=document.get
 document.getElementById('projectFileInput').onchange=function(){var file=this.files&&this.files[0];if(!file)return;mapStatus.textContent='Öffne pin2map-Projekt …';file.text().then(function(txt){if(txt.indexOf('PIN2MAP\n')===0)txt=txt.slice(8);return JSON.parse(txt)}).then(openPin2MapProject).catch(function(){mapStatus.textContent='⚠️ Die Datei konnte nicht als pin2map-Projekt geöffnet werden.'})};
 
 function renderMapPng(){map.invalidateSize(true);return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})}).then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})}).then(function(){return html2canvas(screen,{useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:Math.min(window.devicePixelRatio||1,2),ignoreElements:function(el){return el.classList&&(el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus')||el.classList.contains('map-ui-control')||el.classList.contains('leaflet-control-zoom')||el.classList.contains('label-toggle')||el.id==='autoZoomButton')}})}).then(function(canvas){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})})}
-function isIPhoneClipboard(){return /iPhone|iPod/.test(navigator.userAgent)}
 document.getElementById('copyMap').onclick=function(){var btn=this;if(!window.html2canvas){mapStatus.textContent='Die Screenshot-Funktion konnte nicht geladen werden. Bitte Seite neu laden.';return}if(!navigator.clipboard||!window.ClipboardItem||!navigator.clipboard.write){mapStatus.textContent='Bild-Zwischenablage wird in diesem Browser nicht unterstützt. Bitte die Seite in Safari über HTTPS öffnen.';return}btn.disabled=true;mapStatus.textContent='Erzeuge Kartenbild …';var item;try{item=new ClipboardItem({'image/png':renderMapPng()})}catch(e){mapStatus.textContent='Kopieren wird von diesem Browser nicht unterstützt.';btn.disabled=false;return}navigator.clipboard.write([item]).then(function(){mapStatus.textContent='✓ Karte kopiert.'}).catch(function(){mapStatus.textContent='Kopieren nicht möglich. Bitte in Safari über HTTPS öffnen und erneut tippen.'}).then(function(){btn.disabled=false})};
 function refreshMapSize(){if(map&&screen.style.display!=='none')setTimeout(function(){map.invalidateSize(true)},180)}
 window.addEventListener('resize',refreshMapSize);
