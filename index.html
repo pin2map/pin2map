@@ -1240,8 +1240,8 @@ function safeProjectFilename(){
  return stamp+'-'+base+'.pin2map'
 }
 function savePin2MapProject(){
- var doc=projectDocument(),blob=new Blob([JSON.stringify(doc)],{type:'application/octet-stream'}),name=safeProjectFilename();
- /* Generischer Binärtyp: iOS soll die .pin2map-Datei herunterladen/sichern statt JSON als Dokument vorzuschauen. */
+ var doc=projectDocument(),payload='PIN2MAP\n'+JSON.stringify(doc),blob=new Blob([payload],{type:'application/octet-stream'}),name=safeProjectFilename();
+ /* Eigene Dateikennung vor dem JSON verhindert, dass Safari den Inhalt als JSON-Dokument erkennt. */
  downloadProjectBlob(blob,name)
 }
 function downloadProjectBlob(blob,name){var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500);mapStatus.textContent='✓ pin2map-Datei gespeichert.'}
@@ -1254,7 +1254,7 @@ function openPin2MapProject(doc){
 }
 document.getElementById('saveProjectFile').onclick=savePin2MapProject;
 document.getElementById('openProjectFile').onclick=function(){var f=document.getElementById('projectFileInput');f.value='';f.click()};
-document.getElementById('projectFileInput').onchange=function(){var file=this.files&&this.files[0];if(!file)return;mapStatus.textContent='Öffne pin2map-Projekt …';file.text().then(function(txt){return JSON.parse(txt)}).then(openPin2MapProject).catch(function(){mapStatus.textContent='⚠️ Die Datei konnte nicht als pin2map-Projekt geöffnet werden.'})};
+document.getElementById('projectFileInput').onchange=function(){var file=this.files&&this.files[0];if(!file)return;mapStatus.textContent='Öffne pin2map-Projekt …';file.text().then(function(txt){if(txt.indexOf('PIN2MAP\n')===0)txt=txt.slice(8);return JSON.parse(txt)}).then(openPin2MapProject).catch(function(){mapStatus.textContent='⚠️ Die Datei konnte nicht als pin2map-Projekt geöffnet werden.'})};
 
 function renderMapPng(){map.invalidateSize(true);return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})}).then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})}).then(function(){return html2canvas(screen,{useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:Math.min(window.devicePixelRatio||1,2),ignoreElements:function(el){return el.classList&&(el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus')||el.classList.contains('map-ui-control')||el.classList.contains('leaflet-control-zoom')||el.classList.contains('label-toggle')||el.id==='autoZoomButton')}})}).then(function(canvas){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})})}
 document.getElementById('copyMapList').onclick=function(){var txt=input.value;function done(){mapStatus.textContent='✓ Liste wurde kopiert.';setTimeout(function(){if(mapStatus.textContent==='✓ Liste wurde kopiert.')mapStatus.textContent=''},1800)}function fallback(){var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done()}catch(e){mapStatus.textContent='Liste konnte nicht kopiert werden.'}document.body.removeChild(ta)}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(fallback);else fallback()};
