@@ -1262,19 +1262,44 @@ function requestedProjectFilename(){
  setCurrentProjectName(base);
  return base+'.pin2map'
 }
+function restoreMapAfterSystemDialog(){
+ setTimeout(function(){
+  try{syncVisibleViewport()}catch(e){}
+  if(map&&screen.style.display!=='none'){
+   try{map.invalidateSize(true)}catch(e){}
+   try{positionAutoZoomButton()}catch(e){}
+  }
+ },120);
+ setTimeout(function(){if(map&&screen.style.display!=='none'){try{map.invalidateSize(true)}catch(e){}}},450)
+}
+function safeProjectFilename(name){
+ var base=cleanProjectBaseName(String(name==null?'':name).replace(/\.pin2map$/i,''));
+ if(!base||/^(null|undefined)$/i.test(base))return null;
+ return base+'.pin2map'
+}
 function savePin2MapProject(){
- var name=requestedProjectFilename();
- if(!name)return;
- var doc=projectDocument(),payload=JSON.stringify(doc),blob=new Blob([payload],{type:'application/octet-stream'});
- /* iPhone/iPad: native File-Übergabe an iOS; Desktop: direkter Browser-Download. */
- if(isConstrainedTouchDevice()&&navigator.share&&navigator.canShare){
+ var requested=requestedProjectFilename();
+ if(!requested)return;
+ var name=safeProjectFilename(requested);
+ if(!name){mapStatus.textContent='⚠️ Ungültiger Dateiname.';return}
+ var doc=projectDocument(),payload=JSON.stringify(doc),blob=new Blob([payload],{type:'application/json'});
+ /* iPhone/iPad: ausschließlich native Datei-Freigabe. Kein Browser-Download-Fallback. */
+ if(isConstrainedTouchDevice()){
+  if(!(navigator.share&&navigator.canShare)){mapStatus.textContent='⚠️ Speichern wird auf diesem Gerät nicht unterstützt.';return}
   try{
-   var file=new File([blob],name,{type:'application/octet-stream'});
-   if(navigator.canShare({files:[file]})){
-    navigator.share({files:[file]}).then(function(){mapStatus.textContent='✓ pin2map-Datei zum Sichern übergeben.'}).catch(function(e){if(e&&e.name==='AbortError')return;downloadProjectBlob(blob,name)});
-    return
-   }
-  }catch(e){}
+   var file=new File([payload],name,{type:'application/json'});
+   if(!navigator.canShare({files:[file]})){mapStatus.textContent='⚠️ Die pin2map-Datei kann nicht an iOS übergeben werden.';return}
+   mapStatus.textContent='pin2map-Datei wird zum Sichern übergeben …';
+   navigator.share({files:[file]}).then(function(){
+    mapStatus.textContent='✓ pin2map-Datei zum Sichern übergeben.';
+    restoreMapAfterSystemDialog()
+   }).catch(function(e){
+    restoreMapAfterSystemDialog();
+    if(e&&e.name==='AbortError'){mapStatus.textContent='';return}
+    mapStatus.textContent='⚠️ Speichern wurde von iOS nicht abgeschlossen.'
+   });
+   return
+  }catch(e){restoreMapAfterSystemDialog();mapStatus.textContent='⚠️ pin2map-Datei konnte nicht an iOS übergeben werden.';return}
  }
  downloadProjectBlob(blob,name)
 }
