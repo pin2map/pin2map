@@ -1240,8 +1240,17 @@ function safeProjectFilename(){
  return stamp+'-'+base+'.pin2map'
 }
 function savePin2MapProject(){
- var doc=projectDocument(),payload='PIN2MAP\n'+JSON.stringify(doc),blob=new Blob([payload],{type:'application/octet-stream'}),name=safeProjectFilename();
- /* Eigene Dateikennung vor dem JSON verhindert, dass Safari den Inhalt als JSON-Dokument erkennt. */
+ var doc=projectDocument(),payload=JSON.stringify(doc),blob=new Blob([payload],{type:'application/json'}),name=safeProjectFilename();
+ /* iPhone/iPad: native File-Übergabe an iOS; Desktop: direkter Browser-Download. */
+ if(isConstrainedTouchDevice()&&navigator.share&&navigator.canShare){
+  try{
+   var file=new File([blob],name,{type:'application/json'});
+   if(navigator.canShare({files:[file]})){
+    navigator.share({files:[file],title:'pin2map-Projekt sichern'}).then(function(){mapStatus.textContent='✓ pin2map-Datei zum Sichern übergeben.'}).catch(function(e){if(e&&e.name==='AbortError')return;downloadProjectBlob(blob,name)});
+    return
+   }
+  }catch(e){}
+ }
  downloadProjectBlob(blob,name)
 }
 function downloadProjectBlob(blob,name){var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500);mapStatus.textContent='✓ pin2map-Datei gespeichert.'}
