@@ -225,10 +225,12 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 #routeOrderToggle{position:relative!important}
 #routeOrderToggle.route-order-optimal{background:#fff!important;color:#111!important;border-color:#d1d1d6!important}
 #routeOrderToggle.route-order-optimal::after{content:"";position:absolute;left:4px;right:4px;top:50%;height:5px;background:#ff3b30;border-radius:4px;transform:rotate(-45deg);transform-origin:center;pointer-events:none}
-.quick-place input{border-radius:999px!important}
+.quick-place input{border-radius:8px!important}
 .bottom-gpx-action.gpx-remove{background:#fff!important;color:#111!important;border-color:#d1d1d6!important;position:relative!important}
 .bottom-gpx-action.gpx-remove::after{content:"";position:absolute;left:5px;right:5px;top:50%;height:5px;background:#ff0000;border-radius:4px;transform:rotate(-45deg);transform-origin:center;pointer-events:none}
 .quick-place .quick-pin-btn,.quick-place .quick-area-btn{height:40px!important;width:40px!important;min-width:40px!important;padding:0!important;border-radius:50%!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+/* V9.0: Text-Eingabefeld wieder rechteckig mit abgerundeten Ecken. */
+.quick-place input{border-radius:8px!important}
 </style>
 <style id="ios-area-keyboard-fix">#areaSearchBox.keyboard-visible{bottom:auto!important;transform:translateX(-50%)!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}</style>
 
@@ -296,7 +298,7 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 
 <style id="route-order-v812">
 .route-order{display:flex;align-items:center;gap:5px;margin-top:7px;font-size:11px;color:#666;font-weight:600}
-.route-order span{margin-right:2px}.route-bulk{display:flex;gap:5px;flex-wrap:wrap}.route-bulk #routeLegColors{background:#e5e5ea!important;color:#333!important}.route-bulk #routeLegColors.active{background:#0a84ff!important;color:#fff!important}.route-order button{padding:5px 8px!important;border-radius:7px!important;background:#e5e5ea!important;color:#333!important;font-size:11px!important;font-weight:600!important}.route-order button.active{background:#0a84ff!important;color:#fff!important}.route-order button:disabled{opacity:.45!important}
+.route-order span{margin-right:2px}.route-bulk{display:flex;gap:5px;flex-wrap:wrap}.route-order button{padding:5px 8px!important;border-radius:7px!important;background:#e5e5ea!important;color:#333!important;font-size:11px!important;font-weight:600!important}.route-order button.active{background:#0a84ff!important;color:#fff!important}.route-order button:disabled{opacity:.45!important}
 #routeModes #exportRouteGpx{font-size:10px!important;font-weight:800!important;width:38px!important;min-width:38px!important;max-width:38px!important;height:32px!important;padding:0!important}
 #routeModes #exportRouteGpx:disabled{opacity:.4!important}
 .route-bulk{margin-top:6px}.route-bulk button{padding:5px 8px!important;border-radius:7px!important;background:#e5e5ea!important;color:#333!important;font-size:11px!important;font-weight:600!important}
@@ -945,39 +947,26 @@ function installMapPinGestures(){
   },true);
  }
 
- /* Mobile Long-Press direkt am DOM: nach Öffnen bleibt der Dialog bis NACH touchend gesperrt. */
+ /* V9.0: Eigene Touch-Zoomgesten; historischer wirkungsloser Long-Press-Code entfernt. */
  if(!mapEl.dataset.pin2mapLongPressInstalled){
   mapEl.dataset.pin2mapLongPressInstalled='1';
-  var timer=null,start=null,moved=false,longPressOpened=false,uiTouch=false;
+  var start=null,moved=false,uiTouch=false;
   var lastOneTap=0,lastTwoTap=0;
-  function clearTimer(){if(timer){clearTimeout(timer);timer=null}}
   function blockedTarget(target){return target&&target.closest&&target.closest('.leaflet-control,.map-ui-control,.topbar,.legend,.bottom,.label-toggle,.elevation-toggle,.route-info,.leaflet-marker-icon,.leaflet-tooltip,.leaflet-popup,#mapActionChooser,#areaClickChooser,#areaSearchBox,#pinCategoryChooser,#placeResultChooser,#categoryEditor,#pinNameEditor,#areaNameEditor')}
   mapEl.addEventListener('touchstart',function(ev){
    if(!ev.touches)return;
    uiTouch=!!blockedTarget(ev.target);
-   if(uiTouch){clearTimer();start=null;moved=false;longPressOpened=false;return}
+   if(uiTouch){start=null;moved=false;return}
    if(ev.touches.length===1){
-    var t=ev.touches[0];start={x:t.clientX,y:t.clientY};moved=false;longPressOpened=false;clearTimer();
-    timer=setTimeout(function(){
-     timer=null;if(moved||!start)return;
-     var rect=mapEl.getBoundingClientRect(),pt=L.point(start.x-rect.left,start.y-rect.top),ll=map.containerPointToLatLng(pt);
-     longPressOpened=false;
-    },650);
-   }else{clearTimer();start=null;moved=false}
+    var t=ev.touches[0];start={x:t.clientX,y:t.clientY};moved=false;
+   }else{start=null;moved=false}
   },{passive:true});
   mapEl.addEventListener('touchmove',function(ev){
    if(!start||!ev.touches||!ev.touches.length)return;var t=ev.touches[0];
-   if(Math.abs(t.clientX-start.x)>10||Math.abs(t.clientY-start.y)>10){moved=true;clearTimer()}
+   if(Math.abs(t.clientX-start.x)>10||Math.abs(t.clientY-start.y)>10){moved=true}
   },{passive:true});
   mapEl.addEventListener('touchend',function(ev){
-   clearTimer();
-   if(uiTouch){uiTouch=false;start=null;moved=false;longPressOpened=false;return}
-   if(longPressOpened){
-    /* Nur das Loslassen des auslösenden Long-Press abfangen.
-       Der nächste Touch auf das bereits offene Menü muss sofort funktionieren. */
-    ev.preventDefault();ev.stopPropagation();
-    longPressOpened=false;start=null;moved=false;return;
-   }
+   if(uiTouch){uiTouch=false;start=null;moved=false;return}
    if(!moved){
     var now=Date.now(),changed=ev.changedTouches&&ev.changedTouches[0];
     /* Einfinger-Doppeltipp: +1 Zoomstufe. */
@@ -990,13 +979,13 @@ function installMapPinGestures(){
    }
    start=null;moved=false;
   },{passive:false});
-  mapEl.addEventListener('touchcancel',function(){clearTimer();start=null;moved=false;longPressOpened=false;uiTouch=false},{passive:true});
+  mapEl.addEventListener('touchcancel',function(){start=null;moved=false;uiTouch=false},{passive:true});
 
   /* Zweifinger-Doppeltipp: zwei kurze 2-Finger-Taps hintereinander = -1 Zoomstufe. */
   var twoActive=false,twoMoved=false,twoCenter=null,twoStart=null;
   mapEl.addEventListener('touchstart',function(ev){
    if(ev.touches&&ev.touches.length===2&&!blockedTarget(ev.target)){
-    clearTimer();start=null;twoActive=true;twoMoved=false;
+    start=null;twoActive=true;twoMoved=false;
     var a=ev.touches[0],b=ev.touches[1];twoCenter={x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2};twoStart=twoCenter;
    }
   },{passive:true});
@@ -1050,7 +1039,6 @@ function areasAtLatLng(ll){
  }
  return out
 }
-function showAreaChoice(ll){return false}
 document.getElementById('areaClickCancel').onclick=function(){document.getElementById('areaClickChooser').style.display='none'};
 function areaPopupHtml(it){
  var id='areaDel'+(++areaDeleteId);areaDeleteItems[id]=it;
@@ -1088,7 +1076,7 @@ document.addEventListener('click',function(e){
 var pinDeleteItems={},pinDeleteId=0;
 function escHtml(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function pinPopupHtml(it){
- var id='pinDel'+(++pinDeleteId);pinDeleteItems[id]=it;
+ var id=it._popupId;if(!id){id='pinDel'+(++pinDeleteId);it._popupId=id}pinDeleteItems[id]=it;
  var inRoute=routePosition(it)>0,toggleClass=inRoute?' route-toggle-remove':'',toggleText=inRoute?'−':'+',toggleTitle=inRoute?'Aus Route entfernen':'Zwischenziel hinzufügen';
  var isStart=it===routeStartItem,isTarget=it===routeTargetItem,startBg=isStart?'#ef3737':'#e5e5ea',startFg=isStart?'#fff':'#111',wayBg=inRoute?'#ffd84d':'#e5e5ea',wayFg='#111',targetBg=isTarget?'#34a853':'#e5e5ea',targetFg=isTarget?'#fff':'#111';
  return '<div><div style="margin-bottom:9px;max-width:280px;word-break:break-word">'+escHtml(it.query)+'</div><button type="button" data-copy-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#0a84ff;color:white;font-weight:400">Kopieren</button><button type="button" data-wikipedia-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:1px solid #c7c7cc;border-radius:8px;background:#fff;color:#111;font-weight:400">ⓦ Wikipedia</button><fieldset style="margin:0 0 7px;padding:5px 7px 7px;border:1px solid #c7c7cc;border-radius:10px"><legend style="padding:0 5px;color:#777;font-size:11px;font-weight:600">Routing</legend><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px"><button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:'+startBg+';color:'+startFg+';font-size:21px;font-weight:400"><span class="route-start-icon" aria-hidden="true"></span></button><button type="button" class="'+toggleClass+'" data-route-waypoint="'+id+'" title="'+toggleTitle+'" aria-label="'+toggleTitle+'" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:'+wayBg+';color:'+wayFg+';font-size:23px;font-weight:400">'+toggleText+'</button><button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="min-width:0;padding:8px 10px;border:0;border-radius:8px;background:'+targetBg+';color:'+targetFg+';font-size:21px;font-weight:400">⦿</button></div></fieldset><button type="button" data-rename-pin="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#666;color:white;font-weight:400">Name ändern</button><button type="button" data-change-pin-category="'+id+'" style="display:block;width:100%;margin-bottom:7px;padding:8px 10px;border:0;border-radius:8px;background:#34a853;color:white;font-weight:400">Kategorie ändern</button><button type="button" data-delete-pin="'+id+'" style="display:block;width:100%;padding:8px 10px;border:0;border-radius:8px;background:#e53935;color:white;font-weight:400">Pin entfernen</button></div>'
@@ -1138,7 +1126,7 @@ function deletePinById(id){
   var grp=categoryLayers[it.category];
   if(grp&&grp.removeLayer)grp.removeLayer(it._pinLayer);else if(map&&map.hasLayer(it._pinLayer))map.removeLayer(it._pinLayer)
  }
- delete pinDeleteItems[id];
+ delete pinDeleteItems[id];it._popupId=null;
  refreshAfterDirectDelete();autoZoomLoadedLayers()
 }
 var pendingPinRename=null;
@@ -1191,10 +1179,9 @@ function saveAreaName(){
 document.getElementById('areaNameCancel').onclick=function(){document.getElementById('areaNameEditor').style.display='none';pendingAreaRename=null};
 document.getElementById('areaNameSave').onclick=saveAreaName;
 document.getElementById('areaNameInput').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveAreaName()}else if(e.key==='Escape'){document.getElementById('areaNameCancel').click()}});
-var routeStartItem=null,routeTargetItem=null,routeWaypoints=[],routeLayer=null,routeMode='driving',routeOrderMode='fixed',routeOptimizeBusy=false,routeFixedWaypoints=null,pendingProjectRoute=null,routeRequestGeneration=0,lastRouteExport=null,routeLegColors=true,routeLegGeometries=[],routeAvoidHighways=false,routeAvoidTolls=false,routeIsReversed=false;
+var routeStartItem=null,routeTargetItem=null,routeWaypoints=[],routeLayer=null,routeMode='driving',routeOrderMode='fixed',routeOptimizeBusy=false,routeFixedWaypoints=null,pendingProjectRoute=null,routeRequestGeneration=0,lastRouteExport=null,routeLegGeometries=[],routeAvoidHighways=false,routeAvoidTolls=false,routeIsReversed=false;
 var routeLegPalette=['#ff0000','#0a84ff','#ff9500','#34c759','#af52de','#00a7a7','#ff2d55','#5856d6','#8e8e93','#64d2ff'];
 function drawRouteGeometry(geometry,segments){if(routeLayer&&map&&map.hasLayer(routeLayer))map.removeLayer(routeLayer);routeLayer=null;var segs=segments||routeLegGeometries;if(segs&&segs.length){routeLayer=L.layerGroup();segs.forEach(function(c,i){if(c&&c.length>1)L.polyline(c.map(function(x){return[x[1],x[0]]}),{color:routeLegPalette[i%routeLegPalette.length],weight:6,opacity:.86}).addTo(routeLayer)});routeLayer.addTo(map)}else if(geometry){routeLayer=L.geoJSON(geometry,{style:{color:'#0a84ff',weight:6,opacity:.82}}).addTo(map)}}
-function updateRouteLegColorButton(){var b=document.getElementById('routeLegColors');if(!b)return;b.classList.toggle('active',routeLegColors);b.textContent=routeLegColors?'Etappenfarben ✓':'Etappenfarben'}
 function updateRouteAvoidControls(){var box=document.getElementById('routeAvoid'),g=document.getElementById('routeDrivingGroup'),h=document.getElementById('routeAvoidHighways'),t=document.getElementById('routeAvoidTolls');if(box)box.classList.toggle('show',routeMode==='driving');if(g)g.classList.toggle('driving-active',routeMode==='driving');if(h)h.classList.toggle('active',routeAvoidHighways);if(t)t.classList.toggle('active',routeAvoidTolls)}
 function drivingValhallaCostingOptions(){return {auto:{use_highways:routeAvoidHighways?0:1,use_tolls:routeAvoidTolls?0:1}}}
 function persistRouteAvoidSettings(){try{localStorage.setItem('routeAvoidHighways',routeAvoidHighways?'1':'0');localStorage.setItem('routeAvoidTolls',routeAvoidTolls?'1':'0')}catch(e){}}
@@ -1790,6 +1777,7 @@ function resetRoutingBeforeImport(){
     (z. B. über "Sichtbare Pins +") auftauchen. */
  pendingProjectRoute=null;routeLegGeometries=[];routeOptimizeBusy=false;routeFixedWaypoints=null;
  clearRoute(false);
+ Object.keys(pinDeleteItems).forEach(function(k){if(pinDeleteItems[k])pinDeleteItems[k]._popupId=null});
  pinDeleteItems={};pinDeleteId=0;
 }
 function openGpxFileText(txt,fileName){
