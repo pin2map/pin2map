@@ -1022,13 +1022,13 @@ html body #mapScreen #placeResultChooser {
 html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButtons button {max-width:100%!important;box-sizing:border-box!important}
 </style>
 <style>
-/* v10.3.34: kompakte, direkt bearbeitbare Klartext-Notiz */
+/* v10.3.35: kompakte, direkt bearbeitbare Klartext-Notiz */
 .p2m-popup .p2m-note-preview{padding:0;margin:6px 0 8px;max-height:none;overflow:visible;border:1px solid #d3d9e2;border-radius:9px}
 .p2m-popup textarea.p2m-inline-note{display:block;box-sizing:border-box;width:100%;height:76px;min-height:54px;max-height:130px;resize:vertical;margin:0;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:1.4;outline-offset:-2px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .p2m-popup textarea.p2m-inline-note:focus{outline:2px solid #1683f5}
 </style>
 <style>
-/* v10.3.34: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
+/* v10.3.35: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 #mapScreen .leaflet-popup-content .p2m-popup{width:100%;min-width:0}
 .p2m-popup .p2m-quick-actions{gap:8px!important;padding:7px 5px!important;justify-content:space-evenly!important}
@@ -1039,7 +1039,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){#mapScreen .leaflet-popup-content{width:calc(100vw - 58px)!important}.p2m-popup .p2m-quick-actions{gap:4px!important}.p2m-popup .p2m-edit-buttons button{min-width:0}}
 </style>
 <style>
-/* v10.3.34: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
+/* v10.3.35: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 .p2m-popup .p2m-pin-title{margin:0 0 5px;overflow-wrap:anywhere}
 .p2m-popup .p2m-five-actions{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid #c7c7cc;border-radius:10px;padding:7px 6px;margin:0 0 8px}
@@ -1056,13 +1056,13 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){.p2m-popup .p2m-bottom-groups{grid-template-columns:57px minmax(0,1fr) 60px;gap:3px}.p2m-popup .p2m-bottom-pin-buttons button[data-rename-pin],.p2m-popup .p2m-bottom-pin-buttons button[data-change-pin-category]{width:45px;font-size:11px}.p2m-popup .p2m-bottom-groups button{width:37px;height:37px}}
  .p2m-popup textarea[data-p2m-inline-note]{font-size:16px!important} </style>
 <style>
-/* v10.3.34: kompakte Gruppierung und gesicherte Klartext-Eingabe */
+/* v10.3.35: kompakte Gruppierung und gesicherte Klartext-Eingabe */
 .p2m-popup .p2m-pin-title{font-weight:700!important}
 .p2m-popup .p2m-five-actions{display:grid!important;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px!important;padding:0!important;border:0!important;align-items:stretch!important}
 .p2m-popup .p2m-five-actions fieldset{display:flex;align-items:center;justify-content:space-around;gap:3px;min-width:0;margin:0;padding:5px 4px 6px;border:1px solid #c7c7cc;border-radius:10px;box-sizing:border-box}
 .p2m-popup .p2m-five-actions legend{padding:0 4px;font-size:11px;line-height:1.1;font-weight:600;color:#777}
 .p2m-popup .p2m-five-actions button{flex:0 1 42px!important}
-.p2m-popup .p2m-notes-field textarea.p2m-inline-note{font-size:14px!important;line-height:1.4!important;height:144px!important;min-height:144px!important;max-height:144px!important;resize:none!important}
+.p2m-popup .p2m-notes-field textarea.p2m-inline-note{font-size:16px!important;line-height:1.25!important;height:144px!important;min-height:144px!important;max-height:144px!important;resize:none!important}
 .p2m-popup .p2m-bottom-groups{grid-template-columns:75px minmax(0,1fr) 65px!important;gap:5px!important}
 .p2m-popup .p2m-bottom-groups fieldset{min-height:65px!important;padding-top:5px!important;padding-bottom:5px!important}
 .p2m-popup .p2m-bottom-groups legend{white-space:nowrap}
@@ -1081,9 +1081,14 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
  }
 }
 </style>
+<style>
+/* iOS Safari zoomt bei Schriftgroessen unter 16px und behaelt den Layout-Zoom nach Tastaturschluss bei. */
+.p2m-popup textarea[data-p2m-inline-note]{font-size:16px!important;line-height:1.25!important;touch-action:pan-y;overscroll-behavior:contain}
+html,body{max-width:100%;overflow-x:hidden}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.3.34)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.3.35)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1983,11 +1988,11 @@ function applyStaticUiSymbols(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyStaticUiSymbols);else applyStaticUiSymbols();
 
-/* v10.3.34: dauerhafte Pin-Metadaten in der Projekt-Cache-Struktur. */
+/* v10.3.35: dauerhafte Pin-Metadaten in der Projekt-Cache-Struktur. */
 var pinNoteSession={};
 function pinMeta(it){
- var key=projectCacheKey(it),c=(activeProjectCache&&activeProjectCache[key])||{},m=pinNoteSession[key];
- if(!m){m={id:c.pinId||((window.crypto&&crypto.randomUUID)?crypto.randomUUID():'p2m-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)),createdAt:c.createdAt||new Date().toISOString(),note:typeof c.note==='string'?c.note:''};pinNoteSession[key]=m}
+ var key=projectCacheKey(it),c=(activeProjectCache&&activeProjectCache[key])||{},m=it&&it._p2mNoteMeta;
+ if(!m){m={id:c.pinId||((window.crypto&&crypto.randomUUID)?crypto.randomUUID():'p2m-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)),createdAt:c.createdAt||new Date().toISOString(),note:typeof c.note==='string'?c.note:''};if(it)it._p2mNoteMeta=m; if(key)pinNoteSession[key]=m}
  return m
 }
 function pinNoteLink(it){return 'https://pin2map.github.io/pin2map/index.html?pin='+encodeURIComponent(pinMeta(it).id)}
@@ -2009,11 +2014,13 @@ function pinPopupHtml(it){
 document.addEventListener('input',function(e){
  var el=e.target;
  if(!el||!el.matches||!el.matches('textarea[data-p2m-inline-note]'))return;
- var it=pinDeleteItems[el.getAttribute('data-p2m-inline-note')];
+ var popup=el.closest('.leaflet-popup');var it=(popup&&popup._p2mItem)||pinDeleteItems[el.getAttribute('data-p2m-inline-note')];
  if(it){
   var meta=pinMeta(it);
   meta.note=el.value;
+  it._p2mNoteMeta=meta;
   var key=projectCacheKey(it);
+  if(key)pinNoteSession[key]=meta;
   if(key&&activeProjectCache&&activeProjectCache[key]){
    activeProjectCache[key].note=meta.note;
    activeProjectCache[key].pinId=meta.id;
@@ -2025,7 +2032,7 @@ document.addEventListener('input',function(e){
 document.addEventListener('change',function(e){
  var el=e.target;
  if(!el||!el.matches||!el.matches('textarea[data-p2m-inline-note]'))return;
- var it=pinDeleteItems[el.getAttribute('data-p2m-inline-note')];
+ var popup=el.closest('.leaflet-popup');var it=(popup&&popup._p2mItem)||pinDeleteItems[el.getAttribute('data-p2m-inline-note')];
  if(it)pinMeta(it).note=el.value;
 },true);
 document.addEventListener('keydown',function(e){
@@ -4121,7 +4128,7 @@ async function importFiles(fileList){
 </style>
 <div id="p2m-editor" role="dialog" aria-modal="true" aria-label="Markdown-Notiz bearbeiten"><header><span id="p2m-editor-title"></span><label id="p2m-editor-copy"><input id="p2m-editor-copy-check" type="checkbox"> Inhalt kopieren</label></header><textarea id="p2m-editor-text" aria-label="Markdown-Notiz" spellcheck="true" placeholder="Markdown-Notiz …"></textarea><footer><button type="button" id="p2m-editor-close" title="Schließen ohne Speichern">×</button><button type="button" id="p2m-editor-delete" class="p2m-editor-delete" title="Notiz löschen">🖋️</button><button type="button" id="p2m-editor-save" title="Notiz speichern">Speichern</button></footer></div>
 <script>
-/* v10.3.34: kompakte Markdown-Notizen und mobiler Vollbildeditor */
+/* v10.3.35: kompakte Markdown-Notizen und mobiler Vollbildeditor */
 function p2mMarkdown(raw){
  var escape=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
  var inline=function(t){return escape(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(_,name,url){return '<a href="'+url.replace(/&quot;/g,'')+'" target="_blank" rel="noopener noreferrer">'+name+'</a>'}).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>')};
