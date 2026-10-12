@@ -1022,13 +1022,13 @@ html body #mapScreen #placeResultChooser {
 html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButtons button {max-width:100%!important;box-sizing:border-box!important}
 </style>
 <style>
-/* v10.3.36: kompakte, direkt bearbeitbare Klartext-Notiz */
+/* v10.3.39: kompakte, direkt bearbeitbare Klartext-Notiz */
 .p2m-popup .p2m-note-preview{padding:0;margin:6px 0 8px;max-height:none;overflow:visible;border:1px solid #d3d9e2;border-radius:9px}
 .p2m-popup textarea.p2m-inline-note{display:block;box-sizing:border-box;width:100%;height:76px;min-height:54px;max-height:130px;resize:vertical;margin:0;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:1.4;outline-offset:-2px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .p2m-popup textarea.p2m-inline-note:focus{outline:2px solid #1683f5}
 </style>
 <style>
-/* v10.3.36: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
+/* v10.3.39: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 #mapScreen .leaflet-popup-content .p2m-popup{width:100%;min-width:0}
 .p2m-popup .p2m-quick-actions{gap:8px!important;padding:7px 5px!important;justify-content:space-evenly!important}
@@ -1039,7 +1039,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){#mapScreen .leaflet-popup-content{width:calc(100vw - 58px)!important}.p2m-popup .p2m-quick-actions{gap:4px!important}.p2m-popup .p2m-edit-buttons button{min-width:0}}
 </style>
 <style>
-/* v10.3.36: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
+/* v10.3.39: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 .p2m-popup .p2m-pin-title{margin:0 0 5px;overflow-wrap:anywhere}
 .p2m-popup .p2m-five-actions{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid #c7c7cc;border-radius:10px;padding:7px 6px;margin:0 0 8px}
@@ -1056,7 +1056,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){.p2m-popup .p2m-bottom-groups{grid-template-columns:57px minmax(0,1fr) 60px;gap:3px}.p2m-popup .p2m-bottom-pin-buttons button[data-rename-pin],.p2m-popup .p2m-bottom-pin-buttons button[data-change-pin-category]{width:45px;font-size:11px}.p2m-popup .p2m-bottom-groups button{width:37px;height:37px}}
  .p2m-popup textarea[data-p2m-inline-note]{font-size:16px!important} </style>
 <style>
-/* v10.3.36: kompakte Gruppierung und gesicherte Klartext-Eingabe */
+/* v10.3.39: kompakte Gruppierung und gesicherte Klartext-Eingabe */
 .p2m-popup .p2m-pin-title{font-weight:700!important}
 .p2m-popup .p2m-five-actions{display:grid!important;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px!important;padding:0!important;border:0!important;align-items:stretch!important}
 .p2m-popup .p2m-five-actions fieldset{display:flex;align-items:center;justify-content:space-around;gap:3px;min-width:0;margin:0;padding:5px 4px 6px;border:1px solid #c7c7cc;border-radius:10px;box-sizing:border-box}
@@ -1088,7 +1088,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.3.36)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.3.39)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1500,7 +1500,7 @@ function addNewItemDirectly(fullLine){
    var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(it.label)+'</div>',iconSize:null})}).addTo(categoryLayers[it.category]);
    it._areaLabelLayer=areaLabelMarker;
   }else{
-   var marker=L.marker(p,{icon:icon(it.symbol,num,false)}).bindPopup(pinPopupHtml(it,a[0].display_name)).addTo(categoryLayers[it.category]);
+   var marker=L.marker(p,{icon:icon(it.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(it)}).addTo(categoryLayers[it.category]);
    it._pinLayer=marker;
    marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(it);if(showElevations&&!isFinite(it.elevation))setTimeout(fetchMissingElevations,0);
   }
@@ -1988,7 +1988,7 @@ function applyStaticUiSymbols(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyStaticUiSymbols);else applyStaticUiSymbols();
 
-/* v10.3.36: dauerhafte Pin-Metadaten in der Projekt-Cache-Struktur. */
+/* v10.3.39: dauerhafte Pin-Metadaten in der Projekt-Cache-Struktur. */
 var pinNoteSession={};
 function pinNoteIdentity(it){
  if(!it)return '';
@@ -1998,10 +1998,41 @@ function pinNoteIdentity(it){
  return 'pin:'+String(it.query||'')+'|'+String(it.label||'')+'|'+(ll?ll.lat.toFixed(6)+','+ll.lng.toFixed(6):String(it.lat||'')+','+String(it.lon||''));
 }
 function pinMeta(it){
- var key=projectCacheKey(it),sessionKey=pinNoteIdentity(it),c=(activeProjectCache&&activeProjectCache[key])||{},m=(it&&it._p2mNoteMeta)||pinNoteSession[sessionKey];
- if(!m){m={id:c.pinId||((window.crypto&&crypto.randomUUID)?crypto.randomUUID():'p2m-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)),createdAt:c.createdAt||new Date().toISOString(),note:typeof c.note==='string'?c.note:''};if(it)it._p2mNoteMeta=m; pinNoteSession[sessionKey]=m}
- return m
+ var key=projectCacheKey(it),identity=pinNoteIdentity(it),c=(activeProjectCache&&activeProjectCache[key])||{};
+ var m=pinNoteSession[identity]||(it&&it._p2mNoteMeta);
+ if(!m)m={id:c.pinId||((window.crypto&&crypto.randomUUID)?crypto.randomUUID():'p2m-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)),createdAt:c.createdAt||new Date().toISOString(),note:typeof c.note==='string'?c.note:''};
+ if(it)it._p2mNoteMeta=m;
+ var locationKey=pinNoteLocationKey(it);
+ if(locationKey&&Object.prototype.hasOwnProperty.call(pinNoteByLocation,locationKey))
+  m.note=pinNoteByLocation[locationKey];
+ pinNoteSession[identity]=m;
+ return m;
 }
+var pinNoteByLocation=Object.create(null);
+function pinNoteLocationKey(it){
+ if(!it)return '';
+ var ll=it._pinLayer&&it._pinLayer.getLatLng?it._pinLayer.getLatLng():null;
+ var lat=ll?ll.lat:it.lat,lon=ll?ll.lng:(it.lon!=null?it.lon:it.lng);
+ if(lat!=null&&lon!=null&&isFinite(Number(lat))&&isFinite(Number(lon)))
+  return Number(lat).toFixed(6)+','+Number(lon).toFixed(6);
+ var line=projectCacheKey(it);
+ return line?'source:'+line:'';
+}
+function pinNoteSave(it,value){
+ if(!it)return;
+ var m=pinMeta(it);m.note=String(value);var locationKey=pinNoteLocationKey(it);if(locationKey)pinNoteByLocation[locationKey]=m.note;
+ it._p2mNoteMeta=m;
+ pinNoteSession[pinNoteIdentity(it)]=m;
+ var key=projectCacheKey(it);
+ if(key){
+  if(!activeProjectCache)activeProjectCache={};
+  if(!activeProjectCache[key])activeProjectCache[key]={};
+  activeProjectCache[key].note=m.note;
+  activeProjectCache[key].pinId=m.id;
+  activeProjectCache[key].createdAt=m.createdAt;
+ }
+}
+
 function pinNoteLink(it){return 'https://pin2map.github.io/pin2map/index.html?pin='+encodeURIComponent(pinMeta(it).id)}
 function pinNoteCopy(value){if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(value).catch(function(){window.prompt('Text kopieren:',value)});window.prompt('Text kopieren:',value);return Promise.resolve()}
 function pinNoteRefresh(it){if(it&&it._pinLayer)it._pinLayer.setPopupContent(pinPopupHtml(it))}
@@ -2017,30 +2048,32 @@ function pinPopupHtml(it){
  return '<div class="p2m-popup"><div class="p2m-pin-title">'+escHtml(pinLabel)+'</div><div class="p2m-created">Erstellt: '+escHtml(new Date(p2mMeta.createdAt).toLocaleString('de-DE'))+'</div><div class="p2m-five-actions"><fieldset class="p2m-top-coords"><legend>Koordinaten/Apple Karten</legend>'+'<button type="button" data-copy-pin="'+id+'" title="In Zwischenablage kopieren" aria-label="In Zwischenablage kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#087df5;color:#fff;font-size:31px;font-weight:600">+</button>'+'<button type="button" data-pin-nav-apple="'+id+'" title="Mit Apple Karten zum Pin" aria-label="Mit Apple Karten zum Pin" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px;font-weight:600"></button></fieldset><fieldset class="p2m-top-route"><legend>pin2map Navigation</legend>'+'<button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+startBg+';color:'+startFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center"><span class="route-start-icon" aria-hidden="true"></span></button>'+'<button type="button" class="'+toggleClass+'" data-route-waypoint="'+id+'" title="'+toggleTitle+'" aria-label="'+toggleTitle+'" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+wayBg+';color:'+wayFg+';font-size:23px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+toggleText+'</button>'+'<button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+targetBg+';color:'+targetFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeTarget')+'</button></fieldset></div>'+gpxButton+'<fieldset class="p2m-notes-field"><legend>Pin Notizen</legend><textarea class="p2m-inline-note" data-p2m-inline-note="'+id+'" aria-label="Notiz zum Pin" placeholder="Notiz eingeben …" rows="7">'+escHtml(p2mMeta.note||'')+'</textarea></fieldset>'+'<div class="p2m-bottom-groups"><fieldset class="p2m-bottom-delete"><legend>Entfernen</legend><button type="button" class="p2m-round-delete" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button></fieldset><fieldset class="p2m-bottom-pin"><legend>Pin</legend><div class="p2m-bottom-pin-buttons"><button type="button" data-p2m-link="'+id+'" title="Pin-Link kopieren" aria-label="Pin-Link kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:24px">🔗</button><button type="button" data-rename-pin="'+id+'">Name</button><button type="button" data-change-pin-category="'+id+'">Symbol</button></div></fieldset><fieldset class="p2m-bottom-wiki"><legend>Wikipedia</legend><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px">'+uiSymbol('wikipedia')+'</button></fieldset></div></div>'
 }
 
+
+document.addEventListener('focusout',function(e){
+ var el=e.target;
+ if(el&&el.matches&&el.matches('textarea[data-p2m-inline-note]')){
+  var item=pinDeleteItems[el.getAttribute('data-p2m-inline-note')];
+  if(item)pinNoteSave(item,el.value);
+ }
+},true);
+document.addEventListener('pointerdown',function(e){
+ var popup=document.querySelector('.leaflet-popup textarea[data-p2m-inline-note]');
+ if(!popup||popup.contains(e.target)||e.target.closest('.leaflet-popup'))return;
+ var item=pinDeleteItems[popup.getAttribute('data-p2m-inline-note')];
+ if(item)pinNoteSave(item,popup.value);
+},true);
+
 // Einfache Textnotizen direkt im Popup, ohne gesonderten Editor.
 document.addEventListener('input',function(e){
  var el=e.target;
  if(!el||!el.matches||!el.matches('textarea[data-p2m-inline-note]'))return;
- var popup=el.closest('.leaflet-popup');var it=(popup&&popup._p2mItem)||pinDeleteItems[el.getAttribute('data-p2m-inline-note')];
- if(it){
-  var meta=pinMeta(it);
-  meta.note=el.value;
-  it._p2mNoteMeta=meta;
-  var key=projectCacheKey(it);
-  pinNoteSession[pinNoteIdentity(it)]=meta;
-  if(key&&activeProjectCache&&activeProjectCache[key]){
-   activeProjectCache[key].note=meta.note;
-   activeProjectCache[key].pinId=meta.id;
-   activeProjectCache[key].createdAt=meta.createdAt;
-  }
- }
+ pinNoteSave(pinDeleteItems[el.getAttribute('data-p2m-inline-note')],el.value);
  e.stopPropagation();
 },true);
 document.addEventListener('change',function(e){
  var el=e.target;
  if(!el||!el.matches||!el.matches('textarea[data-p2m-inline-note]'))return;
- var popup=el.closest('.leaflet-popup');var it=(popup&&popup._p2mItem)||pinDeleteItems[el.getAttribute('data-p2m-inline-note')];
- if(it)pinMeta(it).note=el.value;
+ pinNoteSave(pinDeleteItems[el.getAttribute('data-p2m-inline-note')],el.value);
 },true);
 document.addEventListener('keydown',function(e){
  if(e.target&&e.target.matches&&e.target.matches('textarea[data-p2m-inline-note]'))e.stopPropagation();
@@ -2653,7 +2686,7 @@ function fetchMissingElevations(){if(!showElevations||elevationBusy)return;var p
 function setElevationDisplay(on){showElevations=!!on;try{localStorage.setItem('showElevations',showElevations?'1':'0')}catch(e){}syncElevationButton();if(showElevations)fetchMissingElevations();else refreshElevationLabels()}
 function build(items){Object.keys(pinDeleteItems).forEach(function(k){delete pinDeleteItems[k]});clearMap();var myBuild=++buildGeneration;buildLegend(items);var labelled=document.getElementById('labelAddresses').checked,areasLabelled=document.getElementById('labelAreas').checked,idx=0,miss=0,missed=[],areaPoints=0;screen.classList.remove('labels-hidden');screen.classList.toggle('hide-address-labels',!labelled);screen.classList.toggle('hide-area-labels',!areasLabelled);labelToggle.classList.toggle('off',!labelled&&!areasLabelled);for(var i=0;i<items.length;i++){if(!categoryLayers[items[i].category])categoryLayers[items[i].category]=L.layerGroup().addTo(map)}
 function noteMissing(x){if(myBuild!==buildGeneration)return;miss++;missed.push(x.query);var box=document.getElementById('notFoundList');box.innerHTML='<b>⚠️ Nicht gefunden ('+missed.length+')</b><br>'+missed.map(function(v){return '• '+esc(v)}).join('<br>')}
-function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.')+(areaPoints?' Flächenpunkte: '+areaPoints.toLocaleString('de-DE')+(isConstrainedTouchDevice()?' (mobil angepasst)':'')+'.':'');if(!miss)setTimeout(function(){if(myBuild===buildGeneration)mapStatus.textContent=''},5000);if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='all')markFilterApply(true);return}var x=items[idx],num=idx+1;mapStatus.textContent=(activeProjectCache&&activeProjectCache[projectCacheKey(x)]?'Lade ':'Suche ')+num+' von '+items.length+': '+x.query;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(pinPopupHtml(x,a[0].display_name)).addTo(categoryLayers[x.category]);x._pinLayer=marker;allBounds.extend(p);marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x)}markFilterRegister(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
+function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.')+(areaPoints?' Flächenpunkte: '+areaPoints.toLocaleString('de-DE')+(isConstrainedTouchDevice()?' (mobil angepasst)':'')+'.':'');if(!miss)setTimeout(function(){if(myBuild===buildGeneration)mapStatus.textContent=''},5000);if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='all')markFilterApply(true);return}var x=items[idx],num=idx+1;mapStatus.textContent=(activeProjectCache&&activeProjectCache[projectCacheKey(x)]?'Lade ':'Suche ')+num+' von '+items.length+': '+x.query;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(x)}).addTo(categoryLayers[x.category]);x._pinLayer=marker;allBounds.extend(p);marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x)}markFilterRegister(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
 document.getElementById('go').onclick=function(){var items=parse(input.value);formStatus.textContent='';form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);if(items.length)build(items);else clearMap()},150)};
 document.getElementById('back').onclick=function(){river980UpdateList();screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
 function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length){build(items);if(importedFromUrl)clearImportedDataFromUrl()}else{clearMap();var q=document.getElementById('quickPlace');if(q)q.blur()}},150)}
@@ -3611,7 +3644,7 @@ function openPin2MapProject(doc){
  if(!doc||doc.format!=='pin2map'||typeof doc.list!=='string')throw new Error('Keine gültige pin2map-Datei.');
  resetRoutingBeforeImport();
  if(window.pin2mapRestoreStartRoutes)window.pin2mapRestoreStartRoutes(doc.gpxStartRoutes);
- pendingGpxTracks=Array.isArray(doc.gpxTracks)&&doc.gpxTracks.length?doc.gpxTracks:null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();input.value=doc.list;river959Saved=Array.isArray(doc.rivers)?doc.rivers.filter(function(x){return x&&Array.isArray(x.chains)&&typeof x.name==='string'}):[];river980UpdateList();activeProjectCache=(doc.cache&&typeof doc.cache==='object')?doc.cache:{};pinNoteSession={};pendingProjectRoute=(doc.route&&typeof doc.route==='object')?doc.route:null;setTimeout(function(){if(map){river959Render();autoZoomAllContent()}},600);
+ pendingGpxTracks=Array.isArray(doc.gpxTracks)&&doc.gpxTracks.length?doc.gpxTracks:null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();input.value=doc.list;river959Saved=Array.isArray(doc.rivers)?doc.rivers.filter(function(x){return x&&Array.isArray(x.chains)&&typeof x.name==='string'}):[];river980UpdateList();activeProjectCache=(doc.cache&&typeof doc.cache==='object')?doc.cache:{};pinNoteSession={};pinNoteByLocation=Object.create(null);pendingProjectRoute=(doc.route&&typeof doc.route==='object')?doc.route:null;setTimeout(function(){if(map){river959Render();autoZoomAllContent()}},600);
  if(doc.options){document.getElementById('labelAddresses').checked=doc.options.labelAddresses!==false;document.getElementById('labelAreas').checked=doc.options.labelAreas!==false;if(typeof doc.options.optionalEsriRelief==='boolean')setOptionalEsriRelief(doc.options.optionalEsriRelief);if(typeof doc.options.showElevations==='boolean')showElevations=doc.options.showElevations;syncElevationButton();if(doc.options.mapStyle&&baseMaps[doc.options.mapStyle]){document.getElementById('mapStyle').value=doc.options.mapStyle;if(map)setBase(doc.options.mapStyle)}}
  form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();
  setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else{clearMap();if(pendingGpxTracks)drawPendingGpxTracks()};setTimeout(function(){if(doc.view&&Array.isArray(doc.view.center)&&doc.view.center.length===2&&isFinite(doc.view.zoom))map.setView(doc.view.center,doc.view.zoom);mapStatus.textContent='✓ pin2map-Projekt geladen.'},80)},80)
@@ -4135,7 +4168,7 @@ async function importFiles(fileList){
 </style>
 <div id="p2m-editor" role="dialog" aria-modal="true" aria-label="Markdown-Notiz bearbeiten"><header><span id="p2m-editor-title"></span><label id="p2m-editor-copy"><input id="p2m-editor-copy-check" type="checkbox"> Inhalt kopieren</label></header><textarea id="p2m-editor-text" aria-label="Markdown-Notiz" spellcheck="true" placeholder="Markdown-Notiz …"></textarea><footer><button type="button" id="p2m-editor-close" title="Schließen ohne Speichern">×</button><button type="button" id="p2m-editor-delete" class="p2m-editor-delete" title="Notiz löschen">🖋️</button><button type="button" id="p2m-editor-save" title="Notiz speichern">Speichern</button></footer></div>
 <script>
-/* v10.3.36: kompakte Markdown-Notizen und mobiler Vollbildeditor */
+/* v10.3.39: kompakte Markdown-Notizen und mobiler Vollbildeditor */
 function p2mMarkdown(raw){
  var escape=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
  var inline=function(t){return escape(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(_,name,url){return '<a href="'+url.replace(/&quot;/g,'')+'" target="_blank" rel="noopener noreferrer">'+name+'</a>'}).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>')};
@@ -4186,23 +4219,23 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
  }
  function stop(){
   if(!host)return;
-  if(field&&origin){origin.value=field.value;origin.dispatchEvent(new Event('input',{bubbles:true}));}
+  if(field&&origin){if(noteItem)pinNoteSave(noteItem,field.value);origin.value=field.value;origin.dispatchEvent(new Event('input',{bubbles:true}));}
   if(host.parentNode)host.parentNode.removeChild(host);
   host=null;origin=null;field=null;
  }
  document.addEventListener('focusin',function(e){
   var el=e.target;
-  if(!el.matches||!el.matches('textarea[data-p2m-inline-note]')||host)return;
+  if(!el.matches||!el.matches('textarea[data-p2m-inline-note]')||host||!window.matchMedia('(max-width: 700px)').matches)return;
   origin=el;
   host=document.createElement('div');host.className='p2m-note-keyboard-overlay';
   host.style.cssText='position:fixed;z-index:2147483647;box-sizing:border-box;background:white;border:1px solid #bbb;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;';
   var top=document.createElement('div');top.style.cssText='display:flex;justify-content:space-between;align-items:center;font:600 16px -apple-system,BlinkMacSystemFont,sans-serif';
-  var label=document.createElement('span');label.textContent='Pin Notizen';
-  var done=document.createElement('button');done.type='button';done.textContent='Fertig ✓';done.style.cssText='font:600 16px -apple-system,sans-serif;padding:8px 12px;border:1px solid #ddd;border-radius:8px;background:#f4f4f4';
+  var label=document.createElement('span');var noteItem=pinDeleteItems[el.getAttribute('data-p2m-inline-note')];label.textContent='Pin Notizen für '+String((noteItem&&(noteItem.label||noteItem.query))||'diesen Pin');label.style.cssText='min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px';
+  var done=document.createElement('button');done.type='button';done.textContent='Fertig ✓';done.style.cssText='font:600 16px -apple-system,sans-serif;padding:8px 12px;border:1px solid #aaa;border-radius:8px;background:#087af5;color:white;white-space:nowrap';
   top.append(label,done);
   field=document.createElement('textarea');field.value=el.value;field.placeholder='Notiz eingeben …';field.style.cssText='flex:1;min-height:0;width:100%;box-sizing:border-box;resize:none;border:1px solid #ccc;border-radius:8px;padding:10px;font:16px/1.35 -apple-system,BlinkMacSystemFont,sans-serif';
   host.append(top,field);document.body.appendChild(host);place();
-  field.addEventListener('input',function(){if(origin){origin.value=field.value;origin.dispatchEvent(new Event('input',{bubbles:true}))}});
+  field.addEventListener('input',function(){if(noteItem)pinNoteSave(noteItem,field.value);if(origin){origin.value=field.value;origin.dispatchEvent(new Event('input',{bubbles:true}))}});
   done.addEventListener('click',function(){field.blur();stop()});
   setTimeout(function(){if(field)field.focus({preventScroll:true})},0);
  },true);
