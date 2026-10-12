@@ -1022,13 +1022,13 @@ html body #mapScreen #placeResultChooser {
 html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButtons button {max-width:100%!important;box-sizing:border-box!important}
 </style>
 <style>
-/* v10.3.31: kompakte, direkt bearbeitbare Klartext-Notiz */
+/* v10.3.32: kompakte, direkt bearbeitbare Klartext-Notiz */
 .p2m-popup .p2m-note-preview{padding:0;margin:6px 0 8px;max-height:none;overflow:visible;border:1px solid #d3d9e2;border-radius:9px}
 .p2m-popup textarea.p2m-inline-note{display:block;box-sizing:border-box;width:100%;height:76px;min-height:54px;max-height:130px;resize:vertical;margin:0;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:1.4;outline-offset:-2px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .p2m-popup textarea.p2m-inline-note:focus{outline:2px solid #1683f5}
 </style>
 <style>
-/* v10.3.31: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
+/* v10.3.32: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 #mapScreen .leaflet-popup-content .p2m-popup{width:100%;min-width:0}
 .p2m-popup .p2m-quick-actions{gap:8px!important;padding:7px 5px!important;justify-content:space-evenly!important}
@@ -1038,9 +1038,29 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 .p2m-popup textarea.p2m-inline-note{height:145px;min-height:100px;max-height:45dvh;resize:vertical}
 @media(max-width:390px){#mapScreen .leaflet-popup-content{width:calc(100vw - 58px)!important}.p2m-popup .p2m-quick-actions{gap:4px!important}.p2m-popup .p2m-edit-buttons button{min-width:0}}
 </style>
-</head><body>
+<style>
+/* v10.3.32: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
+#mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
+.p2m-popup .p2m-pin-title{margin:0 0 5px;overflow-wrap:anywhere}
+.p2m-popup .p2m-five-actions{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid #c7c7cc;border-radius:10px;padding:7px 6px;margin:0 0 8px}
+.p2m-popup .p2m-five-actions button{flex:0 1 42px;min-width:0!important;width:42px!important;height:42px!important;border-radius:50%;padding:0!important;display:inline-flex;align-items:center;justify-content:center}
+.p2m-popup .p2m-notes-field{border:1px solid #c7c7cc;border-radius:10px;margin:0 0 8px;padding:4px 7px 7px;min-width:0}
+.p2m-popup .p2m-notes-field legend,.p2m-popup .p2m-bottom-groups legend{padding:0 4px;color:#777;font-size:11px;font-weight:600}
+.p2m-popup .p2m-notes-field textarea.p2m-inline-note{width:100%;height:205px;min-height:120px;max-height:none;resize:none;border:0;border-radius:5px;box-sizing:border-box;margin:0;padding:7px 6px;background:#fff;font-size:16px;line-height:1.4;overflow:auto;-webkit-overflow-scrolling:touch;outline-offset:-2px}
+.p2m-popup .p2m-bottom-groups{display:grid;grid-template-columns:62px minmax(0,1fr) 66px;gap:5px;align-items:stretch}
+.p2m-popup .p2m-bottom-groups fieldset{border:1px solid #c7c7cc;border-radius:10px;min-width:0;margin:0;padding:5px 3px 7px;display:flex;align-items:center;justify-content:center}
+.p2m-popup .p2m-bottom-groups button{display:inline-flex;align-items:center;justify-content:center;border:1px solid #c7c7cc;background:#fff;color:#111;border-radius:50%;width:40px;height:40px;min-width:0;padding:0;font-size:20px;line-height:1;box-sizing:border-box}
+.p2m-popup .p2m-bottom-pin-buttons{display:flex;justify-content:space-around;align-items:center;gap:3px;width:100%}
+.p2m-popup .p2m-bottom-pin-buttons button[data-rename-pin],.p2m-popup .p2m-bottom-pin-buttons button[data-change-pin-category]{font-size:12px;width:50px;border-radius:22px}
+.p2m-popup .p2m-bottom-groups .p2m-round-delete{background:#e53935!important;color:#fff!important;border-color:#e53935!important;font-size:26px!important;font-weight:700}
+@media(max-width:390px){.p2m-popup .p2m-bottom-groups{grid-template-columns:57px minmax(0,1fr) 60px;gap:3px}.p2m-popup .p2m-bottom-pin-buttons button[data-rename-pin],.p2m-popup .p2m-bottom-pin-buttons button[data-change-pin-category]{width:45px;font-size:11px}.p2m-popup .p2m-bottom-groups button{width:37px;height:37px}}
+/* iOS: Popup waehrend der Texteingabe aus dem Leaflet-Transform-Kontext loesen. */
+#mapScreen.p2m-note-typing .leaflet-popup:has(textarea[data-p2m-inline-note]:focus){position:fixed!important;transform:none!important;left:50%!important;top:var(--p2m-keyboard-top,8px)!important;bottom:auto!important;margin:0!important;translate:-50% 0!important;max-height:var(--p2m-keyboard-height,75dvh)!important;overflow-y:auto!important;overscroll-behavior:contain;z-index:99999!important}
+#mapScreen.p2m-note-typing .leaflet-popup:has(textarea[data-p2m-inline-note]:focus) .leaflet-popup-tip-container{display:none!important}
+#mapScreen.p2m-note-typing .leaflet-popup:has(textarea[data-p2m-inline-note]:focus) .p2m-notes-field textarea{height:clamp(85px,25dvh,170px)}
+</style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.3.31)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.3.32)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1940,7 +1960,7 @@ function applyStaticUiSymbols(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyStaticUiSymbols);else applyStaticUiSymbols();
 
-/* v10.3.31: dauerhafte Pin-Metadaten in der Projekt-Cache-Struktur. */
+/* v10.3.32: dauerhafte Pin-Metadaten in der Projekt-Cache-Struktur. */
 var pinNoteSession={};
 function pinMeta(it){
  var key=projectCacheKey(it),c=(activeProjectCache&&activeProjectCache[key])||{},m=pinNoteSession[key];
@@ -1959,8 +1979,34 @@ function pinPopupHtml(it){
  var inRoute=routePosition(it)>0,toggleClass=inRoute?' route-toggle-remove':'',toggleText=inRoute?uiSymbol('routeWaypointRemove'):uiSymbol('routeWaypointAdd'),toggleTitle=inRoute?'Aus Route entfernen':'Zwischenziel hinzufügen';
  var isStart=it===routeStartItem,isTarget=it===routeTargetItem,startBg=isStart?'#ef3737':'#e5e5ea',startFg=isStart?'#fff':'#111',wayBg=inRoute?'#ffd84d':'#e5e5ea',wayFg='#111',targetBg=isTarget?'#34a853':'#e5e5ea',targetFg=isTarget?'#fff':'#111';
  var pinLabel=String((it&&it.label)||'').trim()||String((it&&it.query)||'').trim();
- return '<div class="p2m-popup"><div style="margin-bottom:5px;max-width:280px;word-break:break-word">'+escHtml(pinLabel)+'</div><div class="p2m-created">Erstellt: '+escHtml(new Date(p2mMeta.createdAt).toLocaleString('de-DE'))+'</div><div class="p2m-quick-actions" style="margin:0 0 7px;padding:9px 7px 7px;border:1px solid #c7c7cc;border-radius:10px;display:flex;justify-content:center;gap:12px"><button type="button" data-p2m-link="'+id+'" title="Pin-Link kopieren" aria-label="Pin-Link kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:24px">🔗</button><button type="button" data-copy-pin="'+id+'" title="In Zwischenablage kopieren" aria-label="In Zwischenablage kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#087df5;color:#fff;font-size:31px;font-weight:600">+</button><button type="button" data-pin-nav-apple="'+id+'" title="Mit Apple Karten zum Pin" aria-label="Mit Apple Karten zum Pin" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px;font-weight:600"></button><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px">'+uiSymbol('wikipedia')+'</button></div><fieldset style="margin:0 0 7px;padding:5px 7px 7px;border:1px solid #c7c7cc;border-radius:10px"><legend style="padding:0 5px;color:#777;font-size:11px;font-weight:600">pin2map-Routing</legend><div style="display:flex;justify-content:center;gap:14px"><button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+startBg+';color:'+startFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center"><span class="route-start-icon" aria-hidden="true"></span></button><button type="button" class="'+toggleClass+'" data-route-waypoint="'+id+'" title="'+toggleTitle+'" aria-label="'+toggleTitle+'" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+wayBg+';color:'+wayFg+';font-size:23px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+toggleText+'</button><button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+targetBg+';color:'+targetFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeTarget')+'</button></div></fieldset>'+gpxButton+'<section class="p2m-note-preview"><textarea class="p2m-inline-note" data-p2m-inline-note="'+id+'" aria-label="Notiz zum Pin" placeholder="Notiz eingeben …" rows="3">'+escHtml(p2mMeta.note||'')+'</textarea></section>'+'<fieldset class="p2m-pin-field"><legend>Pin ändern</legend><div class="p2m-pin-buttons p2m-edit-buttons"><button type="button" data-rename-pin="'+id+'">Name</button><button type="button" data-change-pin-category="'+id+'">Symbol</button><button type="button" class="p2m-round-delete" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">❌</button></div></fieldset></div>'
+ return '<div class="p2m-popup"><div class="p2m-pin-title">'+escHtml(pinLabel)+'</div><div class="p2m-created">Erstellt: '+escHtml(new Date(p2mMeta.createdAt).toLocaleString('de-DE'))+'</div><div class="p2m-five-actions">'+'<button type="button" data-copy-pin="'+id+'" title="In Zwischenablage kopieren" aria-label="In Zwischenablage kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#087df5;color:#fff;font-size:31px;font-weight:600">+</button>'+'<button type="button" data-pin-nav-apple="'+id+'" title="Mit Apple Karten zum Pin" aria-label="Mit Apple Karten zum Pin" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px;font-weight:600"></button>'+'<button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+startBg+';color:'+startFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center"><span class="route-start-icon" aria-hidden="true"></span></button>'+'<button type="button" class="'+toggleClass+'" data-route-waypoint="'+id+'" title="'+toggleTitle+'" aria-label="'+toggleTitle+'" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+wayBg+';color:'+wayFg+';font-size:23px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+toggleText+'</button>'+'<button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+targetBg+';color:'+targetFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeTarget')+'</button>'+'</div>'+gpxButton+'<fieldset class="p2m-notes-field"><legend>Pin Notizen</legend><textarea class="p2m-inline-note" data-p2m-inline-note="'+id+'" aria-label="Notiz zum Pin" placeholder="Notiz eingeben …" rows="6">'+escHtml(p2mMeta.note||'')+'</textarea></fieldset>'+'<div class="p2m-bottom-groups"><fieldset class="p2m-bottom-delete"><legend>Pin löschen</legend><button type="button" class="p2m-round-delete" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button></fieldset><fieldset class="p2m-bottom-pin"><legend>Pin</legend><div class="p2m-bottom-pin-buttons"><button type="button" data-p2m-link="'+id+'" title="Pin-Link kopieren" aria-label="Pin-Link kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:24px">🔗</button><button type="button" data-rename-pin="'+id+'">Name</button><button type="button" data-change-pin-category="'+id+'">Symbol</button></div></fieldset><fieldset class="p2m-bottom-wiki"><legend>Wikipedia</legend><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px">'+uiSymbol('wikipedia')+'</button></fieldset></div></div>'
 }
+
+// iPhone: Beim Fokus nicht die gesamte Leaflet-Karte durch Safari verschieben lassen.
+(function(){
+ var screen=document.getElementById('mapScreen');
+ if(!screen)return;
+ function adjust(){
+  if(!screen.classList.contains('p2m-note-typing'))return;
+  var vv=window.visualViewport;
+  var top=vv?Math.max(5,vv.offsetTop+5):5;
+  var height=vv?Math.max(170,vv.height-15):Math.max(170,window.innerHeight-15);
+  screen.style.setProperty('--p2m-keyboard-top',top+'px');
+  screen.style.setProperty('--p2m-keyboard-height',height+'px');
+ }
+ document.addEventListener('focusin',function(e){
+  if(e.target&&e.target.matches&&e.target.matches('#mapScreen textarea[data-p2m-inline-note]')){
+   screen.classList.add('p2m-note-typing');adjust();
+  }
+ },true);
+ document.addEventListener('focusout',function(e){
+  if(e.target&&e.target.matches&&e.target.matches('#mapScreen textarea[data-p2m-inline-note]')){
+   screen.classList.remove('p2m-note-typing');
+  }
+ },true);
+ if(window.visualViewport){window.visualViewport.addEventListener('resize',adjust);window.visualViewport.addEventListener('scroll',adjust)}
+})();
+
 // Einfache Textnotizen direkt im Popup, ohne gesonderten Editor.
 document.addEventListener('input',function(e){
  var el=e.target;
@@ -4062,7 +4108,7 @@ async function importFiles(fileList){
 </style>
 <div id="p2m-editor" role="dialog" aria-modal="true" aria-label="Markdown-Notiz bearbeiten"><header><span id="p2m-editor-title"></span><label id="p2m-editor-copy"><input id="p2m-editor-copy-check" type="checkbox"> Inhalt kopieren</label></header><textarea id="p2m-editor-text" aria-label="Markdown-Notiz" spellcheck="true" placeholder="Markdown-Notiz …"></textarea><footer><button type="button" id="p2m-editor-close" title="Schließen ohne Speichern">×</button><button type="button" id="p2m-editor-delete" class="p2m-editor-delete" title="Notiz löschen">🖋️</button><button type="button" id="p2m-editor-save" title="Notiz speichern">Speichern</button></footer></div>
 <script>
-/* v10.3.31: kompakte Markdown-Notizen und mobiler Vollbildeditor */
+/* v10.3.32: kompakte Markdown-Notizen und mobiler Vollbildeditor */
 function p2mMarkdown(raw){
  var escape=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
  var inline=function(t){return escape(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(_,name,url){return '<a href="'+url.replace(/&quot;/g,'')+'" target="_blank" rel="noopener noreferrer">'+name+'</a>'}).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>')};
