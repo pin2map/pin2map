@@ -516,7 +516,12 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 }
 
 
-#areaSearchBox.keyboard-visible{bottom:auto!important;transform:translateX(-50%)!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}</style>
+#areaSearchBox.keyboard-visible{bottom:auto!important;transform:translateX(-50%)!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+/* v10.4.0: kombinierbare Inhaltsfilter, grosse native iPhone-Checkboxen. */
+#markFilterPanel .p2m-filter-options{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px;padding-top:11px;border-top:1px solid #dedee3}
+#markFilterPanel .p2m-filter-options label{display:inline-flex;align-items:center;gap:7px;min-height:38px;cursor:pointer;touch-action:manipulation;font-size:14px;white-space:nowrap;user-select:none;-webkit-user-select:none}
+#markFilterPanel .p2m-filter-options input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;accent-color:#087df5;width:20px;height:20px;min-width:20px;margin:0;pointer-events:auto}
+</style>
 
 <meta name="pin2map-build" content="v8.2">
 
@@ -1022,13 +1027,13 @@ html body #mapScreen #placeResultChooser {
 html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButtons button {max-width:100%!important;box-sizing:border-box!important}
 </style>
 <style>
-/* v10.3.58: kompakte, direkt bearbeitbare Klartext-Notiz */
+/* v10.4.0: kompakte, direkt bearbeitbare Klartext-Notiz */
 .p2m-popup .p2m-note-preview{padding:0;margin:6px 0 8px;max-height:none;overflow:visible;border:1px solid #d3d9e2;border-radius:9px}
 .p2m-popup textarea.p2m-inline-note{display:block;box-sizing:border-box;width:100%;height:76px;min-height:54px;max-height:130px;resize:vertical;margin:0;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:1.4;outline-offset:-2px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .p2m-popup textarea.p2m-inline-note:focus{outline:2px solid #1683f5}
 </style>
 <style>
-/* v10.3.58: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
+/* v10.4.0: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 #mapScreen .leaflet-popup-content .p2m-popup{width:100%;min-width:0}
 .p2m-popup .p2m-quick-actions{gap:8px!important;padding:7px 5px!important;justify-content:space-evenly!important}
@@ -1039,7 +1044,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){#mapScreen .leaflet-popup-content{width:calc(100vw - 58px)!important}.p2m-popup .p2m-quick-actions{gap:4px!important}.p2m-popup .p2m-edit-buttons button{min-width:0}}
 </style>
 <style>
-/* v10.3.58: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
+/* v10.4.0: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 .p2m-popup .p2m-pin-title{margin:0 0 5px;overflow-wrap:anywhere}
 .p2m-popup .p2m-five-actions{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid #c7c7cc;border-radius:10px;padding:7px 6px;margin:0 0 8px}
@@ -1056,7 +1061,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){.p2m-popup .p2m-bottom-groups{grid-template-columns:57px minmax(0,1fr) 60px;gap:3px}.p2m-popup .p2m-bottom-pin-buttons button[data-rename-pin],.p2m-popup .p2m-bottom-pin-buttons button[data-change-pin-category]{width:45px;font-size:11px}.p2m-popup .p2m-bottom-groups button{width:37px;height:37px}}
  .p2m-popup textarea[data-p2m-inline-note]{font-size:16px!important} </style>
 <style>
-/* v10.3.58: kompakte Gruppierung und gesicherte Klartext-Eingabe */
+/* v10.4.0: kompakte Gruppierung und gesicherte Klartext-Eingabe */
 .p2m-popup .p2m-pin-title{font-weight:700!important}
 .p2m-popup .p2m-five-actions{display:grid!important;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px!important;padding:0!important;border:0!important;align-items:stretch!important}
 .p2m-popup .p2m-five-actions fieldset{display:flex;align-items:center;justify-content:space-around;gap:3px;min-width:0;margin:0;padding:5px 4px 6px;border:1px solid #c7c7cc;border-radius:10px;box-sizing:border-box}
@@ -1087,7 +1092,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 html,body{max-width:100%;overflow-x:hidden}
 </style>
 <style>
-/* v10.3.58: Leaflet-Schliessen-X exakt mittig. */
+/* v10.4.0: Leaflet-Schliessen-X exakt mittig. */
 #mapScreen .leaflet-popup-close-button{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:0!important;line-height:1!important;font-family:Arial,sans-serif!important}
 </style>
 <style id="p2m-v10354-style">
@@ -1095,10 +1100,14 @@ html,body{max-width:100%;overflow-x:hidden}
 #mapScreen .leaflet-popup-content:has(.p2m-popup){width:min(326px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 /* Kleiner Notizindikator am Symbol, unabhängig von der Pin-Farbe. */
 #mapScreen .emoji-marker.p2m-has-note .emoji-pin::after{content:"";position:absolute;left:0px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:#2879dd;border:1.5px solid white;box-shadow:0 0 0 1px #36618b;pointer-events:none}
+
+/* Einheitliche Pin-Merkmale: Notiz links, GPX rechts, URL an der Spitze. */
+#mapScreen .emoji-marker.p2m-has-gpx .emoji-pin::before{content:"";position:absolute;left:50%;bottom:0px;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#e63c3c;border:1.5px solid white;box-shadow:0 0 0 1px #a52b2b;pointer-events:none;z-index:2}
+#mapScreen .emoji-marker.p2m-has-url .emoji-pin{background-image:linear-gradient(45deg,#56b9e9 0%,#56b9e9 17%,transparent 18%)!important}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.3.58)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.4.0)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1138,6 +1147,7 @@ html,body{max-width:100%;overflow-x:hidden}
  <div class="p2m-filter-head"><strong>⚲ Markierungen filtern</strong><button type="button" id="markFilterClose" aria-label="Filter schließen">×</button></div>
  <div class="p2m-filter-searchrow"><input type="search" id="markFilterText" placeholder="Beschriftung, z. B. FAO" autocomplete="off" aria-label="Beschriftung filtern"><button type="button" id="markFilterReset" title="Alle anzeigen" aria-label="Alle anzeigen">ALL</button></div>
  <div class="p2m-filter-inforow"><select id="markFilterType" aria-label="Markierungstyp"><option value="all">Pins und Flächen</option><option value="pins">Nur Pins</option><option value="areas">Nur Flächen</option></select><div id="markFilterCount" role="status" aria-live="polite">sichtbar: alle</div></div>
+ <div class="p2m-filter-options" role="group" aria-label="Pins mit Inhalt"><label><input type="checkbox" id="markFilterTrack"> <span>Mit Track</span></label><label><input type="checkbox" id="markFilterLink"> <span>Mit Link</span></label><label><input type="checkbox" id="markFilterNote"> <span>Mit Notiz</span></label></div>
 </div>
 <button type="button" id="legendToggle" class="map-round-control map-ui-control" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><button type="button" id="routeClear" title="Route entfernen" aria-label="Route entfernen">Route entfernen</button><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">⏏︎</span></button></div><div class="route-toolbar-row route-toolbar-primary"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="now">Jetzt</option><option value="depart">Abfahrt</option><option value="arrive">Ankunft</option></select><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"></div></div><div class="route-toolbar-row route-toolbar-secondary">
 <button type="button" id="routeVisiblePins" class="route-circle route-visible-pins" title="Alle noch nicht verwendeten Pins im aktuellen Kartenausschnitt als Zwischenziele hinzufügen" aria-label="Sichtbare Pins hinzufügen"><svg class="route-all-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42" width="36" height="36" aria-hidden="true" focusable="false"><rect x="6" y="7" width="30" height="28" rx="0" fill="none" stroke="#111" stroke-width="1.5"/><text x="21" y="21" fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="central">ALL</text></svg></button>
@@ -1169,9 +1179,18 @@ var defaults='# 📍 [Red] Rot\n\n# 🔹 [DodgerBlue] Blau\n\n# 🅿️ [LimeGre
 window.pin2mapCurrentMap=function(){return map};
 var map=null,baseLayer=null,categoryLayers={},allBounds=null,renderedAreas=[],areaRenderer=null,buildGeneration=0,areaPointTotal=0,gpxLayer=null,pendingGpxTracks=null;
 var markFilterEntries=[],markFilterQuery='',markFilterKind='all';
+var markFilterTrack=false,markFilterLink=false,markFilterNote=false;
 function markFilterMatches(it){
  var q=markFilterQuery.trim().toLocaleLowerCase('de');
- return (!q||String(it.label||'').toLocaleLowerCase('de').includes(q))&&(markFilterKind==='all'||(it.area?'areas':'pins')===markFilterKind)
+ if(q&&!String(it.label||'').toLocaleLowerCase('de').includes(q))return false;
+ if(markFilterKind!=='all'&&(it.area?'areas':'pins')!==markFilterKind)return false;
+ if(markFilterTrack||markFilterLink||markFilterNote){
+  if(it.area)return false;
+  if(markFilterTrack&&!p2mGpxKeyForPin(it))return false;
+  if(markFilterLink&&!String(p2m41UrlGet(it)||'').trim())return false;
+  if(markFilterNote&&!String(pinMeta(it).note||'').trim())return false;
+ }
+ return true;
 }
 function markFilterRegister(it){markFilterEntries.push(it);markFilterApplyOne(it)}
 function markFilterApplyOne(it){
@@ -1181,7 +1200,7 @@ function markFilterApplyOne(it){
 }
 function markFilterApply(zoom){
  var count=0;markFilterEntries.forEach(function(it){markFilterApplyOne(it);if(markFilterMatches(it))count++});
- var active=!!markFilterQuery.trim()||markFilterKind!=='all';
+ var active=!!markFilterQuery.trim()||markFilterKind!=='all'||markFilterTrack||markFilterLink||markFilterNote;
  var button=document.getElementById('markFilterButton');if(button)button.classList.toggle('p2m-filter-active',active);
  var countEl=document.getElementById('markFilterCount');if(countEl)countEl.textContent='sichtbar: '+(active?String(count):'alle');
  if(zoom)markFilterZoom();
@@ -1190,7 +1209,7 @@ function markFilterZoom(){
  if(!map)return;var bounds=L.latLngBounds([]);
  markFilterEntries.forEach(function(it){if(!markFilterMatches(it))return;var layer=it._areaLayer||it._pinLayer;if(!layer)return;try{if(layer.getBounds)bounds.extend(layer.getBounds());else if(layer.getLatLng)bounds.extend(layer.getLatLng())}catch(e){}});
  if(bounds.isValid())map.fitBounds(bounds,{padding:[55,55],maxZoom:15});
- else if(markFilterQuery.trim()||markFilterKind!=='all')mapStatus.textContent='Keine passenden Markierungen gefunden.';
+ else if(markFilterQuery.trim()||markFilterKind!=='all'||markFilterTrack||markFilterLink||markFilterNote)mapStatus.textContent='Keine passenden Markierungen gefunden.';
 }
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
 var showElevations=false,elevationBusy=false;
@@ -1315,7 +1334,33 @@ function prepareAreaGeoJSON(g){
 function clearMap(){if(!map)return;markFilterEntries=[];buildGeneration++;for(var i=0;i<renderedAreas.length;i++){var ri=renderedAreas[i];if(ri&&ri.item){ri.item._areaLayer=null;ri.item._areaLabelLayer=null}}for(var k in categoryLayers){map.removeLayer(categoryLayers[k]);if(categoryLayers[k]&&categoryLayers[k].clearLayers)categoryLayers[k].clearLayers()}categoryLayers={};renderedAreas=[];areaPointTotal=0;document.getElementById('legend').innerHTML='';document.getElementById('addressList').innerHTML='';document.getElementById('notFoundList').innerHTML='';allBounds=L.latLngBounds([])}
 function p2mHasPinName(it){var label=String(it&&it.label||'').trim(),query=String(it&&it.query||'').trim();return !!label&&!(label===query&&/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(query))}
 function p2mSyncPinLabel(it){if(!it||!it._pinLayer)return;var marker=it._pinLayer;if(p2mHasPinName(it)){if(marker.getTooltip())marker.setTooltipContent(it.label);else marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'})}else if(marker.getTooltip())marker.unbindTooltip()}
-function p2mSyncNoteDot(it){if(!it||!it._pinLayer)return;var el=it._pinLayer.getElement&&it._pinLayer.getElement();if(el)el.classList.toggle('p2m-has-note',!!String(pinMeta(it).note||'').trim())}
+/* GPX-Zuordnung ist unabhaengig von der editierbaren Kategorie. */
+function p2mGpxKeyForPin(it){
+ if(!it)return '';
+ if(it._p2mGpxKey)return it._p2mGpxKey;
+ var coord=String(it.query||'').replace(/\s+/g,'');
+ var tracks=window.pin2mapGpxTracks;
+ if(tracks&&tracks.size){
+  var hits=[];tracks.forEach(function(_,k){if(k.slice(k.indexOf('|')+1)===coord)hits.push(k)});
+  if(hits.length===1){it._p2mGpxKey=hits[0];return hits[0]}
+ }
+ var key=String(it.label||'')+'|'+coord;
+ if(it.category==='GPX-Startpunkte'){it._p2mGpxKey=key;return key}
+ return '';
+}
+/* Pin-Merkmale zentral und unabhaengig vom Popup-Inhalt darstellen. */
+function p2mSyncPinBadges(it){
+ if(!it||!it._pinLayer)return;
+ var el=it._pinLayer.getElement&&it._pinLayer.getElement();if(!el)return;
+ el.classList.toggle('p2m-has-note',!!String(pinMeta(it).note||'').trim());
+ var isGpx=!!p2mGpxKeyForPin(it);
+ /* Importierte GPX-Startpunkte besitzen eine zugeordnete Datei (auch nach Neuladen in IndexedDB). */
+ el.classList.toggle('p2m-has-gpx',isGpx);
+ var url='';try{if(typeof p2m41UrlGet==='function')url=p2m41UrlGet(it)}catch(e){}
+ el.classList.toggle('p2m-has-url',!!String(url||'').trim());
+ if((markFilterTrack||markFilterLink||markFilterNote)&&markFilterEntries.indexOf(it)!==-1)markFilterApply(false);
+}
+function p2mSyncNoteDot(it){p2mSyncPinBadges(it)}
 function icon(sym,num,useNum,routeRole){var inside=useNum?'<span class="number-pin">'+num+'</span>':'<span>'+esc(sym)+'</span>',bg=routeRole==='start'?'#ff5a52':routeRole==='target'?'#62c370':routeRole==='waypoint'?'#ffe082':routeRole==='both'?'linear-gradient(135deg,#ff5a52 0 50%,#62c370 50% 100%)':(sym==='ⓦ'?'#ffb6d5':'#fff'),st='background:'+bg+';';return L.divIcon({className:'emoji-marker',html:'<div class="emoji-pin" style="'+st+'">'+inside+'</div>',iconSize:[36,36],iconAnchor:[18,36]})}
 function geocode(q,area){
  var cm=String(q).trim().match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
@@ -1628,7 +1673,7 @@ function isStandaloneWebApp(){
  return !!((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true)
 }
 function restorePin2MapAfterExternalView(){
- /* v10.3.58: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
+ /* v10.4.0: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
  ['mapActionChooser','areaClickChooser'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none'});
  try{document.activeElement&&document.activeElement.blur&&document.activeElement.blur()}catch(e){}
  try{if(map){map.dragging&&map.dragging.enable();map.touchZoom&&map.touchZoom.enable();map.doubleClickZoom&&map.doubleClickZoom.enable();map.scrollWheelZoom&&map.scrollWheelZoom.enable();map.invalidateSize(false)}}catch(e){}
@@ -2029,7 +2074,7 @@ function applyStaticUiSymbols(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyStaticUiSymbols);else applyStaticUiSymbols();
 
-/* v10.3.58: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
+/* v10.4.0: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
    sind die Identitaet; Popup-HTML, Kategorie, Name und Listenzeile sind es nicht. */
 var p2mMobileNoteEditing=null;
 var pinNoteSession=Object.create(null);
@@ -2088,13 +2133,13 @@ function p2mCommitVisiblePinNote(it){
 function pinNoteLink(it){return 'https://pin2map.github.io/pin2map/index.html?pin='+encodeURIComponent(pinMeta(it).id)}
 function pinNoteCopy(value){if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(value).catch(function(){window.prompt('Text kopieren:',value)});window.prompt('Text kopieren:',value);return Promise.resolve()}
 function pinNoteRefresh(it){if(it&&it._pinLayer)it._pinLayer.setPopupContent(pinPopupHtml(it))}
-function pinPopupHtml(it){
+function pinPopupHtml(it){p2mSyncPinBadges(it);
  p2mCommitVisiblePinNote(it);
  var id=it._popupId;if(id&&pinDeleteItems[id]!==it)id=null;if(!id){id='pinDel'+(++pinDeleteId);it._popupId=id}pinDeleteItems[id]=it;
  var p2mMeta=pinMeta(it);
- var gpxKey=escHtml(String(it.label||'')+'|'+String(it.query||'').replace(/\s+/g,''));
- var gpxButton=(it.category==='GPX-Startpunkte'?'<div style="display:flex;gap:8px;margin:12px 0 13px;width:100%"><button type="button" data-gpx-route="'+id+'" data-gpx-key="'+gpxKey+'" class="p2m-gpx-route-btn" title="GPX-Route ein- oder ausblenden" style="position:relative;flex:1;min-width:0;padding:9px 4px;border-radius:9px;background:#e6f2e9;border:1px solid #98c5a3;color:#175a2a;font-weight:700;white-space:nowrap">🥾 Route</button><button type="button" data-gpx-save="'+id+'" data-gpx-key="'+gpxKey+'" style="flex:1;min-width:0;padding:9px 3px;border-radius:9px;background:#e6f2e9;border:1px solid #98c5a3;color:#175a2a;font-weight:700;white-space:nowrap">GPX ↓</button></div>':'');
- if(it.category==='GPX-Startpunkte'&&window.pin2mapGpxRouteVisible&&window.pin2mapGpxRouteVisible(it,gpxKey))gpxButton=gpxButton.replace('class="p2m-gpx-route-btn"','class="p2m-gpx-route-btn p2m-gpx-visible"');
+ var pinGpxKey=p2mGpxKeyForPin(it);var gpxKey=escHtml(pinGpxKey);
+ var gpxButton=(pinGpxKey?'<div style="display:flex;gap:8px;margin:12px 0 13px;width:100%"><button type="button" data-gpx-route="'+id+'" data-gpx-key="'+gpxKey+'" class="p2m-gpx-route-btn" title="GPX-Route ein- oder ausblenden" style="position:relative;flex:1;min-width:0;padding:9px 4px;border-radius:9px;background:#e6f2e9;border:1px solid #98c5a3;color:#175a2a;font-weight:700;white-space:nowrap">🥾 Route</button><button type="button" data-gpx-save="'+id+'" data-gpx-key="'+gpxKey+'" style="flex:1;min-width:0;padding:9px 3px;border-radius:9px;background:#e6f2e9;border:1px solid #98c5a3;color:#175a2a;font-weight:700;white-space:nowrap">GPX ↓</button></div>':'');
+ if(pinGpxKey&&window.pin2mapGpxRouteVisible&&window.pin2mapGpxRouteVisible(it,gpxKey))gpxButton=gpxButton.replace('class="p2m-gpx-route-btn"','class="p2m-gpx-route-btn p2m-gpx-visible"');
  var inRoute=routePosition(it)>0,toggleClass=inRoute?' route-toggle-remove':'',toggleText=inRoute?uiSymbol('routeWaypointRemove'):uiSymbol('routeWaypointAdd'),toggleTitle=inRoute?'Aus Route entfernen':'Zwischenziel hinzufügen';
  var isStart=it===routeStartItem,isTarget=it===routeTargetItem,startBg=isStart?'#ef3737':'#e5e5ea',startFg=isStart?'#fff':'#111',wayBg=inRoute?'#ffd84d':'#e5e5ea',wayFg='#111',targetBg=isTarget?'#34a853':'#e5e5ea',targetFg=isTarget?'#fff':'#111';
  var pinLabel=String((it&&it.label)||'').trim()||String((it&&it.query)||'').trim();
@@ -2352,7 +2397,7 @@ function currentRouteItems(){return (routeStartItem?[routeStartItem]:[]).concat(
 function routePosition(it){var arr=currentRouteItems();for(var i=0;i<arr.length;i++)if(arr[i]===it)return i+1;return 0}
 function routeRoleForItem(it){if(it===routeStartItem&&it===routeTargetItem)return 'both';if(it===routeStartItem)return 'start';if(it===routeTargetItem)return 'target';if(routeWaypoints.indexOf(it)>=0)return 'waypoint';return ''}
 function refreshRoutePinPresentation(){
- var seen=[];Object.keys(pinDeleteItems).forEach(function(k){var it=pinDeleteItems[k];if(!it||seen.indexOf(it)>=0)return;seen.push(it);var pos=routePosition(it),label=(pos?'('+pos+') ':'')+routeItemName(it);if(it._pinLayer){it._pinLayer.setIcon(icon(it.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));var tt=it._pinLayer.getTooltip&&it._pinLayer.getTooltip();if(tt)tt.setContent(label);it._pinLayer.setPopupContent(pinPopupHtml(it))}})
+ var seen=[];Object.keys(pinDeleteItems).forEach(function(k){var it=pinDeleteItems[k];if(!it||seen.indexOf(it)>=0)return;seen.push(it);var pos=routePosition(it),label=(pos?'('+pos+') ':'')+routeItemName(it);if(it._pinLayer){it._pinLayer.setIcon(icon(it.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));p2mSyncPinBadges(it);var tt=it._pinLayer.getTooltip&&it._pinLayer.getTooltip();if(tt)tt.setContent(label);it._pinLayer.setPopupContent(pinPopupHtml(it))}})
 }
 function routeModeButtonSymbol(){
  return uiSymbol(routeMode==='bicycle'?'bicycle':routeMode==='pedestrian'?'pedestrian':routeMode==='transit'?'transit':'driving')
@@ -2697,7 +2742,7 @@ function openPinCategoryChange(it){
  cats.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'';b.title=c.name;b.setAttribute('aria-label',c.name);b.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;padding:8px;border:1px solid #d1d1d6;border-radius:11px;background:'+hexToRgba(c.color,.28)+';font-size:30px;line-height:1;cursor:pointer';b.onclick=function(){
    box.style.display='none';if(map)map.closePopup();var oldCat=it.category,oldGrp=categoryLayers[oldCat];moveSourceLineToCategory(it,i);
    if(oldGrp&&it._pinLayer)oldGrp.removeLayer(it._pinLayer);if(!categoryLayers[c.name])categoryLayers[c.name]=L.layerGroup().addTo(map);if(it._pinLayer){it._pinLayer.setIcon(icon(c.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));categoryLayers[c.name].addLayer(it._pinLayer)}
-   it.category=c.name;it.symbol=c.symbol;it.color=c.color;it._pinLayer&&it._pinLayer.setPopupContent(pinPopupHtml(it));pendingPinCategoryChange=null;refreshAfterDirectDelete();autoZoomLoadedLayers()
+   it.category=c.name;it.symbol=c.symbol;it.color=c.color;p2mSyncPinBadges(it);it._pinLayer&&it._pinLayer.setPopupContent(pinPopupHtml(it));pendingPinCategoryChange=null;refreshAfterDirectDelete();autoZoomLoadedLayers()
   };buttons.appendChild(b)});box.style.display='block'
 }
 document.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('[data-change-pin-category]'):null;if(!b)return;e.preventDefault();e.stopPropagation();var it=pinDeleteItems[b.getAttribute('data-change-pin-category')];if(it)openPinCategoryChange(it)});
@@ -2719,7 +2764,7 @@ function openAreaCategoryChange(it){
   box.style.display='none';box.classList.remove('area-color-only');if(map)map.closePopup();var oldCat=it.category,oldGrp=categoryLayers[oldCat];moveSourceLineToCategory(it,i);
   if(oldGrp&&it._areaLayer)oldGrp.removeLayer(it._areaLayer);if(oldGrp&&it._areaLabelLayer)oldGrp.removeLayer(it._areaLabelLayer);if(!categoryLayers[c.name])categoryLayers[c.name]=L.layerGroup().addTo(map);
   if(it._areaLayer){it._areaLayer.setStyle({color:c.color,fillColor:c.color});categoryLayers[c.name].addLayer(it._areaLayer)}if(it._areaLabelLayer)categoryLayers[c.name].addLayer(it._areaLabelLayer);
-  it.category=c.name;it.symbol=c.symbol;it.color=c.color;refreshAfterDirectDelete()
+  it.category=c.name;it.symbol=c.symbol;it.color=c.color;p2mSyncPinBadges(it);refreshAfterDirectDelete()
  };buttons.appendChild(bt)});box.style.display='block'
 } document.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('[data-change-area-category]'):null;if(!b)return;e.preventDefault();e.stopPropagation();var it=areaDeleteItems[b.getAttribute('data-change-area-category')];if(it)openAreaCategoryChange(it)});
 function openCategoryEditor(name,v){
@@ -3557,7 +3602,15 @@ document.getElementById('markFilterClose').onclick=function(){markFilterPanel.st
 document.getElementById('markFilterText').addEventListener('input',function(){markFilterQuery=this.value;markFilterApply(true)});
 document.getElementById('markFilterType').addEventListener('change',function(){markFilterKind=this.value;markFilterApply(true)});
 
-document.getElementById('markFilterReset').onclick=function(){markFilterQuery='';markFilterKind='all';document.getElementById('markFilterText').value='';document.getElementById('markFilterType').value='all';markFilterApply(false);autoZoomAllContent()};
+[['markFilterTrack','track'],['markFilterLink','link'],['markFilterNote','note']].forEach(function(entry){
+ document.getElementById(entry[0]).addEventListener('change',function(){
+  if(entry[1]==='track')markFilterTrack=this.checked;
+  if(entry[1]==='link')markFilterLink=this.checked;
+  if(entry[1]==='note')markFilterNote=this.checked;
+  markFilterApply(true);
+ });
+});
+document.getElementById('markFilterReset').onclick=function(){markFilterQuery='';markFilterKind='all';markFilterTrack=false;markFilterLink=false;markFilterNote=false;document.getElementById('markFilterText').value='';document.getElementById('markFilterType').value='all';['markFilterTrack','markFilterLink','markFilterNote'].forEach(function(id){document.getElementById(id).checked=false});markFilterApply(false);autoZoomAllContent()};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&markFilterPanel.style.display==='block'){markFilterPanel.style.display='none';markFilterButton.setAttribute('aria-expanded','false')}});
 document.getElementById('autoZoomButton').onclick=function(){
  // GPX-Startpunktroute hat Vorrang, wenn keine interne Routing-Route aktiv ist.
@@ -3869,9 +3922,9 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)setT
 
 
 
-/* v10.3.58: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
+/* v10.4.0: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
 
-/* v10.3.58: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
+/* v10.4.0: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
 var p2m41OriginalPopup=pinPopupHtml;
 pinPopupHtml=function(it){
  var html=p2m41OriginalPopup(it),id=it._popupId;
@@ -3886,7 +3939,7 @@ document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&
 var p2m41Urls=Object.create(null),p2m41Item=null,p2m41Cat=null,p2m41Mode='';
 function p2m41UrlKey(it){return pinNoteLocationKey(it)}
 function p2m41UrlGet(it){var k=p2m41UrlKey(it),c=activeProjectCache&&activeProjectCache[projectCacheKey(it)];return p2m41Urls[k]||(c&&c.pinUrl)||''}
-function p2m41UrlSave(it,url){var k=p2m41UrlKey(it);p2m41Urls[k]=url;var key=projectCacheKey(it);if(key){if(!activeProjectCache)activeProjectCache={};if(!activeProjectCache[key])activeProjectCache[key]={};activeProjectCache[key].pinUrl=url}}
+function p2m41UrlSave(it,url){var k=p2m41UrlKey(it);p2m41Urls[k]=url;var key=projectCacheKey(it);if(key){if(!activeProjectCache)activeProjectCache={};if(!activeProjectCache[key])activeProjectCache[key]={};activeProjectCache[key].pinUrl=url}p2mSyncPinBadges(it)}
 var p2m41Dialog=document.createElement('div');p2m41Dialog.id='p2m41-dialog';document.body.appendChild(p2m41Dialog);
 function p2m41Close(){p2m41Dialog.style.display='none';p2m41Dialog.innerHTML='';p2m41Item=null}
 function p2m41Open(it,mode){p2m41Item=it;p2m41Mode=mode;/* Popup bleibt hinter dem URL-Dialog geoeffnet. */
@@ -3894,7 +3947,7 @@ function p2m41Open(it,mode){p2m41Item=it;p2m41Mode=mode;/* Popup bleibt hinter d
  var field=document.createElement('input');field.type='text';field.placeholder=mode==='url'?'https://…':'Name des Pins';field.value=mode==='url'?p2m41UrlGet(it):((it.label&&it.label!==it.query)?it.label:'');if(mode==='url'){field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');field.inputMode='url';}card.appendChild(field);
  if(mode==='edit'){var sub=document.createElement('div');sub.textContent='Kategorie';sub.style.marginBottom='8px';card.appendChild(sub);var cats=document.createElement('div');cats.className='p2m41-cats';var defs=ensurePinCategoryChoices();p2m41Cat=defs.findIndex(function(c){return c.name===it.category});if(p2m41Cat<0)p2m41Cat=0;defs.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'📍';b.title=c.name;b.setAttribute('aria-pressed',String(i===p2m41Cat));b.onclick=function(){p2m41Cat=i;cats.querySelectorAll('button').forEach(function(x,j){x.setAttribute('aria-pressed',String(i===j))})};cats.appendChild(b)});card.appendChild(cats)}
  var actions=document.createElement('div');actions.className='p2m41-actions';var cancel=document.createElement('button');cancel.textContent='Abbrechen';cancel.onclick=p2m41Close;actions.appendChild(cancel);
- var ok=document.createElement('button');ok.className='p2m41-primary';ok.textContent='OK';ok.onclick=function(){if(mode==='url'){p2m41UrlSave(it,field.value.trim());p2m41Close();return}var name=field.value.trim();if(name!==((it.label&&it.label!==it.query)?it.label:'')){pendingPinRename=it;document.getElementById('pinNameInput').value=name;savePinName()}var defs=ensurePinCategoryChoices();if(defs[p2m41Cat]&&defs[p2m41Cat].name!==it.category){p2mCommitVisiblePinNote(it);var old=it.category,c=defs[p2m41Cat],oldGrp=categoryLayers[old];moveSourceLineToCategory(it,p2m41Cat);if(oldGrp&&it._pinLayer)oldGrp.removeLayer(it._pinLayer);if(!categoryLayers[c.name])categoryLayers[c.name]=L.layerGroup().addTo(map);if(it._pinLayer){it._pinLayer.setIcon(icon(c.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));categoryLayers[c.name].addLayer(it._pinLayer)}it.category=c.name;it.symbol=c.symbol;it.color=c.color;refreshAfterDirectDelete()}if(it._pinLayer)it._pinLayer.setPopupContent(pinPopupHtml(it));p2m41Close();if(it._pinLayer&&map&&map.hasLayer(it._pinLayer)){it._pinLayer.openPopup()}};if(mode!=='url')actions.appendChild(ok);
+ var ok=document.createElement('button');ok.className='p2m41-primary';ok.textContent='OK';ok.onclick=function(){if(mode==='url'){p2m41UrlSave(it,field.value.trim());p2m41Close();return}var name=field.value.trim();if(name!==((it.label&&it.label!==it.query)?it.label:'')){pendingPinRename=it;document.getElementById('pinNameInput').value=name;savePinName()}var defs=ensurePinCategoryChoices();if(defs[p2m41Cat]&&defs[p2m41Cat].name!==it.category){p2mCommitVisiblePinNote(it);p2mGpxKeyForPin(it);var old=it.category,c=defs[p2m41Cat],oldGrp=categoryLayers[old];moveSourceLineToCategory(it,p2m41Cat);if(oldGrp&&it._pinLayer)oldGrp.removeLayer(it._pinLayer);if(!categoryLayers[c.name])categoryLayers[c.name]=L.layerGroup().addTo(map);if(it._pinLayer){it._pinLayer.setIcon(icon(c.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));categoryLayers[c.name].addLayer(it._pinLayer)}it.category=c.name;it.symbol=c.symbol;it.color=c.color;p2mSyncPinBadges(it);refreshAfterDirectDelete()}if(it._pinLayer)it._pinLayer.setPopupContent(pinPopupHtml(it));p2m41Close();if(it._pinLayer&&map&&map.hasLayer(it._pinLayer)){it._pinLayer.openPopup()}};if(mode!=='url')actions.appendChild(ok);
  if(mode==='url'){var open=document.createElement('button');open.textContent='Öffnen';open.onclick=function(){var u=field.value.trim();try{var parsed=new URL(u);if(!/^https?:$/.test(parsed.protocol))throw Error('invalid');p2m41UrlSave(it,u);window.open(parsed.href,'_blank','noopener,noreferrer')}catch(e){p2m51UrlNotice('Bitte eine gültige http(s)-URL eingeben.')}};actions.appendChild(open);actions.appendChild(ok)}card.appendChild(actions);p2m41Dialog.replaceChildren(card);p2m41Dialog.style.display='flex';p2m41Dialog.onclick=function(e){if(e.target===p2m41Dialog)p2m41Close()};card.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing){e.preventDefault();e.stopPropagation();ok.click()}else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();cancel.click()}});
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&p2m41Dialog.style.display==='flex'){e.preventDefault();e.stopImmediatePropagation();p2m41Close()}},true);
@@ -4292,7 +4345,7 @@ async function importFiles(fileList){
 </style>
 <div id="p2m-editor" role="dialog" aria-modal="true" aria-label="Markdown-Notiz bearbeiten"><header><span id="p2m-editor-title"></span><label id="p2m-editor-copy"><input id="p2m-editor-copy-check" type="checkbox"> Inhalt kopieren</label></header><textarea id="p2m-editor-text" aria-label="Markdown-Notiz" spellcheck="true" placeholder="Markdown-Notiz …"></textarea><footer><button type="button" id="p2m-editor-close" title="Schließen ohne Speichern">×</button><button type="button" id="p2m-editor-delete" class="p2m-editor-delete" title="Notiz löschen">🖋️</button><button type="button" id="p2m-editor-save" title="Notiz speichern">Speichern</button></footer></div>
 <script>
-/* v10.3.58: kompakte Markdown-Notizen und mobiler Vollbildeditor */
+/* v10.4.0: kompakte Markdown-Notizen und mobiler Vollbildeditor */
 function p2mMarkdown(raw){
  var escape=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
  var inline=function(t){return escape(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(_,name,url){return '<a href="'+url.replace(/&quot;/g,'')+'" target="_blank" rel="noopener noreferrer">'+name+'</a>'}).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>')};
@@ -4346,7 +4399,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 1 48px!important;width:48px!important;height:48px!important;min-width:0!important;padding:0!important;border-radius:50%!important;border:1px solid #c7c7cc!important;background:#fff!important;font-size:24px!important;line-height:1!important}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-round-delete{background:#e53935!important;color:#fff!important;border-color:#e53935!important}
 
-/* v10.3.58: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
+/* v10.4.0: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
 :root{--p2m-button-neutral-bg:#e5e5ea;--p2m-button-neutral-fg:#17181c;--p2m-button-neutral-border:#aeb0b9}
 #p2m41-dialog .p2m41-actions button:not(.p2m41-primary){background:var(--p2m-button-neutral-bg)!important;color:var(--p2m-button-neutral-fg)!important;border-color:var(--p2m-button-neutral-border)!important}
 /* Untere Popup-Reihe in der Groesse der oberen runden Buttons. */
@@ -4355,7 +4408,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button[data-p2m-url],
 .p2m-popup .p2m-bottom-groups>button[data-p2m-url]{font-size:14px!important;font-weight:600!important;letter-spacing:-.3px!important}
 
-/* v10.3.58: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
+/* v10.4.0: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
 #p2m41-dialog .p2m41-cats{gap:9px;padding:4px;box-sizing:border-box}
 #p2m41-dialog .p2m41-cats button{min-height:44px;height:44px;padding:3px 5px;font-size:23px;line-height:1.1;box-sizing:border-box;background:var(--p2m-button-neutral-bg);color:var(--p2m-button-neutral-fg)}
 #p2m41-dialog .p2m41-cats button[aria-pressed=true]{outline:none!important;box-shadow:inset 0 0 0 3px #087df5}
@@ -4364,7 +4417,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 </style>
 
 <style>
-/* v10.3.58: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
+/* v10.4.0: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
 :root{--p2m-danger-bg:#e53935;--p2m-danger-fg:#fff}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-danger-x,
 .p2m-popup .p2m-bottom-groups>button.p2m-danger-x{
@@ -4408,7 +4461,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 })();
 </script>
 <style>
-/* v10.3.58: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
+/* v10.4.0: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
 :root{--p2m-collapse-ink:#222;--p2m-collapse-size:20px}
 .p2m-collapse-icon{display:block;position:relative;width:var(--p2m-collapse-size);height:var(--p2m-collapse-size);flex:0 0 var(--p2m-collapse-size);margin:auto}
 .p2m-collapse-icon::before{content:"";position:absolute;left:2px;top:3px;border-left:8px solid transparent;border-right:8px solid transparent;border-top:9px solid var(--p2m-collapse-ink)}
