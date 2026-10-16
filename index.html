@@ -517,12 +517,12 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 
 
 #areaSearchBox.keyboard-visible{bottom:auto!important;transform:translateX(-50%)!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-/* v10.4.25: kombinierbare Inhaltsfilter, grosse native iPhone-Checkboxen. */
+/* v10.5.0: kombinierbare Inhaltsfilter, grosse native iPhone-Checkboxen. */
 #markFilterPanel .p2m-filter-options{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px;padding-top:11px;border-top:1px solid #dedee3}
 #markFilterPanel .p2m-filter-options label{display:inline-flex;align-items:center;gap:7px;min-height:38px;cursor:pointer;touch-action:manipulation;font-size:14px;white-space:nowrap;user-select:none;-webkit-user-select:none}
 #markFilterPanel .p2m-filter-options input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;accent-color:#087df5;width:20px;height:20px;min-width:20px;margin:0;pointer-events:auto}
 
-/* v10.4.25: Einheitlicher Status der Filter-Schaltfläche (inkl. iPhone). */
+/* v10.5.0: Einheitlicher Status der Filter-Schaltfläche (inkl. iPhone). */
 #mapScreen .topbar .quick-place #markFilterButton:not(.p2m-filter-active){background:#fff!important;border:1px solid #2687d8!important;color:#175a96!important;}
 #mapScreen .topbar .quick-place #markFilterButton.p2m-filter-active{background:#e53935!important;border:1px solid #e53935!important;color:#fff!important;}
 
@@ -620,7 +620,7 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 
 #toggleElevations{position:absolute!important;z-index:1210!important;pointer-events:auto!important;touch-action:manipulation!important;top:max(122px,calc(env(safe-area-inset-top) + 122px))!important;right:max(10px,env(safe-area-inset-right))!important;bottom:auto!important;width:46px!important;height:46px!important;padding:0!important;border-radius:50%!important;background:rgba(255,255,255,.96)!important;color:#111!important;box-shadow:0 2px 10px #0003!important;font:700 17px/46px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;text-align:center!important}
 #toggleElevations.active{background:#007aff!important;color:#fff!important}
-#toggleElevations.off{opacity:.55!important}
+#toggleElevations.off{opacity:.55!important}\n#toggleElevations.p2m-temp-active{background:#f4b4ad!important;color:#7b2520!important;opacity:1!important}\n.elevation-label.p2m-temperature-label{background:#fff0ee;border-color:#cb7770}
 @media(max-width:600px){#toggleElevations{top:max(120px,calc(env(safe-area-inset-top) + 120px))!important;right:max(8px,env(safe-area-inset-right))!important}}
 
 
@@ -1046,13 +1046,13 @@ html body #mapScreen #placeResultChooser {
 html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButtons button {max-width:100%!important;box-sizing:border-box!important}
 </style>
 <style>
-/* v10.4.25: kompakte, direkt bearbeitbare Klartext-Notiz */
+/* v10.5.0: kompakte, direkt bearbeitbare Klartext-Notiz */
 .p2m-popup .p2m-note-preview{padding:0;margin:6px 0 8px;max-height:none;overflow:visible;border:1px solid #d3d9e2;border-radius:9px}
 .p2m-popup textarea.p2m-inline-note{display:block;box-sizing:border-box;width:100%;height:76px;min-height:54px;max-height:130px;resize:vertical;margin:0;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:1.4;outline-offset:-2px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .p2m-popup textarea.p2m-inline-note:focus{outline:2px solid #1683f5}
 </style>
 <style>
-/* v10.4.25: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
+/* v10.5.0: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 #mapScreen .leaflet-popup-content .p2m-popup{width:100%;min-width:0}
 .p2m-popup .p2m-quick-actions{gap:8px!important;padding:7px 5px!important;justify-content:space-evenly!important}
@@ -1063,7 +1063,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){#mapScreen .leaflet-popup-content{width:calc(100vw - 58px)!important}.p2m-popup .p2m-quick-actions{gap:4px!important}.p2m-popup .p2m-edit-buttons button{min-width:0}}
 </style>
 <style>
-/* v10.4.25: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
+/* v10.5.0: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 .p2m-popup .p2m-pin-title{margin:0 0 5px;overflow-wrap:anywhere}
 .p2m-popup .p2m-five-actions{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid #c7c7cc;border-radius:10px;padding:7px 6px;margin:0 0 8px}
@@ -1080,7 +1080,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){.p2m-popup .p2m-bottom-groups{grid-template-columns:57px minmax(0,1fr) 60px;gap:3px}.p2m-popup .p2m-bottom-pin-buttons button[data-rename-pin],.p2m-popup .p2m-bottom-pin-buttons button[data-change-pin-category]{width:45px;font-size:11px}.p2m-popup .p2m-bottom-groups button{width:37px;height:37px}}
  .p2m-popup textarea[data-p2m-inline-note]{font-size:16px!important} </style>
 <style>
-/* v10.4.25: kompakte Gruppierung und gesicherte Klartext-Eingabe */
+/* v10.5.0: kompakte Gruppierung und gesicherte Klartext-Eingabe */
 .p2m-popup .p2m-pin-title{font-weight:700!important}
 .p2m-popup .p2m-five-actions{display:grid!important;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px!important;padding:0!important;border:0!important;align-items:stretch!important}
 .p2m-popup .p2m-five-actions fieldset{display:flex;align-items:center;justify-content:space-around;gap:3px;min-width:0;margin:0;padding:5px 4px 6px;border:1px solid #c7c7cc;border-radius:10px;box-sizing:border-box}
@@ -1111,7 +1111,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 html,body{max-width:100%;overflow-x:hidden}
 </style>
 <style>
-/* v10.4.25: Leaflet-Schliessen-X exakt mittig. */
+/* v10.5.0: Leaflet-Schliessen-X exakt mittig. */
 #mapScreen .leaflet-popup-close-button{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:0!important;line-height:1!important;font-family:Arial,sans-serif!important}
 </style>
 <style id="p2m-v10354-style">
@@ -1126,7 +1126,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.4.25)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.0)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1254,7 +1254,7 @@ function markFilterZoom(){
  else if(markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote)mapStatus.textContent='Keine passenden Markierungen gefunden.';
 }
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
-var showElevations=false,elevationBusy=false;
+var showElevations=false,elevationBusy=false,p2mInfoMode=0,p2mTemperatureBusy=false,p2mTemperatureGeneration=0;
 var currentProjectName=''; /* Dateiname ohne .pin2map des geöffneten bzw. zuletzt gespeicherten Projekts. */
 function cleanProjectBaseName(value){return String(value||'').replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,100)}
 function setCurrentProjectName(value){currentProjectName=cleanProjectBaseName(value);var field=document.getElementById('listNameInput');if(field&&field.value!==currentProjectName)field.value=currentProjectName}
@@ -1643,7 +1643,7 @@ function addNewItemDirectly(fullLine){
   }else{
    var marker=L.marker(p,{icon:icon(it.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(it)}).addTo(categoryLayers[it.category]);
    it._pinLayer=marker;
-   if(p2mHasPinName(it))marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(it);p2mSyncNoteDot(it);if(showElevations&&!isFinite(it.elevation))setTimeout(fetchMissingElevations,0);
+   if(p2mHasPinName(it))marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(it);p2mSyncNoteDot(it);if(showElevations&&!isFinite(it.elevation))setTimeout(fetchMissingElevations,0);if(p2mInfoMode===2)setTimeout(fetchPinTemperatures,0);
   }
   // V9.10.40: Auch direkt hinzugefügte Pins und Flächen im Namensfilter erfassen.
   markFilterRegister(it);
@@ -1728,7 +1728,7 @@ function isStandaloneWebApp(){
  return !!((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true)
 }
 function restorePin2MapAfterExternalView(){
- /* v10.4.25: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
+ /* v10.5.0: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
  ['mapActionChooser','areaClickChooser'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none'});
  try{document.activeElement&&document.activeElement.blur&&document.activeElement.blur()}catch(e){}
  try{if(map){map.dragging&&map.dragging.enable();map.touchZoom&&map.touchZoom.enable();map.doubleClickZoom&&map.doubleClickZoom.enable();map.scrollWheelZoom&&map.scrollWheelZoom.enable();map.invalidateSize(false)}}catch(e){}
@@ -2129,7 +2129,7 @@ function applyStaticUiSymbols(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyStaticUiSymbols);else applyStaticUiSymbols();
 
-/* v10.4.25: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
+/* v10.5.0: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
    sind die Identitaet; Popup-HTML, Kategorie, Name und Listenzeile sind es nicht. */
 var p2mMobileNoteEditing=null;
 var pinNoteSession=Object.create(null);
@@ -2838,12 +2838,82 @@ document.getElementById('categoryEditSave').onclick=function(){
 };
 function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');Object.keys(cats).forEach(function(name){var v=cats[name],lab=document.createElement('div'),cb=document.createElement('input'),sw=document.createElement('span'),txt=document.createElement('span');lab.className='chip';lab.style.cursor='pointer';cb.type='checkbox';cb.checked=map&&categoryLayers[name]?map.hasLayer(categoryLayers[name]):true;sw.className='swatch';sw.style.background=v.color;txt.textContent=v.symbol+' '+name+' ('+v.count+')';cb.onclick=function(e){e.stopPropagation()};cb.onchange=function(){var l=categoryLayers[name];if(!l)return;if(cb.checked)l.addTo(map);else map.removeLayer(l);markFilterApply(false);autoZoomAllContent()};lab.onclick=function(e){if(e.target===cb)return;openCategoryEditor(name,v)};lab.appendChild(cb);lab.appendChild(sw);lab.appendChild(txt);box.appendChild(lab)})}
 function removeElevationLabel(it){if(!it||!it._elevationLayer)return;try{var grp=categoryLayers[it.category];if(grp&&grp.removeLayer)grp.removeLayer(it._elevationLayer);else if(map&&map.hasLayer(it._elevationLayer))map.removeLayer(it._elevationLayer)}catch(e){}it._elevationLayer=null}
-function renderElevationLabel(it){if(!it||!it._pinLayer)return;removeElevationLabel(it);if(!showElevations||!isFinite(it.elevation))return;var ll=it._pinLayer.getLatLng();it._elevationLayer=L.marker(ll,{interactive:false,zIndexOffset:450,icon:L.divIcon({className:'elevation-label-wrap',html:'<div class="elevation-label">'+Math.round(Number(it.elevation))+' m</div>',iconSize:null,iconAnchor:[0,42]})}).addTo(categoryLayers[it.category])}
+function renderElevationLabel(it){
+ if(!it||!it._pinLayer)return;
+ removeElevationLabel(it);
+ var label='';
+ if(p2mInfoMode===1&&isFinite(Number(it.elevation))&&it.elevation!==null)label=Math.round(Number(it.elevation))+' m';
+ if(p2mInfoMode===2){
+  if(it._p2mTemp&&Date.now()-it._p2mTemp.at<15*60*1000&&isFinite(it._p2mTemp.value))
+   label=Math.round(it._p2mTemp.value)+' °C';
+  else label='– °C';
+ }
+ if(!label)return;
+ var ll=it._pinLayer.getLatLng();
+ it._elevationLayer=L.marker(ll,{interactive:false,zIndexOffset:450,icon:L.divIcon({
+  className:'elevation-label-wrap',
+  html:'<div class="elevation-label'+(p2mInfoMode===2?' p2m-temperature-label':'')+'">'+label+'</div>',
+  iconSize:null,iconAnchor:[0,42]
+ })}).addTo(categoryLayers[it.category]);
+ markFilterApplyOne(it);
+}
 function allCurrentPinItems(){return markFilterEntries.filter(function(it){return !!(it&&!it.area&&it._pinLayer)})}
-function refreshElevationLabels(){allCurrentPinItems().forEach(function(it){renderElevationLabel(it)})}
-function syncElevationButton(){var b=document.getElementById('toggleElevations');if(!b)return;b.innerHTML='<span aria-hidden="true">m</span>';b.classList.toggle('active',showElevations);b.classList.toggle('off',!showElevations);b.title=showElevations?'Höhen ausblenden':'Höhen anzeigen';b.setAttribute('aria-label',b.title)}
+function refreshElevationLabels(){allCurrentPinItems().forEach(renderElevationLabel)}
+function syncElevationButton(){
+ var b=document.getElementById('toggleElevations');if(!b)return;
+ var modes=['ℹ','m','°C'];
+ b.textContent=modes[p2mInfoMode];
+ b.classList.toggle('active',p2mInfoMode===1);
+ b.classList.toggle('off',p2mInfoMode===0);
+ b.classList.toggle('p2m-temp-active',p2mInfoMode===2);
+ b.title=['Pin-Informationen: Aus (Tippen für Höhen)','Pin-Informationen: Höhe (Tippen für Temperatur)','Pin-Informationen: Temperatur (Tippen zum Ausschalten)'][p2mInfoMode];
+ b.setAttribute('aria-label',b.title);
+}
+function fetchPinTemperatures(){
+ if(p2mInfoMode!==2||p2mTemperatureBusy)return;
+ var now=Date.now(),pins=allCurrentPinItems();
+ var missing=pins.filter(function(it){return !it._p2mTemp||now-it._p2mTemp.at>=15*60*1000});
+ refreshElevationLabels();
+ if(!missing.length)return;
+ p2mTemperatureBusy=true;
+ var generation=++p2mTemperatureGeneration,position=0,done=0;
+ function next(){
+  if(generation!==p2mTemperatureGeneration){p2mTemperatureBusy=false;return}
+  if(position>=missing.length){p2mTemperatureBusy=false;return}
+  var batch=missing.slice(position,position+20);position+=batch.length;
+  var lats=[],lons=[];
+  batch.forEach(function(it){var ll=it._pinLayer.getLatLng();lats.push(ll.lat);lons.push(ll.lng)});
+  var url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(lats.join(','))+
+   '&longitude='+encodeURIComponent(lons.join(','))+'&current=temperature_2m';
+  fetch(url).then(function(r){if(!r.ok)throw Error('Wetter HTTP '+r.status);return r.json()})
+  .then(function(data){
+   var rows=Array.isArray(data)?data:[data];
+   if(rows.length!==batch.length)throw Error('Unvollständige Wetterdaten');
+   rows.forEach(function(row,i){
+    var value=row&&row.current&&row.current.temperature_2m;
+    if(value!==null&&value!==undefined&&isFinite(Number(value)))
+     batch[i]._p2mTemp={value:Number(value),at:Date.now()};
+   });
+  }).catch(function(){mapStatus.textContent='⚠️ Temperaturdaten nicht vollständig verfügbar.'})
+  .finally(function(){
+   done+=batch.length;
+   if(p2mInfoMode===2)refreshElevationLabels();
+   next();
+  });
+ }
+ next();
+}
+function setP2mInfoMode(mode){
+ p2mInfoMode=((mode%3)+3)%3;
+ showElevations=p2mInfoMode===1;
+ try{localStorage.setItem('showElevations','0')}catch(e){}
+ syncElevationButton();
+ refreshElevationLabels();
+ if(p2mInfoMode===1)fetchMissingElevations();
+ if(p2mInfoMode===2)fetchPinTemperatures();
+}
 function fetchMissingElevations(){if(!showElevations||elevationBusy)return;var pins=allCurrentPinItems(),missing=pins.filter(function(it){return !isFinite(it.elevation)});refreshElevationLabels();if(!missing.length){mapStatus.textContent='✓ Höhen angezeigt.';setTimeout(function(){if(mapStatus.textContent==='✓ Höhen angezeigt.')mapStatus.textContent=''},1600);return}elevationBusy=true;mapStatus.textContent='Lade Höhen für '+missing.length+' Pin'+(missing.length===1?'':'s')+' …';var batches=[];for(var i=0;i<missing.length;i+=100)batches.push(missing.slice(i,i+100));var done=0;function next(){if(!batches.length){elevationBusy=false;refreshElevationLabels();mapStatus.textContent='✓ Höhen geladen.';setTimeout(function(){if(mapStatus.textContent==='✓ Höhen geladen.')mapStatus.textContent=''},1800);return}var batch=batches.shift(),lats=[],lons=[];batch.forEach(function(it){var ll=it._pinLayer.getLatLng();lats.push(ll.lat);lons.push(ll.lng)});var u='https://api.open-meteo.com/v1/elevation?latitude='+encodeURIComponent(lats.join(','))+'&longitude='+encodeURIComponent(lons.join(','));fetch(u).then(function(r){if(!r.ok)throw new Error('Elevation HTTP '+r.status);return r.json()}).then(function(d){var e=d&&d.elevation;if(!Array.isArray(e)||e.length!==batch.length)throw new Error('Ungültige Höhendaten');batch.forEach(function(it,j){if(isFinite(e[j]))it.elevation=Number(e[j]);renderElevationLabel(it)});done+=batch.length;mapStatus.textContent='Lade Höhen … '+done+'/'+missing.length;next()}).catch(function(){elevationBusy=false;mapStatus.textContent='⚠️ Höhen konnten nicht geladen werden.'})}next()}
-function setElevationDisplay(on){showElevations=!!on;try{localStorage.setItem('showElevations',showElevations?'1':'0')}catch(e){}syncElevationButton();if(showElevations)fetchMissingElevations();else refreshElevationLabels()}
+function setElevationDisplay(on){setP2mInfoMode(on?1:0)}
 function build(items){Object.keys(pinDeleteItems).forEach(function(k){delete pinDeleteItems[k]});clearMap();var myBuild=++buildGeneration;buildLegend(items);var labelled=document.getElementById('labelAddresses').checked,areasLabelled=document.getElementById('labelAreas').checked,idx=0,miss=0,missed=[],areaPoints=0;screen.classList.remove('labels-hidden');screen.classList.toggle('hide-address-labels',!labelled);screen.classList.toggle('hide-area-labels',!areasLabelled);labelToggle.classList.toggle('off',!labelled&&!areasLabelled);for(var i=0;i<items.length;i++){if(!categoryLayers[items[i].category])categoryLayers[items[i].category]=L.layerGroup().addTo(map)}
 function noteMissing(x){if(myBuild!==buildGeneration)return;miss++;missed.push(x.query);var box=document.getElementById('notFoundList');box.innerHTML='<b>⚠️ Nicht gefunden ('+missed.length+')</b><br>'+missed.map(function(v){return '• '+esc(v)}).join('<br>')}
 function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.')+(areaPoints?' Flächenpunkte: '+areaPoints.toLocaleString('de-DE')+(isConstrainedTouchDevice()?' (mobil angepasst)':'')+'.':'');if(!miss)setTimeout(function(){if(myBuild===buildGeneration)mapStatus.textContent=''},5000);if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='alltext')markFilterApply(true);return}var x=items[idx],num=idx+1;mapStatus.textContent=(activeProjectCache&&activeProjectCache[projectCacheKey(x)]?'Lade ':'Suche ')+num+' von '+items.length+': '+x.query;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(x)}).addTo(categoryLayers[x.category]);x._pinLayer=marker;allBounds.extend(p);if(p2mHasPinName(x))marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x);p2mSyncNoteDot(x)}markFilterRegister(x);p2mSyncPinBadges(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
@@ -3595,7 +3665,7 @@ if(elevationToggle){
  ['pointerdown','pointerup','touchstart','touchend','mousedown','mouseup'].forEach(function(type){
   elevationToggle.addEventListener(type,function(e){e.stopPropagation()},{passive:true});
  });
- elevationToggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();setElevationDisplay(!showElevations)});
+ elevationToggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();setP2mInfoMode(p2mInfoMode+1)});
 }
 var labelToggle=document.getElementById('labelToggle');
 labelToggle.onclick=function(){
@@ -3646,10 +3716,10 @@ document.addEventListener('click',function(e){
  e.preventDefault();e.stopPropagation();var ll=L.latLng(currentLocationLatLng.lat,currentLocationLatLng.lng);if(map)map.closePopup();chooseCategory(ll)
 });
 var styleSel=document.getElementById('mapStyle');try{var saved=localStorage.getItem('mapStyle');if(saved&&baseMaps[saved])styleSel.value=saved;else if(saved)styleSel.value='standard'}catch(e){}styleSel.onchange=function(){setBase(this.value)};
-var mapStyleButton=document.getElementById('mapStyleButton'),mapStyleMenu=document.getElementById('mapStyleMenu');var esriToggle=document.getElementById('esriReliefToggle');esriToggle.checked=optionalEsriRelief;esriToggle.addEventListener('change',function(e){e.stopPropagation();setOptionalEsriRelief(this.checked)});try{showElevations=localStorage.getItem('showElevations')==='1'}catch(e){}syncElevationButton();
+var mapStyleButton=document.getElementById('mapStyleButton'),mapStyleMenu=document.getElementById('mapStyleMenu');var esriToggle=document.getElementById('esriReliefToggle');esriToggle.checked=optionalEsriRelief;esriToggle.addEventListener('change',function(e){e.stopPropagation();setOptionalEsriRelief(this.checked)});showElevations=false;p2mInfoMode=0;syncElevationButton();
 function syncMapStyleMenu(){var bs=mapStyleMenu.querySelectorAll('[data-map-style]');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('active',bs[i].getAttribute('data-map-style')===styleSel.value)}
 mapStyleButton.onclick=function(e){e.stopPropagation();syncMapStyleMenu();mapStyleMenu.style.display=mapStyleMenu.style.display==='block'?'none':'block'};
-mapStyleMenu.onclick=function(e){if(e.target&&(e.target.id==='esriReliefToggle'||e.target.closest('#esriReliefToggleLabel')))return;if(e.target&&e.target.id==='toggleElevations'){e.preventDefault();e.stopPropagation();setElevationDisplay(!showElevations);mapStyleMenu.style.display='none';return}if(e.target&&e.target.id==='removeGpxTrack'){e.preventDefault();e.stopPropagation();removeImportedGpxTrack();mapStyleMenu.style.display='none';return}var b=e.target.closest('[data-map-style]');if(!b)return;styleSel.value=b.getAttribute('data-map-style');setBase(styleSel.value);syncMapStyleMenu();mapStyleMenu.style.display='none'};
+mapStyleMenu.onclick=function(e){if(e.target&&(e.target.id==='esriReliefToggle'||e.target.closest('#esriReliefToggleLabel')))return;if(e.target&&e.target.id==='toggleElevations'){e.preventDefault();e.stopPropagation();setP2mInfoMode(p2mInfoMode+1);mapStyleMenu.style.display='none';return}if(e.target&&e.target.id==='removeGpxTrack'){e.preventDefault();e.stopPropagation();removeImportedGpxTrack();mapStyleMenu.style.display='none';return}var b=e.target.closest('[data-map-style]');if(!b)return;styleSel.value=b.getAttribute('data-map-style');setBase(styleSel.value);syncMapStyleMenu();mapStyleMenu.style.display='none'};
 document.addEventListener('click',function(e){if(mapStyleMenu.style.display==='block'&&!mapStyleMenu.contains(e.target)&&e.target!==mapStyleButton)mapStyleMenu.style.display='none'});
 var markFilterButton=document.getElementById('markFilterButton'),markFilterPanel=document.getElementById('markFilterPanel');
 markFilterButton.onclick=function(e){e.preventDefault();e.stopPropagation();var open=markFilterPanel.style.display!=='block';markFilterPanel.style.display=open?'block':'none';markFilterButton.setAttribute('aria-expanded',open?'true':'false');if(open){var bar=document.querySelector('.topbar'),r=bar.getBoundingClientRect(),w=markFilterPanel.getBoundingClientRect().width||325;markFilterPanel.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+(r.width-w)/2))+'px';markFilterPanel.style.top=Math.min(r.bottom+8,window.innerHeight-80)+'px';document.getElementById('markFilterText').focus()}};
@@ -3870,7 +3940,7 @@ function openPin2MapProject(doc){
  resetRoutingBeforeImport();
  if(window.pin2mapRestoreStartRoutes)window.pin2mapRestoreStartRoutes(doc.gpxStartRoutes);
  pendingGpxTracks=Array.isArray(doc.gpxTracks)&&doc.gpxTracks.length?doc.gpxTracks:null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();input.value=doc.list;river959Saved=Array.isArray(doc.rivers)?doc.rivers.filter(function(x){return x&&Array.isArray(x.chains)&&typeof x.name==='string'}):[];river980UpdateList();activeProjectCache=(doc.cache&&typeof doc.cache==='object')?doc.cache:{};pinNoteSession={};pinNoteByLocation=Object.create(null);pendingProjectRoute=(doc.route&&typeof doc.route==='object')?doc.route:null;setTimeout(function(){if(map){river959Render();autoZoomAllContent();p2mRefreshLoadedNoteBadges()}},600);
- if(doc.options){document.getElementById('labelAddresses').checked=doc.options.labelAddresses!==false;document.getElementById('labelAreas').checked=doc.options.labelAreas!==false;if(typeof doc.options.optionalEsriRelief==='boolean')setOptionalEsriRelief(doc.options.optionalEsriRelief);if(typeof doc.options.showElevations==='boolean')showElevations=doc.options.showElevations;syncElevationButton();if(doc.options.mapStyle&&baseMaps[doc.options.mapStyle]){document.getElementById('mapStyle').value=doc.options.mapStyle;if(map)setBase(doc.options.mapStyle)}}
+ if(doc.options){document.getElementById('labelAddresses').checked=doc.options.labelAddresses!==false;document.getElementById('labelAreas').checked=doc.options.labelAreas!==false;if(typeof doc.options.optionalEsriRelief==='boolean')setOptionalEsriRelief(doc.options.optionalEsriRelief);showElevations=false;p2mInfoMode=0;syncElevationButton();if(doc.options.mapStyle&&baseMaps[doc.options.mapStyle]){document.getElementById('mapStyle').value=doc.options.mapStyle;if(map)setBase(doc.options.mapStyle)}}
  form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();
  setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else{clearMap();if(pendingGpxTracks)drawPendingGpxTracks()};setTimeout(function(){if(doc.view&&Array.isArray(doc.view.center)&&doc.view.center.length===2&&isFinite(doc.view.zoom))map.setView(doc.view.center,doc.view.zoom);mapStatus.textContent='✓ pin2map-Projekt geladen.'},80)},80)
 }
@@ -3981,7 +4051,7 @@ function syncLegendToggle(){
  legendToggle.title=legendVisible?'Kategorien ausblenden':'Kategorien einblenden';legendToggle.setAttribute('aria-label',legendToggle.title)
 }
 if(legendToggle)legendToggle.onclick=function(e){e.preventDefault();e.stopPropagation();legendVisible=!legendVisible;syncLegendToggle()};
-/* v10.4.25: Ein Tipp auf die freie Karte schliesst Filterdialog und Kategorienliste.
+/* v10.5.0: Ein Tipp auf die freie Karte schliesst Filterdialog und Kategorienliste.
    Die Filterwerte bleiben erhalten; die Karte selbst verarbeitet den Tipp weiter. */
 (function(){
  var mapElement=document.getElementById('map');
@@ -4076,9 +4146,9 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)setT
 
 
 
-/* v10.4.25: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
+/* v10.5.0: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
 
-/* v10.4.25: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
+/* v10.5.0: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
 var p2m41OriginalPopup=pinPopupHtml;
 pinPopupHtml=function(it){
  var html=p2m41OriginalPopup(it),id=it._popupId;
@@ -4534,7 +4604,7 @@ async function importFiles(fileList){
 </style>
 <div id="p2m-editor" role="dialog" aria-modal="true" aria-label="Markdown-Notiz bearbeiten"><header><span id="p2m-editor-title"></span><label id="p2m-editor-copy"><input id="p2m-editor-copy-check" type="checkbox"> Inhalt kopieren</label></header><textarea id="p2m-editor-text" aria-label="Markdown-Notiz" spellcheck="true" placeholder="Markdown-Notiz …"></textarea><footer><button type="button" id="p2m-editor-close" title="Schließen ohne Speichern">×</button><button type="button" id="p2m-editor-delete" class="p2m-editor-delete" title="Notiz löschen">🖋️</button><button type="button" id="p2m-editor-save" title="Notiz speichern">Speichern</button></footer></div>
 <script>
-/* v10.4.25: kompakte Markdown-Notizen und mobiler Vollbildeditor */
+/* v10.5.0: kompakte Markdown-Notizen und mobiler Vollbildeditor */
 function p2mMarkdown(raw){
  var escape=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
  var inline=function(t){return escape(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(_,name,url){return '<a href="'+url.replace(/&quot;/g,'')+'" target="_blank" rel="noopener noreferrer">'+name+'</a>'}).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>')};
@@ -4588,7 +4658,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 1 48px!important;width:48px!important;height:48px!important;min-width:0!important;padding:0!important;border-radius:50%!important;border:1px solid #c7c7cc!important;background:#fff!important;font-size:24px!important;line-height:1!important}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-round-delete{background:#e53935!important;color:#fff!important;border-color:#e53935!important}
 
-/* v10.4.25: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
+/* v10.5.0: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
 :root{--p2m-button-neutral-bg:#e5e5ea;--p2m-button-neutral-fg:#17181c;--p2m-button-neutral-border:#aeb0b9}
 #p2m41-dialog .p2m41-actions button:not(.p2m41-primary){background:var(--p2m-button-neutral-bg)!important;color:var(--p2m-button-neutral-fg)!important;border-color:var(--p2m-button-neutral-border)!important}
 /* Untere Popup-Reihe in der Groesse der oberen runden Buttons. */
@@ -4597,7 +4667,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button[data-p2m-url],
 .p2m-popup .p2m-bottom-groups>button[data-p2m-url]{font-size:14px!important;font-weight:600!important;letter-spacing:-.3px!important}
 
-/* v10.4.25: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
+/* v10.5.0: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
 #p2m41-dialog .p2m41-cats{gap:9px;padding:4px;box-sizing:border-box}
 #p2m41-dialog .p2m41-cats button{min-height:44px;height:44px;padding:3px 5px;font-size:23px;line-height:1.1;box-sizing:border-box;background:var(--p2m-button-neutral-bg);color:var(--p2m-button-neutral-fg)}
 #p2m41-dialog .p2m41-cats button[aria-pressed=true]{outline:none!important;box-shadow:inset 0 0 0 3px #087df5}
@@ -4606,7 +4676,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 </style>
 
 <style>
-/* v10.4.25: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
+/* v10.5.0: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
 :root{--p2m-danger-bg:#e53935;--p2m-danger-fg:#fff}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-danger-x,
 .p2m-popup .p2m-bottom-groups>button.p2m-danger-x{
@@ -4710,7 +4780,7 @@ document.addEventListener('click',function(e){
 },true);
 </script>
 <style>
-/* v10.4.25: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
+/* v10.5.0: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
 :root{--p2m-collapse-ink:#222;--p2m-collapse-size:20px}
 .p2m-collapse-icon{display:block;position:relative;width:var(--p2m-collapse-size);height:var(--p2m-collapse-size);flex:0 0 var(--p2m-collapse-size);margin:auto}
 .p2m-collapse-icon::before{content:"";position:absolute;left:2px;top:3px;border-left:8px solid transparent;border-right:8px solid transparent;border-top:9px solid var(--p2m-collapse-ink)}
@@ -4729,7 +4799,7 @@ document.addEventListener('click',function(e){
 .p2m51-notice-card{background:#fff;border-radius:14px;padding:20px;width:min(420px,100%);font:17px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 10px 30px #0003;box-sizing:border-box}
 .p2m51-notice-card button{display:block;margin:20px 0 0 auto;padding:9px 15px;border:1px solid var(--p2m-button-neutral-border);background:var(--p2m-button-neutral-bg);color:#111;border-radius:9px;font-size:16px}
 
-/* v10.4.25: Aktiver Filter: vollflächiges Rot ohne Schattierung. */
+/* v10.5.0: Aktiver Filter: vollflächiges Rot ohne Schattierung. */
 #mapScreen .topbar .quick-place > #markFilterButton.p2m-filter-active{background:#e53935!important;background-image:none!important;border-color:#e53935!important;color:#fff!important;box-shadow:none!important;filter:none!important;opacity:1!important;}
 </style>
 </body></html>
