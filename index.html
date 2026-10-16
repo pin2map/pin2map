@@ -517,12 +517,12 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 
 
 #areaSearchBox.keyboard-visible{bottom:auto!important;transform:translateX(-50%)!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-/* v10.5.18: kombinierbare Inhaltsfilter, grosse native iPhone-Checkboxen. */
+/* v10.5.26: kombinierbare Inhaltsfilter, grosse native iPhone-Checkboxen. */
 #markFilterPanel .p2m-filter-options{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px;padding-top:11px;border-top:1px solid #dedee3}
 #markFilterPanel .p2m-filter-options label{display:inline-flex;align-items:center;gap:7px;min-height:38px;cursor:pointer;touch-action:manipulation;font-size:14px;white-space:nowrap;user-select:none;-webkit-user-select:none}
 #markFilterPanel .p2m-filter-options input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;accent-color:#087df5;width:20px;height:20px;min-width:20px;margin:0;pointer-events:auto}
 
-/* v10.5.18: Einheitlicher Status der Filter-Schaltfläche (inkl. iPhone). */
+/* v10.5.26: Einheitlicher Status der Filter-Schaltfläche (inkl. iPhone). */
 #mapScreen .topbar .quick-place #markFilterButton:not(.p2m-filter-active){background:#fff!important;border:1px solid #2687d8!important;color:#175a96!important;}
 #mapScreen .topbar .quick-place #markFilterButton.p2m-filter-active{background:#e53935!important;border:1px solid #e53935!important;color:#fff!important;}
 
@@ -1076,7 +1076,7 @@ html body #mapScreen #placeResultChooser {
 }
 html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButtons button {max-width:100%!important;box-sizing:border-box!important}
 
-/* v10.5.18: zweifarbige Modus-Schaltfläche passend zu den Pin-Labels */
+/* v10.5.26: zweifarbige Modus-Schaltfläche passend zu den Pin-Labels */
 #toggleElevations.p2m-daily-active,#toggleElevations.p2m-sun-active{display:flex!important;align-items:stretch!important;justify-content:stretch!important}
 #toggleElevations .p2m-mode-left,#toggleElevations .p2m-mode-right{display:flex;align-items:center;justify-content:center;width:50%;height:100%;min-width:0;font-weight:700;line-height:1}
 #toggleElevations.p2m-daily-active .p2m-mode-left{background:#c7e8ff;color:#111}
@@ -1085,13 +1085,13 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 #toggleElevations.p2m-sun-active .p2m-mode-right{background:#183b78;color:#fff}
 </style>
 <style>
-/* v10.5.18: kompakte, direkt bearbeitbare Klartext-Notiz */
+/* v10.5.26: kompakte, direkt bearbeitbare Klartext-Notiz */
 .p2m-popup .p2m-note-preview{padding:0;margin:6px 0 8px;max-height:none;overflow:visible;border:1px solid #d3d9e2;border-radius:9px}
 .p2m-popup textarea.p2m-inline-note{display:block;box-sizing:border-box;width:100%;height:76px;min-height:54px;max-height:130px;resize:vertical;margin:0;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:1.4;outline-offset:-2px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .p2m-popup textarea.p2m-inline-note:focus{outline:2px solid #1683f5}
 </style>
 <style>
-/* v10.5.18: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
+/* v10.5.26: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 #mapScreen .leaflet-popup-content .p2m-popup{width:100%;min-width:0}
 .p2m-popup .p2m-quick-actions{gap:8px!important;padding:7px 5px!important;justify-content:space-evenly!important}
@@ -1102,7 +1102,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){#mapScreen .leaflet-popup-content{width:calc(100vw - 58px)!important}.p2m-popup .p2m-quick-actions{gap:4px!important}.p2m-popup .p2m-edit-buttons button{min-width:0}}
 </style>
 <style>
-/* v10.5.18: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
+/* v10.5.26: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 .p2m-popup .p2m-pin-title{margin:0 0 5px;overflow-wrap:anywhere}
 .p2m-popup .p2m-five-actions{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid #c7c7cc;border-radius:10px;padding:7px 6px;margin:0 0 8px}
@@ -1119,7 +1119,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){.p2m-popup .p2m-bottom-groups{grid-template-columns:57px minmax(0,1fr) 60px;gap:3px}.p2m-popup .p2m-bottom-pin-buttons button[data-rename-pin],.p2m-popup .p2m-bottom-pin-buttons button[data-change-pin-category]{width:45px;font-size:11px}.p2m-popup .p2m-bottom-groups button{width:37px;height:37px}}
  .p2m-popup textarea[data-p2m-inline-note]{font-size:16px!important} </style>
 <style>
-/* v10.5.18: kompakte Gruppierung und gesicherte Klartext-Eingabe */
+/* v10.5.26: kompakte Gruppierung und gesicherte Klartext-Eingabe */
 .p2m-popup .p2m-pin-title{font-weight:700!important}
 .p2m-popup .p2m-five-actions{display:grid!important;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px!important;padding:0!important;border:0!important;align-items:stretch!important}
 .p2m-popup .p2m-five-actions fieldset{display:flex;align-items:center;justify-content:space-around;gap:3px;min-width:0;margin:0;padding:5px 4px 6px;border:1px solid #c7c7cc;border-radius:10px;box-sizing:border-box}
@@ -1150,7 +1150,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 html,body{max-width:100%;overflow-x:hidden}
 </style>
 <style>
-/* v10.5.18: Leaflet-Schliessen-X exakt mittig. */
+/* v10.5.26: Leaflet-Schliessen-X exakt mittig. */
 #mapScreen .leaflet-popup-close-button{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:0!important;line-height:1!important;font-family:Arial,sans-serif!important}
 </style>
 <style id="p2m-v10354-style">
@@ -1163,9 +1163,25 @@ html,body{max-width:100%;overflow-x:hidden}
 #mapScreen .emoji-marker.p2m-has-gpx .emoji-pin::before{content:"";position:absolute;left:50%;bottom:0px;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#e63c3c;border:1.5px solid white;box-shadow:0 0 0 1px #a52b2b;pointer-events:none;z-index:2}
 #mapScreen .emoji-marker.p2m-has-url .emoji-pin{background-image:linear-gradient(45deg,#56b9e9 0%,#56b9e9 17%,transparent 18%)!important}
 </style>
+<style id="p2m-route-details-chevron-fix">
+/* Routendetails: ein einzelnes Dreieck, nach unten geschlossen / nach oben offen. */
+#routeInfo #routeDetailsToggle{position:relative!important}
+#routeInfo #routeDetailsToggle span{display:none!important}
+#routeInfo #routeDetailsToggle::after{content:none!important;display:none!important}
+#routeInfo #routeDetailsToggle::before{
+ content:""!important;display:block!important;position:absolute!important;
+ left:50%!important;top:50%!important;width:17px!important;height:12px!important;
+ border:0!important;border-radius:0!important;background:#17181c!important;
+ clip-path:polygon(0 0,100% 0,50% 100%)!important;
+ transform:translate(-50%,-50%) rotate(0deg)!important;
+}
+#routeInfo.route-details-open #routeDetailsToggle::before{
+ transform:translate(-50%,-50%) rotate(180deg)!important;
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.18)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.26)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1783,7 +1799,7 @@ function isStandaloneWebApp(){
  return !!((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true)
 }
 function restorePin2MapAfterExternalView(){
- /* v10.5.18: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
+ /* v10.5.26: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
  ['mapActionChooser','areaClickChooser'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none'});
  try{document.activeElement&&document.activeElement.blur&&document.activeElement.blur()}catch(e){}
  try{if(map){map.dragging&&map.dragging.enable();map.touchZoom&&map.touchZoom.enable();map.doubleClickZoom&&map.doubleClickZoom.enable();map.scrollWheelZoom&&map.scrollWheelZoom.enable();map.invalidateSize(false)}}catch(e){}
@@ -2184,7 +2200,7 @@ function applyStaticUiSymbols(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyStaticUiSymbols);else applyStaticUiSymbols();
 
-/* v10.5.18: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
+/* v10.5.26: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
    sind die Identitaet; Popup-HTML, Kategorie, Name und Listenzeile sind es nicht. */
 var p2mMobileNoteEditing=null;
 var pinNoteSession=Object.create(null);
@@ -2507,7 +2523,7 @@ function currentRouteItems(){return (routeStartItem?[routeStartItem]:[]).concat(
 function routePosition(it){var arr=currentRouteItems();for(var i=0;i<arr.length;i++)if(arr[i]===it)return i+1;return 0}
 function routeRoleForItem(it){if(it===routeStartItem&&it===routeTargetItem)return 'both';if(it===routeStartItem)return 'start';if(it===routeTargetItem)return 'target';if(routeWaypoints.indexOf(it)>=0)return 'waypoint';return ''}
 function refreshRoutePinPresentation(){
- var seen=[];Object.keys(pinDeleteItems).forEach(function(k){var it=pinDeleteItems[k];if(!it||seen.indexOf(it)>=0)return;seen.push(it);var pos=routePosition(it),label=(pos?'('+pos+') ':'')+routeItemName(it);if(it._pinLayer){it._pinLayer.setIcon(icon(it.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));p2mSyncPinBadges(it);var tt=it._pinLayer.getTooltip&&it._pinLayer.getTooltip();if(tt)tt.setContent(label);it._pinLayer.setPopupContent(pinPopupHtml(it))}})
+ var seen=[];var pins=(typeof markFilterEntries!=='undefined'&&Array.isArray(markFilterEntries)?markFilterEntries:[]).concat(Object.keys(pinDeleteItems).map(function(k){return pinDeleteItems[k]}));pins.forEach(function(it){if(!it||it.area||!it._pinLayer||seen.indexOf(it)>=0)return;seen.push(it);var pos=routePosition(it),label=(pos?'('+pos+') ':'')+routeItemName(it);it._pinLayer.setIcon(icon(it.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));p2mSyncPinBadges(it);var tt=it._pinLayer.getTooltip&&it._pinLayer.getTooltip();if(tt)tt.setContent(label);it._pinLayer.setPopupContent(pinPopupHtml(it))})
 }
 function routeModeButtonSymbol(){
  return uiSymbol(routeMode==='bicycle'?'bicycle':routeMode==='pedestrian'?'pedestrian':routeMode==='transit'?'transit':'driving')
@@ -2571,7 +2587,7 @@ function addVisiblePinsToRoute(){
  if(!map||!routeStartItem||!routeTargetItem){mapStatus.textContent='⚠️ Bitte zuerst Start und Ziel festlegen.';return}
  if(routeMode==='transit'){mapStatus.textContent='⚠️ ÖPNV unterstützt derzeit keine Zwischenziele.';return}
  var bounds=map.getBounds(),used=currentRouteItems(),seen=[],candidates=[];
- Object.keys(pinDeleteItems).forEach(function(k){var it=pinDeleteItems[k];if(!it||!it._pinLayer||seen.indexOf(it)>=0)return;seen.push(it);if(used.indexOf(it)>=0)return;var ll=it._pinLayer.getLatLng();if(bounds.contains(ll))candidates.push(it)});
+ allCurrentPinItems().forEach(function(it){if(!it||!it._pinLayer||seen.indexOf(it)>=0)return;seen.push(it);if(used.indexOf(it)>=0)return;if(!map.hasLayer(it._pinLayer))return;var ll=it._pinLayer.getLatLng();if(bounds.contains(ll))candidates.push(it)});
  candidates.sort(function(a,b){return pinNumberForItem(a)-pinNumberForItem(b)});
  if(!candidates.length){mapStatus.textContent='Keine weiteren sichtbaren Pins gefunden.';return}
  if(routeOrderMode==='optimal'){
@@ -4268,7 +4284,85 @@ document.getElementById('projectFileInput').onchange=function(){
  });
 };
 
-function renderMapPng(){map.invalidateSize(true);return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})}).then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})}).then(function(){return html2canvas(screen,{useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:Math.min(window.devicePixelRatio||1,2),ignoreElements:function(el){return el.classList&&(el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus')||el.classList.contains('map-ui-control')||el.classList.contains('leaflet-control-zoom')||el.classList.contains('label-toggle')||el.id==='autoZoomButton')}})}).then(function(canvas){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})})}
+/* Screenshot: only map layers and scale; redraw split labels directly on PNG canvas.
+   html2canvas can render the rounded label backgrounds without their inline-flex text. */
+function p2mScreenshotSplitLabels(canvas){
+ var root=screen.getBoundingClientRect(),scaleX=canvas.width/root.width,scaleY=canvas.height/root.height;
+ var ctx=canvas.getContext('2d');
+ screen.querySelectorAll('.elevation-label.p2m-daily-label,.elevation-label.p2m-sun-label').forEach(function(label){
+  if(!label.getClientRects().length)return;
+  var wrap=label.closest('.leaflet-marker-icon');
+  if(wrap&&getComputedStyle(wrap).display==='none')return;
+  var r=label.getBoundingClientRect();
+  if(r.right<=root.left||r.left>=root.right||r.bottom<=root.top||r.top>=root.bottom)return;
+  var parts=Array.from(label.querySelectorAll('.p2m-label-half'));
+  if(parts.length!==2)return;
+  ctx.save();
+  var x0=(r.left-root.left)*scaleX,y0=(r.top-root.top)*scaleY;
+  var w0=r.width*scaleX,h0=r.height*scaleY;
+  var rad=Math.min(h0/2,w0/2);
+  function roundedPath(){
+   ctx.beginPath();
+   ctx.moveTo(x0+rad,y0);
+   ctx.lineTo(x0+w0-rad,y0);
+   ctx.quadraticCurveTo(x0+w0,y0,x0+w0,y0+rad);
+   ctx.lineTo(x0+w0,y0+h0-rad);
+   ctx.quadraticCurveTo(x0+w0,y0+h0,x0+w0-rad,y0+h0);
+   ctx.lineTo(x0+rad,y0+h0);
+   ctx.quadraticCurveTo(x0,y0+h0,x0,y0+h0-rad);
+   ctx.lineTo(x0,y0+rad);
+   ctx.quadraticCurveTo(x0,y0,x0+rad,y0);
+   ctx.closePath();
+  }
+  roundedPath();ctx.clip();
+  parts.forEach(function(part,i){
+   var pr=part.getBoundingClientRect();
+   var x=(pr.left-root.left)*scaleX,y=(pr.top-root.top)*scaleY,w=pr.width*scaleX,h=pr.height*scaleY;
+   if(!w||!h)return;
+   var st=getComputedStyle(part),fs=parseFloat(st.fontSize)||12;
+   ctx.fillStyle=st.backgroundColor;ctx.fillRect(x,y,w,h);
+   ctx.font=(st.fontWeight||'700')+' '+(fs*scaleY)+'px '+(st.fontFamily||'sans-serif');
+   ctx.fillStyle=st.color;ctx.textAlign='center';ctx.textBaseline='middle';
+   ctx.fillText(part.textContent.trim(),x+w/2,y+h/2);
+  });
+  // Match the thin rounded outline of the live Leaflet label.
+  roundedPath();
+  ctx.lineWidth=Math.max(1,Math.min(scaleX,scaleY));
+  ctx.strokeStyle=getComputedStyle(label).borderColor||'#a9a9a9';
+  ctx.stroke();
+  ctx.restore();
+ });
+}
+function renderMapPng(){
+ map.invalidateSize(true);
+ return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})})
+ .then(function(){return new Promise(function(resolve){setTimeout(resolve,250)})})
+ .then(function(){return html2canvas(screen,{
+  useCORS:true,allowTaint:false,backgroundColor:'#fff',scale:1,
+  ignoreElements:function(el){
+   if(!el.classList)return false;
+   if(el.classList.contains('elevation-label')&&(el.classList.contains('p2m-daily-label')||el.classList.contains('p2m-sun-label')))return true;
+   if(el.classList.contains('leaflet-control-container'))return false;
+   return el.classList.contains('topbar')||el.classList.contains('bottom')||el.classList.contains('mapStatus')||el.classList.contains('map-ui-control')||el.classList.contains('leaflet-control-zoom')||el.classList.contains('label-toggle')||el.id==='autoZoomButton'||el.classList.contains('route-info')||el.classList.contains('leaflet-popup')||el.classList.contains('leaflet-control-attribution');
+  },
+  onclone:function(doc){
+   var cloned=doc.getElementById('mapScreen');
+   if(!cloned)return;
+   Array.from(cloned.children).forEach(function(child){if(child.id!=='map')child.style.setProperty('display','none','important')});
+   cloned.querySelectorAll('.leaflet-control-container .leaflet-control').forEach(function(el){if(!el.classList.contains('leaflet-control-scale'))el.style.setProperty('display','none','important')});
+   cloned.querySelectorAll('.leaflet-control-scale').forEach(function(el){el.style.setProperty('display','block','important')});
+   // html2canvas exaggerates Leaflet tooltip shadows and outlines.
+   cloned.querySelectorAll('.leaflet-tooltip.address-label').forEach(function(el){
+    el.style.setProperty('box-shadow','none','important');
+    el.style.setProperty('filter','none','important');
+    el.style.setProperty('outline','none','important');
+    el.style.setProperty('border','1px solid #777','important');
+    el.style.setProperty('border-radius','5px','important');
+   });
+  }
+ })})
+ .then(function(canvas){p2mScreenshotSplitLabels(canvas);return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})});
+}
 document.getElementById('copyMap').onclick=function(){var btn=this;if(!window.html2canvas){mapStatus.textContent='Die Screenshot-Funktion konnte nicht geladen werden. Bitte Seite neu laden.';return}if(!navigator.clipboard||!window.ClipboardItem||!navigator.clipboard.write){mapStatus.textContent='Bild-Zwischenablage wird in diesem Browser nicht unterstützt. Bitte die Seite in Safari über HTTPS öffnen.';return}btn.disabled=true;mapStatus.textContent='Erzeuge Kartenbild …';var item;try{item=new ClipboardItem({'image/png':renderMapPng()})}catch(e){mapStatus.textContent='Kopieren wird von diesem Browser nicht unterstützt.';btn.disabled=false;return}navigator.clipboard.write([item]).then(function(){mapStatus.textContent='✓ Karte kopiert.'}).catch(function(){mapStatus.textContent='Kopieren nicht möglich. Bitte in Safari über HTTPS öffnen und erneut tippen.'}).then(function(){btn.disabled=false})};
 function refreshMapSize(){if(map&&screen.style.display!=='none')setTimeout(function(){map.invalidateSize(true)},180)}
 window.addEventListener('resize',refreshMapSize);
@@ -4289,7 +4383,7 @@ function syncLegendToggle(){
  legendToggle.title=legendVisible?'Kategorien ausblenden':'Kategorien einblenden';legendToggle.setAttribute('aria-label',legendToggle.title)
 }
 if(legendToggle)legendToggle.onclick=function(e){e.preventDefault();e.stopPropagation();legendVisible=!legendVisible;syncLegendToggle()};
-/* v10.5.18: Ein Tipp auf die freie Karte schliesst Filterdialog und Kategorienliste.
+/* v10.5.26: Ein Tipp auf die freie Karte schliesst Filterdialog und Kategorienliste.
    Die Filterwerte bleiben erhalten; die Karte selbst verarbeitet den Tipp weiter. */
 (function(){
  var mapElement=document.getElementById('map');
@@ -4384,9 +4478,9 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)setT
 
 
 
-/* v10.5.18: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
+/* v10.5.26: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
 
-/* v10.5.18: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
+/* v10.5.26: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
 var p2m41OriginalPopup=pinPopupHtml;
 pinPopupHtml=function(it){
  var html=p2m41OriginalPopup(it),id=it._popupId;
@@ -4842,7 +4936,7 @@ async function importFiles(fileList){
 </style>
 <div id="p2m-editor" role="dialog" aria-modal="true" aria-label="Markdown-Notiz bearbeiten"><header><span id="p2m-editor-title"></span><label id="p2m-editor-copy"><input id="p2m-editor-copy-check" type="checkbox"> Inhalt kopieren</label></header><textarea id="p2m-editor-text" aria-label="Markdown-Notiz" spellcheck="true" placeholder="Markdown-Notiz …"></textarea><footer><button type="button" id="p2m-editor-close" title="Schließen ohne Speichern">×</button><button type="button" id="p2m-editor-delete" class="p2m-editor-delete" title="Notiz löschen">🖋️</button><button type="button" id="p2m-editor-save" title="Notiz speichern">Speichern</button></footer></div>
 <script>
-/* v10.5.18: kompakte Markdown-Notizen und mobiler Vollbildeditor */
+/* v10.5.26: kompakte Markdown-Notizen und mobiler Vollbildeditor */
 function p2mMarkdown(raw){
  var escape=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
  var inline=function(t){return escape(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(_,name,url){return '<a href="'+url.replace(/&quot;/g,'')+'" target="_blank" rel="noopener noreferrer">'+name+'</a>'}).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>')};
@@ -4896,7 +4990,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 1 48px!important;width:48px!important;height:48px!important;min-width:0!important;padding:0!important;border-radius:50%!important;border:1px solid #c7c7cc!important;background:#fff!important;font-size:24px!important;line-height:1!important}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-round-delete{background:#e53935!important;color:#fff!important;border-color:#e53935!important}
 
-/* v10.5.18: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
+/* v10.5.26: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
 :root{--p2m-button-neutral-bg:#e5e5ea;--p2m-button-neutral-fg:#17181c;--p2m-button-neutral-border:#aeb0b9}
 #p2m41-dialog .p2m41-actions button:not(.p2m41-primary){background:var(--p2m-button-neutral-bg)!important;color:var(--p2m-button-neutral-fg)!important;border-color:var(--p2m-button-neutral-border)!important}
 /* Untere Popup-Reihe in der Groesse der oberen runden Buttons. */
@@ -4905,7 +4999,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button[data-p2m-url],
 .p2m-popup .p2m-bottom-groups>button[data-p2m-url]{font-size:14px!important;font-weight:600!important;letter-spacing:-.3px!important}
 
-/* v10.5.18: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
+/* v10.5.26: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
 #p2m41-dialog .p2m41-cats{gap:9px;padding:4px;box-sizing:border-box}
 #p2m41-dialog .p2m41-cats button{min-height:44px;height:44px;padding:3px 5px;font-size:23px;line-height:1.1;box-sizing:border-box;background:var(--p2m-button-neutral-bg);color:var(--p2m-button-neutral-fg)}
 #p2m41-dialog .p2m41-cats button[aria-pressed=true]{outline:none!important;box-shadow:inset 0 0 0 3px #087df5}
@@ -4914,7 +5008,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 </style>
 
 <style>
-/* v10.5.18: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
+/* v10.5.26: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
 :root{--p2m-danger-bg:#e53935;--p2m-danger-fg:#fff}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-danger-x,
 .p2m-popup .p2m-bottom-groups>button.p2m-danger-x{
@@ -5018,7 +5112,7 @@ document.addEventListener('click',function(e){
 },true);
 </script>
 <style>
-/* v10.5.18: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
+/* v10.5.26: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
 :root{--p2m-collapse-ink:#222;--p2m-collapse-size:20px}
 .p2m-collapse-icon{display:block;position:relative;width:var(--p2m-collapse-size);height:var(--p2m-collapse-size);flex:0 0 var(--p2m-collapse-size);margin:auto}
 .p2m-collapse-icon::before{content:"";position:absolute;left:2px;top:3px;border-left:8px solid transparent;border-right:8px solid transparent;border-top:9px solid var(--p2m-collapse-ink)}
@@ -5028,6 +5122,10 @@ document.addEventListener('click',function(e){
 #routeInfo #routeDetailsToggle,#routeInfo #routeCollapseToggle{font-size:0!important}
 #routeInfo #routeDetailsToggle::before,#routeInfo #routeCollapseToggle::before{content:""!important;position:absolute!important;left:50%!important;top:50%!important;width:16px!important;height:9px!important;border:0!important;border-radius:0!important;background:var(--p2m-collapse-ink)!important;clip-path:polygon(0 0,100% 0,50% 100%)!important;transform:translate(-50%,-75%)!important}
 #routeInfo #routeDetailsToggle::after,#routeInfo #routeCollapseToggle::after{content:""!important;position:absolute!important;left:50%!important;top:calc(50% + 5px)!important;width:16px!important;height:4px!important;background:var(--p2m-collapse-ink)!important;transform:translateX(-50%)!important;border-radius:1px!important}
+/* Vorrang vor dem gemeinsamen Minimieren-Symbol. */
+#routeInfo #routeDetailsToggle::after{content:none!important;display:none!important}
+#routeInfo #routeDetailsToggle::before{width:17px!important;height:12px!important;top:50%!important;background:#17181c!important;clip-path:polygon(0 0,100% 0,50% 100%)!important;transform:translate(-50%,-50%) rotate(0deg)!important}
+#routeInfo.route-details-open #routeDetailsToggle::before{transform:translate(-50%,-50%) rotate(180deg)!important}
 /* Mobiler Eingabedialog bleibt im sichtbaren Bereich auf stabiler Hoehe. */
 @media(max-width:700px){
  #p2m41-dialog{align-items:flex-start!important;justify-content:center!important}
@@ -5037,7 +5135,7 @@ document.addEventListener('click',function(e){
 .p2m51-notice-card{background:#fff;border-radius:14px;padding:20px;width:min(420px,100%);font:17px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 10px 30px #0003;box-sizing:border-box}
 .p2m51-notice-card button{display:block;margin:20px 0 0 auto;padding:9px 15px;border:1px solid var(--p2m-button-neutral-border);background:var(--p2m-button-neutral-bg);color:#111;border-radius:9px;font-size:16px}
 
-/* v10.5.18: Aktiver Filter: vollflächiges Rot ohne Schattierung. */
+/* v10.5.26: Aktiver Filter: vollflächiges Rot ohne Schattierung. */
 #mapScreen .topbar .quick-place > #markFilterButton.p2m-filter-active{background:#e53935!important;background-image:none!important;border-color:#e53935!important;color:#fff!important;box-shadow:none!important;filter:none!important;opacity:1!important;}
 </style>
 </body></html>
