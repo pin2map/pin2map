@@ -517,12 +517,12 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 
 
 #areaSearchBox.keyboard-visible{bottom:auto!important;transform:translateX(-50%)!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-/* v10.5.15: kombinierbare Inhaltsfilter, grosse native iPhone-Checkboxen. */
+/* v10.5.18: kombinierbare Inhaltsfilter, grosse native iPhone-Checkboxen. */
 #markFilterPanel .p2m-filter-options{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px;padding-top:11px;border-top:1px solid #dedee3}
 #markFilterPanel .p2m-filter-options label{display:inline-flex;align-items:center;gap:7px;min-height:38px;cursor:pointer;touch-action:manipulation;font-size:14px;white-space:nowrap;user-select:none;-webkit-user-select:none}
 #markFilterPanel .p2m-filter-options input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;accent-color:#087df5;width:20px;height:20px;min-width:20px;margin:0;pointer-events:auto}
 
-/* v10.5.15: Einheitlicher Status der Filter-Schaltfläche (inkl. iPhone). */
+/* v10.5.18: Einheitlicher Status der Filter-Schaltfläche (inkl. iPhone). */
 #mapScreen .topbar .quick-place #markFilterButton:not(.p2m-filter-active){background:#fff!important;border:1px solid #2687d8!important;color:#175a96!important;}
 #mapScreen .topbar .quick-place #markFilterButton.p2m-filter-active{background:#e53935!important;border:1px solid #e53935!important;color:#fff!important;}
 
@@ -558,6 +558,14 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 .p2m-url-modal-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
 .p2m-url-modal-actions button{border:0;border-radius:10px;padding:11px 14px;font-size:14px;cursor:pointer}
 #p2mUrlCancel{background:#e6e7ea;color:#222}#p2mUrlCopy{background:#087df5;color:#fff}
+
+/* Zweifarbige Pin-Labels für Tagesminimum/-maximum und Sonnenzeiten. */
+.elevation-label.p2m-daily-label,.elevation-label.p2m-sun-label{display:inline-flex;align-items:stretch;padding:0;overflow:hidden;border-radius:999px;background:transparent;white-space:nowrap}
+.elevation-label .p2m-label-half{display:inline-block;padding:3px 6px;line-height:1.25;white-space:nowrap}
+.elevation-label .p2m-label-min{background:#c7e8ff;color:#111}
+.elevation-label .p2m-label-max{background:#ffc9c9;color:#111}
+.elevation-label .p2m-label-rise{background:#fff0a3;color:#111}
+.elevation-label .p2m-label-set{background:#183b78;color:#fff}
 </style>
 
 <meta name="pin2map-build" content="v8.2">
@@ -639,7 +647,9 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 #toggleElevations{position:absolute!important;z-index:1210!important;pointer-events:auto!important;touch-action:manipulation!important;top:max(122px,calc(env(safe-area-inset-top) + 122px))!important;right:max(10px,env(safe-area-inset-right))!important;bottom:auto!important;width:46px!important;height:46px!important;padding:0!important;border-radius:50%!important;background:rgba(255,255,255,.96)!important;color:#111!important;box-shadow:0 2px 10px #0003!important;font:700 17px/46px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;text-align:center!important}
 #toggleElevations.active{background:#e5e5ea!important;color:#222!important}
 #toggleElevations.off{opacity:.55!important}
-#toggleElevations.p2m-daily-active{background:linear-gradient(90deg,#7db8f5 0%,#7db8f5 50%,#ffffff 50%,#ffffff 100%)!important;color:#263447!important;opacity:1!important;font-size:14px!important}
+#toggleElevations.p2m-daily-active{background:transparent!important;color:#111!important;opacity:1!important;font-size:18px!important;padding:0!important;overflow:hidden!important}
+#toggleElevations.p2m-sun-active{background:transparent!important;color:#111!important;opacity:1!important;font-size:25px!important;letter-spacing:0!important;padding:0!important;overflow:hidden!important}
+.elevation-label.p2m-sun-label{background:#fff;border-color:#b7b7b7;white-space:nowrap}
 .elevation-label.p2m-daily-label{background:#f4f6ff;border-color:#9e9ebd;white-space:nowrap}
 #toggleElevations.p2m-temp-active{background:#f4b4ad!important;color:#7b2520!important;opacity:1!important}\n.elevation-label.p2m-temperature-label{background:#fff0ee;border-color:#cb7770}
 @media(max-width:600px){#toggleElevations{top:max(120px,calc(env(safe-area-inset-top) + 120px))!important;right:max(8px,env(safe-area-inset-right))!important}}
@@ -1065,15 +1075,23 @@ html body #mapScreen #placeResultChooser {
  box-sizing:border-box!important;
 }
 html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButtons button {max-width:100%!important;box-sizing:border-box!important}
+
+/* v10.5.18: zweifarbige Modus-Schaltfläche passend zu den Pin-Labels */
+#toggleElevations.p2m-daily-active,#toggleElevations.p2m-sun-active{display:flex!important;align-items:stretch!important;justify-content:stretch!important}
+#toggleElevations .p2m-mode-left,#toggleElevations .p2m-mode-right{display:flex;align-items:center;justify-content:center;width:50%;height:100%;min-width:0;font-weight:700;line-height:1}
+#toggleElevations.p2m-daily-active .p2m-mode-left{background:#c7e8ff;color:#111}
+#toggleElevations.p2m-daily-active .p2m-mode-right{background:#ffc9c9;color:#111}
+#toggleElevations.p2m-sun-active .p2m-mode-left{background:#fff0a3;color:#111}
+#toggleElevations.p2m-sun-active .p2m-mode-right{background:#183b78;color:#fff}
 </style>
 <style>
-/* v10.5.15: kompakte, direkt bearbeitbare Klartext-Notiz */
+/* v10.5.18: kompakte, direkt bearbeitbare Klartext-Notiz */
 .p2m-popup .p2m-note-preview{padding:0;margin:6px 0 8px;max-height:none;overflow:visible;border:1px solid #d3d9e2;border-radius:9px}
 .p2m-popup textarea.p2m-inline-note{display:block;box-sizing:border-box;width:100%;height:76px;min-height:54px;max-height:130px;resize:vertical;margin:0;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:1.4;outline-offset:-2px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .p2m-popup textarea.p2m-inline-note:focus{outline:2px solid #1683f5}
 </style>
 <style>
-/* v10.5.15: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
+/* v10.5.18: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 #mapScreen .leaflet-popup-content .p2m-popup{width:100%;min-width:0}
 .p2m-popup .p2m-quick-actions{gap:8px!important;padding:7px 5px!important;justify-content:space-evenly!important}
@@ -1084,7 +1102,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){#mapScreen .leaflet-popup-content{width:calc(100vw - 58px)!important}.p2m-popup .p2m-quick-actions{gap:4px!important}.p2m-popup .p2m-edit-buttons button{min-width:0}}
 </style>
 <style>
-/* v10.5.15: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
+/* v10.5.18: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 .p2m-popup .p2m-pin-title{margin:0 0 5px;overflow-wrap:anywhere}
 .p2m-popup .p2m-five-actions{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid #c7c7cc;border-radius:10px;padding:7px 6px;margin:0 0 8px}
@@ -1101,7 +1119,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){.p2m-popup .p2m-bottom-groups{grid-template-columns:57px minmax(0,1fr) 60px;gap:3px}.p2m-popup .p2m-bottom-pin-buttons button[data-rename-pin],.p2m-popup .p2m-bottom-pin-buttons button[data-change-pin-category]{width:45px;font-size:11px}.p2m-popup .p2m-bottom-groups button{width:37px;height:37px}}
  .p2m-popup textarea[data-p2m-inline-note]{font-size:16px!important} </style>
 <style>
-/* v10.5.15: kompakte Gruppierung und gesicherte Klartext-Eingabe */
+/* v10.5.18: kompakte Gruppierung und gesicherte Klartext-Eingabe */
 .p2m-popup .p2m-pin-title{font-weight:700!important}
 .p2m-popup .p2m-five-actions{display:grid!important;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px!important;padding:0!important;border:0!important;align-items:stretch!important}
 .p2m-popup .p2m-five-actions fieldset{display:flex;align-items:center;justify-content:space-around;gap:3px;min-width:0;margin:0;padding:5px 4px 6px;border:1px solid #c7c7cc;border-radius:10px;box-sizing:border-box}
@@ -1132,7 +1150,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 html,body{max-width:100%;overflow-x:hidden}
 </style>
 <style>
-/* v10.5.15: Leaflet-Schliessen-X exakt mittig. */
+/* v10.5.18: Leaflet-Schliessen-X exakt mittig. */
 #mapScreen .leaflet-popup-close-button{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:0!important;line-height:1!important;font-family:Arial,sans-serif!important}
 </style>
 <style id="p2m-v10354-style">
@@ -1147,7 +1165,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.15)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.18)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1291,7 +1309,7 @@ function markFilterZoom(){
  else if(markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote)mapStatus.textContent='Keine passenden Markierungen gefunden.';
 }
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
-var showElevations=false,elevationBusy=false,p2mInfoMode=0,p2mTemperatureBusy=false,p2mTemperatureGeneration=0,p2mDailyBusy=false,p2mDailyRefreshPending=false;
+var showElevations=false,elevationBusy=false,p2mInfoMode=0,p2mTemperatureBusy=false,p2mTemperatureGeneration=0,p2mDailyBusy=false,p2mDailyRefreshPending=false,p2mSunBusy=false,p2mSunPending=false;
 var currentProjectName=''; /* Dateiname ohne .pin2map des geöffneten bzw. zuletzt gespeicherten Projekts. */
 function cleanProjectBaseName(value){return String(value||'').replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,100)}
 function setCurrentProjectName(value){currentProjectName=cleanProjectBaseName(value);var field=document.getElementById('listNameInput');if(field&&field.value!==currentProjectName)field.value=currentProjectName}
@@ -1680,7 +1698,7 @@ function addNewItemDirectly(fullLine){
   }else{
    var marker=L.marker(p,{icon:icon(it.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(it)}).addTo(categoryLayers[it.category]);
    it._pinLayer=marker;
-   if(p2mHasPinName(it))marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(it);p2mSyncNoteDot(it);if(showElevations&&!isFinite(it.elevation))setTimeout(fetchMissingElevations,0);if(p2mInfoMode===2)setTimeout(fetchPinTemperatures,0);if(p2mInfoMode===3)setTimeout(fetchPinDailyTemperatures,0);
+   if(p2mHasPinName(it))marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(it);p2mSyncNoteDot(it);if(showElevations&&!isFinite(it.elevation))setTimeout(fetchMissingElevations,0);if(p2mInfoMode===2)setTimeout(fetchPinTemperatures,0);if(p2mInfoMode===3)setTimeout(fetchPinDailyTemperatures,0);if(p2mInfoMode===4)setTimeout(fetchPinSunTimes,0);
   }
   // V9.10.40: Auch direkt hinzugefügte Pins und Flächen im Namensfilter erfassen.
   markFilterRegister(it);
@@ -1765,7 +1783,7 @@ function isStandaloneWebApp(){
  return !!((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true)
 }
 function restorePin2MapAfterExternalView(){
- /* v10.5.15: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
+ /* v10.5.18: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
  ['mapActionChooser','areaClickChooser'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none'});
  try{document.activeElement&&document.activeElement.blur&&document.activeElement.blur()}catch(e){}
  try{if(map){map.dragging&&map.dragging.enable();map.touchZoom&&map.touchZoom.enable();map.doubleClickZoom&&map.doubleClickZoom.enable();map.scrollWheelZoom&&map.scrollWheelZoom.enable();map.invalidateSize(false)}}catch(e){}
@@ -2166,7 +2184,7 @@ function applyStaticUiSymbols(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyStaticUiSymbols);else applyStaticUiSymbols();
 
-/* v10.5.15: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
+/* v10.5.18: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
    sind die Identitaet; Popup-HTML, Kategorie, Name und Listenzeile sind es nicht. */
 var p2mMobileNoteEditing=null;
 var pinNoteSession=Object.create(null);
@@ -2882,8 +2900,13 @@ function renderElevationLabel(it){
  if(p2mInfoMode===1&&isFinite(Number(it.elevation))&&it.elevation!==null)label=Math.round(Number(it.elevation))+' m';
  if(p2mInfoMode===3){
   if(it._p2mDaily&&Date.now()-it._p2mDaily.at<15*60*1000&&it._p2mDaily.date===it._p2mDaily.today)
-   label=Math.round(it._p2mDaily.min)+'/'+Math.round(it._p2mDaily.max)+' °C';
-  else label='–/– °C';
+   label=Math.round(it._p2mDaily.min)+'°/'+Math.round(it._p2mDaily.max)+' °C';
+  else label='–°/– °C';
+ }
+ if(p2mInfoMode===4){
+  if(it._p2mSun&&it._p2mSun.date===p2mLocalDate(it._p2mSun.offset)&&Date.now()-it._p2mSun.at<15*60*1000)
+   label=it._p2mSun.rise+' | '+it._p2mSun.set;
+  else label='–:– | –:–';
  }
  if(p2mInfoMode===2){
   if(it._p2mTemp&&Date.now()-it._p2mTemp.at<15*60*1000&&isFinite(it._p2mTemp.value))
@@ -2891,10 +2914,19 @@ function renderElevationLabel(it){
   else label='– °C';
  }
  if(!label)return;
+ var labelHtml=label;
+ if(p2mInfoMode===3){
+  var dailyParts=label.split('/');
+  if(dailyParts.length===2)labelHtml='<span class="p2m-label-half p2m-label-min">'+dailyParts[0]+'</span><span class="p2m-label-half p2m-label-max">'+dailyParts[1]+'</span>';
+ }
+ if(p2mInfoMode===4){
+  var sunParts=label.split(' | ');
+  if(sunParts.length===2)labelHtml='<span class="p2m-label-half p2m-label-rise">'+sunParts[0]+'</span><span class="p2m-label-half p2m-label-set">'+sunParts[1]+'</span>';
+ }
  var ll=it._pinLayer.getLatLng();
  it._elevationLayer=L.marker(ll,{interactive:false,zIndexOffset:450,icon:L.divIcon({
   className:'elevation-label-wrap',
-  html:'<div class="elevation-label'+(p2mInfoMode===2?' p2m-temperature-label':p2mInfoMode===3?' p2m-daily-label':'')+'">'+label+'</div>',
+  html:'<div class="elevation-label'+(p2mInfoMode===2?' p2m-temperature-label':p2mInfoMode===3?' p2m-daily-label':p2mInfoMode===4?' p2m-sun-label':'')+'">'+labelHtml+'</div>',
   iconSize:null,iconAnchor:[0,42]
  })}).addTo(categoryLayers[it.category]);
  markFilterApplyOne(it);
@@ -2903,13 +2935,16 @@ function allCurrentPinItems(){return markFilterEntries.filter(function(it){retur
 function refreshElevationLabels(){allCurrentPinItems().forEach(renderElevationLabel)}
 function syncElevationButton(){
  var b=document.getElementById('toggleElevations');if(!b)return;
- var modes=['ℹ','m','°C','M/M'];
- b.textContent=modes[p2mInfoMode];
+ var modes=['ℹ','m','°C','M/M','☀️|🌚'];
+ if(p2mInfoMode===3)b.innerHTML='<span class="p2m-mode-left">M</span><span class="p2m-mode-right">M</span>';
+ else if(p2mInfoMode===4)b.innerHTML='<span class="p2m-mode-left">↑</span><span class="p2m-mode-right">↓</span>';
+ else b.textContent=modes[p2mInfoMode];
  b.classList.toggle('active',p2mInfoMode===1);
  b.classList.toggle('off',p2mInfoMode===0);
  b.classList.toggle('p2m-temp-active',p2mInfoMode===2);
  b.classList.toggle('p2m-daily-active',p2mInfoMode===3);
- b.title=['Pin-Informationen: Aus (Tippen für Höhen)','Pin-Informationen: Höhe (Tippen für Temperatur)','Pin-Informationen: Temperatur (Tippen für Tagesminimum/-maximum)','Pin-Informationen: Tagesminimum/-maximum (Tippen zum Ausschalten)'][p2mInfoMode];
+ b.classList.toggle('p2m-sun-active',p2mInfoMode===4);
+ b.title=['Pin-Informationen: Aus (Tippen für Höhen)','Pin-Informationen: Höhe (Tippen für Temperatur)','Pin-Informationen: Temperatur (Tippen für Tagesminimum/-maximum)','Pin-Informationen: Tagesminimum/-maximum (Tippen für Sonnenzeiten)','Pin-Informationen: Sonnenaufgang und Sonnenuntergang (Tippen zum Ausschalten)'][p2mInfoMode];
  b.setAttribute('aria-label',b.title);
 }
 function fetchPinTemperatures(){
@@ -2979,8 +3014,44 @@ function fetchPinDailyTemperatures(){
  }
  next();
 }
+function p2mLocalDate(offset){
+ var d=new Date(Date.now()+Number(offset||0)*1000);
+ return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
+}
+function fetchPinSunTimes(){
+ if(p2mInfoMode!==4)return;
+ if(p2mSunBusy){p2mSunPending=true;return}
+ var now=Date.now(),pins=allCurrentPinItems();
+ var missing=pins.filter(function(it){return !it._p2mSun||now-it._p2mSun.at>=15*60*1000||it._p2mSun.date!==p2mLocalDate(it._p2mSun.offset)});
+ refreshElevationLabels();
+ if(!missing.length)return;
+ p2mSunBusy=true;
+ var position=0;
+ function next(){
+  if(position>=missing.length){p2mSunBusy=false;if(p2mSunPending){p2mSunPending=false;fetchPinSunTimes()}return}
+  var batch=missing.slice(position,position+20);position+=batch.length;
+  var lats=[],lons=[];
+  batch.forEach(function(it){var ll=it._pinLayer.getLatLng();lats.push(ll.lat);lons.push(ll.lng)});
+  var url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(lats.join(','))+
+   '&longitude='+encodeURIComponent(lons.join(','))+
+   '&daily=sunrise,sunset&forecast_days=1&timezone=auto';
+  fetch(url).then(function(r){if(!r.ok)throw Error('Sonnenzeiten HTTP '+r.status);return r.json()})
+  .then(function(data){
+   var rows=Array.isArray(data)?data:[data];
+   if(rows.length!==batch.length)throw Error('Unvollständige Sonnenzeiten');
+   rows.forEach(function(row,i){
+    var d=row&&row.daily,r=d&&d.sunrise&&d.sunrise[0],t=d&&d.sunset&&d.sunset[0];
+    if(typeof r==='string'&&typeof t==='string'&&/^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(r)&&/^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(t)){
+     batch[i]._p2mSun={rise:r.slice(11,16),set:t.slice(11,16),date:d.time[0],offset:Number(row.utc_offset_seconds)||0,at:Date.now()};
+    }
+   });
+  }).catch(function(){mapStatus.textContent='⚠️ Sonnenzeiten nicht vollständig verfügbar.'})
+  .finally(function(){if(p2mInfoMode===4)refreshElevationLabels();next()});
+ }
+ next();
+}
 function setP2mInfoMode(mode){
- p2mInfoMode=((mode%4)+4)%4;
+ p2mInfoMode=((mode%5)+5)%5;
  showElevations=p2mInfoMode===1;
  try{localStorage.setItem('showElevations','0')}catch(e){}
  syncElevationButton();
@@ -2988,6 +3059,7 @@ function setP2mInfoMode(mode){
  if(p2mInfoMode===1)fetchMissingElevations();
  if(p2mInfoMode===2)fetchPinTemperatures();
  if(p2mInfoMode===3)fetchPinDailyTemperatures();
+ if(p2mInfoMode===4)fetchPinSunTimes();
 }
 function fetchMissingElevations(){if(!showElevations||elevationBusy)return;var pins=allCurrentPinItems(),missing=pins.filter(function(it){return !isFinite(it.elevation)});refreshElevationLabels();if(!missing.length){mapStatus.textContent='✓ Höhen angezeigt.';setTimeout(function(){if(mapStatus.textContent==='✓ Höhen angezeigt.')mapStatus.textContent=''},1600);return}elevationBusy=true;mapStatus.textContent='Lade Höhen für '+missing.length+' Pin'+(missing.length===1?'':'s')+' …';var batches=[];for(var i=0;i<missing.length;i+=100)batches.push(missing.slice(i,i+100));var done=0;function next(){if(!batches.length){elevationBusy=false;refreshElevationLabels();mapStatus.textContent='✓ Höhen geladen.';setTimeout(function(){if(mapStatus.textContent==='✓ Höhen geladen.')mapStatus.textContent=''},1800);return}var batch=batches.shift(),lats=[],lons=[];batch.forEach(function(it){var ll=it._pinLayer.getLatLng();lats.push(ll.lat);lons.push(ll.lng)});var u='https://api.open-meteo.com/v1/elevation?latitude='+encodeURIComponent(lats.join(','))+'&longitude='+encodeURIComponent(lons.join(','));fetch(u).then(function(r){if(!r.ok)throw new Error('Elevation HTTP '+r.status);return r.json()}).then(function(d){var e=d&&d.elevation;if(!Array.isArray(e)||e.length!==batch.length)throw new Error('Ungültige Höhendaten');batch.forEach(function(it,j){if(isFinite(e[j]))it.elevation=Number(e[j]);renderElevationLabel(it)});done+=batch.length;mapStatus.textContent='Lade Höhen … '+done+'/'+missing.length;next()}).catch(function(){elevationBusy=false;mapStatus.textContent='⚠️ Höhen konnten nicht geladen werden.'})}next()}
 function setElevationDisplay(on){setP2mInfoMode(on?1:0)}
@@ -4217,7 +4289,7 @@ function syncLegendToggle(){
  legendToggle.title=legendVisible?'Kategorien ausblenden':'Kategorien einblenden';legendToggle.setAttribute('aria-label',legendToggle.title)
 }
 if(legendToggle)legendToggle.onclick=function(e){e.preventDefault();e.stopPropagation();legendVisible=!legendVisible;syncLegendToggle()};
-/* v10.5.15: Ein Tipp auf die freie Karte schliesst Filterdialog und Kategorienliste.
+/* v10.5.18: Ein Tipp auf die freie Karte schliesst Filterdialog und Kategorienliste.
    Die Filterwerte bleiben erhalten; die Karte selbst verarbeitet den Tipp weiter. */
 (function(){
  var mapElement=document.getElementById('map');
@@ -4312,9 +4384,9 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)setT
 
 
 
-/* v10.5.15: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
+/* v10.5.18: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
 
-/* v10.5.15: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
+/* v10.5.18: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
 var p2m41OriginalPopup=pinPopupHtml;
 pinPopupHtml=function(it){
  var html=p2m41OriginalPopup(it),id=it._popupId;
@@ -4770,7 +4842,7 @@ async function importFiles(fileList){
 </style>
 <div id="p2m-editor" role="dialog" aria-modal="true" aria-label="Markdown-Notiz bearbeiten"><header><span id="p2m-editor-title"></span><label id="p2m-editor-copy"><input id="p2m-editor-copy-check" type="checkbox"> Inhalt kopieren</label></header><textarea id="p2m-editor-text" aria-label="Markdown-Notiz" spellcheck="true" placeholder="Markdown-Notiz …"></textarea><footer><button type="button" id="p2m-editor-close" title="Schließen ohne Speichern">×</button><button type="button" id="p2m-editor-delete" class="p2m-editor-delete" title="Notiz löschen">🖋️</button><button type="button" id="p2m-editor-save" title="Notiz speichern">Speichern</button></footer></div>
 <script>
-/* v10.5.15: kompakte Markdown-Notizen und mobiler Vollbildeditor */
+/* v10.5.18: kompakte Markdown-Notizen und mobiler Vollbildeditor */
 function p2mMarkdown(raw){
  var escape=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
  var inline=function(t){return escape(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(_,name,url){return '<a href="'+url.replace(/&quot;/g,'')+'" target="_blank" rel="noopener noreferrer">'+name+'</a>'}).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>')};
@@ -4824,7 +4896,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 1 48px!important;width:48px!important;height:48px!important;min-width:0!important;padding:0!important;border-radius:50%!important;border:1px solid #c7c7cc!important;background:#fff!important;font-size:24px!important;line-height:1!important}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-round-delete{background:#e53935!important;color:#fff!important;border-color:#e53935!important}
 
-/* v10.5.15: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
+/* v10.5.18: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
 :root{--p2m-button-neutral-bg:#e5e5ea;--p2m-button-neutral-fg:#17181c;--p2m-button-neutral-border:#aeb0b9}
 #p2m41-dialog .p2m41-actions button:not(.p2m41-primary){background:var(--p2m-button-neutral-bg)!important;color:var(--p2m-button-neutral-fg)!important;border-color:var(--p2m-button-neutral-border)!important}
 /* Untere Popup-Reihe in der Groesse der oberen runden Buttons. */
@@ -4833,7 +4905,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button[data-p2m-url],
 .p2m-popup .p2m-bottom-groups>button[data-p2m-url]{font-size:14px!important;font-weight:600!important;letter-spacing:-.3px!important}
 
-/* v10.5.15: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
+/* v10.5.18: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
 #p2m41-dialog .p2m41-cats{gap:9px;padding:4px;box-sizing:border-box}
 #p2m41-dialog .p2m41-cats button{min-height:44px;height:44px;padding:3px 5px;font-size:23px;line-height:1.1;box-sizing:border-box;background:var(--p2m-button-neutral-bg);color:var(--p2m-button-neutral-fg)}
 #p2m41-dialog .p2m41-cats button[aria-pressed=true]{outline:none!important;box-shadow:inset 0 0 0 3px #087df5}
@@ -4842,7 +4914,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 </style>
 
 <style>
-/* v10.5.15: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
+/* v10.5.18: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
 :root{--p2m-danger-bg:#e53935;--p2m-danger-fg:#fff}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-danger-x,
 .p2m-popup .p2m-bottom-groups>button.p2m-danger-x{
@@ -4946,7 +5018,7 @@ document.addEventListener('click',function(e){
 },true);
 </script>
 <style>
-/* v10.5.15: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
+/* v10.5.18: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
 :root{--p2m-collapse-ink:#222;--p2m-collapse-size:20px}
 .p2m-collapse-icon{display:block;position:relative;width:var(--p2m-collapse-size);height:var(--p2m-collapse-size);flex:0 0 var(--p2m-collapse-size);margin:auto}
 .p2m-collapse-icon::before{content:"";position:absolute;left:2px;top:3px;border-left:8px solid transparent;border-right:8px solid transparent;border-top:9px solid var(--p2m-collapse-ink)}
@@ -4965,7 +5037,7 @@ document.addEventListener('click',function(e){
 .p2m51-notice-card{background:#fff;border-radius:14px;padding:20px;width:min(420px,100%);font:17px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 10px 30px #0003;box-sizing:border-box}
 .p2m51-notice-card button{display:block;margin:20px 0 0 auto;padding:9px 15px;border:1px solid var(--p2m-button-neutral-border);background:var(--p2m-button-neutral-bg);color:#111;border-radius:9px;font-size:16px}
 
-/* v10.5.15: Aktiver Filter: vollflächiges Rot ohne Schattierung. */
+/* v10.5.18: Aktiver Filter: vollflächiges Rot ohne Schattierung. */
 #mapScreen .topbar .quick-place > #markFilterButton.p2m-filter-active{background:#e53935!important;background-image:none!important;border-color:#e53935!important;color:#fff!important;box-shadow:none!important;filter:none!important;opacity:1!important;}
 </style>
 </body></html>
