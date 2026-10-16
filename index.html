@@ -517,12 +517,12 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 
 
 #areaSearchBox.keyboard-visible{bottom:auto!important;transform:translateX(-50%)!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-/* v10.4.21: kombinierbare Inhaltsfilter, grosse native iPhone-Checkboxen. */
+/* v10.4.22: kombinierbare Inhaltsfilter, grosse native iPhone-Checkboxen. */
 #markFilterPanel .p2m-filter-options{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px;padding-top:11px;border-top:1px solid #dedee3}
 #markFilterPanel .p2m-filter-options label{display:inline-flex;align-items:center;gap:7px;min-height:38px;cursor:pointer;touch-action:manipulation;font-size:14px;white-space:nowrap;user-select:none;-webkit-user-select:none}
 #markFilterPanel .p2m-filter-options input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;accent-color:#087df5;width:20px;height:20px;min-width:20px;margin:0;pointer-events:auto}
 
-/* v10.4.21: Einheitlicher Status der Filter-Schaltfläche (inkl. iPhone). */
+/* v10.4.22: Einheitlicher Status der Filter-Schaltfläche (inkl. iPhone). */
 #mapScreen .topbar .quick-place #markFilterButton:not(.p2m-filter-active){background:#fff!important;border:1px solid #2687d8!important;color:#175a96!important;}
 #mapScreen .topbar .quick-place #markFilterButton.p2m-filter-active{background:#e53935!important;border:1px solid #e53935!important;color:#fff!important;}
 
@@ -1046,13 +1046,13 @@ html body #mapScreen #placeResultChooser {
 html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButtons button {max-width:100%!important;box-sizing:border-box!important}
 </style>
 <style>
-/* v10.4.21: kompakte, direkt bearbeitbare Klartext-Notiz */
+/* v10.4.22: kompakte, direkt bearbeitbare Klartext-Notiz */
 .p2m-popup .p2m-note-preview{padding:0;margin:6px 0 8px;max-height:none;overflow:visible;border:1px solid #d3d9e2;border-radius:9px}
 .p2m-popup textarea.p2m-inline-note{display:block;box-sizing:border-box;width:100%;height:76px;min-height:54px;max-height:130px;resize:vertical;margin:0;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit;font-size:13px;line-height:1.4;outline-offset:-2px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .p2m-popup textarea.p2m-inline-note:focus{outline:2px solid #1683f5}
 </style>
 <style>
-/* v10.4.21: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
+/* v10.4.22: vier Schnellaktionen, kompakter Pin-Block, groesseres Notizfeld. */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 #mapScreen .leaflet-popup-content .p2m-popup{width:100%;min-width:0}
 .p2m-popup .p2m-quick-actions{gap:8px!important;padding:7px 5px!important;justify-content:space-evenly!important}
@@ -1063,7 +1063,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){#mapScreen .leaflet-popup-content{width:calc(100vw - 58px)!important}.p2m-popup .p2m-quick-actions{gap:4px!important}.p2m-popup .p2m-edit-buttons button{min-width:0}}
 </style>
 <style>
-/* v10.4.21: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
+/* v10.4.22: kompakte Gruppen, Notizflaeche und iOS-Tastaturmodus */
 #mapScreen .leaflet-popup-content{width:min(350px,calc(100vw - 58px))!important;max-width:calc(100vw - 58px)!important}
 .p2m-popup .p2m-pin-title{margin:0 0 5px;overflow-wrap:anywhere}
 .p2m-popup .p2m-five-actions{display:flex;align-items:center;justify-content:space-between;gap:4px;border:1px solid #c7c7cc;border-radius:10px;padding:7px 6px;margin:0 0 8px}
@@ -1080,7 +1080,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 @media(max-width:390px){.p2m-popup .p2m-bottom-groups{grid-template-columns:57px minmax(0,1fr) 60px;gap:3px}.p2m-popup .p2m-bottom-pin-buttons button[data-rename-pin],.p2m-popup .p2m-bottom-pin-buttons button[data-change-pin-category]{width:45px;font-size:11px}.p2m-popup .p2m-bottom-groups button{width:37px;height:37px}}
  .p2m-popup textarea[data-p2m-inline-note]{font-size:16px!important} </style>
 <style>
-/* v10.4.21: kompakte Gruppierung und gesicherte Klartext-Eingabe */
+/* v10.4.22: kompakte Gruppierung und gesicherte Klartext-Eingabe */
 .p2m-popup .p2m-pin-title{font-weight:700!important}
 .p2m-popup .p2m-five-actions{display:grid!important;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px!important;padding:0!important;border:0!important;align-items:stretch!important}
 .p2m-popup .p2m-five-actions fieldset{display:flex;align-items:center;justify-content:space-around;gap:3px;min-width:0;margin:0;padding:5px 4px 6px;border:1px solid #c7c7cc;border-radius:10px;box-sizing:border-box}
@@ -1111,7 +1111,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 html,body{max-width:100%;overflow-x:hidden}
 </style>
 <style>
-/* v10.4.21: Leaflet-Schliessen-X exakt mittig. */
+/* v10.4.22: Leaflet-Schliessen-X exakt mittig. */
 #mapScreen .leaflet-popup-close-button{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:0!important;line-height:1!important;font-family:Arial,sans-serif!important}
 </style>
 <style id="p2m-v10354-style">
@@ -1126,7 +1126,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.4.21)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.4.22)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1178,7 +1178,7 @@ html,body{max-width:100%;overflow-x:hidden}
 <div class="route-toolbar-row route-toolbar-details">
 <div class="route-details-label-group"><button type="button" id="routeDetailsToggle" class="route-circle" title="Teilstrecken anzeigen" aria-label="Teilstrecken anzeigen" disabled><span aria-hidden="true">⏏︎</span></button><span id="routeDetailsLabel">Routendetails</span></div>
 <div class="route-navi-group"><span>Route in:</span><div class="route-navi-buttons"><button type="button" id="openAppleMaps" class="route-circle" title="Route in Apple Karten öffnen" aria-label="Route in Apple Karten öffnen"></button></div></div>
-</div><div id="routeAvoid" class="route-avoid"></div><div class="route-bulk"></div><div id="routeEndpoints" class="route-pin-state"></div><div id="routeEdit" class="route-edit"></div><div id="routeHint" class="route-hint" style="display:none"></div><div id="routeLegs" class="route-legs"></div></div></div><div id="notFoundList" class="not-found"></div><div id="placeResultChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5600;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(520px,calc(100vw - 32px));box-sizing:border-box;max-height:78vh;overflow:auto"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Ort auswählen</div><div id="placeResultButtons"></div><button type="button" id="placeResultCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="pinCategoryChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5100;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(300px,82vw);max-width:88vw;max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Kategorie für neuen Pin wählen</div><div id="pinCategoryButtons" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"></div><button type="button" id="pinCategoryCancel" style="width:100%;margin-top:10px;padding:9px;border:0;border-radius:9px;background:#e5e5ea;font-weight:400">Abbrechen</button></div><div id="areaClickChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5400;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(380px,88vw);max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Fläche auswählen</div><div id="areaClickButtons"></div><button type="button" id="areaClickCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="categoryEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5700;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Kategorie bearbeiten</div><label style="display:block;margin:8px 0">Name<input id="categoryEditName" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:16px"></label><label style="display:block;margin:8px 0">Symbol<input id="categoryEditSymbol" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:22px"></label><label style="display:flex;align-items:center;gap:10px;margin:10px 0">Farbe<input id="categoryEditColor" type="color" style="width:58px;height:40px;border:0;background:transparent"><span id="categoryEditColorText"></span></label><button type="button" id="categoryEditSave" style="width:100%;margin-top:8px;background:#666">Änderungen übernehmen</button><button type="button" id="categoryEditCancel" style="width:100%;margin-top:8px;background:#666">Abbrechen</button></div><div id="pinNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Pin umbenennen</div><input id="pinNameInput" type="text" autocomplete="off" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="pinNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="pinNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="areaNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Fläche umbenennen</div><input id="areaNameInput" type="text" autocomplete="off" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="areaNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="areaNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="mapActionChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5200;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(310px,84vw);max-width:90vw;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Aktion wählen</div><button type="button" id="actionAddPin" style="display:block;width:100%;margin-bottom:8px;background:#34a853">📍 Pin setzen</button><button type="button" id="actionWikipediaArea" style="display:none;width:100%;margin-bottom:8px;background:#fff;color:#111;border:1px solid #c7c7cc">ⓦ Wikipedia</button><button type="button" id="actionFindAreas" style="display:block;width:100%;margin-bottom:8px;background:#34a853">🗺️ Gebiete suchen</button><button type="button" id="actionRenameArea" style="display:none;width:100%;margin-bottom:8px;background:#666">Name ändern</button><button type="button" id="actionChangeAreaCategory" style="display:none;width:100%;margin-bottom:8px;background:#666">Kategorie ändern</button><button type="button" id="actionRemoveArea" style="display:none;width:100%;margin-bottom:8px;background:#e53935">Fläche entfernen</button><button type="button" id="actionCancel" style="display:block;width:100%;margin-top:8px;background:#e5e5ea;color:#111">Abbrechen</button></div><div id="areaSearchBox" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5300;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(520px,calc(100vw - 32px));box-sizing:border-box;max-height:78vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;font-size:16px;margin-bottom:10px">Bitte auswählen:</div><div id="areaSearchPoint" style="color:#666;font-size:12px;margin-bottom:10px"></div><div id="areaSearchResults"></div>
+</div><div id="routeAvoid" class="route-avoid"></div><div class="route-bulk"></div><div id="routeEndpoints" class="route-pin-state"></div><div id="routeEdit" class="route-edit"></div><div id="routeHint" class="route-hint" style="display:none"></div><div id="routeLegs" class="route-legs"></div></div></div><div id="notFoundList" class="not-found"></div><div id="placeResultChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5600;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(520px,calc(100vw - 32px));box-sizing:border-box;max-height:78vh;overflow:auto"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Ort auswählen</div><div id="placeResultButtons"></div><button type="button" id="placeResultCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="pinCategoryChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5100;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(300px,82vw);max-width:88vw;max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Kategorie für neuen Pin wählen</div><div id="pinCategoryButtons" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"></div><button type="button" id="pinCategoryCancel" style="width:100%;margin-top:10px;padding:9px;border:0;border-radius:9px;background:#e5e5ea;font-weight:400">Abbrechen</button></div><div id="areaClickChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5400;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(380px,88vw);max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Fläche auswählen</div><div id="areaClickButtons"></div><button type="button" id="areaClickCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="categoryEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5700;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Kategorie bearbeiten</div><label style="display:block;margin:8px 0">Name<input id="categoryEditName" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:16px"></label><label style="display:block;margin:8px 0">Symbol<input id="categoryEditSymbol" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:22px"></label><label style="display:flex;align-items:center;gap:10px;margin:10px 0">Farbe<input id="categoryEditColor" type="color" style="width:58px;height:40px;border:0;background:transparent"><span id="categoryEditColorText"></span></label><button type="button" id="categoryEditSave" style="width:100%;margin-top:8px;background:#666">Änderungen übernehmen</button><button type="button" id="categoryEditCancel" style="width:100%;margin-top:8px;background:#666">Abbrechen</button></div><div id="pinNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Pin umbenennen</div><input id="pinNameInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="pinNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="pinNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="areaNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Fläche umbenennen</div><input id="areaNameInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="areaNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="areaNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="mapActionChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5200;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(310px,84vw);max-width:90vw;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Aktion wählen</div><button type="button" id="actionAddPin" style="display:block;width:100%;margin-bottom:8px;background:#34a853">📍 Pin setzen</button><button type="button" id="actionWikipediaArea" style="display:none;width:100%;margin-bottom:8px;background:#fff;color:#111;border:1px solid #c7c7cc">ⓦ Wikipedia</button><button type="button" id="actionFindAreas" style="display:block;width:100%;margin-bottom:8px;background:#34a853">🗺️ Gebiete suchen</button><button type="button" id="actionRenameArea" style="display:none;width:100%;margin-bottom:8px;background:#666">Name ändern</button><button type="button" id="actionChangeAreaCategory" style="display:none;width:100%;margin-bottom:8px;background:#666">Kategorie ändern</button><button type="button" id="actionRemoveArea" style="display:none;width:100%;margin-bottom:8px;background:#e53935">Fläche entfernen</button><button type="button" id="actionCancel" style="display:block;width:100%;margin-top:8px;background:#e5e5ea;color:#111">Abbrechen</button></div><div id="areaSearchBox" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5300;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(520px,calc(100vw - 32px));box-sizing:border-box;max-height:78vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;font-size:16px;margin-bottom:10px">Bitte auswählen:</div><div id="areaSearchPoint" style="color:#666;font-size:12px;margin-bottom:10px"></div><div id="areaSearchResults"></div>
 <div id="manualAreaSearchBlock" style="display:none">
   <div style="font-weight:700;font-size:15px;margin-bottom:8px">🔎 Weiteres Gebiet suchen</div>
   <div style="display:flex;gap:7px">
@@ -1728,7 +1728,7 @@ function isStandaloneWebApp(){
  return !!((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true)
 }
 function restorePin2MapAfterExternalView(){
- /* v10.4.21: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
+ /* v10.4.22: Bei Rueckkehr von externen Tabs den geoeffneten Pin-Dialog beibehalten. */
  ['mapActionChooser','areaClickChooser'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none'});
  try{document.activeElement&&document.activeElement.blur&&document.activeElement.blur()}catch(e){}
  try{if(map){map.dragging&&map.dragging.enable();map.touchZoom&&map.touchZoom.enable();map.doubleClickZoom&&map.doubleClickZoom.enable();map.scrollWheelZoom&&map.scrollWheelZoom.enable();map.invalidateSize(false)}}catch(e){}
@@ -2129,7 +2129,7 @@ function applyStaticUiSymbols(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyStaticUiSymbols);else applyStaticUiSymbols();
 
-/* v10.4.21: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
+/* v10.4.22: Zentrale Notizablage. Pin-Objekt und unveraenderliche Ortskennung
    sind die Identitaet; Popup-HTML, Kategorie, Name und Listenzeile sind es nicht. */
 var p2mMobileNoteEditing=null;
 var pinNoteSession=Object.create(null);
@@ -3981,7 +3981,7 @@ function syncLegendToggle(){
  legendToggle.title=legendVisible?'Kategorien ausblenden':'Kategorien einblenden';legendToggle.setAttribute('aria-label',legendToggle.title)
 }
 if(legendToggle)legendToggle.onclick=function(e){e.preventDefault();e.stopPropagation();legendVisible=!legendVisible;syncLegendToggle()};
-/* v10.4.21: Ein Tipp auf die freie Karte schliesst Filterdialog und Kategorienliste.
+/* v10.4.22: Ein Tipp auf die freie Karte schliesst Filterdialog und Kategorienliste.
    Die Filterwerte bleiben erhalten; die Karte selbst verarbeitet den Tipp weiter. */
 (function(){
  var mapElement=document.getElementById('map');
@@ -4068,15 +4068,34 @@ if(window.visualViewport){
 document.addEventListener('focusout',function(){setTimeout(syncVisibleViewport,250)},true);
 document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(syncVisibleViewport,50)});
 
+/* Grauer Hintergrund unter der halbtransparenten iOS-Tastaturleiste. */
+(function(){
+ if(!window.visualViewport)return;
+ var strip=document.createElement('div');
+ strip.setAttribute('aria-hidden','true');
+ strip.style.cssText='position:fixed;display:none;left:0;width:100%;height:74px;background:#d5d8e1;pointer-events:none;z-index:1900;';
+ document.body.appendChild(strip);
+ function align(){
+  var vv=window.visualViewport;
+  var active=document.activeElement;
+  var keyboard=active&&/^(INPUT|TEXTAREA)$/.test(active.tagName)&&p2mStableMapHeight&&vv.height<p2mStableMapHeight-110;
+  strip.style.display=keyboard?'block':'none';
+  if(keyboard){strip.style.top=Math.round(vv.offsetTop+vv.height-74)+'px';strip.style.width=Math.round(vv.width)+'px';strip.style.left=Math.round(vv.offsetLeft)+'px';}
+ }
+ window.visualViewport.addEventListener('resize',align,{passive:true});
+ window.visualViewport.addEventListener('scroll',align,{passive:true});
+ document.addEventListener('focusin',function(){setTimeout(align,100)},true);
+ document.addEventListener('focusout',function(){strip.style.display='none'},true);
+})();
 /* Kontextmenü schließen, wenn außerhalb getippt/geklickt wird. */
 
 
 
 
 
-/* v10.4.21: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
+/* v10.4.22: Die Popup-Erweiterung muss im Haupt-Scope laufen. */
 
-/* v10.4.21: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
+/* v10.4.22: schmale Aktionsleiste, gemeinsamer Name/Kategorie-Dialog, URL pro Pin. */
 var p2m41OriginalPopup=pinPopupHtml;
 pinPopupHtml=function(it){
  var html=p2m41OriginalPopup(it),id=it._popupId;
@@ -4096,7 +4115,7 @@ var p2m41Dialog=document.createElement('div');p2m41Dialog.id='p2m41-dialog';docu
 function p2m41Close(){p2m41Dialog.style.display='none';p2m41Dialog.innerHTML='';p2m41Item=null}
 function p2m41Open(it,mode){p2m41Item=it;p2m41Mode=mode;/* Popup bleibt hinter dem URL-Dialog geoeffnet. */
  var card=document.createElement('div');card.className='p2m41-card';var h=document.createElement('strong');h.textContent=mode==='url'?'URL für '+(it.label||it.query):'Pin bearbeiten';card.appendChild(h);
- var field=document.createElement('input');field.type='text';field.placeholder=mode==='url'?'https://…':'Name des Pins';field.value=mode==='url'?p2m41UrlGet(it):((it.label&&it.label!==it.query)?it.label:'');if(mode==='url'){field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');field.inputMode='url';}card.appendChild(field);
+ var field=document.createElement('input');field.type='text';field.placeholder=mode==='url'?'https://…':'Name des Pins';field.value=mode==='url'?p2m41UrlGet(it):((it.label&&it.label!==it.query)?it.label:'');field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');if(mode==='url'){field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');field.inputMode='url';}card.appendChild(field);
  if(mode==='edit'){var sub=document.createElement('div');sub.textContent='Kategorie';sub.style.marginBottom='8px';card.appendChild(sub);var cats=document.createElement('div');cats.className='p2m41-cats';var defs=ensurePinCategoryChoices();p2m41Cat=defs.findIndex(function(c){return c.name===it.category});if(p2m41Cat<0)p2m41Cat=0;defs.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'📍';b.title=c.name;b.setAttribute('aria-pressed',String(i===p2m41Cat));b.onclick=function(){p2m41Cat=i;cats.querySelectorAll('button').forEach(function(x,j){x.setAttribute('aria-pressed',String(i===j))})};cats.appendChild(b)});card.appendChild(cats)}
  var actions=document.createElement('div');actions.className='p2m41-actions';var cancel=document.createElement('button');cancel.textContent='Abbrechen';cancel.onclick=p2m41Close;actions.appendChild(cancel);
  var ok=document.createElement('button');ok.className='p2m41-primary';ok.textContent='OK';ok.onclick=function(){if(mode==='url'){p2m41UrlSave(it,field.value.trim());p2m41Close();return}var name=field.value.trim();if(name!==((it.label&&it.label!==it.query)?it.label:'')){pendingPinRename=it;document.getElementById('pinNameInput').value=name;savePinName()}var defs=ensurePinCategoryChoices();if(defs[p2m41Cat]&&defs[p2m41Cat].name!==it.category){p2mCommitVisiblePinNote(it);p2mGpxKeyForPin(it);var old=it.category,c=defs[p2m41Cat],oldGrp=categoryLayers[old];moveSourceLineToCategory(it,p2m41Cat);if(oldGrp&&it._pinLayer)oldGrp.removeLayer(it._pinLayer);if(!categoryLayers[c.name])categoryLayers[c.name]=L.layerGroup().addTo(map);if(it._pinLayer){it._pinLayer.setIcon(icon(c.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));categoryLayers[c.name].addLayer(it._pinLayer)}it.category=c.name;it.symbol=c.symbol;it.color=c.color;p2mSyncPinBadges(it);refreshAfterDirectDelete()}if(it._pinLayer)it._pinLayer.setPopupContent(pinPopupHtml(it));p2m41Close();if(it._pinLayer&&map&&map.hasLayer(it._pinLayer)){it._pinLayer.openPopup()}};if(mode!=='url')actions.appendChild(ok);
@@ -4531,7 +4550,7 @@ async function importFiles(fileList){
 </style>
 <div id="p2m-editor" role="dialog" aria-modal="true" aria-label="Markdown-Notiz bearbeiten"><header><span id="p2m-editor-title"></span><label id="p2m-editor-copy"><input id="p2m-editor-copy-check" type="checkbox"> Inhalt kopieren</label></header><textarea id="p2m-editor-text" aria-label="Markdown-Notiz" spellcheck="true" placeholder="Markdown-Notiz …"></textarea><footer><button type="button" id="p2m-editor-close" title="Schließen ohne Speichern">×</button><button type="button" id="p2m-editor-delete" class="p2m-editor-delete" title="Notiz löschen">🖋️</button><button type="button" id="p2m-editor-save" title="Notiz speichern">Speichern</button></footer></div>
 <script>
-/* v10.4.21: kompakte Markdown-Notizen und mobiler Vollbildeditor */
+/* v10.4.22: kompakte Markdown-Notizen und mobiler Vollbildeditor */
 function p2mMarkdown(raw){
  var escape=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
  var inline=function(t){return escape(t).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(_,name,url){return '<a href="'+url.replace(/&quot;/g,'')+'" target="_blank" rel="noopener noreferrer">'+name+'</a>'}).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>')};
@@ -4585,7 +4604,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 1 48px!important;width:48px!important;height:48px!important;min-width:0!important;padding:0!important;border-radius:50%!important;border:1px solid #c7c7cc!important;background:#fff!important;font-size:24px!important;line-height:1!important}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-round-delete{background:#e53935!important;color:#fff!important;border-color:#e53935!important}
 
-/* v10.4.21: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
+/* v10.4.22: Einheitliche Graufarbe fuer neutrale Aktionsbuttons. */
 :root{--p2m-button-neutral-bg:#e5e5ea;--p2m-button-neutral-fg:#17181c;--p2m-button-neutral-border:#aeb0b9}
 #p2m41-dialog .p2m41-actions button:not(.p2m41-primary){background:var(--p2m-button-neutral-bg)!important;color:var(--p2m-button-neutral-fg)!important;border-color:var(--p2m-button-neutral-border)!important}
 /* Untere Popup-Reihe in der Groesse der oberen runden Buttons. */
@@ -4594,7 +4613,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 #mapScreen .leaflet-popup .p2m-bottom-groups>button[data-p2m-url],
 .p2m-popup .p2m-bottom-groups>button[data-p2m-url]{font-size:14px!important;font-weight:600!important;letter-spacing:-.3px!important}
 
-/* v10.4.21: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
+/* v10.4.22: Kompaktere Kategorie-Kacheln, Markierung innerhalb der Kachel. */
 #p2m41-dialog .p2m41-cats{gap:9px;padding:4px;box-sizing:border-box}
 #p2m41-dialog .p2m41-cats button{min-height:44px;height:44px;padding:3px 5px;font-size:23px;line-height:1.1;box-sizing:border-box;background:var(--p2m-button-neutral-bg);color:var(--p2m-button-neutral-fg)}
 #p2m41-dialog .p2m41-cats button[aria-pressed=true]{outline:none!important;box-shadow:inset 0 0 0 3px #087df5}
@@ -4603,7 +4622,7 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 </style>
 
 <style>
-/* v10.4.21: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
+/* v10.4.22: zentrale Schaltflaechen-Formen fuer Entfernen und Ausblenden. */
 :root{--p2m-danger-bg:#e53935;--p2m-danger-fg:#fff}
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-danger-x,
 .p2m-popup .p2m-bottom-groups>button.p2m-danger-x{
@@ -4707,7 +4726,7 @@ document.addEventListener('click',function(e){
 },true);
 </script>
 <style>
-/* v10.4.21: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
+/* v10.4.22: Ein gemeinsames Minimieren-Symbol fuer Pin und Routing. */
 :root{--p2m-collapse-ink:#222;--p2m-collapse-size:20px}
 .p2m-collapse-icon{display:block;position:relative;width:var(--p2m-collapse-size);height:var(--p2m-collapse-size);flex:0 0 var(--p2m-collapse-size);margin:auto}
 .p2m-collapse-icon::before{content:"";position:absolute;left:2px;top:3px;border-left:8px solid transparent;border-right:8px solid transparent;border-top:9px solid var(--p2m-collapse-ink)}
@@ -4726,7 +4745,7 @@ document.addEventListener('click',function(e){
 .p2m51-notice-card{background:#fff;border-radius:14px;padding:20px;width:min(420px,100%);font:17px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 10px 30px #0003;box-sizing:border-box}
 .p2m51-notice-card button{display:block;margin:20px 0 0 auto;padding:9px 15px;border:1px solid var(--p2m-button-neutral-border);background:var(--p2m-button-neutral-bg);color:#111;border-radius:9px;font-size:16px}
 
-/* v10.4.21: Aktiver Filter: vollflächiges Rot ohne Schattierung. */
+/* v10.4.22: Aktiver Filter: vollflächiges Rot ohne Schattierung. */
 #mapScreen .topbar .quick-place > #markFilterButton.p2m-filter-active{background:#e53935!important;background-image:none!important;border-color:#e53935!important;color:#fff!important;box-shadow:none!important;filter:none!important;opacity:1!important;}
 </style>
 </body></html>
