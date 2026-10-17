@@ -1127,7 +1127,7 @@ html body #mapScreen #placeResultButtons,html body #mapScreen #placeResultButton
 .p2m-popup .p2m-five-actions button{flex:0 1 42px!important}
 .p2m-popup .p2m-notes-field textarea.p2m-inline-note{font-size:16px!important;line-height:1.25!important;height:144px!important;min-height:144px!important;max-height:144px!important;resize:none!important}
 .p2m-popup .p2m-bottom-groups{grid-template-columns:75px minmax(0,1fr) 65px!important;gap:5px!important}
-.p2m-popup .p2m-bottom-groups fieldset{min-height:65px!important;padding-top:5px!important;padding-bottom:5px!important}
+.p2m-popup .p2m-bottom-groups fieldset{min-height:65px!important;padding-top:8px!important;padding-bottom:5px!important}
 .p2m-popup .p2m-bottom-groups legend{white-space:nowrap}
 @media(max-width:390px){
  .p2m-popup .p2m-five-actions button{width:37px!important;height:37px!important;min-width:0!important}
@@ -1202,13 +1202,13 @@ html,body{max-width:100%;overflow-x:hidden}
  #p2m41-dialog:has(.p2m41-cats) .p2m41-cats button{font-size:clamp(20px,6vw,27px)!important}
 }
 </style><style id="p2m-v10539-category-tile-labels">
-/* Feste quadratische Kacheln: Kategoriename nach [Farbe] wird unten abgeschnitten. */
-#p2m41-dialog .p2m41-cats button{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;min-width:0!important;min-height:0!important;}
-#p2m41-dialog .p2m41-cats .p2m-category-tile-icon{display:block;flex:0 0 auto;line-height:1.15;font-size:inherit;}
-#p2m41-dialog .p2m41-cats .p2m-category-tile-label{position:absolute;bottom:3px;left:3px;right:3px;display:block;overflow:hidden;text-overflow:clip;white-space:nowrap;text-align:center;font:500 8px/1.15 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#555;pointer-events:none;}
+/* Feste quadratische Kacheln: Kategoriebezeichnung bis zu zwei Zeilen, oben beginnend. */
+#p2m41-dialog .p2m41-cats button{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;min-width:0!important;min-height:0!important;padding:4px!important;}
+#p2m41-dialog .p2m41-cats .p2m-category-tile-icon{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);display:block;line-height:1.05;font-size:inherit;margin:0!important;}
+#p2m41-dialog .p2m41-cats .p2m-category-tile-label{position:absolute;top:auto;bottom:9%;left:3px;right:3px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;white-space:normal;overflow-wrap:anywhere;text-overflow:clip;text-align:center;font:500 8px/1.13 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#555;pointer-events:none;max-height:2.26em;}
 </style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.40)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.44)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -2884,7 +2884,18 @@ function ensurePinCategoryChoices(){
  var base=defaults.split('\n').filter(function(line){return line.trim().charAt(0)==='#'});
  var missing=base.filter(function(line){
   var m=line.match(/\]\s*(.*)$/),name=m?m[1].trim():'';
-  return name&&!existing.some(function(c){return c.name.toLocaleLowerCase('de')===name.toLocaleLowerCase('de')});
+  // A renamed standard category is still the same category: match its
+  // unchanged symbol or color as well as its former name. Otherwise the
+  // default would be appended again every time the category picker opens.
+  var raw=line.slice(1).trim(),match=raw.match(/\[([^\]]+)\]/);
+  var baseColor=color(match?match[1]:'');
+  var before=match?raw.replace(match[0],'').trim():raw;
+  var baseSymbol=before.split(/\s+/)[0]||'';
+  return name&&!existing.some(function(c){
+   return c.name.toLocaleLowerCase('de')===name.toLocaleLowerCase('de') ||
+    (baseSymbol&&c.symbol===baseSymbol) ||
+    (baseColor&&c.color===baseColor);
+  });
  });
  if(missing.length){input.value=input.value.replace(/\s*$/,'')+'\n\n'+missing.join('\n\n')+'\n'}
  return categoryDefinitions()
