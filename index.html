@@ -1185,7 +1185,11 @@ html,body{max-width:100%;overflow-x:hidden}
 .p2m-popup .p2m-title-edit-btn{width:25px!important;height:25px!important;min-width:25px!important;flex:0 0 25px;border-radius:50%!important;padding:0!important;display:flex!important;align-items:center;justify-content:center;font-size:12px!important;border:1px solid #c7c7cc!important;background:#fff!important;color:#111!important}
 .p2m-popup .p2m-inline-name{font:700 18px/1.25 -apple-system,BlinkMacSystemFont,sans-serif;flex:1;min-width:0;width:100%;height:32px;min-height:32px;resize:none;white-space:pre;overflow-x:auto;overflow-y:hidden;box-sizing:border-box;border:1px solid #087df5;border-radius:6px;padding:4px 6px}
 </style>
-</head><body>
+<style id="p2m-v10537-category-dialog">
+#p2m41-dialog:has(.p2m41-cats) .p2m41-card{width:min(350px,calc(100vw - 32px))!important;padding:15px!important}
+#p2m41-dialog .p2m41-cats{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important;max-height:none!important;overflow:visible!important;margin-top:12px}
+#p2m41-dialog .p2m41-cats button{width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1/1!important;padding:4px!important;border-radius:10px!important;font-size:27px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+</style></head><body>
 <main id="formScreen" class="wrap">
 <h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.29)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
@@ -4505,14 +4509,27 @@ function p2m41UrlGet(it){if(!it)return '';var k=p2m41UrlKey(it),c=activeProjectC
 function p2m41UrlSave(it,url){var k=p2m41UrlKey(it);p2m41Urls[k]=url;var key=projectCacheKey(it);if(key){if(!activeProjectCache)activeProjectCache={};if(!activeProjectCache[key])activeProjectCache[key]={};activeProjectCache[key].pinUrl=url}p2mSyncPinBadges(it)}
 var p2m41Dialog=document.createElement('div');p2m41Dialog.id='p2m41-dialog';document.body.appendChild(p2m41Dialog);
 function p2m41Close(){p2m41Dialog.style.display='none';p2m41Dialog.innerHTML='';p2m41Item=null}
+function p2m41ApplyPinCategory(it,index){
+ var defs=ensurePinCategoryChoices(),c=defs[index];if(!c)return;
+ if(c.name!==it.category){
+  p2mCommitVisiblePinNote(it);p2mGpxKeyForPin(it);
+  var oldGrp=categoryLayers[it.category];moveSourceLineToCategory(it,index);
+  if(oldGrp&&it._pinLayer)oldGrp.removeLayer(it._pinLayer);
+  if(!categoryLayers[c.name])categoryLayers[c.name]=L.layerGroup().addTo(map);
+  if(it._pinLayer){it._pinLayer.setIcon(icon(c.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));categoryLayers[c.name].addLayer(it._pinLayer)}
+  it.category=c.name;it.symbol=c.symbol;it.color=c.color;p2mSyncPinBadges(it);refreshAfterDirectDelete();
+ }
+ if(it._pinLayer)it._pinLayer.setPopupContent(pinPopupHtml(it));
+ p2m41Close();if(it._pinLayer&&map&&map.hasLayer(it._pinLayer))it._pinLayer.openPopup();
+}
 function p2m41Open(it,mode){p2m41Item=it;p2m41Mode=mode;/* Popup bleibt hinter dem URL-Dialog geoeffnet. */
  var card=document.createElement('div');card.className='p2m41-card';var h=document.createElement('strong');h.textContent=mode==='url'?'URL für '+(it.label||it.query):'Kategorie ändern';card.appendChild(h);
  var field=document.createElement('input');field.type='text';field.placeholder=mode==='url'?'https://, mailto:, obsidian:// …':'';field.value=mode==='url'?p2m41UrlGet(it):((it.label&&it.label!==it.query)?it.label:'');field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('name',mode==='url'?'p2m_link_text':'p2m_marker_title');field.setAttribute('data-form-type','other');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');if(mode==='url'){field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');field.inputMode='url';}if(mode==='url')card.appendChild(field);
  field.setAttribute('role','textbox');
- if(mode==='edit'){var cats=document.createElement('div');cats.className='p2m41-cats';var defs=ensurePinCategoryChoices();p2m41Cat=defs.findIndex(function(c){return c.name===it.category});if(p2m41Cat<0)p2m41Cat=0;defs.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'📍';b.title=c.name;b.setAttribute('aria-pressed',String(i===p2m41Cat));b.onclick=function(){p2m41Cat=i;cats.querySelectorAll('button').forEach(function(x,j){x.setAttribute('aria-pressed',String(i===j))})};cats.appendChild(b)});card.appendChild(cats)}
- var actions=document.createElement('div');actions.className='p2m41-actions';var cancel=document.createElement('button');cancel.textContent='Abbrechen';cancel.onclick=p2m41Close;actions.appendChild(cancel);
- var ok=document.createElement('button');ok.className='p2m41-primary';ok.textContent='OK';ok.onclick=function(){if(mode==='url'){p2m41UrlSave(it,field.value.trim());p2m41Close();return}var defs=ensurePinCategoryChoices();if(defs[p2m41Cat]&&defs[p2m41Cat].name!==it.category){p2mCommitVisiblePinNote(it);p2mGpxKeyForPin(it);var old=it.category,c=defs[p2m41Cat],oldGrp=categoryLayers[old];moveSourceLineToCategory(it,p2m41Cat);if(oldGrp&&it._pinLayer)oldGrp.removeLayer(it._pinLayer);if(!categoryLayers[c.name])categoryLayers[c.name]=L.layerGroup().addTo(map);if(it._pinLayer){it._pinLayer.setIcon(icon(c.symbol,pinNumberForItem(it),false,routeRoleForItem(it)));categoryLayers[c.name].addLayer(it._pinLayer)}it.category=c.name;it.symbol=c.symbol;it.color=c.color;p2mSyncPinBadges(it);refreshAfterDirectDelete()}if(it._pinLayer)it._pinLayer.setPopupContent(pinPopupHtml(it));p2m41Close();if(it._pinLayer&&map&&map.hasLayer(it._pinLayer)){it._pinLayer.openPopup()}};if(mode!=='url')actions.appendChild(ok);
- if(mode==='url'){var open=document.createElement('button');open.textContent='Öffnen';open.onclick=function(){var u=field.value.trim();try{p2m41UrlSave(it,u);p2mOpenExternalLink(u)}catch(e){p2m51UrlNotice('Bitte einen gültigen Link mit Protokoll eingeben (z. B. https:, mailto: oder obsidian:).')}};actions.appendChild(open);actions.appendChild(ok)}card.appendChild(actions);p2m41Dialog.replaceChildren(card);p2m41Dialog.style.display='flex';p2m41Dialog.onclick=function(e){if(e.target===p2m41Dialog)p2m41Close()};card.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing){e.preventDefault();e.stopPropagation();ok.click()}else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();cancel.click()}});
+ if(mode==='edit'){var cats=document.createElement('div');cats.className='p2m41-cats';var defs=ensurePinCategoryChoices();p2m41Cat=defs.findIndex(function(c){return c.name===it.category});if(p2m41Cat<0)p2m41Cat=0;defs.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'📍';b.title=c.name;b.setAttribute('aria-pressed',String(i===p2m41Cat));b.onclick=function(){p2m41Cat=i;p2m41ApplyPinCategory(it,i)};cats.appendChild(b)});card.appendChild(cats)}
+ var actions=document.createElement('div');actions.className='p2m41-actions';var cancel=document.createElement('button');cancel.textContent='Abbrechen';cancel.onclick=p2m41Close;if(mode==='url')actions.appendChild(cancel);
+ var ok=document.createElement('button');ok.className='p2m41-primary';ok.textContent='OK';ok.onclick=function(){if(mode==='url'){p2m41UrlSave(it,field.value.trim());p2m41Close();return}};if(mode!=='url')actions.appendChild(ok);
+ if(mode==='url'){var open=document.createElement('button');open.textContent='Öffnen';open.onclick=function(){var u=field.value.trim();try{p2m41UrlSave(it,u);p2mOpenExternalLink(u)}catch(e){p2m51UrlNotice('Bitte einen gültigen Link mit Protokoll eingeben (z. B. https:, mailto: oder obsidian:).')}};actions.appendChild(open);actions.appendChild(ok)}if(mode==='url')card.appendChild(actions);p2m41Dialog.replaceChildren(card);p2m41Dialog.style.display='flex';p2m41Dialog.onclick=function(e){if(e.target===p2m41Dialog)p2m41Close()};card.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing&&mode==='url'){e.preventDefault();e.stopPropagation();ok.click()}else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();cancel.click()}});
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&p2m41Dialog.style.display==='flex'){e.preventDefault();e.stopImmediatePropagation();p2m41Close()}},true);
 function p2m51UrlNotice(message){
@@ -5208,8 +5225,10 @@ document.addEventListener('click',function(e){
 #mapScreen #legend .chip{gap:6px!important;}
 #mapScreen #legend .chip .swatch{margin-left:11px!important;flex-shrink:0!important;}
 
-/* v10.5.34: Nur das Info-Symbol im Aus-Modus mittig und lesbar skalieren. */
+/* v10.5.37: Nur das Info-Symbol im Aus-Modus mittig und lesbar skalieren. */
 #mapScreen #toggleElevations.off{position:absolute!important;}
 #mapScreen #toggleElevations.off .p2m-info-glyph{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;font-family:Georgia,"Times New Roman",serif;font-size:29px;font-weight:700;line-height:1;white-space:nowrap;font-variant-emoji:text;}
+/* v10.5.37: Beide Bedienelemente mit halbtransparentem Hintergrund wie die i-Schaltfläche. */
+#mapScreen #copyMap,#mapScreen #labelToggle{background-color:rgba(255,255,255,.53)!important;background-image:none!important;}
 </style>
 </body></html>
