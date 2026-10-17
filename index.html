@@ -1185,13 +1185,25 @@ html,body{max-width:100%;overflow-x:hidden}
 .p2m-popup .p2m-title-edit-btn{width:25px!important;height:25px!important;min-width:25px!important;flex:0 0 25px;border-radius:50%!important;padding:0!important;display:flex!important;align-items:center;justify-content:center;font-size:12px!important;border:1px solid #c7c7cc!important;background:#fff!important;color:#111!important}
 .p2m-popup .p2m-inline-name{font:700 18px/1.25 -apple-system,BlinkMacSystemFont,sans-serif;flex:1;min-width:0;width:100%;height:32px;min-height:32px;resize:none;white-space:pre;overflow-x:auto;overflow-y:hidden;box-sizing:border-box;border:1px solid #087df5;border-radius:6px;padding:4px 6px}
 </style>
-<style id="p2m-v10537-category-dialog">
+<style id="p2m-v10538-category-dialog">
 #p2m41-dialog:has(.p2m41-cats) .p2m41-card{width:min(350px,calc(100vw - 32px))!important;padding:15px!important}
 #p2m41-dialog .p2m41-cats{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important;max-height:none!important;overflow:visible!important;margin-top:12px}
 #p2m41-dialog .p2m41-cats button{width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1/1!important;padding:4px!important;border-radius:10px!important;font-size:27px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+</style><style id="p2m-v10538-category-dialog">
+/* Nur Kategorieauswahl: drei Reihen vollständig ohne internen Scrollbereich. */
+#p2m41-dialog:has(.p2m41-cats) .p2m41-card{position:relative!important;overflow:visible!important;max-height:none!important;padding:15px!important}
+#p2m41-dialog:has(.p2m41-cats) .p2m41-cats{max-height:none!important;overflow:visible!important}
+#p2m41-dialog .p2m-category-close{position:absolute!important;top:6px!important;right:7px!important;width:24px!important;height:24px!important;min-height:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;color:#666!important;font:700 22px/24px Arial,sans-serif!important;text-align:center!important;cursor:pointer!important;box-shadow:none!important}
+#p2m41-dialog .p2m-category-close:focus-visible{outline:2px solid #087df5!important}
+@media(max-width:700px){
+ #p2m41-dialog:has(.p2m41-cats){align-items:center!important;padding:8px!important;overflow-y:auto!important}
+ #p2m41-dialog:has(.p2m41-cats) .p2m41-card{margin-top:0!important;flex-shrink:0!important;width:min(350px,calc(100vw - 24px))!important}
+ #p2m41-dialog:has(.p2m41-cats) .p2m41-cats{gap:7px!important;margin-top:10px!important}
+ #p2m41-dialog:has(.p2m41-cats) .p2m41-cats button{font-size:clamp(20px,6vw,27px)!important}
+}
 </style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.29)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.5.38)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -4524,6 +4536,7 @@ function p2m41ApplyPinCategory(it,index){
 }
 function p2m41Open(it,mode){p2m41Item=it;p2m41Mode=mode;/* Popup bleibt hinter dem URL-Dialog geoeffnet. */
  var card=document.createElement('div');card.className='p2m41-card';var h=document.createElement('strong');h.textContent=mode==='url'?'URL für '+(it.label||it.query):'Kategorie ändern';card.appendChild(h);
+ if(mode==='edit'){var closeCategory=document.createElement('button');closeCategory.type='button';closeCategory.className='p2m-category-close';closeCategory.textContent='×';closeCategory.title='Abbrechen';closeCategory.setAttribute('aria-label','Kategorieauswahl abbrechen');closeCategory.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();p2m41Close()});card.appendChild(closeCategory)}
  var field=document.createElement('input');field.type='text';field.placeholder=mode==='url'?'https://, mailto:, obsidian:// …':'';field.value=mode==='url'?p2m41UrlGet(it):((it.label&&it.label!==it.query)?it.label:'');field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('name',mode==='url'?'p2m_link_text':'p2m_marker_title');field.setAttribute('data-form-type','other');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');if(mode==='url'){field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');field.inputMode='url';}if(mode==='url')card.appendChild(field);
  field.setAttribute('role','textbox');
  if(mode==='edit'){var cats=document.createElement('div');cats.className='p2m41-cats';var defs=ensurePinCategoryChoices();p2m41Cat=defs.findIndex(function(c){return c.name===it.category});if(p2m41Cat<0)p2m41Cat=0;defs.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.textContent=c.symbol||'📍';b.title=c.name;b.setAttribute('aria-pressed',String(i===p2m41Cat));b.onclick=function(){p2m41Cat=i;p2m41ApplyPinCategory(it,i)};cats.appendChild(b)});card.appendChild(cats)}
@@ -5225,10 +5238,10 @@ document.addEventListener('click',function(e){
 #mapScreen #legend .chip{gap:6px!important;}
 #mapScreen #legend .chip .swatch{margin-left:11px!important;flex-shrink:0!important;}
 
-/* v10.5.37: Nur das Info-Symbol im Aus-Modus mittig und lesbar skalieren. */
+/* v10.5.38: Nur das Info-Symbol im Aus-Modus mittig und lesbar skalieren. */
 #mapScreen #toggleElevations.off{position:absolute!important;}
 #mapScreen #toggleElevations.off .p2m-info-glyph{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;font-family:Georgia,"Times New Roman",serif;font-size:29px;font-weight:700;line-height:1;white-space:nowrap;font-variant-emoji:text;}
-/* v10.5.37: Beide Bedienelemente mit halbtransparentem Hintergrund wie die i-Schaltfläche. */
+/* v10.5.38: Beide Bedienelemente mit halbtransparentem Hintergrund wie die i-Schaltfläche. */
 #mapScreen #copyMap,#mapScreen #labelToggle{background-color:rgba(255,255,255,.53)!important;background-image:none!important;}
 </style>
 </body></html>
