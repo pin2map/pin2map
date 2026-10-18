@@ -1289,9 +1289,149 @@ html,body{max-width:100%;overflow-x:hidden}
  #mapScreen #routeInfo .p10728-transit-leg .p10728-mode{grid-column:3;grid-row:1;}
 }
 </style>
-</head><body>
+<style id="p10729-route-polish">
+/* Keep all routing circles square even when their flex row is constrained. */
+#mapScreen #routeInfo .route-circle{flex-shrink:0!important;aspect-ratio:1/1!important;box-sizing:border-box!important;border-radius:50%!important;}
+#mapScreen #routeInfo .route-toolbar-primary{gap:clamp(9px,2.4vw,17px)!important;}
+#mapScreen #routeInfo .route-toolbar-primary [data-route-mode]{flex:0 0 44px!important;width:44px!important;min-width:44px!important;max-width:44px!important;height:44px!important;min-height:44px!important;max-height:44px!important;}
+#mapScreen #routeInfo .route-toolbar-secondary{gap:12px!important;}
+#mapScreen #routeInfo #transitTimeControls{flex:0 1 auto!important;gap:10px!important;min-width:0!important;}
+#mapScreen #routeInfo #transitTimeMode{flex:0 0 auto!important;}
+#mapScreen #routeInfo #transitDateTime{box-sizing:border-box!important;display:block;flex:0 0 238px!important;width:238px!important;min-width:238px!important;max-width:238px!important;height:42px!important;min-height:42px!important;padding:4px 8px!important;font-size:14px!important;white-space:nowrap!important;line-height:1.2!important;}
+#mapScreen #routeInfo #transitDateTime[style*="display: none"],#mapScreen #routeInfo #transitDateTime[style*="display:none"]{display:none!important;}
+/* Identical leg structure on desktop and phone. */
+#mapScreen #routeInfo .route-legs .p10728-transit-leg{display:grid!important;grid-template-columns:24px 55px 30px minmax(0,1fr)!important;grid-template-rows:auto auto auto!important;column-gap:10px!important;row-gap:5px!important;align-items:start!important;padding:12px 0!important;font-size:14px!important;white-space:normal!important;}
+#mapScreen #routeInfo .p10728-transit-leg .p10728-num{grid-column:1!important;grid-row:1!important;}
+#mapScreen #routeInfo .p10728-transit-leg .p10728-depart{grid-column:2!important;grid-row:1!important;}
+#mapScreen #routeInfo .p10728-transit-leg .p10728-mode{grid-column:3!important;grid-row:1!important;}
+#mapScreen #routeInfo .p10728-transit-leg .p10728-line{grid-column:4!important;grid-row:1!important;}
+#mapScreen #routeInfo .p10728-transit-leg .p10728-origin{grid-column:4!important;grid-row:2!important;}
+#mapScreen #routeInfo .p10728-transit-leg .p10728-arrival{grid-column:2!important;grid-row:3!important;}
+#mapScreen #routeInfo .p10728-transit-leg .p10728-direction{grid-column:3!important;grid-row:3!important;}
+#mapScreen #routeInfo .p10728-transit-leg .p10728-destination{grid-column:4!important;grid-row:3!important;}
+#mapScreen #routeInfo .p10729-duration{grid-column:2!important;grid-row:2!important;color:#8e8e93!important;font-size:12px!important;font-weight:500!important;white-space:nowrap!important;font-variant-numeric:tabular-nums!important;}
+@media(max-width:600px){
+ #mapScreen #routeInfo .route-toolbar-primary{gap:clamp(8px,2.3vw,12px)!important;}
+ #mapScreen #routeInfo .route-toolbar-primary [data-route-mode]{flex:0 0 38px!important;width:38px!important;min-width:38px!important;max-width:38px!important;height:38px!important;min-height:38px!important;max-height:38px!important;}
+ #mapScreen #routeInfo .route-toolbar-secondary{gap:8px!important;}
+ #mapScreen #routeInfo #transitTimeControls{gap:7px!important;}
+ #mapScreen #routeInfo #transitTimeMode{max-width:92px!important;}
+ #mapScreen #routeInfo #transitDateTime{flex:0 1 190px!important;width:190px!important;min-width:0!important;max-width:190px!important;height:40px!important;min-height:40px!important;font-size:13px!important;padding:4px!important;}
+ #mapScreen #routeInfo .route-toolbar-secondary #routeReverse{flex:0 0 38px!important;width:38px!important;min-width:38px!important;max-width:38px!important;height:38px!important;min-height:38px!important;max-height:38px!important;}
+ #mapScreen #routeInfo .route-legs .p10728-transit-leg{grid-template-columns:20px 48px 26px minmax(0,1fr)!important;column-gap:7px!important;font-size:13px!important;}
+}
+</style>
+<style id="p10731-transit-colors">
+/* The numbered badge uses the same hue as the corresponding transit geometry. */
+#mapScreen #routeInfo .p10728-transit-leg .p10728-num{display:inline-flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;width:23px!important;height:23px!important;min-width:23px!important;min-height:23px!important;border:2px solid #777;border-radius:50%!important;font-size:12px!important;font-weight:800!important;line-height:1!important;white-space:nowrap!important;overflow-wrap:normal!important;align-self:start!important;}
+@media(max-width:600px){#mapScreen #routeInfo .p10728-transit-leg .p10728-num{width:20px!important;height:20px!important;min-width:20px!important;min-height:20px!important;font-size:11px!important;}}
+</style>
+<style id="p10732-focus">
+@media(min-width:701px){#mapScreen #routeInfo{width:460px!important;max-width:calc(100vw - 28px)!important;}}
+#mapScreen #routeInfo #transitTimeMode,#mapScreen #routeInfo #transitDateTime{height:42px!important;min-height:42px!important;max-height:42px!important;box-sizing:border-box!important;}
+@media(max-width:600px){#mapScreen #routeInfo #transitTimeMode,#mapScreen #routeInfo #transitDateTime{height:40px!important;min-height:40px!important;max-height:40px!important;}}
+#mapScreen #routeInfo .p10728-transit-leg.p10732-walk .p10728-num{border:0!important;border-radius:0!important;color:#777!important;background:none!important;}
+#mapScreen #routeInfo .p10728-transit-leg.p10732-ride{cursor:pointer;touch-action:manipulation;border-radius:7px;}
+#mapScreen #routeInfo .p10728-transit-leg.p10732-ride:active{background:#e9f1fc;}
+#mapScreen #routeInfo.p10732-focused .route-legs .p10728-transit-leg{display:none!important;}
+#mapScreen #routeInfo.p10732-focused .route-legs .p10728-transit-leg.p10732-selected{display:grid!important;background:#f1f5fa;border-radius:8px;padding:10px 5px!important;}
+#mapScreen #routeInfo.p10732-focused .route-legs{max-height:28vh!important;}
+.p10732-map-label{font:600 12px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#151515;background:rgba(255,255,255,.96);border:2px solid var(--leg-color,#1565c0);border-radius:8px;padding:5px 8px;box-shadow:0 2px 8px #0003;white-space:nowrap;text-align:center;}
+.p10732-label-icon{font-size:16px;vertical-align:middle;}
+.p10732-label-wrap{background:none!important;border:0!important;}
+</style>
+<style id="p10733-route-label">
+/* An der tatsächlichen Linie verankertes, deutlich lesbares Etappenlabel. */
+.leaflet-tooltip.p10733-route-tooltip{padding:0!important;border:0!important;border-radius:12px!important;background:transparent!important;box-shadow:none!important;white-space:nowrap!important;pointer-events:none!important;}
+.leaflet-tooltip.p10733-route-tooltip:before{display:none!important;}
+.p10733-invisible-anchor{background:transparent!important;border:0!important;}
+.p10733-label{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;color:#171b22;border:2px solid var(--leg-color,#1565c0);border-left-width:7px;border-radius:11px;padding:8px 13px;box-shadow:0 3px 14px #0005;min-width:105px;text-align:left;}
+.p10733-label-heading{display:flex;align-items:center;gap:8px;font-size:17px;line-height:1.25;}
+.p10733-label-heading span{font-size:21px;}
+.p10733-label-heading strong{font-weight:800;}
+.p10733-label-times{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;color:#505966;margin-top:4px;padding-left:30px;}
+@media(max-width:600px){.p10733-label{padding:7px 10px}.p10733-label-heading{font-size:16px}.p10733-label-times{font-size:13px}}
+</style>
+<style id="p10734-label-nav">
+.leaflet-tooltip.p10734-route-tooltip{pointer-events:auto!important;cursor:default!important;}
+.p10734-label{display:flex;align-items:stretch;gap:2px;background:#fff;border:2px solid var(--leg-color,#777);border-radius:9px;box-shadow:0 3px 12px #0004;color:#171b22;font:600 12px/1.25 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:min(82vw,360px);overflow:hidden;}
+.p10734-label-nav{appearance:none;border:0;background:#f2f4f7;color:#394454;padding:0 7px;min-width:24px;font-size:12px;cursor:pointer;touch-action:manipulation;}
+.p10734-label-nav:disabled{opacity:.22;cursor:default;}
+.p10734-label-middle{padding:5px 4px;min-width:0;cursor:pointer;}
+.p10734-label-top{display:flex;align-items:center;gap:5px;min-width:0;}
+.p10734-label-icon{font-size:16px;flex:0 0 19px;text-align:center;}
+.p10734-label-desc{font-size:12px;font-weight:750;white-space:normal;overflow-wrap:anywhere;}
+.p10734-label-times{margin-top:2px;padding-left:24px;color:#515967;font-size:11px;font-weight:650;white-space:nowrap;font-variant-numeric:tabular-nums;}
+</style>
+<style id="p10735-focus-mode">
+/* Im Etappenmodus bleibt die Karte samt Navigationslabel vollständig frei. */
+#mapScreen #routeInfo.p10732-focused{display:none!important}
+.leaflet-interactive.p10735-leg-clickable{cursor:pointer}
+</style>
+<style id="p10736-label-halves">
+.leaflet-tooltip.p10734-route-tooltip{max-width:none!important;white-space:nowrap!important;}
+.p10734-label.p10736-label{position:relative;display:flex!important;flex-direction:column!important;gap:0!important;width:max-content!important;max-width:none!important;min-width:0!important;overflow:hidden!important;padding:0!important;cursor:pointer;touch-action:manipulation;}
+.p10736-heading{position:relative;z-index:2;padding:7px 12px 2px;font-size:12px;font-weight:750;line-height:1.3;white-space:nowrap;pointer-events:none;}
+.p10736-subline{position:relative;z-index:2;display:flex;align-items:center;gap:9px;padding:1px 12px 7px;font-size:12px;font-weight:650;white-space:nowrap;pointer-events:none;}
+.p10736-symbol{font-size:16px;line-height:1;}
+.p10736-clickzones{position:absolute;inset:0;display:flex;z-index:1;}
+.p10736-half{flex:1 1 50%;min-width:0;border:0;border-radius:0;margin:0;padding:0;cursor:pointer;touch-action:manipulation;}
+.p10736-half:disabled{cursor:default;opacity:.35;}
+.p10736-half:focus-visible{outline:2px solid #111;outline-offset:-3px;}
+</style><style id="p10737-label-layout">
+/* Keine farbigen Hälften; beide transparenten Klickflächen bleiben erhalten. */
+.p10736-label .p10736-half,.p10736-label .p10736-half:disabled{background:transparent!important;opacity:1!important;}
+.p10736-label .p10736-subline{display:grid!important;grid-template-columns:1fr auto 1fr!important;align-items:center!important;column-gap:10px!important;width:100%!important;box-sizing:border-box!important;padding:2px 12px 8px!important;}
+.p10736-label .p10737-time{font-size:12px!important;font-weight:650!important;font-variant-numeric:tabular-nums;white-space:nowrap!important;}
+.p10736-label .p10737-start{text-align:left!important;}
+.p10736-label .p10737-end{text-align:right!important;}
+.p10736-label .p10736-symbol{text-align:center!important;justify-self:center!important;}
+</style><style id="p10738-adjustments">
+.p10736-label.p10734-label{background:#fff6bf!important}
+.p10736-label .p10736-heading,.p10736-label .p10736-subline{background:transparent!important}
+#mapScreen #routeInfo #transitExtraTransfer{height:42px!important;min-height:42px!important;max-height:42px!important;width:89px!important;max-width:89px!important;flex:0 0 89px!important;padding:0 4px!important;font-size:13px!important;border-radius:8px!important;background:#fff!important;color:#111!important;border:1px solid #c7c7cc!important;box-sizing:border-box!important}
+@media(max-width:600px){#mapScreen #routeInfo #transitTimeControls{flex-wrap:wrap!important}#mapScreen #routeInfo #transitExtraTransfer{height:40px!important;min-height:40px!important;max-height:40px!important;width:80px!important;max-width:80px!important;flex-basis:80px!important;font-size:12px!important}}
+</style><style id="p10739-fixes">
+/* Frisches, dezentes Zitronengelb für Etappenlabels. */
+.p10736-label.p10734-label{background:#fffde2!important}
+.p10736-label .p10739-middle{display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;min-width:max-content}
+.p10736-label .p10739-duration{font-size:11px;font-weight:600;color:#62666c;white-space:nowrap}
+/* Datum kompakter; Umsteigezeit und Umkehrschalter behalten ihren Platz. */
+#mapScreen #routeInfo #transitTimeControls{flex-wrap:nowrap!important;gap:6px!important;min-width:0!important;max-width:100%!important}
+#mapScreen #routeInfo #transitDateTime{flex:0 1 180px!important;width:180px!important;min-width:0!important;max-width:180px!important;font-size:13px!important;padding:3px 5px!important}
+#mapScreen #routeInfo #transitExtraTransfer{flex:0 0 78px!important;width:78px!important;max-width:78px!important;font-size:12px!important;padding:0 3px!important}
+#mapScreen #routeInfo .route-toolbar-secondary #routeReverse{margin-left:0!important;flex-shrink:0!important}
+@media(max-width:600px){#mapScreen #routeInfo #transitDateTime{flex:0 1 158px!important;width:158px!important;max-width:158px!important;font-size:12px!important;padding:2px!important}#mapScreen #routeInfo #transitExtraTransfer{flex:0 0 71px!important;width:71px!important;max-width:71px!important;font-size:11px!important}}
+</style><style id="p10741-transit-controls">
+/* Consistent sizing of the time selector, date/time field, transfer buffer and reverse button. */
+#mapScreen #routeInfo .route-toolbar-secondary{align-items:center!important}
+#mapScreen #routeInfo #transitTimeControls{align-items:center!important}
+#mapScreen #routeInfo #transitTimeMode,
+#mapScreen #routeInfo #transitDateTime,
+#mapScreen #routeInfo #transitExtraTransfer{height:42px!important;min-height:42px!important;max-height:42px!important;box-sizing:border-box!important;align-self:center!important;line-height:normal!important}
+#mapScreen #routeInfo .route-toolbar-secondary #routeReverse{height:42px!important;min-height:42px!important;max-height:42px!important;width:42px!important;min-width:42px!important;max-width:42px!important;flex:0 0 42px!important;align-self:center!important;border-radius:50%!important}
+#mapScreen #routeInfo .route-details-label-group{gap:12px!important}
+#mapScreen #routeInfo .route-toolbar-details{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}
+#mapScreen #routeInfo #transitStagesButton{display:none!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;white-space:nowrap!important;border:1px solid #b8c5d0!important;border-radius:9px!important;background:#edf4fa!important;color:#172b3d!important;font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;padding:9px 10px!important;min-height:36px!important;cursor:pointer!important}
+#mapScreen #routeInfo.p2m-transit-layout #transitStagesButton{display:inline-flex!important}
+#mapScreen #routeInfo .route-navi-group{margin-left:auto!important;flex:0 0 auto!important}
+@media(max-width:600px){
+ #mapScreen #routeInfo #transitTimeMode,#mapScreen #routeInfo #transitDateTime,#mapScreen #routeInfo #transitExtraTransfer{height:40px!important;min-height:40px!important;max-height:40px!important}
+ #mapScreen #routeInfo .route-toolbar-secondary #routeReverse{height:40px!important;min-height:40px!important;max-height:40px!important;width:40px!important;min-width:40px!important;max-width:40px!important;flex-basis:40px!important}
+ #mapScreen #routeInfo .route-details-label-group{gap:8px!important}
+ #mapScreen #routeInfo #transitStagesButton{font-size:12px!important;padding:8px 6px!important;min-height:34px!important}
+ #mapScreen #routeInfo .route-toolbar-details{gap:5px!important}
+}
+</style><style id="p10742-datetime-alignment">
+/* Compact, vertically centered datetime-local control across WebKit/iOS and desktop. */
+#mapScreen #routeInfo #transitDateTime{flex:0 1 195px!important;width:195px!important;min-width:0!important;max-width:195px!important;height:42px!important;min-height:42px!important;max-height:42px!important;padding:0 8px!important;line-height:42px!important;vertical-align:middle!important;text-align:left!important;box-sizing:border-box!important;align-self:center!important;font-size:14px!important}
+#mapScreen #routeInfo #transitDateTime::-webkit-datetime-edit{display:inline-flex;align-items:center;height:100%;padding:0;line-height:normal}
+#mapScreen #routeInfo #transitDateTime::-webkit-datetime-edit-fields-wrapper{display:inline-flex;align-items:center;height:100%;padding:0}
+#mapScreen #routeInfo #transitDateTime::-webkit-calendar-picker-indicator{align-self:center;margin:0 0 0 3px}
+@media(max-width:600px){#mapScreen #routeInfo #transitDateTime{flex:0 1 155px!important;width:155px!important;max-width:155px!important;height:40px!important;min-height:40px!important;max-height:40px!important;line-height:40px!important;font-size:12px!important;padding:0 4px!important}}
+</style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.7.28)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.7.42)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1344,7 +1484,7 @@ html,body{max-width:100%;overflow-x:hidden}
  <div class="p2m-filter-inforow"><div class="p2m-filter-typecol"><select id="markFilterType" aria-label="Markierungstyp"><option value="all">Pins und Flächen</option><option value="pins">Nur Pins</option><option value="areas">Nur Flächen</option><option value="alltext" selected>Pins, Flächen, Text</option><option value="pinstext">Nur Pins und Text</option></select><div id="markFilterCount" role="status" aria-live="polite">sichtbar: alle</div></div><button type="button" id="markFilterExport" title="Sichtbare Pins als Text kopieren" aria-label="Sichtbare Pins als Text kopieren">📋</button></div>
  <div class="p2m-filter-options" role="group" aria-label="Pins mit Inhalt"><label><input type="checkbox" id="markFilterTrack"> <span>Mit Track</span></label><label><input type="checkbox" id="markFilterLink"> <span>Mit Link</span></label><label><input type="checkbox" id="markFilterNote"> <span>Mit Notiz</span></label></div>
 </div>
-<button type="button" id="legendToggle" class="map-round-control map-ui-control" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">⏏︎</span></button></div><div class="route-toolbar-row route-toolbar-primary"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button><button type="button" id="routeClear" title="Route entfernen" aria-label="Route beenden">Beenden</button></div><div class="route-toolbar-row route-toolbar-secondary"><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="now">Jetzt</option><option value="depart">Abfahrt</option><option value="arrive">Ankunft</option></select><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"></div>
+<button type="button" id="legendToggle" class="map-round-control map-ui-control" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">⏏︎</span></button></div><div class="route-toolbar-row route-toolbar-primary"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button><button type="button" id="routeClear" title="Route entfernen" aria-label="Route beenden">Beenden</button></div><div class="route-toolbar-row route-toolbar-secondary"><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="now">Jetzt</option><option value="depart">Abfahrt</option><option value="arrive">Ankunft</option></select><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"><select id="transitExtraTransfer" aria-label="Zusätzliche Umsteigezeit" title="Zusätzliche Umsteigezeit"><option value="0">+0 min</option><option value="3">+3 min</option><option value="5" selected>+5 min</option><option value="10">+10 min</option><option value="15">+15 min</option></select></div>
 <button type="button" id="routeVisiblePins" class="route-circle route-visible-pins" title="Alle noch nicht verwendeten Pins im aktuellen Kartenausschnitt als Zwischenziele hinzufügen" aria-label="Sichtbare Pins hinzufügen"><svg class="route-all-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42" width="36" height="36" aria-hidden="true" focusable="false"><rect x="6" y="7" width="30" height="28" rx="0" fill="none" stroke="#111" stroke-width="1.5"/><text x="21" y="21" fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="central">ALL</text></svg></button>
 <div id="routeOrder" class="route-tool-group route-order-group">
 <button type="button" id="routeOrderToggle" data-route-order="fixed" class="active route-circle" title="Reihenfolge fest" aria-label="Reihenfolge fest">FIX</button>
@@ -1352,7 +1492,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </div><button type="button" id="routeReverse" class="route-circle route-reverse" title="Routing-Reihenfolge umkehren" aria-label="Routing-Reihenfolge umkehren">⇄</button></div>
 <div class="route-toolbar-row route-toolbar-details">
 <div class="route-details-label-group"><button type="button" id="routeDetailsToggle" class="route-circle" title="Teilstrecken anzeigen" aria-label="Teilstrecken anzeigen" disabled><span aria-hidden="true">⏏︎</span></button><span id="routeDetailsLabel">Routendetails</span></div>
-<div class="route-navi-group"><span>Route in:</span><div class="route-navi-buttons"><button type="button" id="openAppleMaps" class="route-circle" title="Route in Apple Karten öffnen" aria-label="Route in Apple Karten öffnen"></button></div></div>
+<button type="button" id="transitStagesButton" title="Erste Etappe auf der Karte anzeigen" aria-label="Etappen auf Karte anzeigen">🔎 Etappen</button><div class="route-navi-group"><span>Route in:</span><div class="route-navi-buttons"><button type="button" id="openAppleMaps" class="route-circle" title="Route in Apple Karten öffnen" aria-label="Route in Apple Karten öffnen"></button></div></div>
 </div><div id="routeAvoid" class="route-avoid"></div><div class="route-bulk"></div><div id="routeEndpoints" class="route-pin-state"></div><div id="routeEdit" class="route-edit"></div><div id="routeHint" class="route-hint" style="display:none"></div><div id="routeLegs" class="route-legs"></div></div></div><div id="notFoundList" class="not-found"></div><div id="placeResultChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5600;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(520px,calc(100vw - 32px));box-sizing:border-box;max-height:78vh;overflow:auto"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Ort auswählen</div><div id="placeResultButtons"></div><button type="button" id="placeResultCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="pinCategoryChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5100;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(300px,82vw);max-width:88vw;max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Kategorie für neuen Pin wählen</div><div id="pinCategoryButtons" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"></div><button type="button" id="pinCategoryCancel" style="width:100%;margin-top:10px;padding:9px;border:0;border-radius:9px;background:#e5e5ea;font-weight:400">Abbrechen</button></div><div id="areaClickChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5400;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(380px,88vw);max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Fläche auswählen</div><div id="areaClickButtons"></div><button type="button" id="areaClickCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="categoryEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5700;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Kategorie bearbeiten</div><label style="display:block;margin:8px 0">Name<input id="categoryEditName" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:16px"></label><label style="display:block;margin:8px 0">Symbol<input id="categoryEditSymbol" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:22px"></label><label style="display:flex;align-items:center;gap:10px;margin:10px 0">Farbe<input id="categoryEditColor" type="color" style="width:58px;height:40px;min-width:58px;min-height:40px;padding:0;border:0;border-radius:0;background:transparent;-webkit-appearance:none;appearance:none"><span id="categoryEditColorText"></span></label><button type="button" id="categoryEditSave" style="width:100%;margin-top:8px;background:#666">Änderungen übernehmen</button><button type="button" id="categoryEditCancel" style="width:100%;margin-top:8px;background:#666">Abbrechen</button></div><div id="pinNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Pin umbenennen</div><input id="pinNameInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="pinNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="pinNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="areaNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Fläche umbenennen</div><input id="areaNameInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="areaNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="areaNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="mapActionChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5200;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(310px,84vw);max-width:90vw;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Aktion wählen</div><button type="button" id="actionAddPin" style="display:block;width:100%;margin-bottom:8px;background:#34a853">📍 Pin setzen</button><button type="button" id="actionWikipediaArea" style="display:none;width:100%;margin-bottom:8px;background:#fff;color:#111;border:1px solid #c7c7cc">ⓦ Wikipedia</button><button type="button" id="actionFindAreas" style="display:block;width:100%;margin-bottom:8px;background:#34a853">🗺️ Gebiete suchen</button><button type="button" id="actionRenameArea" style="display:none;width:100%;margin-bottom:8px;background:#666">Name ändern</button><button type="button" id="actionChangeAreaCategory" style="display:none;width:100%;margin-bottom:8px;background:#666">Kategorie ändern</button><button type="button" id="actionRemoveArea" style="display:none;width:100%;margin-bottom:8px;background:#e53935">Fläche entfernen</button><button type="button" id="actionCancel" style="display:block;width:100%;margin-top:8px;background:#e5e5ea;color:#111">Abbrechen</button></div><div id="areaSearchBox" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5300;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(520px,calc(100vw - 32px));box-sizing:border-box;max-height:78vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;font-size:16px;margin-bottom:10px">Bitte auswählen:</div><div id="areaSearchPoint" style="color:#666;font-size:12px;margin-bottom:10px"></div><div id="areaSearchResults"></div>
 <div id="manualAreaSearchBlock" style="display:none">
   <div style="font-weight:700;font-size:15px;margin-bottom:8px">🔎 Weiteres Gebiet suchen</div>
@@ -2876,7 +3016,7 @@ function openRouteInAppleMaps(){
 function clearRoute(keepPoints){
  lastRouteExport=null;updateGpxButton();
  if(routeLayer&&map&&map.hasLayer(routeLayer))map.removeLayer(routeLayer);routeLayer=null;
- var routeInfoEl=document.getElementById('routeInfo');routeInfoEl.style.display='none';routeInfoEl.classList.remove('route-details-open');var rl=document.getElementById('routeLegs');if(rl){rl.classList.remove('open');rl.innerHTML=''}var rt=document.getElementById('routeDetailsToggle');if(rt){rt.disabled=true;rt.title='Teilstrecken anzeigen';rt.setAttribute('aria-label','Teilstrecken anzeigen')}var re=document.getElementById('routeEdit');if(re)re.innerHTML=''
+ p10732ClearFocus();var routeInfoEl=document.getElementById('routeInfo');routeInfoEl.style.display='none';routeInfoEl.classList.remove('route-details-open');var rl=document.getElementById('routeLegs');if(rl){rl.classList.remove('open');rl.innerHTML=''}var rt=document.getElementById('routeDetailsToggle');if(rt){rt.disabled=true;rt.title='Teilstrecken anzeigen';rt.setAttribute('aria-label','Teilstrecken anzeigen')}var re=document.getElementById('routeEdit');if(re)re.innerHTML=''
  if(!keepPoints){routeRequestGeneration++;routeStartItem=null;routeTargetItem=null;routeWaypoints=[];setRouteOrderFixed(true)}updateAppleMapsButton();renderRouteEditor()
 }
 function updateGpxButton(){var b=document.getElementById('bottomGpxAction');if(!b)return;if(gpxLayer){b.disabled=false;b.textContent='GPX';b.classList.add('gpx-remove');b.title='Importierten GPX-Pfad entfernen';b.setAttribute('aria-label',b.title)}else{b.textContent='GPX';b.classList.remove('gpx-remove');b.disabled=!lastRouteExport;b.title='Route als GPX exportieren';b.setAttribute('aria-label',b.title)}}
@@ -2923,7 +3063,7 @@ function showCalculatedRoute(routeItems,geometry,distanceMeters,durationSeconds,
  var km=distanceMeters/1000,dist=km<10?km.toFixed(1):Math.round(km).toLocaleString('de-DE');
  p2mTransitTransfers=null;updateRouteDetailsLabel();document.getElementById('routeSummary').textContent=routeModeIcon()+' '+dist+' km · ca. '+formatRouteDuration(durationSeconds);
  document.getElementById('routeEndpoints').textContent='';renderRouteEditor();
- var routeInfoEl=document.getElementById('routeInfo');routeInfoEl.classList.remove('route-details-open');var legsBox=document.getElementById('routeLegs');legsBox.innerHTML='';legsBox.classList.remove('open');
+ p10732ClearFocus();var routeInfoEl=document.getElementById('routeInfo');routeInfoEl.classList.remove('route-details-open');var legsBox=document.getElementById('routeLegs');legsBox.innerHTML='';legsBox.classList.remove('open');
  (legs||[]).forEach(function(leg,i){var fromItem=routeItems[i],toItem=routeItems[i+1],a=routeItemName(fromItem),b=routeItemName(toItem),lkm=leg.distance/1000,ldist=lkm<10?lkm.toFixed(1):Math.round(lkm).toLocaleString('de-DE'),row=document.createElement('div'),dot=document.createElement('span'),txt=document.createElement('span');row.className='route-leg';dot.className='route-leg-dot';dot.style.background=routeLegColor(i,(legs||[]).length);txt.textContent=(i+1)+'. '+a+' → '+b+' · '+ldist+' km · '+formatRouteDuration(leg.duration);row.appendChild(dot);row.appendChild(txt);if(isAppleDevice()&&fromItem&&toItem&&fromItem._pinLayer&&toItem._pinLayer){row.classList.add('route-leg-apple');row.title=a+' → '+b+' in Apple Karten öffnen';row.setAttribute('role','button');row.setAttribute('tabindex','0');row.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openRouteLegInAppleMaps(fromItem,toItem)});row.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();openRouteLegInAppleMaps(fromItem,toItem)}})}legsBox.appendChild(row)});
  var toggle=document.getElementById('routeDetailsToggle');if(toggle){toggle.disabled=!(legs&&legs.length);toggle.title='Teilstrecken anzeigen';toggle.setAttribute('aria-label','Teilstrecken anzeigen')}document.getElementById('routeHint').style.display='none';updateRouteModeButtons();document.getElementById('routeInfo').style.display='flex';
  autoZoomLoadedLayers();mapStatus.textContent=''
@@ -2943,35 +3083,137 @@ function decodeGooglePolyline6(str){
  return out
 }
 function transitTime(v){if(!v)return'';var d=new Date(v);return isNaN(d)?'':d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}
-function transitModeLabel(m){var x=String(m||'').toUpperCase();if(x==='WALK'||x==='FOOT')return'🚶';if(x==='BUS'||x==='COACH')return'🚌';if(x==='TRAM')return'🚋';if(x==='SUBWAY'||x==='METRO')return'🚇';if(x==='SUBURBAN')return'🚆';if(x==='RAIL'||x==='TRAIN'||x==='HIGHSPEED_RAIL'||x==='LONG_DISTANCE')return'🚆';if(x==='FERRY')return'⛴️';return'🚍'}
+function transitModeLabel(m,line){var x=String(m||'').toUpperCase();if(x==='WALK'||x==='FOOT')return'🚶';if(x==='BUS'||x==='COACH')return'🚌';if(x==='TRAM')return'🚋';if(x==='SUBWAY'||x==='METRO')return'🚇';if(x==='SUBURBAN')return'🚆';if(x==='RAIL'||x==='TRAIN'||x==='HIGHSPEED_RAIL'||x==='LONG_DISTANCE')return'🚆';if(x==='FERRY')return'⛴️';if(/^(RE|RB|IRE|MEX|RS)\s*\d/i.test(String(line||'')))return'🚊';if(/REGIONAL|REGIO|LOCAL_RAIL|REGIONAL_RAIL/.test(x))return'🚊';return'🚍'}
+function p10730Platform(leg,side){
+ // Transitous/MOTIS may supply platform data on the stop, or directly on the leg.
+ var stop=leg&&leg[side]||{},prefix=side==='from'?'departure':'arrival';
+ var candidates=[stop.track,stop.platform,stop.platformCode,stop.platformName,stop.scheduledTrack,stop.scheduledPlatform,stop[prefix+'Track'],stop[prefix+'Platform'],leg&&leg[prefix+'Track'],leg&&leg[prefix+'Platform']];
+ for(var i=0;i<candidates.length;i++){
+  var v=candidates[i];if(v&&typeof v==='object')v=v.name||v.code||v.label||v.number||'';
+  if(v===null||v===undefined)continue;
+  var value=String(v).trim();if(!value)continue;
+  // Do not display unknown values or arbitrary object serialization.
+  if(value==='[object Object]'||/^(null|undefined|unknown|n\/?a)$/i.test(value))continue;
+  return (/^(gleis|steig|bahnsteig|platform|track)\b/i.test(value)?'':'Gleis ')+value;
+ }
+ return '';
+}
 function transitLegName(leg){var r=leg.routeShortName||leg.routeName||leg.displayName||'';var h=leg.headsign||leg.tripHeadsign||'';return [transitModeLabel(leg.mode),r,h?('→ '+h):''].filter(Boolean).join(' ')}
-function transitGeometry(legs){var features=[];(legs||[]).forEach(function(leg){var g=leg.legGeometry||leg.geometry;if(!g)return;var coords=[];if(typeof g==='string')coords=decodeGooglePolyline6(g);else if(g.points)coords=decodeGooglePolyline6(g.points);else if(g.type==='LineString'&&g.coordinates)coords=g.coordinates;if(coords&&coords.length>1)features.push({type:'Feature',properties:{mode:leg.mode||''},geometry:{type:'LineString',coordinates:coords}})});return{type:'FeatureCollection',features:features}}
+// One stable color per public-transport leg; walking connectors stay neutral.
+var p10731TransitPalette=['#e53935','#1565c0','#00897b','#8e24aa','#ef6c00','#6d4c41','#c2185b','#558b2f'];
+function p10731IsWalk(leg){var m=String(leg&&leg.mode||'').toUpperCase();return m==='WALK'||m==='FOOT'}
+function p10731TransitLegColors(legs){var n=0;return(legs||[]).map(function(leg){return p10731IsWalk(leg)?'#e65100':p10731TransitPalette[(n++)%p10731TransitPalette.length]})}
+function transitGeometry(legs,colors){var features=[];(legs||[]).forEach(function(leg,i){var g=leg.legGeometry||leg.geometry;if(!g)return;var coords=[];if(typeof g==='string')coords=decodeGooglePolyline6(g);else if(g.points)coords=decodeGooglePolyline6(g.points);else if(g.type==='LineString'&&g.coordinates)coords=g.coordinates;if(coords&&coords.length>1)features.push({type:'Feature',properties:{mode:leg.mode||'',legIndex:i,legColor:colors&&colors[i]||'#e65100'},geometry:{type:'LineString',coordinates:coords}})});return{type:'FeatureCollection',features:features}}
+var p10732FocusedLeg=null,p10732FocusLabel=null,p10732LegBounds=[],p10733LegPoints=[],p10734Legs=[],p10734Rows=[],p10734Colors=[];
+function p10732ClearFocus(){
+ p10732FocusedLeg=null;
+ var info=document.getElementById('routeInfo');if(info)info.classList.remove('p10732-focused');
+ var box=document.getElementById('routeLegs');if(box)box.querySelectorAll('.p10732-selected').forEach(function(el){el.classList.remove('p10732-selected')});
+ if(p10732FocusLabel&&map)map.removeLayer(p10732FocusLabel);p10732FocusLabel=null;
+}
+function p10734NavigateLeg(delta){
+ if(p10732FocusedLeg===null)return;
+ var next=p10732FocusedLeg+delta;
+ if(next<0||next>=p10734Legs.length)return;
+ p10732FocusLeg(next,p10734Rows[next],p10734Legs[next],p10734Colors[next]);
+}
+function p10735Direction(leg){
+ var choices=[leg.trip&&leg.trip.headsign,leg.trip&&leg.trip.tripHeadsign,leg.trip&&leg.trip.direction,leg.trip&&leg.trip.destination,leg.route&&leg.route.headsign,leg.route&&leg.route.direction,leg.headsign,leg.tripHeadsign,leg.trip&&leg.trip.destinationName,leg.trip&&leg.trip.destinationStop&&leg.trip.destinationStop.name];
+ var raw=String(choices.find(function(v){return typeof v==='string'&&v.trim()})||'').trim();
+ // Transitous liefert bei einigen ICE-Fahrten nur den Bahnsteigbereich statt des Zugziels.
+ // Diese Angabe ist keine Fahrtrichtung und darf nicht als solche ausgegeben werden.
+ if(/^(?:hauptbahnhof|hbf)\s*\((?:oben|unten|tief)\)$/i.test(raw)){var fallback=[leg.trip&&leg.trip.destination,leg.trip&&leg.trip.destinationName,leg.route&&leg.route.longName,leg.routeLongName].find(function(v){return typeof v==='string'&&v.trim()&&!/^(?:hauptbahnhof|hbf)\s*\(/i.test(v)});return fallback||'';}
+ return raw;
+}
+function p10735ShowLeg(i){
+ if(i<0||i>=p10734Legs.length)return;
+ // Auch bei bereits gewählter Etappe das Label zuverlässig wiederherstellen.
+ if(p10732FocusedLeg===i)p10732ClearFocus();
+ p10732FocusLeg(i,p10734Rows[i],p10734Legs[i],p10734Colors[i]);
+}
+function p10732FocusLeg(i,row,leg,color){
+ if(p10732FocusedLeg===i){p10732ClearFocus();return}
+ p10732ClearFocus();var bounds=p10732LegBounds[i];
+ if(!bounds||!bounds.isValid()){
+  var a=leg.from&&leg.from.lat!==undefined?L.latLng(leg.from.lat,leg.from.lon):null;
+  var b=leg.to&&leg.to.lat!==undefined?L.latLng(leg.to.lat,leg.to.lon):null;
+  if(a&&b)bounds=L.latLngBounds([a,b]);
+ }
+ if(!bounds||!bounds.isValid())return;
+ p10732FocusedLeg=i;var info=document.getElementById('routeInfo');info.classList.add('p10732-focused');row.classList.add('p10732-selected');
+ var from=transitTime(leg.startTime||(leg.from&&leg.from.departure)),to=transitTime(leg.endTime||(leg.to&&leg.to.arrival));
+ var walk=p10731IsWalk(leg),line=walk?'Fußweg':(leg.routeShortName||leg.routeName||leg.displayName||'ÖPNV');
+ var direction=walk?'':p10735Direction(leg);
+ var label=document.createElement('div');label.className='p10734-label p10736-label';label.style.setProperty('--leg-color',color);
+ var heading=document.createElement('div');heading.className='p10736-heading';heading.textContent=line+(direction?' · Ri. '+direction:'');
+ var subline=document.createElement('div');subline.className='p10736-subline';
+ var symbol=document.createElement('span');symbol.className='p10736-symbol';symbol.textContent=transitModeLabel(leg.mode,leg.routeShortName||leg.routeName);
+ var times=document.createElement('span');times.textContent=from+' – '+to;
+ var startTime=document.createElement('span');startTime.className='p10737-time p10737-start';startTime.textContent=from;var endTime=document.createElement('span');endTime.className='p10737-time p10737-end';endTime.textContent=to;var mins=Math.max(0,Math.round((new Date(leg.endTime||(leg.to&&leg.to.arrival))-new Date(leg.startTime||(leg.from&&leg.from.departure)))/60000));var mid=document.createElement('span');mid.className='p10739-middle';mid.appendChild(symbol);var dur=document.createElement('span');dur.className='p10739-duration';dur.textContent=Number.isFinite(mins)?mins+' min':'';mid.appendChild(dur);subline.appendChild(startTime);subline.appendChild(mid);subline.appendChild(endTime);
+ var zones=document.createElement('div');zones.className='p10736-clickzones';
+ function p10736Tint(hex){var m=/^#([0-9a-f]{6})$/i.exec(hex||'');if(!m)return '#eef1f4';var v=m[1],r=parseInt(v.slice(0,2),16),g=parseInt(v.slice(2,4),16),b=parseInt(v.slice(4,6),16);return 'rgb('+Math.round(r*.16+255*.84)+','+Math.round(g*.16+255*.84)+','+Math.round(b*.16+255*.84)+')'}
+ var left=document.createElement('button');left.type='button';left.className='p10736-half';left.setAttribute('aria-label','Vorherige Etappe');left.title='Vorherige Etappe';left.disabled=i===0;left.style.background='transparent';
+ var right=document.createElement('button');right.type='button';right.className='p10736-half';right.setAttribute('aria-label','Nächste Etappe');right.title='Nächste Etappe';right.disabled=i===p10734Legs.length-1;right.style.background='transparent';
+ zones.appendChild(left);zones.appendChild(right);label.appendChild(zones);label.appendChild(heading);label.appendChild(subline);
+ // Einzelklick verzögert auswerten, damit Doppelklick nicht die Etappe wechselt.
+ var clickTimer=null,lastTapTime=0;
+ function p10736OpenList(e){if(e){e.preventDefault();e.stopPropagation()}if(clickTimer){clearTimeout(clickTimer);clickTimer=null}p10732ClearFocus();}
+ function p10736Tap(e,delta){e.preventDefault();e.stopPropagation();if(e.detail>=2){p10736OpenList(e);return}if(clickTimer)clearTimeout(clickTimer);clickTimer=setTimeout(function(){clickTimer=null;p10734NavigateLeg(delta)},280)}
+ left.addEventListener('click',function(e){p10736Tap(e,-1)});
+ right.addEventListener('click',function(e){p10736Tap(e,1)});
+ label.addEventListener('dblclick',p10736OpenList);
+ label.addEventListener('touchend',function(e){var now=Date.now();if(now-lastTapTime<350){p10736OpenList(e)}lastTapTime=now},{passive:false});
+ var point=p10733LegPoints[i]||bounds.getCenter();
+ p10732FocusLabel=L.marker(point,{icon:L.divIcon({className:'p10733-invisible-anchor',iconSize:[1,1]}),interactive:false,zIndexOffset:1000}).addTo(map);
+ p10732FocusLabel.bindTooltip(label,{permanent:true,direction:'top',offset:[0,-14],opacity:1,className:'p10733-route-tooltip p10734-route-tooltip',interactive:true}).openTooltip();
+ map.fitBounds(bounds,{paddingTopLeft:[35,75],paddingBottomRight:[35,125],maxZoom:walk?18:16,animate:true});
+}
+document.getElementById('transitStagesButton').addEventListener('click',function(e){
+ e.preventDefault();e.stopPropagation();
+ if(routeMode!=='transit'||!p10734Legs.length||!p10734Rows.length)return;
+ var info=document.getElementById('routeInfo');
+ info.classList.add('route-details-open');
+ var first=p10734Rows[0];if(first)p10735ShowLeg(0);
+});
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='transitExtraTransfer'&&routeMode==='transit'&&routeStartItem&&routeTargetItem){try{calculateRoute()}catch(err){console.warn('Umsteigezeit:',err)}}});
 function calculateTransitRoute(routeItems){
  if(routeItems.length>2){mapStatus.textContent='⚠️ ÖPNV-Test: Zwischenziele werden derzeit nicht unterstützt.';document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();return}
  var a=routeItems[0]._pinLayer.getLatLng(),b=routeItems[1]._pinLayer.getLatLng();
- var q=new URLSearchParams({fromPlace:a.lat+','+a.lng,toPlace:b.lat+','+b.lng,detailedLegs:'true',detailedTransfers:'true',transitModes:'TRANSIT',directModes:''});var tm=document.getElementById('transitTimeMode').value,tq=transitQueryTime();if(tq){q.set('time',tq);q.set('arriveBy',tm==='arrive'?'true':'false')}
+ var q=new URLSearchParams({fromPlace:a.lat+','+a.lng,toPlace:b.lat+','+b.lng,detailedLegs:'true',detailedTransfers:'true',transitModes:'TRANSIT',directModes:''});var extraTransfer=document.getElementById('transitExtraTransfer');if(extraTransfer&&Number(extraTransfer.value)>0)q.set('additionalTransferTime',String(Number(extraTransfer.value)));var tm=document.getElementById('transitTimeMode').value,tq=transitQueryTime();if(tq){q.set('time',tq);q.set('arriveBy',tm==='arrive'?'true':'false')}
  fetch('https://api.transitous.org/api/v6/plan?'+q.toString(),{headers:{'Accept':'application/json'}}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){
-  if(!d.itineraries||!d.itineraries.length)throw new Error('Keine ÖPNV-Verbindung');var it=d.itineraries[0],legs=it.legs||[],geo=transitGeometry(legs);
+  if(!d.itineraries||!d.itineraries.length)throw new Error('Keine ÖPNV-Verbindung');var it=d.itineraries[0],legs=it.legs||[],legColors=p10731TransitLegColors(legs),geo=transitGeometry(legs,legColors);p10732ClearFocus();p10734Legs=legs;p10734Rows=[];p10734Colors=legColors;p10732LegBounds=[];p10733LegPoints=[];geo.features.forEach(function(f){var idx=f.properties.legIndex;var coords=f.geometry.coordinates;if(coords&&coords.length>1){var b=L.latLngBounds(coords.map(function(c){return[c[1],c[0]]}));if(b.isValid()){p10732LegBounds[idx]=b;var mid=coords[Math.floor(coords.length/2)];if(mid)p10733LegPoints[idx]=L.latLng(mid[1],mid[0])}}});
   if(routeLayer&&map&&map.hasLayer(routeLayer))map.removeLayer(routeLayer);
-  routeLayer=L.geoJSON(geo,{style:function(f){var m=String((f.properties&&f.properties.mode)||'').toUpperCase();return{color:(m==='WALK'||m==='FOOT')?'#666':'#0a84ff',weight:(m==='WALK'||m==='FOOT')?4:6,opacity:.85,dashArray:(m==='WALK'||m==='FOOT')?'6 7':null}}}).addTo(map);
+  routeLayer=L.geoJSON(geo,{style:function(f){var m=String((f.properties&&f.properties.mode)||'').toUpperCase();return{color:(f.properties&&f.properties.legColor)||'#e65100',weight:(m==='WALK'||m==='FOOT')?5:6,opacity:.9,dashArray:(m==='WALK'||m==='FOOT')?'1 11':null,lineCap:(m==='WALK'||m==='FOOT')?'round':'round'}},onEachFeature:function(f,layer){
+   var idx=f.properties&&f.properties.legIndex;
+   if(typeof idx!=='number')return;
+   layer.options.className='p10735-leg-clickable';
+   layer.on('click',function(e){if(e&&e.originalEvent)L.DomEvent.stopPropagation(e.originalEvent);p10735ShowLeg(idx)});
+   // Unsichtbare breitere Klickfläche auch für schmale Fußwege.
+   if(layer.setStyle)layer.setStyle({interactive:true});
+  }}).addTo(map);
   rememberRouteExport(routeItems,geo);
   var start=transitTime(it.startTime),end=transitTime(it.endTime);p2mTransitTransfers=Number(it.transfers)||0;document.getElementById('routeSummary').textContent='🚃 '+start+'–'+end+' · '+formatRouteDuration(it.duration||0);updateRouteDetailsLabel();
   document.getElementById('routeEndpoints').textContent='';renderRouteEditor();
   var routeInfoEl=document.getElementById('routeInfo');routeInfoEl.classList.remove('route-details-open');var box=document.getElementById('routeLegs');box.innerHTML='';box.classList.remove('open');legs.forEach(function(leg,i){
    var row=document.createElement('div');row.className='route-leg p10728-transit-leg';
    var from=(leg.from&&leg.from.name)||'',to=(leg.to&&leg.to.name)||'';
+   var fromPlatform=p10730Platform(leg,'from'),toPlatform=p10730Platform(leg,'to');
+   if(fromPlatform)from+=' · '+fromPlatform;
+   if(toPlatform)to+=' · '+toPlatform;
    var t1=transitTime(leg.startTime||(leg.from&&leg.from.departure)),t2=transitTime(leg.endTime||(leg.to&&leg.to.arrival));
-   var mode=String(leg.mode||'').toUpperCase(),walk=mode==='WALK'||mode==='FOOT';
+   var mode=String(leg.mode||'').toUpperCase(),walk=mode==='WALK'||mode==='FOOT';row.classList.add(walk?'p10732-walk':'p10732-ride');
    var line=leg.routeShortName||leg.routeName||leg.displayName||(walk?'Fußweg':'Verbindung');
-   var direction=leg.headsign||leg.tripHeadsign||'';
+   var direction=p10735Direction(leg);
    function cell(cls,value){var el=document.createElement('span');el.className=cls;el.textContent=value||'–';row.appendChild(el)}
-   cell('p10728-num',(i+1)+'.');cell('p10728-time p10728-depart',t1);
-   cell('p10728-mode',transitModeLabel(mode));cell('p10728-line',line);
+   cell('p10728-num',(i+1)+'.');var numberBadge=row.querySelector('.p10728-num');if(numberBadge){numberBadge.style.borderColor=walk?'transparent':legColors[i];numberBadge.style.color=walk?'#777777':legColors[i];numberBadge.title=walk?'Fußweg (orange gepunktet)':'Farbe des Streckenabschnitts auf der Karte'}cell('p10728-time p10728-depart',t1);
+   cell('p10728-mode',transitModeLabel(mode,line));cell('p10728-line',line);
+   var durationMinutes=Math.max(0,Math.round((new Date(leg.endTime||(leg.to&&leg.to.arrival))-new Date(leg.startTime||(leg.from&&leg.from.departure)))/60000));
+   cell('p10729-duration',Number.isFinite(durationMinutes)?(durationMinutes+' min'):'');
    cell('p10728-origin',from);
    cell('p10728-direction', '→');
    cell('p10728-time p10728-arrival',t2);cell('p10728-destination',to);
    if(direction){row.title='Richtung: '+direction;var label=row.querySelector('.p10728-line');label.textContent+=' · Ri. '+direction}
-   box.appendChild(row)
+   if(true){row.setAttribute('role','button');row.tabIndex=0;row.title='Etappe auf Karte anzeigen · erneut antippen: ganze Liste';row.addEventListener('click',function(){p10732FocusLeg(i,row,leg,legColors[i])});row.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();p10732FocusLeg(i,row,leg,legColors[i])}})}p10734Rows[i]=row;box.appendChild(row)
   });
   var toggle=document.getElementById('routeDetailsToggle');if(toggle){toggle.disabled=!legs.length;toggle.title='Teilstrecken anzeigen';toggle.setAttribute('aria-label','Teilstrecken anzeigen')}var hint=document.getElementById('routeHint');hint.textContent='';hint.style.display='none';updateRouteModeButtons();document.getElementById('routeInfo').style.display='flex';autoZoomLoadedLayers();mapStatus.textContent=''
  }).catch(function(e){document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();mapStatus.textContent='⚠️ ÖPNV-Verbindung konnte nicht berechnet werden. '+(e&&e.message?e.message:'')})
@@ -3057,7 +3299,8 @@ document.getElementById('routePanelToggle').onclick=function(e){
  e.preventDefault();e.stopPropagation();
  if(!(routeStartItem&&routeTargetItem))return;
  var info=document.getElementById('routeInfo');
- setRoutePanelHidden(!info.classList.contains('route-panel-hidden'))
+ if(routeMode==='transit'&&p10732FocusedLeg!==null)p10732ClearFocus();
+ setRoutePanelHidden(false);
 };
 document.getElementById('routePanelHide').onclick=function(e){
  e.preventDefault();e.stopPropagation();
