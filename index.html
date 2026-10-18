@@ -1224,7 +1224,7 @@ html,body{max-width:100%;overflow-x:hidden}
 #mapScreen .leaflet-popup-content .p2m106-path-popup{width:auto!important;min-width:0!important}
 </style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.7.17)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.7.19)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1805,10 +1805,12 @@ function p2mEnablePinMove(it,marker){
   el.style.touchAction='none';
   function clear(){if(hold){clearTimeout(hold);hold=null}if(el)el.classList.remove('p2m-pin-move-ready');if(map&&map.dragging)map.dragging.enable();active=null;ready=false;dragged=false;marker._p2mMoveStarted=false;}
   function point(ev){var t=ev.touches&&ev.touches[0]||ev.changedTouches&&ev.changedTouches[0]||ev;return {x:t.clientX,y:t.clientY};}
+  var lastTapAt=0,lastTapPoint=null,touchDownAt=0,touchDownPoint=null,touchMoved=false;
   function down(ev){
    if(active!==null)return;if(ev.type==='mousedown'&&ev.button!==0)return;
    if(ev.type==='touchstart'&&ev.touches.length!==1)return;
    active=ev.type==='touchstart'?'touch':'mouse';origin=point(ev);last=origin;ready=false;dragged=false;
+   if(active==='touch'){touchDownAt=Date.now();touchDownPoint=origin;touchMoved=false;}
    // Leaflet darf den Fingerkontakt nicht als Kartenverschiebung übernehmen.
    ev.stopPropagation();
    if(map&&map.dragging)map.dragging.disable();
@@ -1817,6 +1819,7 @@ function p2mEnablePinMove(it,marker){
   function move(ev){
    if(active===null||((ev.type==='touchmove')!==(active==='touch')))return;
    var p=point(ev);last=p;
+   if(active==='touch'&&touchDownPoint&&Math.hypot(p.x-touchDownPoint.x,p.y-touchDownPoint.y)>12)touchMoved=true;
    if(!ready){if(Math.hypot(p.x-origin.x,p.y-origin.y)>9){clear();}if(ev.cancelable)ev.preventDefault();ev.stopPropagation();return;}
    if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
    if(!map)return;
@@ -1828,6 +1831,23 @@ function p2mEnablePinMove(it,marker){
    if(active===null)return;
    if(active==='touch'&&ev.type!=='touchend'&&ev.type!=='touchcancel')return;
    if(active==='mouse'&&ev.type!=='mouseup')return;
+   // iOS Safari liefert auf Markern nicht zuverlässig ein natives dblclick.
+   // Zwei kurze Touch-Tipps direkt am Pin deshalb separat erkennen.
+   if(active==='touch'&&ev.type==='touchend'&&!ready&&!dragged&&!touchMoved&&Date.now()-touchDownAt<350){
+    var now=Date.now(),tap=point(ev);
+    if(lastTapAt&&now-lastTapAt<400&&lastTapPoint&&Math.hypot(tap.x-lastTapPoint.x,tap.y-lastTapPoint.y)<35){
+     lastTapAt=0;lastTapPoint=null;
+     marker._p2mSuppressClickUntil=now+900;
+     if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null;}
+     if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
+     map.closePopup();
+     var maxZoom=map.getMaxZoom();if(!isFinite(maxZoom))maxZoom=19;
+     map.setView(marker.getLatLng(),maxZoom,{animate:true});
+     clear();moveUnlocked=false;touchReady=false;
+     return;
+    }
+    lastTapAt=now;lastTapPoint=tap;
+   }
    if(ready&&dragged){marker._p2mSuppressClickUntil=Date.now()+850;savePosition();if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
     if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null;}
     marker.closePopup();}
