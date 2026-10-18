@@ -1224,7 +1224,7 @@ html,body{max-width:100%;overflow-x:hidden}
 #mapScreen .leaflet-popup-content .p2m106-path-popup{width:auto!important;min-width:0!important}
 </style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.7.19)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.7.24)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1741,6 +1741,21 @@ function refreshAfterDirectAdd(){
 
 }
 /* v10.7.17: Pin-Position per Maus oder langem Fingerdruck bearbeiten. */
+// v10.7.23: Doppelklick/-tipp auf denselben Pin: unabhaengig vom Autozoom 18 und 14 im Wechsel.
+// Anschliessender Autozoom: 12, 18, 12 ...
+var p2mLastDoublePin=null;
+function p2mZoomDoublePin(marker){
+ if(!map||!marker)return;
+ var ll=marker.getLatLng();
+ var identity=marker;
+ var second=p2mLastDoublePin===identity && marker._p2mDoubleZoomClose===true;
+ var maxZoom=map.getMaxZoom();if(!isFinite(maxZoom))maxZoom=19;
+ var target=Math.min(second?14:18,maxZoom);
+ map.closePopup();map.setView(ll,target,{animate:true});
+ p2mLastDoublePin=identity;
+ marker._p2mDoubleZoomClose=!second;
+ // Kein Eingriff in den separaten Autozoom-Wechselzustand.
+}
 function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
@@ -1758,10 +1773,7 @@ function p2mEnablePinMove(it,marker){
   if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null}
   if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}
   if(!map)return;
-  map.closePopup();
-  var maximum=map.getMaxZoom();
-  if(!isFinite(maximum))maximum=19;
-  map.setView(marker.getLatLng(),maximum,{animate:true});
+  p2mZoomDoublePin(marker);
  });
  function stopTimer(){if(touchTimer){clearTimeout(touchTimer);touchTimer=null}if(pressTimer){clearTimeout(pressTimer);pressTimer=null}}
  function feedback(el){
@@ -1840,9 +1852,7 @@ function p2mEnablePinMove(it,marker){
      marker._p2mSuppressClickUntil=now+900;
      if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null;}
      if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
-     map.closePopup();
-     var maxZoom=map.getMaxZoom();if(!isFinite(maxZoom))maxZoom=19;
-     map.setView(marker.getLatLng(),maxZoom,{animate:true});
+     p2mZoomDoublePin(marker);
      clear();moveUnlocked=false;touchReady=false;
      return;
     }
@@ -4177,7 +4187,7 @@ document.getElementById('markFilterReset').onclick=function(){markFilterQuery=''
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&markFilterPanel.style.display==='block'){markFilterPanel.style.display='none';markFilterButton.setAttribute('aria-expanded','false')}});
 // Wiederholter manueller Autozoom: bei einem Pin Nah-/Uebersicht,
 // bei mehreren Pins exakte Einpassung / zwei Zoomstufen weiter heraus.
-function p2mTogglePinAutoZoom(){
+function p2mTogglePinAutoZoom(routeMode){
  if(!map)return false;
  var bounds=L.latLngBounds([]),count=0,hasOtherGeometry=false;
  function collect(layer){
@@ -4191,6 +4201,8 @@ function p2mTogglePinAutoZoom(){
  if(!bounds.isValid()||hasOtherGeometry||count===0)return false;
  var key=count+'|'+bounds.getSouthWest().lat.toFixed(6)+','+bounds.getSouthWest().lng.toFixed(6)+'|'+bounds.getNorthEast().lat.toFixed(6)+','+bounds.getNorthEast().lng.toFixed(6);
  var previous=p2mAutoZoomToggleState;
+ // Bei aktiver Route startet der erste Klick stets mit enger Pin-Einpassung.
+ if(routeMode&&(!previous||previous.routeKey!==key))previous=null;
  if(count===1){
   // Automatisches Setzen bleibt bei Zoom 16; manuell abwechselnd 18 und 12.
   var close=!(previous&&previous.key===key&&previous.mode==='close');
@@ -4200,16 +4212,26 @@ function p2mTogglePinAutoZoom(){
   var wide=!!(previous&&previous.key===key&&previous.mode==='fit');
   map.fitBounds(bounds,{padding:[45,45],maxZoom:16,animate:false});
   if(wide)map.setZoom(Math.max(map.getMinZoom(),map.getZoom()-2));
-  p2mAutoZoomToggleState={key:key,mode:wide?'wide':'fit'};
+  p2mAutoZoomToggleState={key:key,routeKey:routeMode?key:null,mode:wide?'wide':'fit'};
  }
  return true;
 }
 document.getElementById('autoZoomButton').onclick=function(){
- // GPX-Startpunktroute hat Vorrang, wenn keine interne Routing-Route aktiv ist.
- // Solange die GPX-Route sichtbar bleibt, wechselt Autozoom zwischen Strecke und Übersicht.
+ // Pins haben Vorrang vor der Route: ab zwei sichtbaren Pins stets
+ // enge Einpassung <-> exakt zwei Zoomstufen weiter (gleicher Mittelpunkt).
  var internalRouteVisible=!!(routeLayer&&map&&map.hasLayer(routeLayer));
  var gpxRouteVisible=!internalRouteVisible&&typeof window.pin2mapGpxAutoZoomRoute==='function'&&window.pin2mapGpxAutoZoomRoute('available');
- if(internalRouteVisible||gpxRouteVisible){
+ var routeVisible=internalRouteVisible||gpxRouteVisible;
+ var visiblePins=0;
+ function countPins(layer){
+  if(!layer)return;
+  if(layer.getLatLng){visiblePins++;return}
+  if(layer.eachLayer)layer.eachLayer(countPins)
+ }
+ Object.keys(categoryLayers).forEach(function(k){var layer=categoryLayers[k];if(layer&&map.hasLayer(layer))countPins(layer)});
+ if(visiblePins>=2){
+  p2mTogglePinAutoZoom(routeVisible);
+ }else if(routeVisible){
   if(autoZoomNextMode==='route'){
    var success=internalRouteVisible?autoZoomCurrentRoute():window.pin2mapGpxAutoZoomRoute('zoom');
    if(success)autoZoomNextMode='all';
