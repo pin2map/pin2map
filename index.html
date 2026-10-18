@@ -573,7 +573,7 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 #categoryEditColor::-webkit-color-swatch{border:0!important;border-radius:0!important}
 #categoryEditColor::-moz-color-swatch{border:0!important;border-radius:0!important}
 
-/* v10.6.4: Drei zentrierte Hauptaktionen */
+/* v10.7.17: Drei zentrierte Hauptaktionen */
 #mapScreen .bottom{display:flex!important;justify-content:center!important;align-items:center!important;gap:12px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:max-content!important;max-width:calc(100vw - 20px)!important}
 #openProjectFile,#saveProjectFile{font-size:29px!important;font-weight:700!important;line-height:1!important}
 #bottomGpxAction{display:none!important}
@@ -1217,12 +1217,14 @@ html,body{max-width:100%;overflow-x:hidden}
 #p2m41-dialog .p2m41-cats button{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;min-width:0!important;min-height:0!important;padding:4px!important;}
 #p2m41-dialog .p2m41-cats .p2m-category-tile-icon{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);display:block;line-height:1.05;font-size:inherit;margin:0!important;}
 #p2m41-dialog .p2m41-cats .p2m-category-tile-label{position:absolute;top:auto;bottom:9%;left:3px;right:3px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;white-space:normal;overflow-wrap:anywhere;text-overflow:clip;text-align:center;font:500 8px/1.13 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#555;pointer-events:none;max-height:2.26em;}
-</style><style>/* v10.6.4: kompakte Popups nur für Flüsse und GPX-Tracks */
+</style><style>
+.p2m-pin-move-ready{filter:drop-shadow(0 0 9px rgba(235,45,45,.95)) drop-shadow(0 0 17px rgba(235,45,45,.55))!important;}
+</style><style>/* v10.7.17: kompakte Popups nur für Flüsse und GPX-Tracks */
 #mapScreen .leaflet-popup-content:has(.p2m106-path-popup){width:auto!important;max-width:215px!important;min-width:125px!important;margin:12px 16px!important}
 #mapScreen .leaflet-popup-content .p2m106-path-popup{width:auto!important;min-width:0!important}
 </style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.6.4)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.7.17)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1293,7 +1295,7 @@ html,body{max-width:100%;overflow-x:hidden}
     <button type="button" id="manualAreaSearchBtn" style="width:auto;padding:9px 14px;margin:0">Suchen</button>
   </div>
   <div id="manualAreaResults"></div>
-</div><button type="button" id="areaSearchClose" style="display:block;width:100%;margin-top:12px;background:#666">Abbrechen</button></div><div id="pinProgress" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5000;background:rgba(255,255,255,.96);color:#111;padding:14px 18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.28);font:600 15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;max-width:min(360px,82vw);pointer-events:none">⏳ Angeklickte Position wird ermittelt und der Pin gesetzt …</div><button type="button" id="labelToggle" class="label-toggle" title="Beschriftungen ein-/ausblenden" aria-label="Beschriftungen ein-/ausblenden">🏷️</button><button type="button" id="toggleElevations" class="elevation-toggle map-ui-control" title="Höhen ein-/ausblenden" aria-label="Höhen ein-/ausblenden"><span aria-hidden="true">m</span></button><div class="bottom"><button type="button" id="openProjectFile" class="list-round" title="pin2map- oder GPX-Datei öffnen" aria-label="pin2map- oder GPX-Datei öffnen">↑</button><button id="back" class="back">Liste</button><button type="button" id="saveProjectFile" class="list-round" title="pin2map-Datei sichern" aria-label="pin2map-Datei sichern">↓</button></div><input id="projectFileInput" type="file" style="display:none">
+</div><button type="button" id="areaSearchClose" style="display:block;width:100%;margin-top:12px;background:#666">Abbrechen</button></div><div id="pinProgress" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5000;background:rgba(255,255,255,.96);color:#111;padding:14px 18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.28);font:600 15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;max-width:min(360px,82vw);pointer-events:none">⏳ Angeklickte Position wird ermittelt und der Pin gesetzt …</div><button type="button" id="labelToggle" class="label-toggle" title="Beschriftungen ein-/ausblenden" aria-label="Beschriftungen ein-/ausblenden">🏷️</button><button type="button" id="toggleElevations" class="elevation-toggle map-ui-control" title="Höhen ein-/ausblenden" aria-label="Höhen ein-/ausblenden"><span aria-hidden="true">m</span></button><div class="bottom"><button type="button" id="openProjectFile" class="list-round" title="pin2map- oder GPX-Datei öffnen" aria-label="pin2map- oder GPX-Datei öffnen">↑</button><button id="back" class="back">Liste</button><button type="button" id="saveProjectFile" class="list-round" title="pin2map-Datei sichern" aria-label="pin2map-Datei sichern">↓</button></div><input id="projectFileInput" type="file" style="display:none"><div id="p107ImportDialog" class="p107-overlay" hidden role="dialog" aria-modal="true" aria-label="Importieren"><div class="p107-panel"><div class="p107-head"><strong id="p107ImportTitle">Importieren</strong><button type="button" id="p107ImportClose" aria-label="Schließen">✕</button></div><div id="p107ImportMain"><button type="button" id="p107ImportNormal" class="p107-choice p107-primary"><span>📄</span><span><b>pin2map</b> <span class="p107-or">oder</span> <b>GPX</b></span><span>›</span></button><button type="button" id="p107ImportHike" class="p107-choice"><span>🥾</span><span><span class="p107-hike-label"><b>GPX-Startpunkte</b><span>mit integrierten Tracks</span></span></span><span>›</span></button></div><div id="p107ImportHikeOptions" hidden><div class="p107-two"><button type="button" id="p107ImportHikeFiles">📄<b>Einzeldatei</b></button><button type="button" id="p107ImportHikeFolder">📁<b>Alle im Ordner</b></button></div><button type="button" id="p107ImportBack" class="p107-back">‹ Zurück</button></div><button type="button" id="p107ImportCancel" class="p107-cancel">Abbrechen</button></div></div>
 </section>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -1670,6 +1672,7 @@ document.addEventListener('keydown',function(e){
  }
 },true);
 var autoZoomNextMode='route';
+var p2mAutoZoomToggleState=null;
 // Gemeinsame Schnittstelle für den GPX-Code in einem separaten Script-Block.
 window.pin2mapSetAutoZoomNextMode=function(mode){autoZoomNextMode=(mode==='all'?'all':'route')};
 function autoZoomCurrentRoute(){
@@ -1700,6 +1703,7 @@ function autoZoomLoadedLayers(){
 }
 window.pin2mapGpxOverviewZoom=function(){autoZoomAllContent();autoZoomNextMode='route'};
 function autoZoomAllContent(){
+ p2mAutoZoomToggleState=null;
  if(!map)return;
  var bounds=L.latLngBounds([]),pointCount=0,hasArea=false;
  function addLayer(layer){
@@ -1721,13 +1725,126 @@ function autoZoomAllContent(){
  });
  if(!bounds.isValid())return;
  if(!hasArea&&pointCount===1){map.setView(bounds.getCenter(),16);return}
- map.fitBounds(bounds,{padding:[45,45],maxZoom:16})
+ map.fitBounds(bounds,{padding:[45,45],maxZoom:16});
+ // Die automatisch berechnete Einpassung ist die erste (enge) Ansicht.
+ // Ein anschließender manueller Klick soll deshalb zuerst herauszoomen.
+ if(!hasArea&&pointCount>=2){
+  var sw=bounds.getSouthWest(),ne=bounds.getNorthEast();
+  p2mAutoZoomToggleState={key:pointCount+'|'+sw.lat.toFixed(6)+','+sw.lng.toFixed(6)+'|'+ne.lat.toFixed(6)+','+ne.lng.toFixed(6),mode:'fit'};
+ }
 
 }
 
 function refreshAfterDirectAdd(){
  var items=parse(input.value),box=document.getElementById('legend');box.innerHTML='';buildLegend(items);
  var al=document.getElementById('addressList');if(al)al.innerHTML='';
+
+}
+/* v10.7.17: Pin-Position per Maus oder langem Fingerdruck bearbeiten. */
+function p2mEnablePinMove(it,marker){
+ if(!it||!marker)return;
+ var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
+ var HOLD_MS=550;
+ // Klick auf Pins verzögert öffnen, damit ein Doppelklick nicht zuerst das Popup zeigt.
+ var pinClickTimer=null;
+ marker.off('click');
+ marker.on('click',function(ev){
+  if(Date.now()<(marker._p2mSuppressClickUntil||0)){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}return;}
+  if(pinClickTimer)clearTimeout(pinClickTimer);
+  pinClickTimer=setTimeout(function(){pinClickTimer=null;if(Date.now()>=(marker._p2mSuppressClickUntil||0))marker.openPopup()},280);
+  if(ev&&ev.originalEvent)L.DomEvent.stopPropagation(ev.originalEvent);
+ });
+ marker.on('dblclick',function(ev){
+  if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null}
+  if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}
+  if(!map)return;
+  map.closePopup();
+  var maximum=map.getMaxZoom();
+  if(!isFinite(maximum))maximum=19;
+  map.setView(marker.getLatLng(),maximum,{animate:true});
+ });
+ function stopTimer(){if(touchTimer){clearTimeout(touchTimer);touchTimer=null}if(pressTimer){clearTimeout(pressTimer);pressTimer=null}}
+ function feedback(el){
+  moveUnlocked=true;touchReady=true;
+  if(el){el.classList.add('p2m-pin-move-ready');}
+  if(typeof navigator!=='undefined'&&typeof navigator.vibrate==='function'){try{navigator.vibrate(35)}catch(e){}}
+ }
+ function resetPress(el){stopTimer();moveUnlocked=false;touchReady=false;startPoint=null;if(el)el.classList.remove('p2m-pin-move-ready')}
+
+ function savePosition(){
+  stopTimer();if(!marker._p2mMoveStarted)return;
+  marker._p2mMoveStarted=false;
+  var ll=marker.getLatLng(),old=String(it.sourceFullLine||'').trim();
+  var coord=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);
+  var preservedName=p2mHasPinName(it)?String(it.label):'';
+  var name=preservedName?' ('+preservedName+')':'';
+  var updated=coord+name,lines=input.value.replace(/\r/g,'').split('\n');
+  var idx=lines.findIndex(function(line){return line.trim()===old});
+  if(idx<0){marker.setLatLng(marker._p2mOriginalPosition);return}
+  p2mCommitVisiblePinNote(it);
+  var meta=pinMeta(it),oldKey=projectCacheKey(it),oldCache=activeProjectCache&&activeProjectCache[oldKey];
+  lines[idx]=updated;input.value=lines.join('\n');
+  it.query=coord;it.label=preservedName;it.sourceLine=updated;it.sourceFullLine=updated;
+  if(activeProjectCache){activeProjectCache[updated]=Object.assign({},oldCache||{},{kind:'pin',lat:ll.lat,lon:ll.lng,display_name:preservedName,pinId:meta.id,createdAt:meta.createdAt,note:meta.note});if(oldKey!==updated)delete activeProjectCache[oldKey]}
+  pinNoteSession[pinNoteIdentity(it)]=meta;pinNoteByLocation[pinNoteIdentity(it)]=meta.note;
+  p2mSyncPinLabel(it);renderElevationLabel(it);p2mSyncPinBadges(it);
+  if(marker.getPopup())marker.setPopupContent(pinPopupHtml(it));
+  allBounds=L.latLngBounds([]);markFilterEntries.forEach(function(x){if(x._pinLayer&&x._pinLayer.getLatLng)allBounds.extend(x._pinLayer.getLatLng());else if(x._areaLayer)allBounds.extend(x._areaLayer.getBounds())});
+  // Verschobene Routenpunkte mit ihren neuen Koordinaten neu berechnen.
+  if(routeStartItem===it||routeTargetItem===it||routeWaypoints.indexOf(it)!==-1||
+     (routeFixedWaypoints&&routeFixedWaypoints.indexOf(it)!==-1)){
+   if(routeStartItem&&routeTargetItem)recalculateAfterRouteStructureChange();
+  }
+  mapStatus.textContent='✓ Pin verschoben';setTimeout(function(){if(mapStatus.textContent==='✓ Pin verschoben')mapStatus.textContent=''},1600);
+ }
+ // Eigene Halte-/Ziehsteuerung: Leaflet-Dragging darf den Start nicht vorzeitig abfangen.
+ if(marker.dragging)marker.dragging.disable();
+ function bindPinMoveHandlers(){
+  var el=marker.getElement();if(!el||el._p2mMoveBound)return;el._p2mMoveBound=true;
+  var active=null,ready=false,dragged=false,origin=null,last=null,hold=null;
+  el.style.touchAction='none';
+  function clear(){if(hold){clearTimeout(hold);hold=null}if(el)el.classList.remove('p2m-pin-move-ready');if(map&&map.dragging)map.dragging.enable();active=null;ready=false;dragged=false;marker._p2mMoveStarted=false;}
+  function point(ev){var t=ev.touches&&ev.touches[0]||ev.changedTouches&&ev.changedTouches[0]||ev;return {x:t.clientX,y:t.clientY};}
+  function down(ev){
+   if(active!==null)return;if(ev.type==='mousedown'&&ev.button!==0)return;
+   if(ev.type==='touchstart'&&ev.touches.length!==1)return;
+   active=ev.type==='touchstart'?'touch':'mouse';origin=point(ev);last=origin;ready=false;dragged=false;
+   // Leaflet darf den Fingerkontakt nicht als Kartenverschiebung übernehmen.
+   ev.stopPropagation();
+   if(map&&map.dragging)map.dragging.disable();
+   hold=setTimeout(function(){hold=null;if(active===null)return;ready=true;moveUnlocked=true;touchReady=true;marker._p2mOriginalPosition=marker.getLatLng();marker._p2mMoveStarted=true;feedback(el);if(map&&map.dragging)map.dragging.disable();},HOLD_MS);
+  }
+  function move(ev){
+   if(active===null||((ev.type==='touchmove')!==(active==='touch')))return;
+   var p=point(ev);last=p;
+   if(!ready){if(Math.hypot(p.x-origin.x,p.y-origin.y)>9){clear();}if(ev.cancelable)ev.preventDefault();ev.stopPropagation();return;}
+   if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
+   if(!map)return;
+   var rect=map.getContainer().getBoundingClientRect();
+   marker.setLatLng(map.containerPointToLatLng(L.point(p.x-rect.left,p.y-rect.top)));
+   dragged=true;
+  }
+  function up(ev){
+   if(active===null)return;
+   if(active==='touch'&&ev.type!=='touchend'&&ev.type!=='touchcancel')return;
+   if(active==='mouse'&&ev.type!=='mouseup')return;
+   if(ready&&dragged){marker._p2mSuppressClickUntil=Date.now()+850;savePosition();if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
+    if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null;}
+    marker.closePopup();}
+   else marker._p2mMoveStarted=false;
+   clear();moveUnlocked=false;touchReady=false;
+  }
+  el.addEventListener('mousedown',down,true);
+  el.addEventListener('touchstart',down,{passive:false,capture:true});
+  document.addEventListener('mousemove',move,true);
+  document.addEventListener('touchmove',move,{passive:false,capture:true});
+  document.addEventListener('mouseup',up,true);
+  document.addEventListener('touchend',up,true);
+  document.addEventListener('touchcancel',up,true);
+ }
+ marker.on('add',bindPinMoveHandlers);
+ // Der Marker ist beim Aufruf bereits auf der Karte: 'add' wurde schon ausgelöst.
+ bindPinMoveHandlers();
 
 }
 function addNewItemDirectly(fullLine){
@@ -1749,7 +1866,7 @@ function addNewItemDirectly(fullLine){
    it._areaLabelLayer=areaLabelMarker;
   }else{
    var marker=L.marker(p,{icon:icon(it.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(it)}).addTo(categoryLayers[it.category]);
-   it._pinLayer=marker;
+   it._pinLayer=marker;p2mEnablePinMove(it,marker);
    if(p2mHasPinName(it))marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(it);p2mSyncNoteDot(it);if(showElevations&&!isFinite(it.elevation))setTimeout(fetchMissingElevations,0);if(p2mInfoMode===2)setTimeout(fetchPinTemperatures,0);if(p2mInfoMode===3)setTimeout(fetchPinDailyTemperatures,0);if(p2mInfoMode===4)setTimeout(fetchPinSunTimes,0);
   }
   // V9.10.40: Auch direkt hinzugefügte Pins und Flächen im Namensfilter erfassen.
@@ -2304,7 +2421,7 @@ function pinPopupHtml(it){p2mSyncPinBadges(it);
  if(pinGpxKey&&window.pin2mapGpxRouteVisible&&window.pin2mapGpxRouteVisible(it,gpxKey))gpxButton=gpxButton.replace('class="p2m-gpx-route-btn"','class="p2m-gpx-route-btn p2m-gpx-visible"');
  var inRoute=routePosition(it)>0,toggleClass=inRoute?' route-toggle-remove':'',toggleText=inRoute?uiSymbol('routeWaypointRemove'):uiSymbol('routeWaypointAdd'),toggleTitle=inRoute?'Aus Route entfernen':'Zwischenziel hinzufügen';
  var isStart=it===routeStartItem,isTarget=it===routeTargetItem,startBg=isStart?'#ef3737':'#e5e5ea',startFg=isStart?'#fff':'#111',wayBg=inRoute?'#ffd84d':'#e5e5ea',wayFg='#111',targetBg=isTarget?'#34a853':'#e5e5ea',targetFg=isTarget?'#fff':'#111';
- var pinLabel=String((it&&it.label)||'').trim()||String((it&&it.query)||'').trim();
+ var pinLabel=p2mHasPinName(it)?String(it.label).trim():'';
  return '<div class="p2m-popup"><div class="p2m-title-row"><div class="p2m-pin-title">'+escHtml(pinLabel)+'</div><button type="button" class="p2m-title-edit-btn" data-p2m-name-toggle="'+id+'" title="Pin-Namen bearbeiten" aria-label="Pin-Namen bearbeiten">🖋️</button></div><div class="p2m-created">Erstellt: '+escHtml(new Date(p2mMeta.createdAt).toLocaleString('de-DE'))+'</div><div class="p2m-five-actions"><fieldset class="p2m-top-coords"><legend>Navi extern</legend>'+'<button type="button" data-copy-pin="'+id+'" title="In Zwischenablage kopieren" aria-label="In Zwischenablage kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#087df5;color:#fff;font-size:31px;font-weight:600">+</button>'+'<button type="button" data-pin-nav-apple="'+id+'" title="Mit Apple Karten zum Pin" aria-label="Mit Apple Karten zum Pin" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px;font-weight:600"></button></fieldset><fieldset class="p2m-top-route"><legend>pin2map Routing</legend>'+'<button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+startBg+';color:'+startFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeStart')+'</button>'+'<button type="button" class="'+toggleClass+'" data-route-waypoint="'+id+'" title="'+toggleTitle+'" aria-label="'+toggleTitle+'" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+wayBg+';color:'+wayFg+';font-size:23px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+toggleText+'</button>'+'<button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+targetBg+';color:'+targetFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeTarget')+'</button></fieldset></div>'+gpxButton+'<fieldset class="p2m-notes-field"><legend>Pin Notizen</legend><textarea class="p2m-inline-note" data-p2m-inline-note="'+id+'" aria-label="Notiz zum Pin" placeholder="Notiz eingeben …" rows="7">'+escHtml(p2mMeta.note||'')+'</textarea></fieldset>'+'<div class="p2m-bottom-groups"><fieldset class="p2m-bottom-delete"><legend>Entfernen</legend><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button></fieldset><fieldset class="p2m-bottom-pin"><legend>Pin</legend><div class="p2m-bottom-pin-buttons"><button type="button" data-rename-pin="'+id+'">Name</button><button type="button" data-change-pin-category="'+id+'">Symbol</button></div></fieldset><fieldset class="p2m-bottom-wiki"><legend>Wikipedia</legend><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px">'+uiSymbol('wikipedia')+'</button></fieldset></div></div>'
 }
 
@@ -2474,7 +2591,8 @@ function deletePinById(id){
  it._popupId=null;
  refreshAfterDirectDelete();
  if(!removed){mapStatus.textContent='Pin von Karte entfernt; Eintrag war in der Liste nicht mehr vorhanden.';}
- // Kein Auto-Zoom nach Löschen: der Kartenausschnitt bleibt stabil.
+ // Nach dem Löschen den Ausschnitt auf die verbleibenden sichtbaren Inhalte anpassen.
+ autoZoomAllContent();
 }
 
 var pendingPinRename=null;
@@ -2486,7 +2604,7 @@ function pinNumberForItem(it){
 function openPinNameEditor(it){
  pendingPinRename=it;if(map)map.closePopup();
  var box=document.getElementById('pinNameEditor'),field=document.getElementById('pinNameInput');
- field.value=(it.label&&it.label!==it.query)?it.label:'';box.style.display='block';
+ field.value=p2mHasPinName(it)?it.label:'';box.style.display='block';
  setTimeout(function(){try{try{field.focus({preventScroll:true})}catch(e){field.focus()}}catch(e){field.focus()}field.select()},40)
 }
 function savePinName(){
@@ -2494,7 +2612,7 @@ function savePinName(){
  var field=document.getElementById('pinNameInput'),name=String(field.value||'').trim(),oldFull=String(it.sourceFullLine||it.sourceLine||'').trim(),num=pinNumberForItem(it);
  var newRaw=String(it.query||'').trim()+(name?' ('+name+')':''),lines=input.value.replace(/\r/g,'').split('\n');
  for(var i=0;i<lines.length;i++){if(lines[i].trim()===oldFull){lines[i]=newRaw;break}}
- input.value=lines.join('\n');it.label=name||it.query;it.sourceLine=newRaw;it.sourceFullLine=newRaw;
+ input.value=lines.join('\n');it.label=name;it.sourceLine=newRaw;it.sourceFullLine=newRaw;
  if(it._pinLayer){
    p2mSyncPinLabel(it);
   it._pinLayer.setPopupContent(pinPopupHtml(it))
@@ -3129,7 +3247,7 @@ function fetchMissingElevations(){if(!showElevations||elevationBusy)return;var p
 function setElevationDisplay(on){setP2mInfoMode(on?1:0)}
 function build(items){Object.keys(pinDeleteItems).forEach(function(k){delete pinDeleteItems[k]});clearMap();var myBuild=++buildGeneration;buildLegend(items);var labelled=document.getElementById('labelAddresses').checked,areasLabelled=document.getElementById('labelAreas').checked,idx=0,miss=0,missed=[],areaPoints=0;screen.classList.remove('labels-hidden');screen.classList.toggle('hide-address-labels',!labelled);screen.classList.toggle('hide-area-labels',!areasLabelled);labelToggle.classList.toggle('off',!labelled&&!areasLabelled);for(var i=0;i<items.length;i++){if(!categoryLayers[items[i].category])categoryLayers[items[i].category]=L.layerGroup().addTo(map)}
 function noteMissing(x){if(myBuild!==buildGeneration)return;miss++;missed.push(x.query);var box=document.getElementById('notFoundList');box.innerHTML='<b>⚠️ Nicht gefunden ('+missed.length+')</b><br>'+missed.map(function(v){return '• '+esc(v)}).join('<br>')}
-function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){p2mApplyImportedPinUrls();if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.')+(areaPoints?' Flächenpunkte: '+areaPoints.toLocaleString('de-DE')+(isConstrainedTouchDevice()?' (mobil angepasst)':'')+'.':'');if(!miss)setTimeout(function(){if(myBuild===buildGeneration)mapStatus.textContent=''},5000);if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='alltext')markFilterApply(true);return}var x=items[idx],num=idx+1;mapStatus.textContent=(activeProjectCache&&activeProjectCache[projectCacheKey(x)]?'Lade ':'Suche ')+num+' von '+items.length+': '+x.query;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(x)}).addTo(categoryLayers[x.category]);x._pinLayer=marker;allBounds.extend(p);if(p2mHasPinName(x))marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x);p2mSyncNoteDot(x)}markFilterRegister(x);p2mSyncPinBadges(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
+function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){p2mApplyImportedPinUrls();if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.')+(areaPoints?' Flächenpunkte: '+areaPoints.toLocaleString('de-DE')+(isConstrainedTouchDevice()?' (mobil angepasst)':'')+'.':'');if(!miss)setTimeout(function(){if(myBuild===buildGeneration)mapStatus.textContent=''},5000);if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='alltext')markFilterApply(true);return}var x=items[idx],num=idx+1;mapStatus.textContent=(activeProjectCache&&activeProjectCache[projectCacheKey(x)]?'Lade ':'Suche ')+num+' von '+items.length+': '+x.query;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(x)}).addTo(categoryLayers[x.category]);x._pinLayer=marker;p2mEnablePinMove(x,marker);allBounds.extend(p);if(p2mHasPinName(x))marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x);p2mSyncNoteDot(x)}markFilterRegister(x);p2mSyncPinBadges(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
 document.getElementById('go').onclick=function(){var items=parse(input.value);formStatus.textContent='';form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);if(items.length)build(items);else clearMap()},150)};
 document.getElementById('back').onclick=function(){river980UpdateList();screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
 function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length){build(items);if(importedFromUrl)clearImportedDataFromUrl()}else{clearMap();var q=document.getElementById('quickPlace');if(q)q.blur()}},150)}
@@ -4037,6 +4155,35 @@ document.getElementById('markFilterType').addEventListener('change',function(){m
 });
 document.getElementById('markFilterReset').onclick=function(){markFilterQuery='';markFilterKind='alltext';markFilterTrack=false;markFilterLink=false;markFilterNote=false;document.getElementById('markFilterText').value='';document.getElementById('markFilterType').value='alltext';['markFilterTrack','markFilterLink','markFilterNote'].forEach(function(id){document.getElementById(id).checked=false});markFilterApply(false);autoZoomAllContent()};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&markFilterPanel.style.display==='block'){markFilterPanel.style.display='none';markFilterButton.setAttribute('aria-expanded','false')}});
+// Wiederholter manueller Autozoom: bei einem Pin Nah-/Uebersicht,
+// bei mehreren Pins exakte Einpassung / zwei Zoomstufen weiter heraus.
+function p2mTogglePinAutoZoom(){
+ if(!map)return false;
+ var bounds=L.latLngBounds([]),count=0,hasOtherGeometry=false;
+ function collect(layer){
+  if(!layer)return;
+  if(layer.getLatLng){var ll=layer.getLatLng();if(ll){bounds.extend(ll);count++}return}
+  if(layer.getBounds){try{var b=layer.getBounds();if(b&&b.isValid()){bounds.extend(b);hasOtherGeometry=true;return}}catch(e){}}
+  if(layer.eachLayer)layer.eachLayer(collect)
+ }
+ Object.keys(categoryLayers).forEach(function(k){var layer=categoryLayers[k];if(layer&&map.hasLayer(layer))collect(layer)});
+ if(Array.isArray(river959Saved)&&river959Saved.some(function(x){return x&&x.chains&&x.chains.length}))hasOtherGeometry=true;
+ if(!bounds.isValid()||hasOtherGeometry||count===0)return false;
+ var key=count+'|'+bounds.getSouthWest().lat.toFixed(6)+','+bounds.getSouthWest().lng.toFixed(6)+'|'+bounds.getNorthEast().lat.toFixed(6)+','+bounds.getNorthEast().lng.toFixed(6);
+ var previous=p2mAutoZoomToggleState;
+ if(count===1){
+  // Automatisches Setzen bleibt bei Zoom 16; manuell abwechselnd 18 und 12.
+  var close=!(previous&&previous.key===key&&previous.mode==='close');
+  map.setView(bounds.getCenter(),close?18:12);
+  p2mAutoZoomToggleState={key:key,mode:close?'close':'wide'};
+ }else{
+  var wide=!!(previous&&previous.key===key&&previous.mode==='fit');
+  map.fitBounds(bounds,{padding:[45,45],maxZoom:16,animate:false});
+  if(wide)map.setZoom(Math.max(map.getMinZoom(),map.getZoom()-2));
+  p2mAutoZoomToggleState={key:key,mode:wide?'wide':'fit'};
+ }
+ return true;
+}
 document.getElementById('autoZoomButton').onclick=function(){
  // GPX-Startpunktroute hat Vorrang, wenn keine interne Routing-Route aktiv ist.
  // Solange die GPX-Route sichtbar bleibt, wechselt Autozoom zwischen Strecke und Übersicht.
@@ -4047,7 +4194,7 @@ document.getElementById('autoZoomButton').onclick=function(){
    var success=internalRouteVisible?autoZoomCurrentRoute():window.pin2mapGpxAutoZoomRoute('zoom');
    if(success)autoZoomNextMode='all';
   }else{autoZoomAllContent();autoZoomNextMode='route'}
- }else autoZoomAllContent();
+ }else if(!p2mTogglePinAutoZoom())autoZoomAllContent();
  mapStatus.textContent='✓ Autozoom';
  setTimeout(function(){if(mapStatus.textContent==='✓ Autozoom')mapStatus.textContent=''},1200)
 };
@@ -4121,14 +4268,14 @@ function p2mSaveNameDialog(){
  field.style.cssText='display:block;flex:1;min-width:0;width:100%;height:45px;min-height:45px;max-height:45px;resize:none;overflow:hidden;white-space:nowrap;box-sizing:border-box;border:1px solid #aaa;border-radius:9px;padding:11px;font:16px -apple-system,BlinkMacSystemFont,sans-serif';nameRow.appendChild(field);
  var urlMode=false;var modeButton=document.createElement('button');modeButton.type='button';modeButton.textContent='URL';modeButton.setAttribute('aria-label','URL-Modus umschalten');modeButton.style.cssText='flex:0 0 45px;width:45px;height:45px;border-radius:50%;border:1px solid #bbb;background:#e5e5e9;color:#111;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;padding:0;line-height:1;box-sizing:border-box';nameRow.appendChild(modeButton);panel.appendChild(nameRow);
  function group(label,choices,selected,horizontal){var wrap=document.createElement('fieldset');wrap.style.cssText='border:1px solid #d0d0d5;border-radius:10px;margin:0 0 12px;padding:9px 12px 11px'+(horizontal?';display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap':'');var legend=document.createElement('legend');legend.textContent=label;legend.style.cssText='font-weight:600;padding:0 5px';wrap.appendChild(legend);var radios=[];choices.forEach(function(c){var row=document.createElement('label');row.style.cssText='display:flex;align-items:center;gap:9px;padding:7px 2px;cursor:pointer;line-height:1.3';var radio=document.createElement('input');radio.type='radio';radio.name='p2m106_'+label;radio.value=c[0];radio.checked=c[0]===selected;radio.style.cssText='width:19px;height:19px;flex:none;accent-color:#007aff';row.appendChild(radio);row.appendChild(document.createTextNode(c[1]));wrap.appendChild(row);radios.push(radio)});panel.appendChild(wrap);return {wrap:wrap,radios:radios}}
- var scope=group('Was speichern?',[['all','Alles'],['visible','Angezeigte'],['route','Routing']],'all',true);scope.wrap.style.gap='5px';scope.wrap.style.flexWrap='nowrap';scope.radios.forEach(function(r){r.parentElement.style.gap='5px';r.parentElement.style.whiteSpace='nowrap';r.parentElement.style.fontSize='14px';r.style.width='17px';r.style.height='17px'});
+ var scope=group('Was speichern?',[['all','Alles'],['visible','Nur Angezeigte'],['route','Nur Routing']],'all',true);scope.wrap.style.gap='5px';scope.wrap.style.flexWrap='nowrap';scope.radios.forEach(function(r){r.parentElement.style.gap='5px';r.parentElement.style.whiteSpace='nowrap';r.parentElement.style.fontSize='14px';r.style.width='17px';r.style.height='17px'});
  var routeChoice=scope.radios.filter(function(r){return r.value==='route'})[0];var routeChoiceRow=routeChoice.parentElement;
  function updateRouteChoice(){var available=!!projectRouteDocument();routeChoiceRow.hidden=!available;routeChoiceRow.style.display=available?'flex':'none';if(!available&&routeChoice.checked)scope.radios[0].checked=true}updateRouteChoice();
  var format=group('Dateiformat',[['gpx','GPX'],['pin2map','pin2map']],'pin2map',true);
  var urlSection=document.createElement('fieldset');urlSection.style.cssText='border:1px solid #d0d0d5;border-radius:10px;margin:0 0 12px;padding:9px 12px 11px';var urlLegend=document.createElement('legend');urlLegend.textContent='Pins als URL';urlLegend.style.cssText='font-weight:600;padding:0 5px';urlSection.appendChild(urlLegend);
  var description=document.createElement('p');description.textContent='Erzeuge aus dem aktuellen Inhalt der Liste eine URL. Nur verwendete Kategorien und nichtleere Listeneinträge werden übernommen und in die Zwischenablage kopiert. Die URL kann anschließend geteilt und in pin2map geöffnet werden.';description.style.cssText='margin:3px 0 12px;line-height:1.4';urlSection.appendChild(description);
  var urlLabel=document.createElement('label');urlLabel.style.cssText='display:flex;align-items:center;gap:9px;padding:5px 0';var urlCheck=document.createElement('input');urlCheck.type='checkbox';urlCheck.style.cssText='width:19px;height:19px;accent-color:#007aff';urlLabel.appendChild(urlCheck);urlLabel.appendChild(document.createTextNode('auch Pin-URLs'));urlSection.appendChild(urlLabel);urlSection.hidden=true;urlSection.style.display='none';panel.appendChild(urlSection);
- modeButton.onclick=function(){urlMode=!urlMode;field.disabled=urlMode;field.style.background=urlMode?'#ededf0':'#fff';field.style.color=urlMode?'#888':'#161616';save.textContent=urlMode?'URL erzeugen':'Speichern';if(!urlMode)updateRouteChoice();scope.wrap.hidden=urlMode;scope.wrap.style.display=urlMode?'none':'';format.wrap.hidden=urlMode;format.wrap.style.display=urlMode?'none':'flex';urlSection.hidden=!urlMode;urlSection.style.display=urlMode?'':'none';modeButton.style.background=urlMode?'#007aff':'#e5e5e9';modeButton.style.color=urlMode?'white':'#111';modeButton.setAttribute('aria-pressed',String(urlMode));status.textContent=''};
+ modeButton.onclick=function(){urlMode=!urlMode;field.disabled=urlMode;field.style.background=urlMode?'#ededf0':'#fff';field.style.color=urlMode?'#888':'#161616';save.textContent=urlMode?'URL erzeugen':'Speichern';if(!urlMode)updateRouteChoice();scope.wrap.hidden=urlMode;scope.wrap.style.display=urlMode?'none':'flex';format.wrap.hidden=urlMode;format.wrap.style.display=urlMode?'none':'flex';urlSection.hidden=!urlMode;urlSection.style.display=urlMode?'':'none';modeButton.style.background=urlMode?'#007aff':'#e5e5e9';modeButton.style.color=urlMode?'white':'#111';modeButton.setAttribute('aria-pressed',String(urlMode));status.textContent=''};
  var status=document.createElement('div');status.style.cssText='color:#b3261e;font-size:13px;min-height:17px;margin-bottom:8px';panel.appendChild(status);
  var buttons=document.createElement('div');buttons.style.cssText='display:flex;gap:10px';var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Abbrechen';cancel.style.cssText='flex:1;padding:12px;border:0;border-radius:9px;background:#e5e5e9;color:#111;font-size:16px';var save=document.createElement('button');save.type='button';save.textContent='Speichern';save.style.cssText='flex:1;padding:12px;border:0;border-radius:9px;background:#007aff;color:#fff;font-size:16px;font-weight:600';
  function value(radios){return radios.filter(function(r){return r.checked})[0].value}
@@ -4147,6 +4294,7 @@ function p2mSaveNameDialog(){
   if(fmt==='gpx'&&what==='route'&&(!lastRouteExport||!lastRouteExport.coords.length)){status.textContent='Die Route muss zuerst berechnet werden.';return}
   var doc=what==='all'?projectDocument():what==='visible'?p2m106VisibleDocument():p2m106RouteDocument();var payload=fmt==='gpx'?p2m106GpxDocument(doc,what):JSON.stringify(doc);
   if(!payload){status.textContent='Keine passenden Daten zum Speichern vorhanden.';return}
+  if(fmt==='gpx'&&!window.confirm('GPX speichert geografische Wegpunkte und Strecken, aber keine pin2map-spezifischen Kategorien, Farben, Notizen, Filter oder vollständig bearbeitbaren Flächen. Flächen werden als Umriss-Tracks exportiert. Für eine vollständige Sicherung bitte pin2map wählen. Trotzdem als GPX speichern?'))return;
   close();setCurrentProjectName(base);p2m106SavePayload(base+'.'+fmt,payload,fmt)
  };
  field.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing){e.preventDefault();save.click()}});
@@ -4168,7 +4316,7 @@ function p2m106VisibleDocument(){
  // Nicht sichtbare Zusatzebenen werden im Teil-Export nicht mitgespeichert.
  doc.rivers=river959Saved.filter(function(r){return (r.chains||[]).some(function(chain){return chain.some(function(pt){return map&&map.getBounds().contains(pt)})})});
  doc.gpxTracks=(gpxLayer&&map.hasLayer(gpxLayer))?doc.gpxTracks:[];
- doc.route=null;doc.gpxStartRoutes=[];return doc
+ doc.route=(routeLayer&&map&&map.hasLayer(routeLayer))?doc.route:null;doc.gpxStartRoutes=[];return doc
 }
 function p2m106RouteDocument(){
  var doc=projectDocument(),route=projectRouteDocument(),allowed=new Set(),keys=new Set();
@@ -4192,6 +4340,13 @@ function p2m106GpxDocument(doc,scope){
   });
   (doc.gpxTracks||[]).forEach(function(track){if(track.length>1)points.push(track)});
   (doc.rivers||[]).forEach(function(r){(r.chains||[]).forEach(function(chain){if(chain.length>1)points.push(chain)})});
+  // GPX 1.1 erlaubt Wegpunkte und Tracks gemeinsam. Die aktive, berechnete
+  // Routing-Geometrie zusätzlich zu den normalen Pins und Pfaden exportieren.
+  // Bei 'Nur Angezeigte' nur, wenn die Route tatsächlich auf der Karte liegt.
+  if(doc.route&&lastRouteExport&&lastRouteExport.coords&&lastRouteExport.coords.length>1&&
+     (scope==='all'||(scope==='visible'&&routeLayer&&map&&map.hasLayer(routeLayer)))){
+   points.push(lastRouteExport.coords.map(function(c){return[c[1],c[0]]}));
+  }
  }
  points.forEach(function(track,i){lines.push('<trk><name>'+xmlEsc('Track '+(i+1))+'</name><trkseg>');track.forEach(function(pt){if(isFinite(pt[0])&&isFinite(pt[1]))lines.push('<trkpt lat="'+Number(pt[0]).toFixed(7)+'" lon="'+Number(pt[1]).toFixed(7)+'"/>')});lines.push('</trkseg></trk>')});
  lines.push('</gpx>');return lines.join('\n')
@@ -4275,7 +4430,7 @@ function openPin2MapProject(doc){
 }
 var listNameInput=document.getElementById('listNameInput');if(listNameInput){listNameInput.addEventListener('input',function(){setCurrentProjectName(this.value)})}
 document.getElementById('saveProjectFile').onclick=function(){savePin2MapProject()};
-document.getElementById('openProjectFile').onclick=function(){var f=document.getElementById('projectFileInput');f.value='';f.click()};
+document.getElementById('openProjectFile').onclick=function(){document.getElementById('p107ImportDialog').hidden=false;document.getElementById('p107ImportNormal').focus({preventScroll:true})};
 // V10.1.0: Importentscheid mit genau einer neuen Kategorie pro Datei.
 var p101ImportSymbols=['🍏','🍋','🫐','🥐','🍿','🎂'];
 function p101ImportCategory(name){
@@ -5056,6 +5211,7 @@ async function importFiles(fileList){
   list.value=old+(old?'\n\n':'')+category+'\n'+lines.join('\n')+'\n';
   list.dispatchEvent(new Event('input',{bubbles:true}));
  }
+ document.dispatchEvent(new CustomEvent('p2mHikeImportFinished',{detail:{count:lines.length,errors:errors.length}}));
  status.textContent=lines.length+' Startpunkte zur Liste hinzugefügt.'+(errors.length?'\n'+errors.length+' Dateien übersprungen: '+errors.slice(0,5).join('; '):'')+'\nMit „✓ Rendern“ auf der Karte anzeigen.';
  fileButton.disabled=folderButton.disabled=false;
 }
@@ -5296,4 +5452,4 @@ document.addEventListener('click',function(e){
 /* v10.5.38: Beide Bedienelemente mit halbtransparentem Hintergrund wie die i-Schaltfläche. */
 #mapScreen #copyMap,#mapScreen #labelToggle{background-color:rgba(255,255,255,.53)!important;background-image:none!important;}
 </style>
-</body></html>
+<style id="p107-import-style">#p107ImportDialog[hidden],#p107ImportHikeOptions[hidden],#p107ImportMain[hidden]{display:none!important}.p107-overlay{position:fixed;inset:0;z-index:20000;background:rgba(0,0,0,.36);display:flex;align-items:center;justify-content:center;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));box-sizing:border-box}.p107-panel{background:#fff;color:#222;width:min(100%,390px);border-radius:16px;padding:18px;box-shadow:0 12px 40px #0003;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.p107-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:18px}.p107-head button{border:0;background:transparent;font-size:22px;padding:5px 10px;color:#555}.p107-choice{display:flex;width:100%;align-items:center;gap:12px;text-align:left;border:0;border-radius:11px;background:#f3f4f6;padding:14px 12px;margin:8px 0;color:#222;min-height:72px}.p107-choice>span:first-child{font-size:25px}.p107-choice>span:nth-child(2){flex:1;min-width:0}.p107-choice b,.p107-two b{display:block;font-size:15px}.p107-choice.p107-primary b{display:inline;font-size:inherit}.p107-choice.p107-primary>span:nth-child(2){white-space:nowrap;font-size:15px}.p107-choice small{display:block;font-size:12px;color:#555;margin-top:4px}.p107-choice>span:last-child{font-size:23px;color:#777}.p107-choice .p107-or{font-weight:400}.p107-hike-label{display:flex;flex-direction:column;gap:3px}.p107-hike-label>span{font-size:14px;font-weight:400}.p107-choice.p107-primary{background:#dbeafe;color:#123b78}.p107-choice.p107-primary>span:last-child{color:#2563eb}.p107-choice.p107-primary:focus-visible{outline:3px solid #2563eb;outline-offset:2px}.p107-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.p107-two button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:0;border-radius:11px;background:#f3f4f6;color:#222;font-size:26px;min-height:105px;padding:12px 5px}.p107-cancel{display:block;width:100%;margin-top:12px;padding:12px;border:0;border-radius:10px;background:#eceef1;color:#333;font-size:15px;font-weight:600}.p107-back{margin-top:12px;border:0;background:transparent;color:#444;padding:9px}</style><script id="p107-import-menu">(function(){'use strict';var dialog=document.getElementById('p107ImportDialog'),main=document.getElementById('p107ImportMain'),options=document.getElementById('p107ImportHikeOptions'),title=document.getElementById('p107ImportTitle');function close(){dialog.hidden=true;main.hidden=false;options.hidden=true;title.textContent='Importieren'}document.getElementById('p107ImportClose').addEventListener('click',close);document.getElementById('p107ImportCancel').addEventListener('click',close);dialog.addEventListener('click',function(e){if(e.target===dialog)close()});document.addEventListener('keydown',function(e){if(dialog.hidden)return;if(e.key==='Escape'){e.preventDefault();close()}else if(e.key==='Enter'&&!main.hidden){var t=e.target;if(t===document.getElementById('p107ImportNormal'))return;if(t===document.getElementById('p107ImportCancel')||t===document.getElementById('p107ImportClose')||t===document.getElementById('p107ImportHike'))return;e.preventDefault();document.getElementById('p107ImportNormal').click()}});document.getElementById('p107ImportNormal').addEventListener('click',function(){var f=document.getElementById('projectFileInput');f.value='';f.click();close()});document.getElementById('p107ImportHike').addEventListener('click',function(){main.hidden=true;options.hidden=false;title.textContent='Wanderrouten importieren'});document.getElementById('p107ImportBack').addEventListener('click',function(){main.hidden=false;options.hidden=true;title.textContent='Importieren'});document.getElementById('p107ImportHikeFiles').addEventListener('click',function(){window.p2mHikeFromMap=true;document.getElementById('gpxStartFilesInput').click();close()});document.getElementById('p107ImportHikeFolder').addEventListener('click',function(){window.p2mHikeFromMap=true;document.getElementById('gpxStartFolderInput').click();close()});document.addEventListener('p2mHikeImportFinished',function(e){if(!window.p2mHikeFromMap)return;window.p2mHikeFromMap=false;if(e.detail&&e.detail.count>0){document.getElementById('go').click();}});})();</script></body></html>
