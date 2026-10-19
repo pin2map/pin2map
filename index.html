@@ -1590,9 +1590,120 @@ html,body{max-width:100%;overflow-x:hidden}
  min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;
 }
 </style>
+<style id="p2m-10837-multipin-group">
+/* Zweite Zeile: die drei bestehenden Aktionen ohne Änderung ihrer IDs/Handler gruppieren. */
+#mapScreen #routeInfo .route-multipin-fieldset{
+ box-sizing:border-box!important;min-width:0!important;flex:0 0 auto!important;
+ margin:0!important;padding:8px 12px 8px!important;
+ border:1px solid #c7c7cc!important;border-radius:12px!important;
+ background:transparent!important;
+}
+#mapScreen #routeInfo .route-multipin-fieldset legend{
+ float:none!important;width:auto!important;margin:0 0 0 4px!important;padding:0 4px!important;
+ color:#777!important;
+ font:600 11px/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+ white-space:nowrap!important;
+}
+#mapScreen #routeInfo .route-multipin-options{
+ display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:nowrap!important;
+}
+#mapScreen #routeInfo .route-multipin-options #routeOrder{
+ display:flex!important;align-items:center!important;gap:10px!important;
+ margin:0!important;padding:0!important;border:0!important;background:none!important;
+}
+#mapScreen #routeInfo .route-multipin-options button{flex-shrink:0!important;margin:0!important}
+/* Im ÖPNV-Modus wird die gesamte Gruppe ausgeblendet; die Zeitfelder bleiben wie bisher. */
+#mapScreen #routeInfo.p2m-transit-layout .route-multipin-fieldset{display:none!important}
+@media(max-width:600px){
+ #mapScreen #routeInfo .route-multipin-fieldset{padding:7px 8px 7px!important}
+ #mapScreen #routeInfo .route-multipin-fieldset legend{font-size:10px!important}
+ #mapScreen #routeInfo .route-multipin-options,
+ #mapScreen #routeInfo .route-multipin-options #routeOrder{gap:8px!important}
+}
+</style>
+<style id="p2m-10838-reverse-group">
+#mapScreen #routeInfo .route-reverse-fieldset{
+ box-sizing:border-box!important;flex:0 0 auto!important;min-width:0!important;
+ margin:0!important;padding:8px 12px!important;
+ border:1px solid #c7c7cc!important;border-radius:12px!important;
+ background:transparent!important;
+}
+#mapScreen #routeInfo .route-reverse-fieldset legend{
+ float:none!important;width:auto!important;margin:0 0 0 4px!important;padding:0 4px!important;
+ color:#777!important;font:600 11px/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+ white-space:nowrap!important;
+}
+#mapScreen #routeInfo .route-reverse-fieldset #routeReverse{
+ margin:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ background:#e5e5ea!important;color:#111!important;border:1px solid #c7c7cc!important;
+}
+#mapScreen #routeInfo .route-reverse-fieldset #routeReverse.active:not(:disabled){
+ background:#0a84ff!important;color:#fff!important;border-color:#0a84ff!important;
+}
+@media(max-width:600px){
+ #mapScreen #routeInfo .route-reverse-fieldset{padding:7px 8px!important}
+ #mapScreen #routeInfo .route-reverse-fieldset legend{font-size:10px!important}
+}
+</style>
+<style id="p2m-10839-route-group-width">
+/* Beide Gruppen gemeinsam so breit wie der Block „Routing für“. */
+#mapScreen #routeInfo .route-toolbar-secondary:not(.p2m-transit-layout){
+  width:280px!important;max-width:280px!important;
+  display:flex!important;align-items:stretch!important;
+  justify-content:flex-start!important;gap:8px!important;
+}
+#mapScreen #routeInfo .route-toolbar-secondary .route-multipin-fieldset{
+  flex:1 1 0!important;width:auto!important;min-width:0!important;
+}
+#mapScreen #routeInfo .route-toolbar-secondary .route-reverse-fieldset{
+  flex:0 0 58px!important;width:58px!important;min-width:58px!important;
+  padding-left:7px!important;padding-right:7px!important;
+}
+#mapScreen #routeInfo .route-toolbar-secondary .route-multipin-options{
+  justify-content:space-between!important;gap:3px!important;
+}
+#mapScreen #routeInfo .route-toolbar-secondary .route-multipin-options #routeOrder{
+  gap:3px!important;
+}
+@media(max-width:600px){
+ #mapScreen #routeInfo .route-toolbar-secondary:not(.p2m-transit-layout){
+   width:224px!important;max-width:224px!important;gap:6px!important;
+ }
+ #mapScreen #routeInfo .route-toolbar-secondary .route-reverse-fieldset{
+   flex-basis:52px!important;width:52px!important;min-width:52px!important;
+   padding-left:5px!important;padding-right:5px!important;
+ }
+ #mapScreen #routeInfo .route-toolbar-secondary .route-multipin-fieldset{
+   padding-left:5px!important;padding-right:5px!important;
+ }
+ #mapScreen #routeInfo .route-toolbar-secondary .route-multipin-options,
+ #mapScreen #routeInfo .route-toolbar-secondary .route-multipin-options #routeOrder{
+   gap:2px!important;
+ }
+}
+</style>
+<style id="p2m-10840-multipin-even-spacing">
+/* Drei gleich breite Spalten: ALL, FIX und OPT sind exakt gleichmäßig verteilt.
+   Die bestehende #routeOrder-Gruppe bleibt für ihre JavaScript-Handler erhalten. */
+#mapScreen #routeInfo .route-toolbar-secondary .route-multipin-options{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:center!important;
+  justify-items:center!important;
+  column-gap:0!important;
+  width:100%!important;
+}
+#mapScreen #routeInfo .route-toolbar-secondary .route-multipin-options #routeOrder{
+  display:contents!important;
+}
+#mapScreen #routeInfo .route-toolbar-secondary .route-multipin-options button{
+  justify-self:center!important;
+  margin:0!important;
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.36)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.40)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1646,11 +1757,11 @@ html,body{max-width:100%;overflow-x:hidden}
  <div class="p2m-filter-options" role="group" aria-label="Pins mit Inhalt"><label><input type="checkbox" id="markFilterTrack"> <span>Mit Track</span></label><label><input type="checkbox" id="markFilterLink"> <span>Mit Link</span></label><label><input type="checkbox" id="markFilterNote"> <span>Mit Notiz</span></label></div>
 </div>
 <button type="button" id="legendToggle" class="map-round-control map-ui-control" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">×</span></button></div><div class="route-toolbar-row route-toolbar-primary"><fieldset class="route-mode-fieldset"><legend>Routing für</legend><div class="route-mode-options"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button></div></fieldset><button type="button" id="routeClear" title="Route entfernen" aria-label="Route beenden">Beenden</button></div><div class="route-toolbar-row route-toolbar-secondary"><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="now">Jetzt</option><option value="depart">Abfahrt</option><option value="arrive">Ankunft</option></select><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"><select id="transitExtraTransfer" aria-label="Zusätzliche Umsteigezeit" title="Zusätzliche Umsteigezeit"><option value="0">+0 min</option><option value="3">+3 min</option><option value="5" selected>+5 min</option><option value="10">+10 min</option><option value="15">+15 min</option></select></div>
-<button type="button" id="routeVisiblePins" class="route-circle route-visible-pins" title="Alle noch nicht verwendeten Pins im aktuellen Kartenausschnitt als Zwischenziele hinzufügen" aria-label="Sichtbare Pins hinzufügen"><svg class="route-all-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42" width="36" height="36" aria-hidden="true" focusable="false"><rect x="6" y="7" width="30" height="28" rx="0" fill="none" stroke="#111" stroke-width="1.5"/><text x="21" y="21" fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="central">ALL</text></svg></button>
+<fieldset class="route-multipin-fieldset"><legend>Multi Pin Routing</legend><div class="route-multipin-options"><button type="button" id="routeVisiblePins" class="route-circle route-visible-pins" title="Alle noch nicht verwendeten Pins im aktuellen Kartenausschnitt als Zwischenziele hinzufügen" aria-label="Sichtbare Pins hinzufügen"><svg class="route-all-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42" width="36" height="36" aria-hidden="true" focusable="false"><rect x="6" y="7" width="30" height="28" rx="0" fill="none" stroke="#111" stroke-width="1.5"/><text x="21" y="21" fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="central">ALL</text></svg></button>
 <div id="routeOrder" class="route-tool-group route-order-group">
 <button type="button" id="routeOrderToggle" data-route-order="fixed" class="active route-circle" title="Reihenfolge fest" aria-label="Reihenfolge fest">FIX</button>
 <button type="button" id="routeOrderOptimal" data-route-order="optimal" class="route-circle" title="Reihenfolge optimieren" aria-label="Reihenfolge optimieren">OPT</button>
-</div><button type="button" id="routeReverse" class="route-circle route-reverse" title="Routing-Reihenfolge umkehren" aria-label="Routing-Reihenfolge umkehren">⇄</button></div>
+</div></div></fieldset><fieldset class="route-reverse-fieldset"><legend id="routeReverseLegend">A→B</legend><button type="button" id="routeReverse" class="route-circle route-reverse" title="Routing-Reihenfolge umkehren" aria-label="Routing-Reihenfolge umkehren">⇄</button></fieldset></div>
 <div class="route-toolbar-row route-toolbar-details">
 <div class="route-details-label-group"><button type="button" id="routeDetailsToggle" class="route-circle" title="Teilstrecken anzeigen" aria-label="Teilstrecken anzeigen" disabled><span aria-hidden="true">⏏︎</span></button><span id="routeDetailsLabel">Routendetails</span></div>
 <button type="button" id="transitStagesButton" title="Erste Etappe auf der Karte anzeigen" aria-label="Etappen auf Karte anzeigen">🔎 Etappen</button><div class="route-navi-group"><span>Route in:</span><div class="route-navi-buttons"><button type="button" id="openAppleMaps" class="route-circle" title="Route in Apple Karten öffnen" aria-label="Route in Apple Karten öffnen"></button></div></div>
@@ -3131,7 +3242,7 @@ function updateRouteDetailsLabel(){
  var info=document.getElementById('routeInfo'),label=document.getElementById('routeDetailsLabel');
  if(label)label.textContent=(routeMode==='transit'&&typeof p2mTransitTransfers==='number')?(p2mTransitTransfers+' Umstieg'+(p2mTransitTransfers===1?'':'e')):'Routendetails'
 }
-function renderRouteEditor(){var box=document.getElementById('routeEdit');if(box)box.innerHTML='';var rb=document.getElementById('routeReverse');if(rb){rb.disabled=!(routeStartItem&&routeTargetItem);rb.textContent=uiSymbol('routeReverse')}refreshRoutePinPresentation();syncRoutePanelToggle();updateRouteModeButtons()}
+function renderRouteEditor(){var box=document.getElementById('routeEdit');if(box)box.innerHTML='';var rb=document.getElementById('routeReverse');if(rb){rb.disabled=!(routeStartItem&&routeTargetItem);rb.textContent=uiSymbol('routeReverse');rb.classList.toggle('active',!!routeIsReversed);rb.setAttribute('aria-pressed',routeIsReversed?'true':'false')}var rl=document.getElementById('routeReverseLegend');if(rl)rl.textContent=routeIsReversed?'B→A':'A→B';refreshRoutePinPresentation();syncRoutePanelToggle();updateRouteModeButtons()}
 function setRouteOrderFixed(resetSnapshot){
  routeOrderMode='fixed';routeOptimizeBusy=false;if(resetSnapshot!==false)routeFixedWaypoints=null;updateRouteOrderButtons()
 }
@@ -3206,7 +3317,7 @@ function clearRoute(keepPoints){
  lastRouteExport=null;updateGpxButton();
  if(routeLayer&&map&&map.hasLayer(routeLayer))map.removeLayer(routeLayer);routeLayer=null;
  p10732ClearFocus();var routeInfoEl=document.getElementById('routeInfo');routeInfoEl.style.display='none';routeInfoEl.classList.remove('route-details-open');var rl=document.getElementById('routeLegs');if(rl){rl.classList.remove('open');rl.innerHTML=''}var rt=document.getElementById('routeDetailsToggle');if(rt){rt.disabled=true;rt.title='Teilstrecken anzeigen';rt.setAttribute('aria-label','Teilstrecken anzeigen')}var re=document.getElementById('routeEdit');if(re)re.innerHTML=''
- if(!keepPoints){routeRequestGeneration++;routeStartItem=null;routeTargetItem=null;routeWaypoints=[];setRouteOrderFixed(true)}updateAppleMapsButton();renderRouteEditor()
+ if(!keepPoints){routeIsReversed=false;routeRequestGeneration++;routeStartItem=null;routeTargetItem=null;routeWaypoints=[];setRouteOrderFixed(true)}updateAppleMapsButton();renderRouteEditor()
 }
 function updateGpxButton(){var b=document.getElementById('bottomGpxAction');if(!b)return;if(gpxLayer){b.disabled=false;b.textContent='GPX';b.classList.add('gpx-remove');b.title='Importierten GPX-Pfad entfernen';b.setAttribute('aria-label',b.title)}else{b.textContent='GPX';b.classList.remove('gpx-remove');b.disabled=!lastRouteExport;b.title='Route als GPX exportieren';b.setAttribute('aria-label',b.title)}}
 function xmlEsc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;')}
