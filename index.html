@@ -1434,9 +1434,17 @@ html,body{max-width:100%;overflow-x:hidden}
 .p2m-popup .p2m-name-field legend{padding:0 4px;color:#777;font-size:11px;font-weight:600}
 .p2m-popup .p2m-name-field input.p2m-inline-name{display:block;width:100%;min-width:0;height:30px;min-height:30px;box-sizing:border-box;border:0!important;border-radius:0;padding:3px 6px;background:transparent;font:700 18px/1.25 -apple-system,BlinkMacSystemFont,sans-serif;outline-offset:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
+<style>
+/* v10.8.16: Alle sechs unteren Pin-Dialog-Buttons auf Pin-Button-Groesse. */
+#mapScreen .leaflet-popup .p2m-popup .p2m-bottom-groups > button {
+ width:42px!important;height:42px!important;min-width:42px!important;
+ min-height:42px!important;max-width:42px!important;max-height:42px!important;
+ flex:0 0 42px!important;box-sizing:border-box!important;
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.7)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.16)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -2583,7 +2591,7 @@ function escHtml(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 var UI_SYMBOLS={
  quickPin:'📍',quickArea:'🏞️',mapStyle:'🗺️',autoZoom:'✓',location:'◎',routePanel:'➰',routePanelHide:'⏏︎',screenshot:'📸',legend:'☰',
  driving:'🚗',bicycle:'🚴‍♂️',pedestrian:'🥾',transit:'🚃',visiblePins:'ALL',routeOrder:'FIX',routeReverse:'⇄',
- wikipedia:'ⓦ',routeWaypointAdd:'+',routeWaypointRemove:'−',routeTarget:'⇥',routeStart:'↗'
+ wikipedia:'ⓦ',routeWaypointAdd:'+',routeWaypointRemove:'−',routeTarget:'⦿',routeStart:'↗'
 };
 function uiSymbol(name){return Object.prototype.hasOwnProperty.call(UI_SYMBOLS,name)?UI_SYMBOLS[name]:''}
 function applyStaticUiSymbols(){
@@ -2663,7 +2671,7 @@ function pinPopupHtml(it){p2mSyncPinBadges(it);
  var inRoute=routePosition(it)>0,toggleClass=inRoute?' route-toggle-remove':'',toggleText=inRoute?uiSymbol('routeWaypointRemove'):uiSymbol('routeWaypointAdd'),toggleTitle=inRoute?'Aus Route entfernen':'Zwischenziel hinzufügen';
  var isStart=it===routeStartItem,isTarget=it===routeTargetItem,startBg=isStart?'#ef3737':'#e5e5ea',startFg=isStart?'#fff':'#111',wayBg=inRoute?'#ffd84d':'#e5e5ea',wayFg='#111',targetBg=isTarget?'#34a853':'#e5e5ea',targetFg=isTarget?'#fff':'#111';
  var pinLabel=p2mHasPinName(it)?String(it.label).trim():'';
- return '<div class="p2m-popup"><fieldset class="p2m-name-field"><legend>Pin Name</legend><input type="text" class="p2m-inline-name" data-p2m-name-id="'+id+'" aria-label="Pin Name" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" value="'+escHtml(pinLabel)+'"></fieldset><div class="p2m-created">Erstellt: '+escHtml(new Date(p2mMeta.createdAt).toLocaleString('de-DE'))+'</div><div class="p2m-five-actions"><fieldset class="p2m-top-coords"><legend>Navi extern</legend>'+'<button type="button" data-copy-pin="'+id+'" title="In Zwischenablage kopieren" aria-label="In Zwischenablage kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#087df5;color:#fff;font-size:31px;font-weight:600">+</button>'+'<button type="button" data-pin-nav-apple="'+id+'" title="Mit Apple Karten zum Pin" aria-label="Mit Apple Karten zum Pin" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px;font-weight:600"></button></fieldset><fieldset class="p2m-top-route"><legend>pin2map Routing</legend>'+'<button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+startBg+';color:'+startFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeStart')+'</button>'+'<button type="button" class="'+toggleClass+'" data-route-waypoint="'+id+'" title="'+toggleTitle+'" aria-label="'+toggleTitle+'" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+wayBg+';color:'+wayFg+';font-size:23px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+toggleText+'</button>'+'<button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="width:42px;height:42px;min-width:42px;padding:0;border:0;border-radius:50%;background:'+targetBg+';color:'+targetFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeTarget')+'</button></fieldset></div>'+gpxButton+'<fieldset class="p2m-notes-field"><legend>Pin Notizen</legend><textarea class="p2m-inline-note" data-p2m-inline-note="'+id+'" aria-label="Notiz zum Pin" placeholder="Notiz eingeben …" rows="7">'+escHtml(p2mMeta.note||'')+'</textarea></fieldset>'+'<div class="p2m-bottom-groups"><fieldset class="p2m-bottom-delete"><legend>Entfernen</legend><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button></fieldset><fieldset class="p2m-bottom-pin"><legend>Pin</legend><div class="p2m-bottom-pin-buttons"><button type="button" data-rename-pin="'+id+'">Name</button><button type="button" data-change-pin-category="'+id+'">Symbol</button></div></fieldset><fieldset class="p2m-bottom-wiki"><legend>Wikipedia</legend><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px">'+uiSymbol('wikipedia')+'</button></fieldset></div></div>'
+ return '<div class="p2m-popup"><fieldset class="p2m-name-field"><legend>Pin Name</legend><input type="text" class="p2m-inline-name" data-p2m-name-id="'+id+'" aria-label="Pin Name" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" value="'+escHtml(pinLabel)+'"></fieldset><div class="p2m-created">Erstellt: '+escHtml(new Date(p2mMeta.createdAt).toLocaleString('de-DE'))+'</div><div class="p2m-five-actions"><fieldset class="p2m-top-coords"><legend>Navi extern</legend>'+'<button type="button" data-copy-pin="'+id+'" title="In Zwischenablage kopieren" aria-label="In Zwischenablage kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#087df5;color:#fff;font-size:31px;font-weight:600">+</button>'+'<button type="button" data-pin-nav-apple="'+id+'" title="Mit Apple Karten zum Pin" aria-label="Mit Apple Karten zum Pin" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px;font-weight:600"></button></fieldset><fieldset class="p2m-top-route"><legend>pin2map Routing</legend>'+'<button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="width:42px;height:42px;min-width:42px;padding:0;border:2px solid #ef3737;border-radius:50%;background:'+startBg+';color:'+startFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeStart')+'</button>'+'<button type="button" class="'+toggleClass+'" data-route-waypoint="'+id+'" title="'+toggleTitle+'" aria-label="'+toggleTitle+'" style="width:42px;height:42px;min-width:42px;padding:0;border:2px solid #ffd84d;border-radius:50%;background:'+wayBg+';color:'+wayFg+';font-size:23px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+toggleText+'</button>'+'<button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="width:42px;height:42px;min-width:42px;padding:0;border:2px solid #34a853;border-radius:50%;background:'+targetBg+';color:'+targetFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeTarget')+'</button></fieldset></div>'+gpxButton+'<fieldset class="p2m-notes-field"><legend>Pin Notizen</legend><textarea class="p2m-inline-note" data-p2m-inline-note="'+id+'" aria-label="Notiz zum Pin" placeholder="Notiz eingeben …" rows="7">'+escHtml(p2mMeta.note||'')+'</textarea></fieldset>'+'<div class="p2m-bottom-groups"><fieldset class="p2m-bottom-delete"><legend>Entfernen</legend><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button></fieldset><fieldset class="p2m-bottom-pin"><legend>Pin</legend><div class="p2m-bottom-pin-buttons"><button type="button" data-rename-pin="'+id+'">Name</button><button type="button" data-change-pin-category="'+id+'">Symbol</button></div></fieldset><fieldset class="p2m-bottom-wiki"><legend>Wikipedia</legend><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px">'+uiSymbol('wikipedia')+'</button></fieldset></div></div>'
 }
 
 
@@ -5092,7 +5100,7 @@ var p2m41OriginalPopup=pinPopupHtml;
 pinPopupHtml=function(it){
  var html=p2m41OriginalPopup(it),id=it._popupId;
  var sym=escHtml(it.symbol||(ensurePinCategoryChoices().find(function(c){return c.name===it.category})||{}).symbol||'📍');
- var row='<div class="p2m-bottom-groups"><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button><button type="button" data-p2m-edit-pin="'+id+'" title="Kategorie ändern" aria-label="Kategorie ändern">'+sym+'</button><button type="button" data-p2m-url="'+id+'" title="URL bearbeiten" aria-label="URL bearbeiten">URL</button><button type="button" data-p2m-open-url="'+id+'" title="Gespeicherte URL öffnen" aria-label="Gespeicherte URL öffnen">🌐</button><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia">'+uiSymbol('wikipedia')+'</button><button type="button" class="p2m-hide-popup" data-p2m-close-popup="1" title="Pin-Dialog schließen" aria-label="Pin-Dialog schließen"><span class="p2m-collapse-icon" aria-hidden="true"></span></button></div>';
+ var row='<div class="p2m-bottom-groups"><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button><button type="button" data-p2m-url="'+id+'" title="URL bearbeiten" aria-label="URL bearbeiten">URL</button><button type="button" data-p2m-edit-pin="'+id+'" title="Kategorie ändern" aria-label="Kategorie ändern">'+sym+'</button><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia">'+uiSymbol('wikipedia')+'</button><button type="button" class="p2m-hide-popup" data-p2m-close-popup="1" title="Pin-Dialog schließen" aria-label="Pin-Dialog schließen">✓</button></div>';
  var start=html.indexOf('<div class="p2m-bottom-groups">');
  if(start<0)throw new Error('Pin-Aktionsleiste nicht gefunden');
  // Der Block steht am Ende des Popups. Die alte Zeile komplett ersetzen.
@@ -5121,12 +5129,21 @@ function p2m41ApplyPinCategory(it,index){
 function p2m41Open(it,mode){p2m41Item=it;p2m41Mode=mode;/* Popup bleibt hinter dem URL-Dialog geoeffnet. */
  var card=document.createElement('div');card.className='p2m41-card';var h=document.createElement('strong');h.textContent=mode==='url'?'URL für '+(it.label||it.query):'Kategorie ändern';card.appendChild(h);
  if(mode==='edit'){var closeCategory=document.createElement('button');closeCategory.type='button';closeCategory.className='p2m-category-close';closeCategory.textContent='×';closeCategory.title='Abbrechen';closeCategory.setAttribute('aria-label','Kategorieauswahl abbrechen');closeCategory.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();p2m41Close()});card.appendChild(closeCategory)}
- var field=document.createElement('input');field.type='text';field.placeholder=mode==='url'?'https://, mailto:, obsidian:// …':'';field.value=mode==='url'?p2m41UrlGet(it):((it.label&&it.label!==it.query)?it.label:'');field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('name',mode==='url'?'p2m_link_text':'p2m_marker_title');field.setAttribute('data-form-type','other');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');if(mode==='url'){field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');field.inputMode='url';}if(mode==='url')card.appendChild(field);
+ var field=document.createElement('input');field.type='text';field.placeholder=mode==='url'?'Bitte Link eingeben ...':'';field.value=mode==='url'?p2m41UrlGet(it):((it.label&&it.label!==it.query)?it.label:'');field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('name',mode==='url'?'p2m_link_text':'p2m_marker_title');field.setAttribute('data-form-type','other');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');if(mode==='url'){field.setAttribute('autocapitalize','none');field.setAttribute('autocorrect','off');field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');field.setAttribute('data-lpignore','true');field.setAttribute('data-1p-ignore','true');field.inputMode='url';}if(mode==='url')card.appendChild(field);
  field.setAttribute('role','textbox');
  if(mode==='edit'){var cats=document.createElement('div');cats.className='p2m41-cats';var defs=ensurePinCategoryChoices();p2m41Cat=defs.findIndex(function(c){return c.name===it.category});if(p2m41Cat<0)p2m41Cat=0;defs.forEach(function(c,i){var b=document.createElement('button');b.type='button';var iconSpan=document.createElement('span');iconSpan.className='p2m-category-tile-icon';iconSpan.textContent=c.symbol||'📍';var labelSpan=document.createElement('span');labelSpan.className='p2m-category-tile-label';labelSpan.textContent=c.name||'';b.appendChild(iconSpan);b.appendChild(labelSpan);b.title=c.name;b.setAttribute('aria-pressed',String(i===p2m41Cat));b.onclick=function(){p2m41Cat=i;p2m41ApplyPinCategory(it,i)};cats.appendChild(b)});card.appendChild(cats)}
  var actions=document.createElement('div');actions.className='p2m41-actions';var cancel=document.createElement('button');cancel.textContent='Abbrechen';cancel.onclick=p2m41Close;if(mode==='url')actions.appendChild(cancel);
- var ok=document.createElement('button');ok.className='p2m41-primary';ok.textContent='OK';ok.onclick=function(){if(mode==='url'){p2m41UrlSave(it,field.value.trim());p2m41Close();return}};if(mode!=='url')actions.appendChild(ok);
- if(mode==='url'){var open=document.createElement('button');open.textContent='Öffnen';open.onclick=function(){var u=field.value.trim();try{p2m41UrlSave(it,u);p2mOpenExternalLink(u)}catch(e){p2m51UrlNotice('Bitte einen gültigen Link mit Protokoll eingeben (z. B. https:, mailto: oder obsidian:).')}};actions.appendChild(open);actions.appendChild(ok)}if(mode==='url')card.appendChild(actions);p2m41Dialog.replaceChildren(card);p2m41Dialog.style.display='flex';p2m41Dialog.onclick=function(e){if(e.target===p2m41Dialog)p2m41Close()};card.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing&&mode==='url'){e.preventDefault();e.stopPropagation();ok.click()}else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();cancel.click()}});
+ var ok=document.createElement('button');ok.className='p2m41-primary';ok.textContent='Speichern';ok.onclick=function(){if(mode==='url'){p2m41UrlSave(it,field.value.trim());p2m41Close();return}};if(mode!=='url')actions.appendChild(ok);
+ if(mode==='url'){var open=document.createElement('button');open.textContent='Öffnen';open.onclick=function(){var u=field.value.trim();try{p2m41UrlSave(it,u);p2mOpenExternalLink(u)}catch(e){p2m51UrlNotice('Bitte einen gültigen Link mit Protokoll eingeben (z. B. https:, mailto: oder obsidian:).')}finally{p2m41Close()}};actions.appendChild(ok);actions.appendChild(open)}if(mode==='url'){
+  function updateUrlDefault(){var editing=document.activeElement===field;ok.classList.toggle('p2m41-primary',editing||!field.value.trim());open.classList.toggle('p2m41-primary',!editing&&!!field.value.trim())}
+  field.addEventListener('focus',updateUrlDefault);
+  field.addEventListener('blur',function(){setTimeout(updateUrlDefault,0)});
+  field.addEventListener('input',updateUrlDefault);
+  open.addEventListener('focus',updateUrlDefault);
+  ok.addEventListener('focus',updateUrlDefault);
+  updateUrlDefault();
+ }
+ if(mode==='url')card.appendChild(actions);p2m41Dialog.replaceChildren(card);p2m41Dialog.style.display='flex';if(mode==='url'){(field.value.trim()?open:field).focus();updateUrlDefault()}p2m41Dialog.onclick=function(e){if(e.target===p2m41Dialog)p2m41Close()};card.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing&&mode==='url'){e.preventDefault();e.stopPropagation();(document.activeElement===field?(p2m41UrlSave(it,field.value.trim()),open.focus(),updateUrlDefault()):(field.value.trim()?open:ok).click())}else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();cancel.click()}});
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&p2m41Dialog.style.display==='flex'){e.preventDefault();e.stopImmediatePropagation();p2m41Close()}},true);
 function p2m51UrlNotice(message){
@@ -5156,6 +5173,22 @@ function p2mFinishInlineName(){p2mPendingInlineName=null;}
 // Vor dem Entfernen des Popup-DOM speichern (auch Leaflet-X und Kartenklick).
 // Die Eingabe wird zwischengespeichert, da Leaflet den DOM-Knoten vor popupclose entfernen kann.
 var p2mPendingInlineName=null;
+// Enter im Pin-Namen: Notizfeld nach eventueller Popup-Aktualisierung fokussieren.
+document.addEventListener('keydown',function(e){
+ var name=e.target;
+ if(e.key!=='Enter'||e.isComposing||!name||!name.matches||!name.matches('input.p2m-inline-name'))return;
+ e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+ var id=name.getAttribute('data-p2m-name-id');
+ function focusNote(){
+  var popup=document.querySelector('.leaflet-popup .p2m-popup');
+  var note=popup&&popup.querySelector('textarea[data-p2m-inline-note]');
+  if(!note||note.getAttribute('data-p2m-inline-note')!==id)return;
+  try{note.focus({preventScroll:true})}catch(err){note.focus()}
+ }
+ name.blur();
+ focusNote();
+ if(document.activeElement===name||!document.activeElement||document.activeElement.tagName!=='TEXTAREA')setTimeout(focusNote,0);
+},true);
 document.addEventListener('input',function(e){
  var field=e.target;if(!field||!field.matches||!field.matches('.p2m-inline-name'))return;
  p2mPendingInlineName={id:field.getAttribute('data-p2m-name-id'),value:field.value};
@@ -5185,6 +5218,17 @@ document.addEventListener('click',function(e){
  if(e.target&&e.target.closest&&e.target.closest('[data-p2m-close-popup]'))p2mFinishInlineName();
 },true);
 if(map)map.on('popupclose',function(){p2mPendingInlineName=null;});
+// Escape closes the active pin popup, without affecting other dialogs.
+document.addEventListener('keydown',function(e){
+ if(e.key!=='Escape'||e.defaultPrevented||!map||!map._popup)return;
+ var popup=map._popup,el=popup.getElement&&popup.getElement();
+ if(!el||!el.querySelector('.p2m-popup'))return;
+ if(document.querySelector('.p2m41-dialog[style*="flex"]'))return;
+ e.preventDefault();e.stopPropagation();
+ var note=el.querySelector('textarea[data-p2m-inline-note]');
+ if(note){var it=pinDeleteItems[note.getAttribute('data-p2m-inline-note')];if(it)pinNoteSave(it,note.value)}
+ p2mFinishInlineName();map.closePopup();
+},false);
 function p2mOpenExternalLink(value){
  var u=String(value||'').trim();
  if(!/^[a-z][a-z0-9+.-]*:/i.test(u)||/^(?:javascript|data|vbscript):/i.test(u))throw Error('unsupported scheme');
