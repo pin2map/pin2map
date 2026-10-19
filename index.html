@@ -1013,6 +1013,7 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 #markFilterPanel .p2m-filter-searchrow,#markFilterPanel .p2m-filter-inforow{display:flex;align-items:center;gap:9px;min-width:0}
 #markFilterPanel .p2m-filter-searchrow{margin-bottom:9px}
 #markFilterPanel #markFilterText{flex:1 1 auto;min-width:0;width:0;margin:0;box-sizing:border-box}
+#markFilterPanel #markFilterReset.p2m-filter-reset-flash{background:#36ad5b!important;color:#fff!important;border-color:#218343!important}
 #markFilterPanel #markFilterReset{flex:0 0 49px;width:49px;height:49px;padding:0;border-radius:50%;border:1px solid #4ba363;background:#e6e7eb;color:#28583a;font-size:14px;font-weight:700;box-shadow:none}
 #markFilterPanel #markFilterType{flex:1 1 56%;min-width:0;width:0;margin:0;box-sizing:border-box;font-size:14px;padding:8px 4px}
 #markFilterPanel #markFilterCount{flex:0 0 auto;white-space:nowrap;font-size:12px;margin:0;color:#555}
@@ -1435,16 +1436,53 @@ html,body{max-width:100%;overflow-x:hidden}
 .p2m-popup .p2m-name-field input.p2m-inline-name{display:block;width:100%;min-width:0;height:30px;min-height:30px;box-sizing:border-box;border:0!important;border-radius:0;padding:3px 6px;background:transparent;font:700 18px/1.25 -apple-system,BlinkMacSystemFont,sans-serif;outline-offset:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 <style>
-/* v10.8.19: Alle sechs unteren Pin-Dialog-Buttons auf Pin-Button-Groesse. */
+/* v10.8.25: Alle sechs unteren Pin-Dialog-Buttons auf Pin-Button-Groesse. */
 #mapScreen .leaflet-popup .p2m-popup .p2m-bottom-groups > button {
  width:42px!important;height:42px!important;min-width:42px!important;
  min-height:42px!important;max-width:42px!important;max-height:42px!important;
  flex:0 0 42px!important;box-sizing:border-box!important;
 }
 </style>
+<style id="p2m-1082526-bottom-controls">
+/* 10.8.25.26: Save/Open retain generous spacing around the smaller routing control. */
+#mapScreen .bottom{
+  gap:26px!important;
+  align-items:center!important;
+}
+#mapScreen .bottom #routePanelToggle{
+  position:static!important;inset:auto!important;transform:none!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 34px!important;width:34px!important;height:34px!important;
+  min-width:34px!important;max-width:34px!important;
+  min-height:34px!important;max-height:34px!important;
+  margin:0!important;padding:0!important;border-radius:50%!important;
+  font-size:19px!important;line-height:1!important;
+  box-shadow:0 2px 7px #0003!important;
+}
+#mapScreen .bottom #routePanelToggle:disabled{
+  display:inline-flex!important;opacity:.35!important;cursor:default!important;
+  background:#e8e8e8!important;color:#666!important;
+  border:1px solid #aaa!important;
+}
+#mapScreen #back{
+  position:absolute!important;z-index:1200!important;
+  right:max(10px,env(safe-area-inset-right))!important;
+  bottom:max(8px,env(safe-area-inset-bottom))!important;
+  left:auto!important;top:auto!important;
+  width:46px!important;height:46px!important;min-width:46px!important;
+  padding:0!important;border-radius:50%!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  background:rgba(20,20,20,.9)!important;color:#fff!important;
+  font:400 27px/1 -apple-system,BlinkMacSystemFont,"Segoe UI Symbol",sans-serif!important;
+  box-shadow:0 2px 10px #0003!important;
+}
+@media(max-width:390px){
+ #mapScreen .bottom{gap:20px!important}
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.19)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.25.26)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1481,13 +1519,13 @@ html,body{max-width:100%;overflow-x:hidden}
 <section id="mapScreen">
 <div id="map"></div>
 <div id="river955-choice" aria-label="Flusstreffer"></div>
-<div class="topbar"><div class="quick-place"><button type="button" id="markFilterButton" class="map-round-control map-ui-control" title="Markierungen filtern" aria-label="Markierungen filtern" aria-expanded="false">⚲</button><div class="quick983-inputwrap"><input id="quickPlace" type="text" name="place_lookup" placeholder="Ort oder Name …" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true"><button id="quick983Clear" type="button" tabindex="-1" aria-label="Eingabe löschen" title="Eingabe löschen"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 3 L13 13 M13 3 L3 13" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></button></div><div class="quick984-selector"><button id="quick983Type" type="button" aria-label="Suchart wählen" aria-haspopup="listbox" aria-expanded="false"><span class="p2m-globe">🌐</span><svg class="quick989-chevron" viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M4 7l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div id="quick984Menu" class="quick984-menu" role="listbox" aria-label="Suchart"><button type="button" role="option" data-search="pin"><u>P</u>in</button><button type="button" role="option" data-search="area"><u>F</u>läche</button><button type="button" role="option" data-search="lake"><u>S</u>ee</button><button type="button" role="option" data-search="river">Fl<u>u</u>ss</button></div></div></div><div id="quickSearchNotice" class="quick-search-notice" role="status" aria-live="polite"></div></div>
+<div class="topbar"><div class="quick-place"><button type="button" id="markFilterButton" class="map-round-control map-ui-control" title="Markierungen filtern" aria-label="Markierungen filtern" aria-expanded="false">⚲</button><div class="quick983-inputwrap"><input id="quickPlace" type="text" name="place_lookup" placeholder="Ort oder Name …" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true"><button id="quick983Clear" type="button" tabindex="-1" aria-label="Eingabe löschen" title="Eingabe löschen"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 3 L13 13 M13 3 L3 13" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></button></div><div class="quick984-selector"><button id="quick983Type" type="button" aria-label="Suchart wählen" aria-haspopup="listbox" aria-expanded="false"><span class="p2m-globe">🌐</span><svg class="quick989-chevron" viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M4 7l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div id="quick984Menu" class="quick984-menu" role="listbox" aria-label="Suchart"><button type="button" role="option" data-search="pin"><u>P</u>in</button><button type="button" role="option" data-search="area"><u>F</u>läche</button><button type="button" role="option" data-search="lake"><u>S</u>ee</button><button type="button" role="option" data-search="river">Fl<u>u</u>ss</button><button type="button" role="option" data-search="filter">Filte<u>r</u></button></div></div></div><div id="quickSearchNotice" class="quick-search-notice" role="status" aria-live="polite"></div></div>
 <button type="button" id="mapStyleButton" class="map-round-control map-ui-control" title="Ansichtsart wählen" aria-label="Ansichtsart wählen">🗺️</button>
 <div id="mapStyleMenu" class="map-ui-control" aria-label="Ansichtsart"><button type="button" data-map-style="latin">International</button><button type="button" data-map-style="standard">OSM Original</button><button type="button" data-map-style="topo">Topografisch</button><button type="button" data-map-style="satellite">Satellit</button><button type="button" data-map-style="humanitarian">Humanitarian</button><label id="esriReliefToggleLabel" style="display:block;padding:10px 12px;border-top:1px solid #ddd;cursor:pointer"><input type="checkbox" id="esriReliefToggle" style="margin-right:8px;vertical-align:middle">Esri-Schummerung</label><button type="button" id="removeGpxTrack" style="display:none;border-top:1px solid #ddd;margin-top:5px;padding-top:10px;color:#d70015">GPX-Linie entfernen</button></div>
 <select id="mapStyle" aria-hidden="true" tabindex="-1" style="display:none"><option value="latin" selected>International</option><option value="standard">OSM Original</option><option value="topo">Topografisch</option><option value="satellite">Satellit</option><option value="humanitarian">Humanitarian</option></select>
 <button type="button" id="autoZoomButton" class="map-round-control map-ui-control" title="Autozoom" aria-label="Autozoom">✓</button>
 <button type="button" id="currentLocationButton" class="map-round-control map-ui-control" title="Aktuellen Standort anzeigen" aria-label="Aktuellen Standort anzeigen">◎</button>
-<button type="button" id="routePanelToggle" class="map-round-control map-ui-control" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden" aria-pressed="true" style="display:none">➰</button>
+
 <button type="button" id="copyMap" class="map-round-control map-ui-control" title="Karte kopieren" aria-label="Karte kopieren">📸</button>
 
 
@@ -1514,7 +1552,7 @@ html,body{max-width:100%;overflow-x:hidden}
     <button type="button" id="manualAreaSearchBtn" style="width:auto;padding:9px 14px;margin:0">Suchen</button>
   </div>
   <div id="manualAreaResults"></div>
-</div><button type="button" id="areaSearchClose" style="display:block;width:100%;margin-top:12px;background:#666">Abbrechen</button></div><div id="pinProgress" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5000;background:rgba(255,255,255,.96);color:#111;padding:14px 18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.28);font:600 15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;max-width:min(360px,82vw);pointer-events:none">⏳ Angeklickte Position wird ermittelt und der Pin gesetzt …</div><button type="button" id="labelToggle" class="label-toggle" title="Beschriftungen ein-/ausblenden" aria-label="Beschriftungen ein-/ausblenden">🏷️</button><button type="button" id="toggleElevations" class="elevation-toggle map-ui-control" title="Höhen ein-/ausblenden" aria-label="Höhen ein-/ausblenden"><span aria-hidden="true">m</span></button><div class="bottom"><button type="button" id="openProjectFile" class="list-round" title="pin2map- oder GPX-Datei öffnen" aria-label="pin2map- oder GPX-Datei öffnen">↑</button><button id="back" class="back">Liste</button><button type="button" id="saveProjectFile" class="list-round" title="pin2map-Datei sichern" aria-label="pin2map-Datei sichern">↓</button></div><input id="projectFileInput" type="file" style="display:none"><div id="p107ImportDialog" class="p107-overlay" hidden role="dialog" aria-modal="true" aria-label="Importieren"><div class="p107-panel"><div class="p107-head"><strong id="p107ImportTitle">Importieren</strong><button type="button" id="p107ImportClose" aria-label="Schließen">✕</button></div><div id="p107ImportMain"><button type="button" id="p107ImportNormal" class="p107-choice p107-primary"><span>📄</span><span><b>pin2map</b> <span class="p107-or">oder</span> <b>GPX</b></span><span>›</span></button><button type="button" id="p107ImportHike" class="p107-choice"><span>🥾</span><span><span class="p107-hike-label"><b>GPX-Startpunkte</b><span>mit integrierten Tracks</span></span></span><span>›</span></button></div><div id="p107ImportHikeOptions" hidden><div class="p107-two"><button type="button" id="p107ImportHikeFiles">📄<b>Einzeldatei</b></button><button type="button" id="p107ImportHikeFolder">📁<b>Alle im Ordner</b></button></div><button type="button" id="p107ImportBack" class="p107-back">‹ Zurück</button></div><button type="button" id="p107ImportCancel" class="p107-cancel">Abbrechen</button></div></div>
+</div><button type="button" id="areaSearchClose" style="display:block;width:100%;margin-top:12px;background:#666">Abbrechen</button></div><div id="pinProgress" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5000;background:rgba(255,255,255,.96);color:#111;padding:14px 18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.28);font:600 15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;max-width:min(360px,82vw);pointer-events:none">⏳ Angeklickte Position wird ermittelt und der Pin gesetzt …</div><button type="button" id="labelToggle" class="label-toggle" title="Beschriftungen ein-/ausblenden" aria-label="Beschriftungen ein-/ausblenden">🏷️</button><button type="button" id="toggleElevations" class="elevation-toggle map-ui-control" title="Höhen ein-/ausblenden" aria-label="Höhen ein-/ausblenden"><span aria-hidden="true">m</span></button><div class="bottom"><button type="button" id="openProjectFile" class="list-round" title="pin2map- oder GPX-Datei öffnen" aria-label="pin2map- oder GPX-Datei öffnen">↑</button><button type="button" id="routePanelToggle" class="map-round-control map-ui-control" title="Kein Routing aktiv" aria-label="Routing (nicht aktiv)" aria-pressed="false" disabled>➰</button><button type="button" id="saveProjectFile" class="list-round" title="pin2map-Datei sichern" aria-label="pin2map-Datei sichern">↓</button></div><button type="button" id="back" class="back" title="Liste und Einstellungen" aria-label="Liste und Einstellungen">⚙</button><input id="projectFileInput" type="file" style="display:none"><div id="p107ImportDialog" class="p107-overlay" hidden role="dialog" aria-modal="true" aria-label="Importieren"><div class="p107-panel"><div class="p107-head"><strong id="p107ImportTitle">Importieren</strong><button type="button" id="p107ImportClose" aria-label="Schließen">✕</button></div><div id="p107ImportMain"><button type="button" id="p107ImportNormal" class="p107-choice p107-primary"><span>📄</span><span><b>pin2map</b> <span class="p107-or">oder</span> <b>GPX</b></span><span>›</span></button><button type="button" id="p107ImportHike" class="p107-choice"><span>🥾</span><span><span class="p107-hike-label"><b>GPX-Startpunkte</b><span>mit integrierten Tracks</span></span></span><span>›</span></button></div><div id="p107ImportHikeOptions" hidden><div class="p107-two"><button type="button" id="p107ImportHikeFiles">📄<b>Einzeldatei</b></button><button type="button" id="p107ImportHikeFolder">📁<b>Alle im Ordner</b></button></div><button type="button" id="p107ImportBack" class="p107-back">‹ Zurück</button></div><button type="button" id="p107ImportCancel" class="p107-cancel">Abbrechen</button></div></div>
 </section>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -1527,6 +1565,16 @@ window.pin2mapCurrentMap=function(){return map};
 var map=null,baseLayer=null,categoryLayers={},allBounds=null,renderedAreas=[],areaRenderer=null,buildGeneration=0,areaPointTotal=0,gpxLayer=null,pendingGpxTracks=null;
 var markFilterEntries=[],markFilterQuery='',markFilterKind='alltext';
 var markFilterTrack=false,markFilterLink=false,markFilterNote=false;
+// Nur während einer unveränderten Filterphase: neu angelegte Pins zusätzlich anzeigen.
+var p2mTemporaryFilterPins=new Set();
+function p2mFilterSignature(){return JSON.stringify([markFilterQuery,markFilterKind,markFilterTrack,markFilterLink,markFilterNote])}
+var p2mLastFilterSignature=p2mFilterSignature();
+function p2mFilterIsActive(){return !!markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote||!!(map&&Object.keys(categoryLayers).some(function(k){return !map.hasLayer(categoryLayers[k])}))}
+function p2mClearTemporaryFilterPins(){
+ p2mTemporaryFilterPins.forEach(function(it){it._p2mTemporaryFilterVisible=false});
+ p2mTemporaryFilterPins.clear();
+}
+
 function p2mFilterTrackName(it){
  var key=p2mGpxKeyForPin(it);if(!key)return '';
  var name=String(key).split('|')[0];
@@ -1558,16 +1606,26 @@ function markFilterMatches(it){
 function markFilterRegister(it){markFilterEntries.push(it);markFilterApplyOne(it);if(it._pinLayer){it._pinLayer.on('add',function(){p2mSyncPinBadges(it)})}}
 function markFilterApplyOne(it){
  var group=categoryLayers[it.category];if(!group)return;
- var show=markFilterMatches(it);
- [it._pinLayer,it._areaLayer,it._areaLabelLayer,it._elevationLayer].forEach(function(layer){if(!layer)return;if(show){if(!group.hasLayer(layer))group.addLayer(layer)}else if(group.hasLayer(layer))group.removeLayer(layer)});
+ var show=markFilterMatches(it)||!!it._p2mTemporaryFilterVisible;
+ [it._pinLayer,it._areaLayer,it._areaLabelLayer,it._elevationLayer].forEach(function(layer){
+  if(!layer)return;
+  if(show){if(!group.hasLayer(layer))group.addLayer(layer)}else if(group.hasLayer(layer))group.removeLayer(layer);
+  // Neue Pins und Flächen bleiben auch sichtbar, wenn ihre Kategorie gerade ausgeblendet ist.
+  if(map&&!map.hasLayer(group)){
+   if(it._p2mTemporaryFilterVisible){if(!map.hasLayer(layer))map.addLayer(layer)}
+   else if(map.hasLayer(layer))map.removeLayer(layer);
+  }
+ });
 }
 function p2mMarkActuallyVisible(it){
  var group=categoryLayers[it.category];
- return !!(map&&group&&map.hasLayer(group)&&markFilterMatches(it)&&
+ return !!(map&&group&&(map.hasLayer(group)||!!it._p2mTemporaryFilterVisible)&&(markFilterMatches(it)||!!it._p2mTemporaryFilterVisible)&&
   ((it._pinLayer&&group.hasLayer(it._pinLayer))||
    (it._areaLayer&&group.hasLayer(it._areaLayer))));
 }
 function markFilterApply(zoom){
+ var signature=p2mFilterSignature();
+ if(signature!==p2mLastFilterSignature){p2mClearTemporaryFilterPins();p2mLastFilterSignature=signature}
  var count=0;markFilterEntries.forEach(function(it){markFilterApplyOne(it);if(p2mMarkActuallyVisible(it))count++});
  var active=!!markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote;
  var hiddenCategory=Object.keys(categoryLayers).some(function(k){return !map.hasLayer(categoryLayers[k])});
@@ -2118,12 +2176,14 @@ function addNewItemDirectly(fullLine){
    it._pinLayer=marker;p2mEnablePinMove(it,marker);
    if(p2mHasPinName(it))marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(it);p2mSyncNoteDot(it);if(showElevations&&!isFinite(it.elevation))setTimeout(fetchMissingElevations,0);if(p2mInfoMode===2)setTimeout(fetchPinTemperatures,0);if(p2mInfoMode===3)setTimeout(fetchPinDailyTemperatures,0);if(p2mInfoMode===4)setTimeout(fetchPinSunTimes,0);
   }
+  // Neue Pins und Flächen bleiben bis zur nächsten Filteränderung sichtbar und bearbeitbar.
+  if(p2mFilterIsActive()){it._p2mTemporaryFilterVisible=true;p2mTemporaryFilterPins.add(it)}
   // V9.10.40: Auch direkt hinzugefügte Pins und Flächen im Namensfilter erfassen.
   markFilterRegister(it);
   markFilterApply(false);
   refreshAfterDirectAdd();
-  if(it.area){if(markFilterMatches(it))autoZoomAllContent()}
-  else if(markFilterMatches(it)&&map&&isFinite(p[0])&&isFinite(p[1])){
+  if(it.area){if(markFilterMatches(it)||it._p2mTemporaryFilterVisible)autoZoomAllContent()}
+  else if((markFilterMatches(it)||it._p2mTemporaryFilterVisible)&&map&&isFinite(p[0])&&isFinite(p[1])){
    map.setView(p,Math.max(11,Math.min(map.getZoom(),15)),{animate:true});
    // V9.10.40: Leaflet nach direktem Hinzufügen ohne Zoomwechsel aktualisieren.
    if(it._pinLayer){it._pinLayer.update();if(it._pinLayer.getTooltip())it._pinLayer.getTooltip().update()}
@@ -2578,8 +2638,11 @@ function deleteAreaById(id){
   if(grp2&&grp2.removeLayer)grp2.removeLayer(it._areaLabelLayer);else if(map&&map.hasLayer(it._areaLabelLayer))map.removeLayer(it._areaLabelLayer)
  }
  renderedAreas=renderedAreas.filter(function(a){return a.item!==it});
+ // v10.8.25.1: Geloeschte Flaeche auch aus dem Filterbestand entfernen.
+ markFilterEntries=markFilterEntries.filter(function(entry){return entry!==it});
+ p2mTemporaryFilterPins.delete(it);
  delete areaDeleteItems[id];
- refreshAfterDirectDelete();autoZoomLoadedLayers()
+ refreshAfterDirectDelete();markFilterApply(false);autoZoomLoadedLayers()
 }
 document.addEventListener('click',function(e){
  var btn=e.target&&e.target.closest?e.target.closest('[data-delete-area]'):null;
@@ -2838,7 +2901,10 @@ function deletePinById(id){
  }
  Object.keys(pinDeleteItems).forEach(function(k){if(pinDeleteItems[k]===it)delete pinDeleteItems[k]});
  it._popupId=null;
- refreshAfterDirectDelete();
+ // v10.8.25.1: Geloeschten Pin aus dem Filterbestand entfernen und Zaehler neu berechnen.
+ markFilterEntries=markFilterEntries.filter(function(entry){return entry!==it});
+ p2mTemporaryFilterPins.delete(it);
+ refreshAfterDirectDelete();markFilterApply(false);
  if(!removed){mapStatus.textContent='Pin von Karte entfernt; Eintrag war in der Liste nicht mehr vorhanden.';}
  // Nach dem Löschen den Ausschnitt auf die verbleibenden sichtbaren Inhalte anpassen.
  autoZoomAllContent();
@@ -2937,7 +3003,7 @@ function setRoutePanelHidden(hide){
  hide=!!hide;
  info.classList.toggle('route-panel-hidden',hide);
  b.classList.toggle('route-panel-off',hide);
- b.style.display=(routeStartItem&&routeTargetItem)?'flex':'none';
+ b.disabled=!(routeStartItem&&routeTargetItem);
  b.textContent=routeModeButtonSymbol();
  b.setAttribute('aria-pressed',hide?'false':'true');
  b.title=hide?'Navigationsdialog einblenden':'Navigationsdialog ausblenden';
@@ -2948,8 +3014,8 @@ function syncRoutePanelToggle(){
  if(!b||!info)return;
  var active=!!(routeStartItem&&routeTargetItem);
  b.classList.toggle('route-toggle-visible',active);
- if(!active){info.classList.remove('route-panel-hidden');b.classList.remove('route-panel-off');b.style.display='none';b.setAttribute('aria-pressed','true');b.title='Navigationsdialog ausblenden';b.setAttribute('aria-label',b.title)}
- else{b.style.display='flex';b.textContent=routeModeButtonSymbol();b.classList.toggle('route-panel-off',info.classList.contains('route-panel-hidden'))}
+ if(!active){info.classList.remove('route-panel-hidden');b.classList.remove('route-panel-off');b.disabled=true;b.textContent='➰';b.setAttribute('aria-pressed','false');b.title='Kein Routing aktiv';b.setAttribute('aria-label','Routing (nicht aktiv)')}
+ else{b.disabled=false;b.textContent=routeModeButtonSymbol();b.classList.toggle('route-panel-off',info.classList.contains('route-panel-hidden'))}
 }
 function updateRouteDetailsLabel(){
  var info=document.getElementById('routeInfo'),label=document.getElementById('routeDetailsLabel');
@@ -3440,7 +3506,7 @@ document.getElementById('categoryEditSave').onclick=function(){
  for(var q in areaDeleteItems){var ar=areaDeleteItems[q];if(ar&&ar.category===oldName){ar.category=newName;ar.symbol=sym;ar.color=col}}
  document.getElementById('categoryEditor').style.display='none';pendingCategoryEditName=null;refreshAfterDirectDelete()
 };
-function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');Object.keys(cats).forEach(function(name){var v=cats[name],lab=document.createElement('div'),cb=document.createElement('input'),sw=document.createElement('span'),txt=document.createElement('span');lab.className='chip';lab.style.cursor='pointer';cb.type='checkbox';cb.checked=map&&categoryLayers[name]?map.hasLayer(categoryLayers[name]):true;sw.className='swatch';sw.style.background=v.color;txt.textContent=v.symbol+' '+name+' ('+v.count+')';cb.onclick=function(e){e.stopPropagation()};cb.onchange=function(){var l=categoryLayers[name];if(!l)return;if(cb.checked)l.addTo(map);else map.removeLayer(l);markFilterApply(false);autoZoomAllContent()};lab.onclick=function(e){if(e.target===cb)return;openCategoryEditor(name,v)};lab.appendChild(cb);lab.appendChild(sw);lab.appendChild(txt);box.appendChild(lab)})}
+function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');Object.keys(cats).forEach(function(name){var v=cats[name],lab=document.createElement('div'),cb=document.createElement('input'),sw=document.createElement('span'),txt=document.createElement('span');lab.className='chip';lab.style.cursor='pointer';cb.type='checkbox';cb.checked=map&&categoryLayers[name]?map.hasLayer(categoryLayers[name]):true;sw.className='swatch';sw.style.background=v.color;txt.textContent=v.symbol+' '+name+' ('+v.count+')';cb.onclick=function(e){e.stopPropagation()};cb.onchange=function(){var l=categoryLayers[name];if(!l)return;p2mClearTemporaryFilterPins();if(cb.checked)l.addTo(map);else map.removeLayer(l);markFilterApply(false);autoZoomAllContent()};lab.onclick=function(e){if(e.target===cb)return;openCategoryEditor(name,v)};lab.appendChild(cb);lab.appendChild(sw);lab.appendChild(txt);box.appendChild(lab)})}
 function removeElevationLabel(it){if(!it||!it._elevationLayer)return;try{var grp=categoryLayers[it.category];if(grp&&grp.removeLayer)grp.removeLayer(it._elevationLayer);else if(map&&map.hasLayer(it._elevationLayer))map.removeLayer(it._elevationLayer)}catch(e){}it._elevationLayer=null}
 function renderElevationLabel(it){
  if(!it||!it._pinLayer)return;
@@ -4272,6 +4338,19 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.ge
 function quick983Search(mode){
  var menu=document.getElementById('quick984Menu'),sel=document.getElementById('quick983Type');if(menu)menu.classList.remove('open');if(sel){sel.setAttribute('aria-expanded','false');sel.blur()}
  var el=document.getElementById('quickPlace'),q=el.value.trim();
+ if(mode==='filter'){
+  // Suchbegriff in den bestehenden Markierungsfilter übernehmen.
+  el.value='';
+  el.dispatchEvent(new Event('input',{bubbles:true}));
+  var panel=document.getElementById('markFilterPanel');
+  var button=document.getElementById('markFilterButton');
+  var filter=document.getElementById('markFilterText');
+  if(panel.style.display!=='block')button.click();
+  filter.value=q;
+  filter.dispatchEvent(new Event('input',{bubbles:true}));
+  filter.focus();
+  return;
+ }
  if(!q)return;
  if(mode==='pin'){submitQuickPlace();return}
  if(mode==='area'){el.value=q.replace(/^(fläche|flaeche|see|lake)\s+/i,'');area960Search();return}
@@ -4300,7 +4379,7 @@ function quick983Search(mode){
   if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!menu.classList.contains('open'))openMenu();else highlight(active+(e.key==='ArrowDown'?1:-1));return}
   if(e.key==='Enter'||e.key===' '){e.preventDefault();if(menu.classList.contains('open'))choose(active);else openMenu();return}
   var key=e.key.toLowerCase();
-  var index=key==='p'?0:key==='f'?1:key==='s'?2:key==='u'?3:-1;
+  var index=key==='p'?0:key==='f'?1:key==='s'?2:key==='u'?3:key==='r'?4:-1;
   if(index>=0){e.preventDefault();choose(index)}
  });
  // Capture shortcuts even when focus is transferred to a menu option by the browser.
@@ -4309,7 +4388,7 @@ function quick983Search(mode){
   if(e.target===selector)return; // selector's own handler already processes this key
   if(e.target===field||e.target===clear)return;
   var key=String(e.key||'').toLowerCase();
-  var index=key==='p'?0:key==='f'?1:key==='s'?2:key==='u'?3:-1;
+  var index=key==='p'?0:key==='f'?1:key==='s'?2:key==='u'?3:key==='r'?4:-1;
   if(index>=0){e.preventDefault();e.stopPropagation();choose(index)}
  },true);
  options.forEach(function(b,i){b.addEventListener('click',function(){choose(i)});b.addEventListener('mouseenter',function(){highlight(i)})});
@@ -4523,8 +4602,72 @@ document.getElementById('markFilterType').addEventListener('change',function(){m
   markFilterApply(true);
  });
 });
-document.getElementById('markFilterReset').onclick=function(){markFilterQuery='';markFilterKind='alltext';markFilterTrack=false;markFilterLink=false;markFilterNote=false;document.getElementById('markFilterText').value='';document.getElementById('markFilterType').value='alltext';['markFilterTrack','markFilterLink','markFilterNote'].forEach(function(id){document.getElementById(id).checked=false});markFilterApply(false);autoZoomAllContent()};
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&markFilterPanel.style.display==='block'){markFilterPanel.style.display='none';markFilterButton.setAttribute('aria-expanded','false')}});
+document.getElementById('markFilterReset').onclick=function(){p2mClearTemporaryFilterPins();markFilterQuery='';markFilterKind='alltext';markFilterTrack=false;markFilterLink=false;markFilterNote=false;document.getElementById('markFilterText').value='';document.getElementById('markFilterType').value='alltext';['markFilterTrack','markFilterLink','markFilterNote'].forEach(function(id){document.getElementById(id).checked=false});markFilterApply(false);autoZoomAllContent()};
+document.addEventListener('keydown',function(e){
+ if(markFilterPanel.style.display!=='block'||(e.key!=='Escape'&&e.key!=='Enter'))return;
+ e.preventDefault();e.stopImmediatePropagation();
+ if(e.key==='Escape'){
+  var reset=document.getElementById('markFilterReset');
+  reset.click(); // Vorhandene ALL-Funktion unverändert verwenden
+  reset.classList.add('p2m-filter-reset-flash');
+  window.setTimeout(function(){
+   reset.classList.remove('p2m-filter-reset-flash');
+   markFilterPanel.style.display='none';
+   markFilterButton.setAttribute('aria-expanded','false');
+  },220);
+ }else{
+  markFilterPanel.style.display='none';
+  markFilterButton.setAttribute('aria-expanded','false');
+ }
+},true);
+// v10.8.25.2: Offene Flaechen-Aktionsdialoge haben Vorrang vor dem Filter-Esc-Reset.
+document.addEventListener('keydown',function(e){
+ if(e.key!=='Escape'||e.defaultPrevented)return;
+ var chooser=document.getElementById('mapActionChooser');
+ var selection=document.getElementById('areaClickChooser');
+ if(selection&&selection.style.display==='block'){
+  e.preventDefault();e.stopImmediatePropagation();
+  document.getElementById('areaClickCancel').click();return;
+ }
+ if(chooser&&chooser.style.display==='block'&&chooser.classList.contains('area-context')){
+  e.preventDefault();e.stopImmediatePropagation();
+  document.getElementById('actionCancel').click();
+ }
+},true);
+// v10.8.25.4: Routing-Esc auf Window-Capture vor allen Document-Esc-Handlern behandeln.
+window.addEventListener('keydown',function(e){
+ if(e.key!=='Escape'||e.defaultPrevented)return;
+ var info=document.getElementById('routeInfo');
+ if(!info||info.classList.contains('route-panel-hidden')||
+    getComputedStyle(info).display==='none'||!info.getClientRects().length)return;
+ // Andere offene Dialoge behalten Vorrang.
+ var filter=document.getElementById('markFilterPanel');
+ if(filter&&filter.style.display==='block')return;
+ var chooser=document.getElementById('mapActionChooser');
+ if(chooser&&chooser.style.display==='block')return;
+ var selection=document.getElementById('areaClickChooser');
+ if(selection&&selection.style.display==='block')return;
+ if(map&&map._popup&&map._popup.isOpen&&map._popup.isOpen())return;
+ var hide=document.getElementById('routePanelHide');
+ if(!hide)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ hide.click();
+},true);
+// v10.8.25: Esc beendet einen aktiven Filter auch bei geschlossenem Filterdialog.
+// Offene Bearbeitungs-, Fluss- und Routingdialoge behalten ihre eigene Esc-Funktion.
+document.addEventListener('keydown',function(e){
+ if(e.key!=='Escape'||e.defaultPrevented||markFilterPanel.style.display==='block'||!p2mFilterIsActive())return;
+ function visible(el){return !!(el&&!el.hidden&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden'&&el.getClientRects().length)}
+ if(map&&map._popup&&visible(map._popup.getElement&&map._popup.getElement()))return;
+ if(['pinNameEditor','areaNameEditor','river955-choice','p2m41-dialog','p2m51-url-notice','p107ImportDialog','routeInfo'].some(function(id){return visible(document.getElementById(id))}))return;
+ if(document.querySelector('.p2m-popup, .p2m-name-editor'))return;
+ // Andere sichtbare modale Dialoge nicht mit der Filter-Ruecksetzung ueberlagern.
+ if(Array.prototype.some.call(document.querySelectorAll('[role="dialog"], [aria-modal="true"]'),function(el){return el!==markFilterPanel&&visible(el)}))return;
+ var reset=document.getElementById('markFilterReset');
+ if(!reset)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ reset.click();
+},true);
 // Wiederholter manueller Autozoom: bei einem Pin Nah-/Uebersicht,
 // bei mehreren Pins exakte Einpassung / zwei Zoomstufen weiter heraus.
 function p2mTogglePinAutoZoom(routeMode){
@@ -5260,7 +5403,7 @@ document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&
  if(window.visualViewport){visualViewport.addEventListener('resize',place);visualViewport.addEventListener('scroll',place)}window.addEventListener('orientationchange',place);
 })();
 
-/* v10.8.19: iPhone-Namenseingabe wie Notizeditor im sichtbaren Viewport fixieren. */
+/* v10.8.25: iPhone-Namenseingabe wie Notizeditor im sichtbaren Viewport fixieren. */
 (function(){
  var host=null,field=null,source=null,pinId=null;
  function mobile(){return window.innerWidth<=700||('ontouchstart' in window&&window.innerWidth<=900)}
@@ -5762,8 +5905,8 @@ document.getElementById('p2m-editor-copy-check').onchange=function(){if(this.che
 }
 #mapScreen .leaflet-popup .p2m-bottom-groups>button.p2m-hide-popup,
 .p2m-popup .p2m-bottom-groups>button.p2m-hide-popup{
- background:var(--p2m-button-neutral-bg)!important;color:#222!important;
- border:1px solid var(--p2m-button-neutral-border)!important;
+ background:#34a853!important;color:#fff!important;
+ border:1px solid #27833f!important;
  font-size:25px!important;font-weight:700!important;line-height:1!important;
 }
 /* Dialoge auf iPhone: oberhalb der Tastatur, mit scrollbarem Inhalt. */
