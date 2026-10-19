@@ -1569,15 +1569,30 @@ html,body{max-width:100%;overflow-x:hidden}
 }
 /* Rahmenbreite wie in 10.8.34 beibehalten, Button-Abstände leicht reduzieren. */
 #mapScreen #routeInfo .route-mode-fieldset{width:280px!important;flex:0 0 280px!important}
-#mapScreen #routeInfo .route-mode-options{gap:19px!important;justify-content:space-between!important}
+#mapScreen #routeInfo .route-mode-options{gap:13px!important;justify-content:space-around!important}
 @media(max-width:600px){
   #mapScreen #routeInfo .route-mode-fieldset{width:224px!important;flex:0 0 224px!important;padding-left:5px!important;padding-right:5px!important}
-  #mapScreen #routeInfo .route-mode-options{gap:15px!important;justify-content:space-between!important}
+  #mapScreen #routeInfo .route-mode-options{gap:8px!important;justify-content:space-around!important}
+}
+</style>
+<style id="p2m-10836-route-title-alignment">
+/* Getrennte Emoji- und Text-Spans ermöglichen zuverlässige vertikale Zentrierung. */
+#mapScreen #routeInfo #routeSummary{
+ display:flex!important;align-items:center!important;
+ column-gap:12px!important;
+}
+#mapScreen #routeInfo #routeSummary .route-summary-icon{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 auto!important;line-height:1!important;
+}
+#mapScreen #routeInfo #routeSummary .route-summary-label{
+ display:inline-block!important;line-height:1.2!important;
+ min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;
 }
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.35)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.36)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -3232,10 +3247,17 @@ function decodeValhallaPolyline(str){
  }
  return out
 }
+function setRouteSummaryAligned(icon,label){
+ var el=document.getElementById('routeSummary');if(!el)return;
+ el.replaceChildren();
+ var glyph=document.createElement('span');glyph.className='route-summary-icon';glyph.textContent=icon;
+ var content=document.createElement('span');content.className='route-summary-label';content.textContent=label;
+ el.append(glyph,content);
+}
 function showCalculatedRoute(routeItems,geometry,distanceMeters,durationSeconds,legs,segments){
  routeLegGeometries=segments&&segments.length?segments.slice():[];drawRouteGeometry(geometry,routeLegGeometries);rememberRouteExport(routeItems,geometry);
  var km=distanceMeters/1000,dist=km<10?km.toFixed(1):Math.round(km).toLocaleString('de-DE');
- p2mTransitTransfers=null;updateRouteDetailsLabel();document.getElementById('routeSummary').textContent=routeModeIcon()+' '+dist+' km · ca. '+formatRouteDuration(durationSeconds);
+ p2mTransitTransfers=null;updateRouteDetailsLabel();setRouteSummaryAligned(routeModeIcon(),dist+' km · ca. '+formatRouteDuration(durationSeconds));
  document.getElementById('routeEndpoints').textContent='';renderRouteEditor();
  p10732ClearFocus();var routeInfoEl=document.getElementById('routeInfo');routeInfoEl.classList.remove('route-details-open');var legsBox=document.getElementById('routeLegs');legsBox.innerHTML='';legsBox.classList.remove('open');
  (legs||[]).forEach(function(leg,i){var fromItem=routeItems[i],toItem=routeItems[i+1],a=routeItemName(fromItem),b=routeItemName(toItem),lkm=leg.distance/1000,ldist=lkm<10?lkm.toFixed(1):Math.round(lkm).toLocaleString('de-DE'),row=document.createElement('div'),dot=document.createElement('span'),txt=document.createElement('span');row.className='route-leg';dot.className='route-leg-dot';dot.style.background=routeLegColor(i,(legs||[]).length);txt.textContent=(i+1)+'. '+a+' → '+b+' · '+ldist+' km · '+formatRouteDuration(leg.duration);row.appendChild(dot);row.appendChild(txt);if(isAppleDevice()&&fromItem&&toItem&&fromItem._pinLayer&&toItem._pinLayer){row.classList.add('route-leg-apple');row.title=a+' → '+b+' in Apple Karten öffnen';row.setAttribute('role','button');row.setAttribute('tabindex','0');row.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openRouteLegInAppleMaps(fromItem,toItem)});row.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();openRouteLegInAppleMaps(fromItem,toItem)}})}legsBox.appendChild(row)});
@@ -3366,7 +3388,7 @@ function calculateTransitRoute(routeItems){
    if(layer.setStyle)layer.setStyle({interactive:true});
   }}).addTo(map);
   rememberRouteExport(routeItems,geo);
-  var start=transitTime(it.startTime),end=transitTime(it.endTime);p2mTransitTransfers=Number(it.transfers)||0;document.getElementById('routeSummary').textContent='🚃 '+start+'–'+end+' · '+formatRouteDuration(it.duration||0);updateRouteDetailsLabel();
+  var start=transitTime(it.startTime),end=transitTime(it.endTime);p2mTransitTransfers=Number(it.transfers)||0;setRouteSummaryAligned('🚃',start+'–'+end+' · '+formatRouteDuration(it.duration||0));updateRouteDetailsLabel();
   document.getElementById('routeEndpoints').textContent='';renderRouteEditor();
   var routeInfoEl=document.getElementById('routeInfo');routeInfoEl.classList.remove('route-details-open');var box=document.getElementById('routeLegs');box.innerHTML='';box.classList.remove('open');legs.forEach(function(leg,i){
    var row=document.createElement('div');row.className='route-leg p10728-transit-leg';
