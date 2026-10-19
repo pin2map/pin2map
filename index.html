@@ -1435,7 +1435,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .p2m-popup .p2m-name-field input.p2m-inline-name{display:block;width:100%;min-width:0;height:30px;min-height:30px;box-sizing:border-box;border:0!important;border-radius:0;padding:3px 6px;background:transparent;font:700 18px/1.25 -apple-system,BlinkMacSystemFont,sans-serif;outline-offset:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 <style>
-/* v10.8.18: Alle sechs unteren Pin-Dialog-Buttons auf Pin-Button-Groesse. */
+/* v10.8.19: Alle sechs unteren Pin-Dialog-Buttons auf Pin-Button-Groesse. */
 #mapScreen .leaflet-popup .p2m-popup .p2m-bottom-groups > button {
  width:42px!important;height:42px!important;min-width:42px!important;
  min-height:42px!important;max-width:42px!important;max-height:42px!important;
@@ -1444,7 +1444,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.18)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.19)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -5260,7 +5260,7 @@ document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&
  if(window.visualViewport){visualViewport.addEventListener('resize',place);visualViewport.addEventListener('scroll',place)}window.addEventListener('orientationchange',place);
 })();
 
-/* v10.8.18: iPhone-Namenseingabe wie Notizeditor im sichtbaren Viewport fixieren. */
+/* v10.8.19: iPhone-Namenseingabe wie Notizeditor im sichtbaren Viewport fixieren. */
 (function(){
  var host=null,field=null,source=null,pinId=null;
  function mobile(){return window.innerWidth<=700||('ontouchstart' in window&&window.innerWidth<=900)}
@@ -5277,7 +5277,7 @@ document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&
   top.append(label,done);field=document.createElement('input');field.type='text';field.value=el.value;field.placeholder='Pin Name eingeben …';
   field.style.cssText='width:100%;box-sizing:border-box;border:1px solid #ccc;border-radius:8px;padding:12px;font:600 18px -apple-system,sans-serif';
   field.addEventListener('input',save);
-  field.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing){e.preventDefault();e.stopPropagation();var id=pinId;close();var note=document.querySelector('textarea[data-p2m-inline-note="'+id+'"]');if(note){note.click();if(!mobile())note.focus()}}else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close();if(map&&map._popup)map.closePopup()}});
+  field.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing){e.preventDefault();e.stopPropagation();close()}else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close();if(map&&map._popup)map.closePopup()}});
   host.append(top,field);document.body.appendChild(host);place();try{field.focus({preventScroll:true})}catch(e){field.focus()}}
  function intercept(e){var el=e.target&&e.target.closest&&e.target.closest('input.p2m-inline-name');if(!el||!mobile())return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();open(el)}
  document.addEventListener('touchstart',intercept,{capture:true,passive:false});document.addEventListener('pointerdown',intercept,true);document.addEventListener('click',intercept,true);
