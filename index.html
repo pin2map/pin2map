@@ -1701,9 +1701,109 @@ html,body{max-width:100%;overflow-x:hidden}
   margin:0!important;
 }
 </style>
+<style id="p2m-10841-all-toggle">
+#mapScreen #routeInfo #routeVisiblePins{
+ background:#e5e5ea!important;border-color:#c7c7cc!important;color:#111!important;
+}
+#mapScreen #routeInfo #routeVisiblePins.p2m-all-on{
+ background:#ffe082!important;border-color:#e0b900!important;color:#111!important;
+}
+#mapScreen #routeInfo [data-route-mode="transit"].p2m-transit-blocked{
+ position:relative!important;display:inline-flex!important;opacity:.65!important;
+ cursor:not-allowed!important;
+}
+#mapScreen #routeInfo [data-route-mode="transit"].p2m-transit-blocked::after{
+ content:"";position:absolute;left:4px;right:4px;top:50%;height:5px;
+ border-radius:4px;background:#f03030;transform:rotate(-45deg);
+ pointer-events:none;z-index:5;
+}
+</style>
+<style id="p2m-10842-route-failure">
+#mapScreen #routeInfo #routeOrderToggle.p2m-fix-inactive{
+ background:#e5e5ea!important;border-color:#c7c7cc!important;
+ color:#888!important;opacity:.65!important;cursor:default!important;
+}
+#mapScreen #routeInfo [data-route-mode].p2m-route-failed{
+ position:relative!important;
+ background:#e5e5ea!important;border-color:#c7c7cc!important;
+ color:#777!important;opacity:.55!important;cursor:not-allowed!important;
+}
+#mapScreen #routeInfo [data-route-mode].p2m-route-failed::after{
+ content:"";position:absolute;left:4px;right:4px;top:50%;height:5px;
+ background:#d93030;border-radius:4px;transform:rotate(-45deg);
+ pointer-events:none;z-index:10;
+}
+</style>
+<style id="p2m-10845-transit-vehicle">
+#mapScreen #routeInfo #transitVehiclePreference{height:42px;min-height:42px;max-height:42px;box-sizing:border-box;border:1px solid #c7c7cc;border-radius:8px;background:#fff;color:#111;padding:0 5px;font-size:12px;min-width:65px;flex:0 0 auto}
+@media(max-width:600px){#mapScreen #routeInfo #transitVehiclePreference{height:40px;min-height:40px;max-height:40px;font-size:12px;}}
+</style>
+<style id="p2m-10846-transit-datetime-room">
+/* Keep the native date/time input usable after adding the vehicle selector. */
+#mapScreen #routeInfo.p2m-transit-layout .route-toolbar-secondary{
+ position:relative!important;display:flex!important;align-items:flex-end!important;
+ flex-wrap:nowrap!important;width:100%!important;max-width:100%!important;
+ box-sizing:border-box!important;
+}
+#mapScreen #routeInfo.p2m-transit-layout #transitTimeControls.show{
+ display:flex!important;flex:1 1 auto!important;flex-wrap:wrap!important;
+ align-items:center!important;gap:8px!important;min-width:0!important;
+ padding-right:62px!important;box-sizing:border-box!important;
+}
+#mapScreen #routeInfo.p2m-transit-layout #transitDateTime{
+ order:-1!important;display:block!important;flex:0 0 100%!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ height:42px!important;min-height:42px!important;max-height:42px!important;
+ font-size:15px!important;padding:0 10px!important;
+}
+#mapScreen #routeInfo.p2m-transit-layout #transitDateTime[style*="display:none"],
+#mapScreen #routeInfo.p2m-transit-layout #transitDateTime[style*="display: none"]{display:none!important}
+#mapScreen #routeInfo.p2m-transit-layout #transitTimeMode{flex:0 0 105px!important;max-width:105px!important}
+#mapScreen #routeInfo.p2m-transit-layout #transitVehiclePreference{flex:0 0 78px!important;max-width:78px!important}
+#mapScreen #routeInfo.p2m-transit-layout #transitExtraTransfer{flex:0 0 78px!important;width:78px!important;max-width:78px!important}
+#mapScreen #routeInfo.p2m-transit-layout .route-reverse-fieldset{
+ position:absolute!important;right:0!important;bottom:0!important;margin:0!important;
+}
+@media(max-width:600px){
+ #mapScreen #routeInfo.p2m-transit-layout #transitTimeControls.show{gap:6px!important;padding-right:55px!important}
+ #mapScreen #routeInfo.p2m-transit-layout #transitDateTime{height:40px!important;min-height:40px!important;max-height:40px!important;font-size:14px!important}
+ #mapScreen #routeInfo.p2m-transit-layout #transitTimeMode{flex-basis:88px!important;max-width:88px!important}
+ #mapScreen #routeInfo.p2m-transit-layout #transitVehiclePreference{flex-basis:70px!important;max-width:70px!important}
+ #mapScreen #routeInfo.p2m-transit-layout #transitExtraTransfer{flex-basis:70px!important;width:70px!important;max-width:70px!important}
+}
+</style>
+<style id="p2m-10847-split-datetime">
+/* Native, separate date and clock inputs. Match the width of "Routing für". */
+#mapScreen #routeInfo.p2m-transit-layout #transitDateTime{display:none!important}
+#mapScreen #routeInfo.p2m-transit-layout #p2mTransitDateTimePair{
+ order:-1!important;flex:0 0 280px!important;width:280px!important;
+ max-width:280px!important;min-width:0!important;box-sizing:border-box!important;
+ gap:8px!important;align-items:stretch!important;
+}
+#mapScreen #routeInfo.p2m-transit-layout #p2mTransitDateTimePair[style*="display:none"],
+#mapScreen #routeInfo.p2m-transit-layout #p2mTransitDateTimePair[style*="display: none"]{display:none!important}
+#mapScreen #routeInfo.p2m-transit-layout #p2mTransitDateTimePair input{
+ box-sizing:border-box!important;min-width:0!important;width:0!important;max-width:none!important;
+ height:42px!important;min-height:42px!important;max-height:42px!important;
+ font-size:15px!important;padding:0 7px!important;line-height:normal!important;
+ background:#fff!important;color:#111!important;border:1px solid #c7c7cc!important;
+ border-radius:8px!important;
+}
+#mapScreen #routeInfo.p2m-transit-layout #p2mTransitDate{flex:1.3 1 0!important}
+#mapScreen #routeInfo.p2m-transit-layout #p2mTransitClock{flex:1 1 0!important}
+@media(max-width:600px){
+ #mapScreen #routeInfo.p2m-transit-layout #p2mTransitDateTimePair{
+  flex-basis:224px!important;width:224px!important;max-width:224px!important;gap:6px!important;
+ }
+ #mapScreen #routeInfo.p2m-transit-layout #p2mTransitDateTimePair input{
+  height:40px!important;min-height:40px!important;max-height:40px!important;
+  font-size:13px!important;padding:0 3px!important;
+ }
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.40)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.48)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1756,7 +1856,7 @@ html,body{max-width:100%;overflow-x:hidden}
  <div class="p2m-filter-inforow"><div class="p2m-filter-typecol"><select id="markFilterType" aria-label="Markierungstyp"><option value="all">Pins und Flächen</option><option value="pins">Nur Pins</option><option value="areas">Nur Flächen</option><option value="alltext" selected>Pins, Flächen, Text</option><option value="pinstext">Nur Pins und Text</option></select><div id="markFilterCount" role="status" aria-live="polite">sichtbar: alle</div></div><button type="button" id="markFilterExport" title="Sichtbare Pins als Text kopieren" aria-label="Sichtbare Pins als Text kopieren">📋</button></div>
  <div class="p2m-filter-options" role="group" aria-label="Pins mit Inhalt"><label><input type="checkbox" id="markFilterTrack"> <span>Mit Track</span></label><label><input type="checkbox" id="markFilterLink"> <span>Mit Link</span></label><label><input type="checkbox" id="markFilterNote"> <span>Mit Notiz</span></label></div>
 </div>
-<button type="button" id="legendToggle" class="map-round-control map-ui-control" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">×</span></button></div><div class="route-toolbar-row route-toolbar-primary"><fieldset class="route-mode-fieldset"><legend>Routing für</legend><div class="route-mode-options"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button></div></fieldset><button type="button" id="routeClear" title="Route entfernen" aria-label="Route beenden">Beenden</button></div><div class="route-toolbar-row route-toolbar-secondary"><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="now">Jetzt</option><option value="depart">Abfahrt</option><option value="arrive">Ankunft</option></select><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"><select id="transitExtraTransfer" aria-label="Zusätzliche Umsteigezeit" title="Zusätzliche Umsteigezeit"><option value="0">+0 min</option><option value="3">+3 min</option><option value="5" selected>+5 min</option><option value="10">+10 min</option><option value="15">+15 min</option></select></div>
+<button type="button" id="legendToggle" class="map-round-control map-ui-control" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">×</span></button></div><div class="route-toolbar-row route-toolbar-primary"><fieldset class="route-mode-fieldset"><legend>Routing für</legend><div class="route-mode-options"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button></div></fieldset><button type="button" id="routeClear" title="Route entfernen" aria-label="Route beenden">Beenden</button></div><div class="route-toolbar-row route-toolbar-secondary"><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="now">Jetzt</option><option value="depart">Abfahrt</option><option value="arrive">Ankunft</option></select><div id="p2mTransitDateTimePair" class="p2m-transit-datetime-pair" style="display:none"><input id="p2mTransitDate" type="date" aria-label="ÖPNV-Datum"><input id="p2mTransitClock" type="time" aria-label="ÖPNV-Uhrzeit" step="60"></div><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"><select id="transitVehiclePreference" aria-label="Bevorzugtes Verkehrsmittel" title="ÖPNV-Verkehrsmittel"><option value="all">Alle</option><option value="rail">Bahn</option><option value="bus">Bus</option></select><select id="transitExtraTransfer" aria-label="Zusätzliche Umsteigezeit" title="Zusätzliche Umsteigezeit"><option value="0">+0 min</option><option value="3">+3 min</option><option value="5" selected>+5 min</option><option value="10">+10 min</option><option value="15">+15 min</option></select></div>
 <fieldset class="route-multipin-fieldset"><legend>Multi Pin Routing</legend><div class="route-multipin-options"><button type="button" id="routeVisiblePins" class="route-circle route-visible-pins" title="Alle noch nicht verwendeten Pins im aktuellen Kartenausschnitt als Zwischenziele hinzufügen" aria-label="Sichtbare Pins hinzufügen"><svg class="route-all-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42" width="36" height="36" aria-hidden="true" focusable="false"><rect x="6" y="7" width="30" height="28" rx="0" fill="none" stroke="#111" stroke-width="1.5"/><text x="21" y="21" fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="central">ALL</text></svg></button>
 <div id="routeOrder" class="route-tool-group route-order-group">
 <button type="button" id="routeOrderToggle" data-route-order="fixed" class="active route-circle" title="Reihenfolge fest" aria-label="Reihenfolge fest">FIX</button>
@@ -3181,7 +3281,7 @@ function saveAreaName(){
 document.getElementById('areaNameCancel').onclick=function(){document.getElementById('areaNameEditor').style.display='none';pendingAreaRename=null};
 document.getElementById('areaNameSave').onclick=saveAreaName;
 document.getElementById('areaNameInput').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveAreaName()}else if(e.key==='Escape'){document.getElementById('areaNameCancel').click()}});
-var routeStartItem=null,routeTargetItem=null,routeWaypoints=[],routeLayer=null,routeMode='driving',routeOrderMode='fixed',routeOptimizeBusy=false,routeFixedWaypoints=null,pendingProjectRoute=null,routeRequestGeneration=0,lastRouteExport=null,routeLegColors=true,routeLegGeometries=[],routeIsReversed=false;
+var routeStartItem=null,routeTargetItem=null,routeWaypoints=[],routeLayer=null,routeMode='driving',routeOrderMode='fixed',routeOptimizeBusy=false,routeFixedWaypoints=null,pendingProjectRoute=null,routeRequestGeneration=0,lastRouteExport=null,routeLegColors=true,routeLegGeometries=[],routeIsReversed=false,routeAllActive=false;
 var routeLegPalette=['#ff0000','#0a84ff','#ff9500','#34c759','#af52de','#00a7a7','#ff2d55','#5856d6','#8e8e93','#64d2ff'];
 var routeLastLegPalette=['#0a84ff','#ff9500','#34c759','#00a7a7','#5856d6','#8e8e93','#64d2ff'];
 function routeLegColor(i,total){if(i===0)return '#ff0000';if(total>1&&i===total-1)return routeLastLegPalette[(i-1)%routeLastLegPalette.length];return routeLegPalette[i%routeLegPalette.length]}
@@ -3202,7 +3302,7 @@ function restoreProjectRoute(items){
  var r=pendingProjectRoute;pendingProjectRoute=null;if(!r)return;
  var start=findProjectRouteItem(items,r.start),target=findProjectRouteItem(items,r.target),wps=(r.waypoints||[]).map(function(x){return findProjectRouteItem(items,x)}).filter(Boolean);
  if(!start||!target||!start._pinLayer||!target._pinLayer){mapStatus.textContent='⚠️ Gespeicherte Route konnte nicht vollständig wiederhergestellt werden.';return}
- routeStartItem=start;routeTargetItem=target;routeWaypoints=wps.filter(function(x){return x&&x._pinLayer&&x!==start&&x!==target});
+ routeAllActive=false;routeStartItem=start;routeTargetItem=target;routeWaypoints=wps.filter(function(x){return x&&x._pinLayer&&x!==start&&x!==target});
  routeMode=/^(driving|bicycle|pedestrian|transit)$/.test(r.mode)?r.mode:'driving';routeOrderMode=r.orderMode==='optimal'?'optimal':'fixed';
 
  var tm=document.getElementById('transitTimeMode'),td=document.getElementById('transitDateTime');if(tm&&/^(now|depart|arrive)$/.test(r.transitTimeMode||''))tm.value=r.transitTimeMode;if(td&&r.transitDateTime)td.value=r.transitDateTime;
@@ -3273,19 +3373,48 @@ function reverseRouteOrder(){
  mapStatus.textContent='↔ Routing-Reihenfolge umgekehrt.';
  calculateRoute();
 }
+var p2mFailedRouteModes={};
+function p2mShowRouteFailure(mode){
+ mode=mode||routeMode;
+ p2mFailedRouteModes[mode]=true;
+ setRouteSummaryAligned(routeModeIcon(),'Routing nicht möglich');
+ mapStatus.textContent='';
+ var b=document.querySelector('[data-route-mode="'+mode+'"]');
+ if(b){b.classList.add('p2m-route-failed');b.disabled=true;b.setAttribute('aria-disabled','true');b.title='Routing nicht möglich'}
+ updateRouteModeButtons();
+}
+function p2mClearRouteFailures(){
+ p2mFailedRouteModes={};
+ document.querySelectorAll('[data-route-mode]').forEach(function(b){
+  b.classList.remove('p2m-route-failed');
+  b.disabled=false;b.removeAttribute('aria-disabled');
+ });
+}
+function updateRouteAllButton(){
+ var b=document.getElementById('routeVisiblePins');
+ if(b){b.classList.toggle('p2m-all-on',routeAllActive);b.setAttribute('aria-pressed',routeAllActive?'true':'false');b.title=routeAllActive?'Alle Zwischenziele entfernen und direkt routen':'Alle sichtbaren Pins als Zwischenziele aufnehmen';b.setAttribute('aria-label',b.title)}
+ var transit=document.querySelector('[data-route-mode="transit"]');
+ if(transit){transit.classList.toggle('p2m-transit-blocked',routeAllActive);transit.disabled=routeAllActive||!!p2mFailedRouteModes.transit;transit.setAttribute('aria-disabled',transit.disabled?'true':'false');if(routeAllActive)transit.title='ÖPNV mit Zwischenzielen nicht verfügbar';else transit.title='ÖPNV'}
+}
 function addVisiblePinsToRoute(){
  if(!map||!routeStartItem||!routeTargetItem){mapStatus.textContent='⚠️ Bitte zuerst Start und Ziel festlegen.';return}
+ if(routeAllActive){
+  routeAllActive=false;routeWaypoints=[];setRouteOrderFixed(true);
+  updateRouteAllButton();renderRouteEditor();updateAppleMapsButton();
+  mapStatus.textContent='Direktroute ohne Zwischenziele.';calculateRoute();return
+ }
  if(routeMode==='transit'){mapStatus.textContent='⚠️ ÖPNV unterstützt derzeit keine Zwischenziele.';return}
  var bounds=map.getBounds(),used=currentRouteItems(),seen=[],candidates=[];
  allCurrentPinItems().forEach(function(it){if(!it||!it._pinLayer||seen.indexOf(it)>=0)return;seen.push(it);if(used.indexOf(it)>=0)return;if(!map.hasLayer(it._pinLayer))return;var ll=it._pinLayer.getLatLng();if(bounds.contains(ll))candidates.push(it)});
  candidates.sort(function(a,b){return pinNumberForItem(a)-pinNumberForItem(b)});
  if(!candidates.length){mapStatus.textContent='Keine weiteren sichtbaren Pins gefunden.';return}
+ routeAllActive=true;updateRouteAllButton();
  if(routeOrderMode==='optimal'){
   var base=routeFixedWaypoints?routeFixedWaypoints.slice():routeWaypoints.slice();candidates.forEach(function(it){if(base.indexOf(it)<0)base.push(it)});routeFixedWaypoints=base.slice();routeWaypoints=base.slice();renderRouteEditor();updateAppleMapsButton();mapStatus.textContent='Optimiere '+candidates.length+' neue sichtbare Pins …';optimizeRouteOrder().then(function(){if(routeStartItem&&routeTargetItem)calculateRoute()})
  }else{candidates.forEach(function(it){routeWaypoints.push(it)});renderRouteEditor();updateAppleMapsButton();mapStatus.textContent='➕ '+candidates.length+' sichtbare Pins zur Route hinzugefügt.';calculateRoute()}
 }
 function setRouteItems(arr){
- if(!arr||arr.length<2)return false;setRouteOrderFixed(true);routeStartItem=arr[0];routeTargetItem=arr[arr.length-1];routeWaypoints=arr.slice(1,-1);updateAppleMapsButton();renderRouteEditor();calculateRoute();return true
+ if(!arr||arr.length<2)return false;routeAllActive=false;setRouteOrderFixed(true);routeStartItem=arr[0];routeTargetItem=arr[arr.length-1];routeWaypoints=arr.slice(1,-1);updateAppleMapsButton();renderRouteEditor();calculateRoute();return true
 }
 function editRouteMove(index,delta){var arr=currentRouteItems(),j=index+delta;if(index<0||index>=arr.length||j<0||j>=arr.length)return;var t=arr[index];arr[index]=arr[j];arr[j]=t;setRouteItems(arr)}
 function editRouteRemove(index){var arr=currentRouteItems();if(arr.length<=2||index<0||index>=arr.length)return;arr.splice(index,1);setRouteItems(arr)}
@@ -3317,7 +3446,7 @@ function clearRoute(keepPoints){
  lastRouteExport=null;updateGpxButton();
  if(routeLayer&&map&&map.hasLayer(routeLayer))map.removeLayer(routeLayer);routeLayer=null;
  p10732ClearFocus();var routeInfoEl=document.getElementById('routeInfo');routeInfoEl.style.display='none';routeInfoEl.classList.remove('route-details-open');var rl=document.getElementById('routeLegs');if(rl){rl.classList.remove('open');rl.innerHTML=''}var rt=document.getElementById('routeDetailsToggle');if(rt){rt.disabled=true;rt.title='Teilstrecken anzeigen';rt.setAttribute('aria-label','Teilstrecken anzeigen')}var re=document.getElementById('routeEdit');if(re)re.innerHTML=''
- if(!keepPoints){routeIsReversed=false;routeRequestGeneration++;routeStartItem=null;routeTargetItem=null;routeWaypoints=[];setRouteOrderFixed(true)}updateAppleMapsButton();renderRouteEditor()
+ if(!keepPoints){routeAllActive=false;routeIsReversed=false;routeRequestGeneration++;routeStartItem=null;routeTargetItem=null;routeWaypoints=[];setRouteOrderFixed(true)}updateAppleMapsButton();renderRouteEditor()
 }
 function updateGpxButton(){var b=document.getElementById('bottomGpxAction');if(!b)return;if(gpxLayer){b.disabled=false;b.textContent='GPX';b.classList.add('gpx-remove');b.title='Importierten GPX-Pfad entfernen';b.setAttribute('aria-label',b.title)}else{b.textContent='GPX';b.classList.remove('gpx-remove');b.disabled=!lastRouteExport;b.title='Route als GPX exportieren';b.setAttribute('aria-label',b.title)}}
 function xmlEsc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;')}
@@ -3340,11 +3469,11 @@ function updateRouteOrderButtons(){
  if(fixed){fixed.classList.toggle('active',routeOrderMode==='fixed');fixed.disabled=false}
  if(opt){opt.classList.toggle('active',routeOrderMode==='optimal');opt.disabled=!canOptimize}
  if(!canOptimize&&routeOrderMode==='optimal')routeOrderMode='fixed'
- if(fixed)fixed.classList.toggle('active',routeOrderMode==='fixed');
- if(opt)opt.classList.toggle('active',routeOrderMode==='optimal')
+ if(fixed){fixed.classList.toggle('active',routeAllActive&&routeOrderMode==='fixed');fixed.classList.toggle('p2m-fix-inactive',!routeAllActive);fixed.disabled=!routeAllActive}
+ if(opt)opt.classList.toggle('active',routeAllActive&&routeOrderMode==='optimal')
 }
 var p2mTransitTransfers=null;
-function updateRouteModeButtons(){updateRouteDetailsLabel();var transitAllowed=routeWaypoints.length===0,transitBtn=document.querySelector('[data-route-mode=\"transit\"]');if(transitBtn)transitBtn.style.display=transitAllowed?'':'none';if(!transitAllowed&&routeMode==='transit'){routeMode='driving'}document.querySelectorAll('[data-route-mode]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-route-mode')===routeMode)});var tc=document.getElementById('transitTimeControls');if(tc)tc.classList.toggle('show',routeMode==='transit');var ri=document.getElementById('routeInfo');if(ri)ri.classList.toggle('p2m-transit-layout',routeMode==='transit');if(routeMode==='transit'&&routeOrderMode==='optimal')routeOrderMode='fixed';updateRouteOrderButtons();updateAppleMapsButton();var pt=document.getElementById('routePanelToggle');if(pt&&document.getElementById('routeInfo').classList.contains('route-panel-hidden'))pt.textContent=routeModeButtonSymbol();}
+function updateRouteModeButtons(){updateRouteDetailsLabel();var transitAllowed=routeWaypoints.length===0,transitBtn=document.querySelector('[data-route-mode=\"transit\"]');if(transitBtn)transitBtn.style.display=(transitAllowed||routeAllActive||routeMode==='transit')?'':'none';document.querySelectorAll('[data-route-mode]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-route-mode')===routeMode)});document.querySelectorAll('[data-route-mode]').forEach(function(b){var failed=!!p2mFailedRouteModes[b.getAttribute('data-route-mode')];b.classList.toggle('p2m-route-failed',failed);if(failed){b.disabled=true;b.setAttribute('aria-disabled','true')}});var tc=document.getElementById('transitTimeControls');if(tc)tc.classList.toggle('show',routeMode==='transit');var ri=document.getElementById('routeInfo');if(ri)ri.classList.toggle('p2m-transit-layout',routeMode==='transit');if(routeMode==='transit'&&routeOrderMode==='optimal')routeOrderMode='fixed';updateRouteOrderButtons();updateAppleMapsButton();updateRouteAllButton();var pt=document.getElementById('routePanelToggle');if(pt&&document.getElementById('routeInfo').classList.contains('route-panel-hidden'))pt.textContent=routeModeButtonSymbol();}
 function localDateTimeValue(d){d=d||new Date();var z=new Date(d.getTime()-d.getTimezoneOffset()*60000);return z.toISOString().slice(0,16)}
 function transitQueryTime(){var mode=document.getElementById('transitTimeMode').value,input=document.getElementById('transitDateTime');if(mode==='now')return null;if(!input.value)input.value=localDateTimeValue();var d=new Date(input.value);return isNaN(d)?null:d.toISOString()}
 function decodeValhallaPolyline(str){
@@ -3366,6 +3495,7 @@ function setRouteSummaryAligned(icon,label){
  el.append(glyph,content);
 }
 function showCalculatedRoute(routeItems,geometry,distanceMeters,durationSeconds,legs,segments){
+ p2mClearRouteFailures();
  routeLegGeometries=segments&&segments.length?segments.slice():[];drawRouteGeometry(geometry,routeLegGeometries);rememberRouteExport(routeItems,geometry);
  var km=distanceMeters/1000,dist=km<10?km.toFixed(1):Math.round(km).toLocaleString('de-DE');
  p2mTransitTransfers=null;updateRouteDetailsLabel();setRouteSummaryAligned(routeModeIcon(),dist+' km · ca. '+formatRouteDuration(durationSeconds));
@@ -3482,11 +3612,12 @@ document.getElementById('transitStagesButton').addEventListener('click',function
  info.classList.add('route-details-open');
  var first=p10734Rows[0];if(first)p10735ShowLeg(0);
 });
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='transitVehiclePreference'&&routeMode==='transit'&&routeStartItem&&routeTargetItem)calculateRoute()});
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='transitExtraTransfer'&&routeMode==='transit'&&routeStartItem&&routeTargetItem){try{calculateRoute()}catch(err){console.warn('Umsteigezeit:',err)}}});
 function calculateTransitRoute(routeItems){
- if(routeItems.length>2){mapStatus.textContent='⚠️ ÖPNV-Test: Zwischenziele werden derzeit nicht unterstützt.';document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();return}
+ if(routeItems.length>2){document.getElementById('routeInfo').style.display='flex';p2mShowRouteFailure('transit');return}
  var a=routeItems[0]._pinLayer.getLatLng(),b=routeItems[1]._pinLayer.getLatLng();
- var q=new URLSearchParams({fromPlace:a.lat+','+a.lng,toPlace:b.lat+','+b.lng,detailedLegs:'true',detailedTransfers:'true',transitModes:'TRANSIT',directModes:''});var extraTransfer=document.getElementById('transitExtraTransfer');if(extraTransfer&&Number(extraTransfer.value)>0)q.set('additionalTransferTime',String(Number(extraTransfer.value)));var tm=document.getElementById('transitTimeMode').value,tq=transitQueryTime();if(tq){q.set('time',tq);q.set('arriveBy',tm==='arrive'?'true':'false')}
+ var q=new URLSearchParams({fromPlace:a.lat+','+a.lng,toPlace:b.lat+','+b.lng,detailedLegs:'true',detailedTransfers:'true',transitModes:(document.getElementById('transitVehiclePreference')||{}).value==='rail'?'RAIL':(document.getElementById('transitVehiclePreference')||{}).value==='bus'?'BUS,COACH':'TRANSIT',directModes:''});var extraTransfer=document.getElementById('transitExtraTransfer');if(extraTransfer&&Number(extraTransfer.value)>0)q.set('additionalTransferTime',String(Number(extraTransfer.value)));var tm=document.getElementById('transitTimeMode').value,tq=transitQueryTime();if(tq){q.set('time',tq);q.set('arriveBy',tm==='arrive'?'true':'false')}
  fetch('https://api.transitous.org/api/v6/plan?'+q.toString(),{headers:{'Accept':'application/json'}}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){
   if(!d.itineraries||!d.itineraries.length)throw new Error('Keine ÖPNV-Verbindung');var it=d.itineraries[0],legs=it.legs||[],legColors=p10731TransitLegColors(legs),geo=transitGeometry(legs,legColors);p10732ClearFocus();p10734Legs=legs;p10734Rows=[];p10734Colors=legColors;p10732LegBounds=[];p10733LegPoints=[];geo.features.forEach(function(f){var idx=f.properties.legIndex;var coords=f.geometry.coordinates;if(coords&&coords.length>1){var b=L.latLngBounds(coords.map(function(c){return[c[1],c[0]]}));if(b.isValid()){p10732LegBounds[idx]=b;var mid=coords[Math.floor(coords.length/2)];if(mid)p10733LegPoints[idx]=L.latLng(mid[1],mid[0])}}});
   if(routeLayer&&map&&map.hasLayer(routeLayer))map.removeLayer(routeLayer);
@@ -3523,7 +3654,7 @@ function calculateTransitRoute(routeItems){
    if(true){row.setAttribute('role','button');row.tabIndex=0;row.title='Etappe auf Karte anzeigen · erneut antippen: ganze Liste';row.addEventListener('click',function(){p10732FocusLeg(i,row,leg,legColors[i])});row.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();p10732FocusLeg(i,row,leg,legColors[i])}})}p10734Rows[i]=row;box.appendChild(row)
   });
   var toggle=document.getElementById('routeDetailsToggle');if(toggle){toggle.disabled=!legs.length;toggle.title='Teilstrecken anzeigen';toggle.setAttribute('aria-label','Teilstrecken anzeigen')}var hint=document.getElementById('routeHint');hint.textContent='';hint.style.display='none';updateRouteModeButtons();document.getElementById('routeInfo').style.display='flex';autoZoomLoadedLayers();mapStatus.textContent=''
- }).catch(function(e){document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();mapStatus.textContent='⚠️ ÖPNV-Verbindung konnte nicht berechnet werden. '+(e&&e.message?e.message:'')})
+ }).catch(function(e){document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();p2mShowRouteFailure('transit')})
 }
 function routeAirDistance(a,b){var A=a._pinLayer.getLatLng(),B=b._pinLayer.getLatLng(),r=Math.PI/180,x=(B.lng-A.lng)*r*Math.cos((A.lat+B.lat)*r/2),y=(B.lat-A.lat)*r;return Math.sqrt(x*x+y*y)*6371000}
 function valhallaTripResult(d,routeItems){
@@ -3554,6 +3685,7 @@ function optimizeRouteOrder(){
  var nw=order.slice(1,-1).map(function(i){return all[i]}),changed=nw.some(function(x,i){return x!==routeWaypoints[i]});routeWaypoints=nw;routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();mapStatus.textContent=changed?'✓ Zwischenziele optimal sortiert.':'✓ Reihenfolge bereits optimal.';return Promise.resolve(changed)
 }
 function calculateRoute(){
+ p2mClearRouteFailures();
  var myGeneration=++routeRequestGeneration;
  if(!routeStartItem||!routeTargetItem||!routeStartItem._pinLayer||!routeTargetItem._pinLayer)return;
  var routeItems=[routeStartItem].concat(routeWaypoints).concat([routeTargetItem]);
@@ -3569,7 +3701,7 @@ function calculateRoute(){
    if(myGeneration!==routeRequestGeneration)return;
    if(d.code!=='Ok'||!d.routes||!d.routes.length)throw new Error(d.message||'Keine Route');var rt=d.routes[0];
    var osrmSegments=(rt.legs||[]).map(function(leg){var out=[];(leg.steps||[]).forEach(function(st){var c=st.geometry&&st.geometry.coordinates||[];if(out.length&&c.length&&out[out.length-1][0]===c[0][0]&&out[out.length-1][1]===c[0][1])c=c.slice(1);out=out.concat(c)});return out});showCalculatedRoute(routeItems,rt.geometry,rt.distance,rt.duration,rt.legs||[],osrmSegments)
-  }).catch(function(){if(myGeneration!==routeRequestGeneration)return;document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();mapStatus.textContent='⚠️ Route konnte nicht berechnet werden. Modus kann oben gewechselt werden.'});return
+  }).catch(function(){if(myGeneration!==routeRequestGeneration)return;document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();p2mShowRouteFailure('driving')});return
  }
  /* V8.24: Fuß/Fahrrad abschnittsweise routen und fertige Etappen sofort anzeigen. So hängt die Gesamtzahl der Pins nicht
     mehr vom Location-Limit eines einzelnen öffentlichen Valhalla-/route-Aufrufs ab. */
@@ -3598,8 +3730,7 @@ function calculateRoute(){
  }).catch(function(e){
   if(myGeneration!==routeRequestGeneration||(e&&e.cancelled))return;
   document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();
-  var detail=e&&e.routeLeg?' Abschnitt '+(e.index+1)+' ('+routeItemName(routeItems[e.index])+' → '+routeItemName(routeItems[e.index+1])+') konnte nicht berechnet werden.':'';
-  mapStatus.textContent='⚠️ '+(routeMode==='driving'?'Autoroute':routeMode==='bicycle'?'Fahrradroute':'Fußweg')+' konnte nicht vollständig berechnet werden.'+detail+(routeMode==='driving'?'':' 🚗 Auto bleibt auswählbar.')
+  p2mShowRouteFailure(routeMode)
  })
 }
 document.getElementById('routePanelToggle').onclick=function(e){
@@ -3633,9 +3764,25 @@ document.getElementById('routeOrder').addEventListener('click',function(e){
  }
 });
 document.getElementById('routeDetailsToggle').onclick=function(e){e.preventDefault();e.stopPropagation();var info=document.getElementById('routeInfo');var open=!info.classList.contains('route-details-open');info.classList.toggle('route-details-open',open);this.title=open?'Teilstrecken ausblenden':'Teilstrecken anzeigen';this.setAttribute('aria-label',this.title);updateRouteDetailsLabel();};
-var transitTimeModeEl=document.getElementById('transitTimeMode'),transitDateTimeEl=document.getElementById('transitDateTime');transitTimeModeEl.addEventListener('change',function(){var timed=this.value!=='now';transitDateTimeEl.style.display=timed?'block':'none';if(timed&&!transitDateTimeEl.value)transitDateTimeEl.value=localDateTimeValue();if(routeMode==='transit'&&routeStartItem&&routeTargetItem)calculateRoute()});transitDateTimeEl.addEventListener('change',function(){if(routeMode==='transit'&&transitTimeModeEl.value!=='now'&&routeStartItem&&routeTargetItem)calculateRoute()});
+var transitTimeModeEl=document.getElementById('transitTimeMode'),transitDateTimeEl=document.getElementById('transitDateTime');transitTimeModeEl.addEventListener('change',function(){var timed=this.value!=='now';transitDateTimeEl.style.display='none';document.getElementById('p2mTransitDateTimePair').style.display=timed?'flex':'none';if(timed&&!transitDateTimeEl.value)transitDateTimeEl.value=localDateTimeValue();if(timed)p2mSyncDateTimePair();if(routeMode==='transit'&&routeStartItem&&routeTargetItem)calculateRoute()});transitDateTimeEl.addEventListener('change',function(){if(routeMode==='transit'&&transitTimeModeEl.value!=='now'&&routeStartItem&&routeTargetItem)calculateRoute()});
+function p2mSyncDateTimePair(){var v=transitDateTimeEl.value||localDateTimeValue();document.getElementById('p2mTransitDate').value=v.slice(0,10);document.getElementById('p2mTransitClock').value=v.slice(11,16)}
+function p2mCommitDateTimePair(){var d=document.getElementById('p2mTransitDate').value,t=document.getElementById('p2mTransitClock').value;if(!d||!t)return;transitDateTimeEl.value=d+'T'+t;transitDateTimeEl.dispatchEvent(new Event('change',{bubbles:true}))}
+['p2mTransitDate','p2mTransitClock'].forEach(function(id){document.getElementById(id).addEventListener('change',p2mCommitDateTimePair)});
+// Native Uhrzeitauswahl auch beim Antippen des gesamten Zeitfelds öffnen.
+// Safari/iOS verwendet die systemeigene Zeitauswahl; andere Browser nutzen showPicker, soweit unterstützt.
+(function(){
+ var clock=document.getElementById('p2mTransitClock');
+ clock.setAttribute('title','Uhrzeit auswählen');
+ clock.addEventListener('click',function(){
+  if(typeof clock.showPicker==='function'){
+   try{clock.showPicker()}catch(e){/* Browser bietet seinen nativen Picker über Fokus an. */}
+  }
+ });
+})();
+
+
 document.addEventListener('click',function(e){
- var b=e.target&&e.target.closest?e.target.closest('[data-route-mode]'):null;if(!b)return;e.preventDefault();e.stopPropagation();var m=b.getAttribute('data-route-mode');if(m===routeMode)return;
+ var b=e.target&&e.target.closest?e.target.closest('[data-route-mode]'):null;if(!b)return;e.preventDefault();e.stopPropagation();var m=b.getAttribute('data-route-mode');if(b.disabled||m==='transit'&&routeAllActive)return;if(m===routeMode)return;
  var keepOptimal=routeOrderMode==='optimal'&&m!=='transit';
  if(routeOrderMode==='optimal'&&routeFixedWaypoints)routeWaypoints=routeFixedWaypoints.slice();
  routeMode=m;
