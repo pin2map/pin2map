@@ -1495,9 +1495,70 @@ html,body{max-width:100%;overflow-x:hidden}
  #mapScreen .bottom{gap:20px!important}
 }
 </style>
+<style id="p2m-10831-route-hide">
+#mapScreen #routeInfo .route-toolbar-summary #routePanelHide{
+ box-sizing:border-box!important;width:30px!important;height:30px!important;
+ min-width:30px!important;max-width:30px!important;
+ min-height:30px!important;max-height:30px!important;
+ flex:0 0 30px!important;padding:0!important;margin:0!important;
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ border-radius:50%!important;border:1px solid var(--route-button-border,#c7c7cc)!important;
+ background:var(--route-button-inactive-bg,#e5e5ea)!important;color:#111!important;
+}
+#mapScreen #routeInfo .route-toolbar-summary #routePanelHide span{
+ display:block!important;font-family:Arial,Helvetica,sans-serif!important;
+ font-size:25px!important;font-weight:400!important;line-height:1!important;
+ transform:none!important;
+}
+</style>
+<style id="p2m-10832-route-mode-group">
+/* Gruppierung wie die beschrifteten Felder im Pin-Dialog. */
+#mapScreen #routeInfo .route-toolbar-summary{
+  border-bottom:0!important;
+  margin-bottom:6px!important;
+}
+#mapScreen #routeInfo .route-toolbar-primary{
+  align-items:center!important;
+  overflow:visible!important;
+}
+#mapScreen #routeInfo .route-mode-fieldset{
+  box-sizing:border-box!important;
+  min-width:0!important;
+  flex:0 1 auto!important;
+  margin:0!important;
+  padding:10px 12px 8px!important;
+  border:1px solid #c7c7cc!important;
+  border-radius:12px!important;
+  background:transparent!important;
+}
+#mapScreen #routeInfo .route-mode-fieldset legend{
+  float:none!important;
+  width:auto!important;
+  margin:0 0 0 4px!important;
+  padding:0 4px!important;
+  color:#777!important;
+  font:600 11px/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+  white-space:nowrap!important;
+}
+#mapScreen #routeInfo .route-mode-options{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:nowrap!important;
+  gap:13px!important;
+}
+#mapScreen #routeInfo .route-mode-options > button{
+  flex:0 0 auto!important;
+  margin:0!important;
+}
+@media(max-width:600px){
+ #mapScreen #routeInfo .route-mode-fieldset{padding:8px 5px 6px!important}
+ #mapScreen #routeInfo .route-mode-options{gap:10px!important}
+ #mapScreen #routeInfo .route-mode-fieldset legend{font-size:10px!important}
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.30)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.33)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -1550,7 +1611,7 @@ html,body{max-width:100%;overflow-x:hidden}
  <div class="p2m-filter-inforow"><div class="p2m-filter-typecol"><select id="markFilterType" aria-label="Markierungstyp"><option value="all">Pins und Flächen</option><option value="pins">Nur Pins</option><option value="areas">Nur Flächen</option><option value="alltext" selected>Pins, Flächen, Text</option><option value="pinstext">Nur Pins und Text</option></select><div id="markFilterCount" role="status" aria-live="polite">sichtbar: alle</div></div><button type="button" id="markFilterExport" title="Sichtbare Pins als Text kopieren" aria-label="Sichtbare Pins als Text kopieren">📋</button></div>
  <div class="p2m-filter-options" role="group" aria-label="Pins mit Inhalt"><label><input type="checkbox" id="markFilterTrack"> <span>Mit Track</span></label><label><input type="checkbox" id="markFilterLink"> <span>Mit Link</span></label><label><input type="checkbox" id="markFilterNote"> <span>Mit Notiz</span></label></div>
 </div>
-<button type="button" id="legendToggle" class="map-round-control map-ui-control" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">⏏︎</span></button></div><div class="route-toolbar-row route-toolbar-primary"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button><button type="button" id="routeClear" title="Route entfernen" aria-label="Route beenden">Beenden</button></div><div class="route-toolbar-row route-toolbar-secondary"><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="now">Jetzt</option><option value="depart">Abfahrt</option><option value="arrive">Ankunft</option></select><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"><select id="transitExtraTransfer" aria-label="Zusätzliche Umsteigezeit" title="Zusätzliche Umsteigezeit"><option value="0">+0 min</option><option value="3">+3 min</option><option value="5" selected>+5 min</option><option value="10">+10 min</option><option value="15">+15 min</option></select></div>
+<button type="button" id="legendToggle" class="map-round-control map-ui-control" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">×</span></button></div><div class="route-toolbar-row route-toolbar-primary"><fieldset class="route-mode-fieldset"><legend>Routing für</legend><div class="route-mode-options"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button></div></fieldset><button type="button" id="routeClear" title="Route entfernen" aria-label="Route beenden">Beenden</button></div><div class="route-toolbar-row route-toolbar-secondary"><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="now">Jetzt</option><option value="depart">Abfahrt</option><option value="arrive">Ankunft</option></select><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"><select id="transitExtraTransfer" aria-label="Zusätzliche Umsteigezeit" title="Zusätzliche Umsteigezeit"><option value="0">+0 min</option><option value="3">+3 min</option><option value="5" selected>+5 min</option><option value="10">+10 min</option><option value="15">+15 min</option></select></div>
 <button type="button" id="routeVisiblePins" class="route-circle route-visible-pins" title="Alle noch nicht verwendeten Pins im aktuellen Kartenausschnitt als Zwischenziele hinzufügen" aria-label="Sichtbare Pins hinzufügen"><svg class="route-all-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42" width="36" height="36" aria-hidden="true" focusable="false"><rect x="6" y="7" width="30" height="28" rx="0" fill="none" stroke="#111" stroke-width="1.5"/><text x="21" y="21" fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="central">ALL</text></svg></button>
 <div id="routeOrder" class="route-tool-group route-order-group">
 <button type="button" id="routeOrderToggle" data-route-order="fixed" class="active route-circle" title="Reihenfolge fest" aria-label="Reihenfolge fest">FIX</button>
