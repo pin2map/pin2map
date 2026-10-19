@@ -1556,9 +1556,27 @@ html,body{max-width:100%;overflow-x:hidden}
  #mapScreen #routeInfo .route-mode-fieldset legend{font-size:10px!important}
 }
 </style>
+<style id="p2m-10834-route-spacing">
+/* Kopfzeile näher an die Routing-Auswahl rücken. */
+#mapScreen #routeInfo .route-toolbar-summary{
+  margin-bottom:2px!important;
+  padding-bottom:0!important;
+}
+/* Symbole am Anfang der Routen-Zusammenfassung leicht einrücken. */
+#mapScreen #routeInfo #routeSummary{
+  padding-left:7px!important;
+  box-sizing:border-box!important;
+}
+/* Abstand der vier Verkehrsmittel-Buttons verdoppeln. */
+#mapScreen #routeInfo .route-mode-options{gap:26px!important}
+@media(max-width:600px){
+  #mapScreen #routeInfo .route-mode-options{gap:20px!important}
+  #mapScreen #routeInfo .route-mode-fieldset{padding-left:5px!important;padding-right:5px!important}
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.33)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.34)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
