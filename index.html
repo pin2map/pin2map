@@ -2231,9 +2231,38 @@ html,body{max-width:100%;overflow-x:hidden}
  #mapScreen #routeInfo #p2mExternalOpen{font-size:22px!important}
 }
 </style>
-</head><body>
+<style id="p2m-10858-control-swap">
+/* Gear and categories exchange their map corners. */
+#mapScreen #back{
+ position:absolute!important;left:max(10px,env(safe-area-inset-left))!important;
+ top:max(66px,calc(env(safe-area-inset-top) + 66px))!important;
+ right:auto!important;bottom:auto!important;
+}
+#mapScreen #legendToggle{
+ left:auto!important;top:auto!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+ bottom:max(8px,env(safe-area-inset-bottom))!important;
+}
+/* Information and geolocation exchange their right-side positions. */
+#mapScreen #currentLocationButton{
+ position:absolute!important;left:auto!important;bottom:auto!important;
+ top:max(122px,calc(env(safe-area-inset-top) + 122px))!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+}
+#mapScreen #toggleElevations{
+ position:absolute!important;left:auto!important;top:auto!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+ bottom:calc(max(8px,env(safe-area-inset-bottom)) + 66px)!important;
+}
+@media(max-width:600px){
+ #mapScreen #back{left:max(8px,env(safe-area-inset-left))!important;top:max(64px,calc(env(safe-area-inset-top) + 64px))!important}
+ #mapScreen #legendToggle{right:max(8px,env(safe-area-inset-right))!important;bottom:max(8px,env(safe-area-inset-bottom))!important}
+ #mapScreen #currentLocationButton{top:max(120px,calc(env(safe-area-inset-top) + 120px))!important;right:max(8px,env(safe-area-inset-right))!important;bottom:auto!important;left:auto!important}
+ #mapScreen #toggleElevations{right:max(8px,env(safe-area-inset-right))!important;bottom:calc(max(8px,env(safe-area-inset-bottom)) + 66px)!important;top:auto!important}
+}
+</style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.57)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.58)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -6902,4 +6931,8 @@ btn.addEventListener('pointerup',cancelHold);btn.addEventListener('pointercancel
 btn.addEventListener('contextmenu',function(e){e.preventDefault();cancelHold();ignoreClick=true;showMenu()});
 btn.addEventListener('dblclick',function(e){e.preventDefault();cancelSingle();ignoreClick=true;showMenu()});
 btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick){held=false;ignoreClick=false;return}var now=Date.now();if(now-lastTap<350){lastTap=0;showMenu();return}lastTap=now;cancelSingle();timer=setTimeout(openFile,310)});
+})();</script><script id="p2m-10858-control-swap-js">(function(){
+ var screen=document.getElementById('mapScreen');
+ var gear=document.getElementById('back');
+ if(screen&&gear&&gear.parentElement!==screen)screen.appendChild(gear);
 })();</script></body></html>
