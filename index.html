@@ -2194,9 +2194,28 @@ html,body{max-width:100%;overflow-x:hidden}
   #mapScreen #routeInfo::-webkit-scrollbar { display:none !important; }
 }
 </style>
+
+<style id="p2m-10911-route-anchoring">
+/* Unterkante des Dialogs auf die Unterkante der oberen (+) Zoomtaste setzen.
+   Zoom: 46px untere Zoomtaste + zweimal 8px Tastenabstand. */
+#mapScreen #routeInfo {
+  bottom: calc(var(--p9100-bottom, 8px) + 62px) !important;
+}
+/* Die ursprüngliche kompakte iPhone-Höhe bleibt während des Scrollens fix. */
+@media (max-width:600px) and (orientation:portrait) {
+  #mapScreen #routeInfo {
+    height: min(46dvh, 400px) !important;
+    min-height: 0 !important;
+    max-height: min(46dvh, 400px) !important;
+    bottom: calc(var(--p9100-bottom, 8px) + 62px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.10)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.11)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
