@@ -2277,7 +2277,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.12)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.13)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -2765,7 +2765,7 @@ function autoZoomCurrentRoute(){
    })(routeLayer)
   }
   if(!bounds.isValid())return false;
-  map.fitBounds(bounds,{padding:[70,70],maxZoom:16});
+  if(!p2m10913FitVisibleRoute(bounds,16))map.fitBounds(bounds,{padding:[70,70],maxZoom:16});
   return true
  }catch(e){return false}
 }
@@ -4042,6 +4042,33 @@ function p10735ShowLeg(i){
  if(p10732FocusedLeg===i)p10732ClearFocus();
  p10732FocusLeg(i,p10734Rows[i],p10734Legs[i],p10734Colors[i]);
 }
+// v10.9.13: iPhone-Etappenzoom anhand des TATSAECHLICH sichtbaren Kartenrechtecks.
+// Unabhaengig von den frueheren fitBounds-Overrides und von pointer:coarse.
+function p2m10913FitVisibleRoute(bounds,maxZoom){
+ if(!map||!bounds||!bounds.isValid()||window.innerWidth>700)return false;
+ var panel=document.getElementById('routeInfo'),mapEl=map.getContainer();
+ if(!panel||!mapEl||panel.hidden||getComputedStyle(panel).display==='none')return false;
+ var mr=mapEl.getBoundingClientRect(),pr=panel.getBoundingClientRect();
+ // Das Dialog-CSS positioniert das Panel absolut im mapScreen; die sichtbare
+ // Oberkante ist deshalb aus getBoundingClientRect zu lesen, nicht aus CSS bottom.
+ if(!(pr.top>mr.top+130&&pr.top<mr.bottom))return false;
+ var left=mr.left+28,right=mr.right-28,top=mr.top+70,bottom=pr.top-32;
+ if(bottom-top<110||right-left<100)return false;
+ var targetWidth=right-left,targetHeight=bottom-top;
+ var nw=map.project(bounds.getNorthWest(),0),se=map.project(bounds.getSouthEast(),0);
+ var dx=Math.max(0.00001,Math.abs(se.x-nw.x)),dy=Math.max(0.00001,Math.abs(se.y-nw.y));
+ var z=Math.log2(Math.min(targetWidth/dx,targetHeight/dy));
+ z=Math.min(z,maxZoom||16,map.getMaxZoom());
+ z=Math.max(map.getMinZoom(),z);
+ var snap=map.options.zoomSnap;
+ if(snap)z=Math.floor(z/snap)*snap;
+ var a=map.project(bounds.getNorthWest(),z),b=map.project(bounds.getSouthEast(),z);
+ var midpoint=a.add(b).divideBy(2);
+ var visibleX=(left+right)/2-mr.left,visibleY=(top+bottom)/2-mr.top;
+ var desired=midpoint.add([mr.width/2-visibleX,mr.height/2-visibleY]);
+ map.stop();map.setView(map.unproject(desired,z),z,{animate:false});
+ return true;
+}
 function p10732FocusLeg(i,row,leg,color,fromKeyboard){
  if(p10732FocusedLeg===i){if(fromKeyboard)return;p10732ClearFocus();return}
  p10732ClearFocus();
@@ -4054,7 +4081,8 @@ function p10732FocusLeg(i,row,leg,color,fromKeyboard){
  if(!bounds||!bounds.isValid())return;
  p10732FocusedLeg=i;
  row.classList.add('p10732-selected');
- map.fitBounds(bounds,{paddingTopLeft:[35,75],paddingBottomRight:[35,125],maxZoom:p10731IsWalk(leg)?18:16,animate:true});
+ if(!p2m10913FitVisibleRoute(bounds,p10731IsWalk(leg)?18:16))
+  map.fitBounds(bounds,{paddingTopLeft:[35,75],paddingBottomRight:[35,125],maxZoom:p10731IsWalk(leg)?18:16,animate:true});
 }
 
 
