@@ -6902,4 +6902,46 @@ btn.addEventListener('pointerup',cancelHold);btn.addEventListener('pointercancel
 btn.addEventListener('contextmenu',function(e){e.preventDefault();cancelHold();ignoreClick=true;showMenu()});
 btn.addEventListener('dblclick',function(e){e.preventDefault();cancelSingle();ignoreClick=true;showMenu()});
 btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick){held=false;ignoreClick=false;return}var now=Date.now();if(now-lastTap<350){lastTap=0;showMenu();return}lastTap=now;cancelSingle();timer=setTimeout(openFile,310)});
-})();</script></body></html>
+})();</script>
+<style id="p2m-10858-iphone-route-bottom">
+/* Nur iPhone: Dialogunterkante exakt an der Unterkante der Zoom-Plus-Taste. */
+@media (max-width:600px) and (pointer:coarse) and (orientation:portrait){
+  #mapScreen #routeInfo{
+    bottom:var(--p2m-iphone-plus-bottom,calc(var(--p9100-bottom,8px) + 43px))!important;
+  }
+}
+</style>
+<script id="p2m-10858-iphone-route-bottom-js">
+(function(){
+  function align(){
+    var screen=document.getElementById('mapScreen');
+    if(!screen)return;
+    var plus=screen.querySelector('.leaflet-control-zoom-in');
+    if(!plus)return;
+    var screenRect=screen.getBoundingClientRect();
+    var plusRect=plus.getBoundingClientRect();
+    if(!plusRect.height)return;
+    screen.style.setProperty('--p2m-iphone-plus-bottom',
+      Math.max(0,screenRect.bottom-plusRect.bottom).toFixed(2)+'px');
+  }
+  function init(){
+    align();
+    window.addEventListener('resize',align,{passive:true});
+    window.addEventListener('orientationchange',align,{passive:true});
+    if(window.visualViewport)window.visualViewport.addEventListener('resize',align,{passive:true});
+    var screen=document.getElementById('mapScreen');
+    if(screen&&window.ResizeObserver){
+      var ro=new ResizeObserver(align);
+      ro.observe(screen);
+      var zoom=screen.querySelector('.leaflet-control-zoom');
+      if(zoom)ro.observe(zoom);
+    }
+    /* Leaflet baut die Zoomsteuerung ggf. erst nach dem Laden auf. */
+    window.addEventListener('load',align,{once:true});
+    requestAnimationFrame(align);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+})();
+</script>
+</body></html>
