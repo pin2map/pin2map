@@ -2277,7 +2277,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.11)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.12)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -7218,7 +7218,7 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
    var gap=18;
    /* On iPhone, reserve extra clearance above the floating dialog: the
       route geometry (not just its center) must remain visible. */
-   var isPhone=window.matchMedia('(max-width:600px) and (pointer:coarse)').matches;
+   var isPhone=mr.width<=700; /* iOS Safari can report pointer: fine even on touch devices. */
    if(isPhone){
     gap=64;
     tl[1]=Math.max(tl[1],24);
@@ -7229,8 +7229,8 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
     try{
      var b=L.latLngBounds(bounds);
      if(b.isValid()){
-      var left=mr.left+24,right=mr.right-24;
-      var top=mr.top+30,bottom=Math.min(mr.bottom-20,pr.top-35);
+      var left=mr.left+42,right=mr.right-42;
+      var top=mr.top+55,bottom=Math.min(mr.bottom-20,pr.top-75);
       if(right-left>60 && bottom-top>90){
        var targetW=right-left,targetH=bottom-top;
        var nw=m.project(b.getNorthWest(),0),se=m.project(b.getSouthEast(),0);
@@ -7240,12 +7240,14 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
        if(Number.isFinite(o.maxZoom))z=Math.min(z,o.maxZoom);
        if(m.getMinZoom)z=Math.max(m.getMinZoom(),z);
        if(m.options.zoomSnap)z=Math.floor(z/m.options.zoomSnap)*m.options.zoomSnap;
-       var centerProjected=m.project(b.getCenter(),z);
+       var projectedNW=m.project(b.getNorthWest(),z),projectedSE=m.project(b.getSouthEast(),z);
+       var centerProjected=projectedNW.add(projectedSE).divideBy(2);
        var visibleCenterX=(left+right)/2-mr.left;
        var visibleCenterY=(top+bottom)/2-mr.top;
        var mapCenterX=mr.width/2,mapCenterY=mr.height/2;
        var adjusted=m.unproject(centerProjected.add([mapCenterX-visibleCenterX,mapCenterY-visibleCenterY]),z);
-       return m.setView(adjusted,z,{animate:o.animate!==false});
+       m.stop();
+       return m.setView(adjusted,z,{animate:false});
       }
      }
     }catch(err){/* fallback to normal Leaflet fitting */}
