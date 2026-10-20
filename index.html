@@ -7002,4 +7002,31 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
+
+<style id="p2m-10860-iphone-compact-other-modes">
+/* Nur iPhone: Auto, Fahrrad, Fußweg enden nach den Routing-Werkzeugen. */
+@media (max-width:600px) and (pointer:coarse) and (orientation:portrait) {
+  #mapScreen #routeInfo:not(.p2m-transit-layout) .route-toolbar-details,
+  #mapScreen #routeInfo:not(.p2m-transit-layout) .route-legs,
+  #mapScreen #routeInfo:not(.p2m-transit-layout) .route-avoid,
+  #mapScreen #routeInfo:not(.p2m-transit-layout) .route-bulk,
+  #mapScreen #routeInfo:not(.p2m-transit-layout) .route-pin-state,
+  #mapScreen #routeInfo:not(.p2m-transit-layout) .route-edit,
+  #mapScreen #routeInfo:not(.p2m-transit-layout) .route-hint {
+    display:none!important;
+  }
+  #mapScreen #routeInfo:not(.p2m-transit-layout) {
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:hidden!important;
+  }
+  #mapScreen #routeInfo:not(.p2m-transit-layout) .route-main {
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+}
+</style>
 </body></html>
