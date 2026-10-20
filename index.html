@@ -2231,9 +2231,23 @@ html,body{max-width:100%;overflow-x:hidden}
  #mapScreen #routeInfo #p2mExternalOpen{font-size:22px!important}
 }
 </style>
-</head><body>
+<style id="p2m-10862-stages-position">
+/* Etappen statt ehemaligem ÖPNV-Anbieterknopf unter A→B. */
+#mapScreen #routeInfo.p2m-transit-layout .route-toolbar-secondary #transitStagesButton {
+ grid-column:2!important;grid-row:2!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ height:42px!important;min-height:42px!important;max-height:42px!important;
+ margin:0!important;padding:0 3px!important;box-sizing:border-box!important;
+ align-self:start!important;justify-self:stretch!important;
+}
+@media(max-width:600px){
+ #mapScreen #routeInfo.p2m-transit-layout .route-toolbar-secondary #transitStagesButton {
+  height:40px!important;min-height:40px!important;max-height:40px!important;
+ }
+}
+</style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.57)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.62)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -2291,15 +2305,10 @@ html,body{max-width:100%;overflow-x:hidden}
 <div id="routeOrder" class="route-tool-group route-order-group">
 <button type="button" id="routeOrderToggle" data-route-order="fixed" class="active route-circle" title="Reihenfolge fest" aria-label="Reihenfolge fest">FIX</button>
 <button type="button" id="routeOrderOptimal" data-route-order="optimal" class="route-circle" title="Reihenfolge optimieren" aria-label="Reihenfolge optimieren">OPT</button>
-</div></div></fieldset><fieldset id="p2mAppleFieldset" class="p2m-apple-fieldset"><legend>Apple</legend><button type="button" id="openAppleMaps" class="route-circle route-apple-visible" title="Route in Apple Karten öffnen" aria-label="Route in Apple Karten öffnen"></button></fieldset><button type="button" id="routeReverse" class="route-reverse" title="Routing-Reihenfolge umkehren" aria-label="Routing-Reihenfolge umkehren">A→B</button><div id="p2mExternalTransit" class="p2m-external-transit"><button type="button" id="p2mExternalOpen" aria-haspopup="dialog" aria-expanded="false" aria-controls="p2mExternalChooser">🚉</button></div></div>
-<div id="p2mExternalChooser" role="dialog" aria-modal="false" aria-label="ÖPNV-Anbieter auswählen" hidden>
-<div class="p2m-external-heading">ÖPNV-Anbieter auswählen <button type="button" id="p2mExternalClose" aria-label="Auswahl schließen">×</button></div>
-<button type="button" class="p2m-external-option" data-p2m-provider="DB Navigator">DB Navigator</button>
-<button type="button" class="p2m-external-option" data-p2m-provider="Tool 2">Tool 2</button>
-<button type="button" class="p2m-external-option" data-p2m-provider="Tool 3">Tool 3</button>
-</div><div class="route-toolbar-row route-toolbar-details">
+</div></div></fieldset><fieldset id="p2mAppleFieldset" class="p2m-apple-fieldset"><legend>Apple</legend><button type="button" id="openAppleMaps" class="route-circle route-apple-visible" title="Route in Apple Karten öffnen" aria-label="Route in Apple Karten öffnen"></button></fieldset><button type="button" id="routeReverse" class="route-reverse" title="Routing-Reihenfolge umkehren" aria-label="Routing-Reihenfolge umkehren">A→B</button><button type="button" id="transitStagesButton" title="Erste Etappe auf der Karte anzeigen" aria-label="Etappen auf Karte anzeigen">Etappen</button></div>
+<div class="route-toolbar-row route-toolbar-details">
 <div class="route-details-label-group"><button type="button" id="routeDetailsToggle" class="route-circle" title="Teilstrecken anzeigen" aria-label="Teilstrecken anzeigen" disabled><span aria-hidden="true">⏏︎</span></button><span id="routeDetailsLabel">Routendetails</span></div>
-<button type="button" id="transitStagesButton" title="Erste Etappe auf der Karte anzeigen" aria-label="Etappen auf Karte anzeigen">🔎 Etappen</button>
+
 </div><div id="routeAvoid" class="route-avoid"></div><div class="route-bulk"></div><div id="routeEndpoints" class="route-pin-state"></div><div id="routeEdit" class="route-edit"></div><div id="routeHint" class="route-hint" style="display:none"></div><div id="routeLegs" class="route-legs"></div></div></div><div id="notFoundList" class="not-found"></div><div id="placeResultChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5600;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(520px,calc(100vw - 32px));box-sizing:border-box;max-height:78vh;overflow:auto"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Ort auswählen</div><div id="placeResultButtons"></div><button type="button" id="placeResultCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="pinCategoryChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5100;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(300px,82vw);max-width:88vw;max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Kategorie für neuen Pin wählen</div><div id="pinCategoryButtons" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"></div><button type="button" id="pinCategoryCancel" style="width:100%;margin-top:10px;padding:9px;border:0;border-radius:9px;background:#e5e5ea;font-weight:400">Abbrechen</button></div><div id="areaClickChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5400;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(380px,88vw);max-height:75vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Fläche auswählen</div><div id="areaClickButtons"></div><button type="button" id="areaClickCancel" style="display:block;width:100%;margin-top:10px;background:#666">Abbrechen</button></div><div id="categoryEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5700;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Kategorie bearbeiten</div><label style="display:block;margin:8px 0">Name<input id="categoryEditName" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:16px"></label><label style="display:block;margin:8px 0">Symbol<input id="categoryEditSymbol" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px;border:1px solid #bbb;border-radius:8px;font-size:22px"></label><label style="display:flex;align-items:center;gap:10px;margin:10px 0">Farbe<input id="categoryEditColor" type="color" style="width:58px;height:40px;min-width:58px;min-height:40px;padding:0;border:0;border-radius:0;background:transparent;-webkit-appearance:none;appearance:none"><span id="categoryEditColorText"></span></label><button type="button" id="categoryEditSave" style="width:100%;margin-top:8px;background:#666">Änderungen übernehmen</button><button type="button" id="categoryEditCancel" style="width:100%;margin-top:8px;background:#666">Abbrechen</button></div><div id="pinNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Pin umbenennen</div><input id="pinNameInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="pinNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="pinNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="areaNameEditor" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5750;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px #0005;width:min(390px,88vw);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><div style="font-weight:700;font-size:17px;margin-bottom:12px">Fläche umbenennen</div><input id="areaNameInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other" placeholder="Name" style="display:block;width:100%;box-sizing:border-box;padding:10px;border:1px solid #bbb;border-radius:9px;font-size:16px"><div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="areaNameCancel" style="flex:1;background:#666">Abbrechen</button><button type="button" id="areaNameSave" style="flex:1;background:#0a84ff">Ändern</button></div></div><div id="mapActionChooser" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5200;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;min-width:min(310px,84vw);max-width:90vw;pointer-events:auto"><div style="font-weight:700;margin-bottom:10px">Aktion wählen</div><button type="button" id="actionAddPin" style="display:block;width:100%;margin-bottom:8px;background:#34a853">📍 Pin setzen</button><button type="button" id="actionWikipediaArea" style="display:none;width:100%;margin-bottom:8px;background:#fff;color:#111;border:1px solid #c7c7cc">ⓦ Wikipedia</button><button type="button" id="actionFindAreas" style="display:block;width:100%;margin-bottom:8px;background:#34a853">🗺️ Gebiete suchen</button><button type="button" id="actionRenameArea" style="display:none;width:100%;margin-bottom:8px;background:#666">Name ändern</button><button type="button" id="actionChangeAreaCategory" style="display:none;width:100%;margin-bottom:8px;background:#666">Kategorie ändern</button><button type="button" id="actionRemoveArea" style="display:none;width:100%;margin-bottom:8px;background:#e53935">Fläche entfernen</button><button type="button" id="actionCancel" style="display:block;width:100%;margin-top:8px;background:#e5e5ea;color:#111">Abbrechen</button></div><div id="areaSearchBox" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5300;background:rgba(255,255,255,.98);color:#111;padding:16px;border-radius:14px;box-shadow:0 5px 22px rgba(0,0,0,.32);font:14px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;width:min(520px,calc(100vw - 32px));box-sizing:border-box;max-height:78vh;overflow:auto;pointer-events:auto"><div style="font-weight:700;font-size:16px;margin-bottom:10px">Bitte auswählen:</div><div id="areaSearchPoint" style="color:#666;font-size:12px;margin-bottom:10px"></div><div id="areaSearchResults"></div>
 <div id="manualAreaSearchBlock" style="display:none">
   <div style="font-weight:700;font-size:15px;margin-bottom:8px">🔎 Weiteres Gebiet suchen</div>
@@ -4182,31 +4191,6 @@ document.getElementById('routePanelHide').onclick=function(e){
 };
 document.getElementById('routeClear').onclick=function(){clearRoute(false);mapStatus.textContent='Route entfernt.';setTimeout(function(){if(mapStatus.textContent==='Route entfernt.')mapStatus.textContent=''},1500)};
 document.getElementById('openAppleMaps').onclick=function(e){e.preventDefault();e.stopPropagation();openRouteInAppleMaps()};
-(function(){
- var trigger=document.getElementById('p2mExternalOpen');
- var popup=document.getElementById('p2mExternalChooser');
- function close(){popup.hidden=true;trigger.setAttribute('aria-expanded','false')}
- trigger.addEventListener('click',function(e){
-  e.preventDefault();e.stopPropagation();
-  var opening=popup.hidden;
-  popup.hidden=!opening;
-  trigger.setAttribute('aria-expanded',opening?'true':'false');
- });
- document.getElementById('p2mExternalClose').addEventListener('click',function(e){
-  e.stopPropagation();close();trigger.focus();
- });
- popup.querySelectorAll('[data-p2m-provider]').forEach(function(b){
-  b.addEventListener('click',function(e){
-   e.stopPropagation();close();
-   alert(this.getAttribute('data-p2m-provider')+' ist derzeit nur ein Platzhalter. Die Übergabe wird später ergänzt.');
-  });
- });
- document.addEventListener('pointerdown',function(e){
-  if(!popup.hidden&&!popup.contains(e.target)&&!trigger.contains(e.target))close();
- });
- document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!popup.hidden){close();trigger.focus()}});
-})();
-
 var bottomGpxAction=document.getElementById('bottomGpxAction');if(bottomGpxAction)bottomGpxAction.onclick=function(e){e.preventDefault();e.stopPropagation();if(gpxLayer){if(confirm("GPX-Track wirklich entfernen?"))removeImportedGpxTrack()}else exportRouteGpx()};updateGpxButton();
 document.getElementById('routeVisiblePins').onclick=function(e){e.preventDefault();e.stopPropagation();addVisiblePinsToRoute()};
 document.getElementById('routeReverse').onclick=function(e){e.preventDefault();e.stopPropagation();reverseRouteOrder()};
