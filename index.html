@@ -2245,9 +2245,14 @@ html,body{max-width:100%;overflow-x:hidden}
   height:40px!important;min-height:40px!important;max-height:40px!important;
  }
 }
-</style></head><body>
+</style><style id="p2m-1090-stage-list-only">
+#mapScreen #routeInfo.p10732-focused{display:flex!important}
+#mapScreen #routeInfo.p10732-focused .route-legs .p10728-transit-leg{display:grid!important}
+#mapScreen #routeInfo.p10732-focused .route-legs{max-height:none!important}
+</style>
+</head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.8.62)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.0)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -2305,7 +2310,7 @@ html,body{max-width:100%;overflow-x:hidden}
 <div id="routeOrder" class="route-tool-group route-order-group">
 <button type="button" id="routeOrderToggle" data-route-order="fixed" class="active route-circle" title="Reihenfolge fest" aria-label="Reihenfolge fest">FIX</button>
 <button type="button" id="routeOrderOptimal" data-route-order="optimal" class="route-circle" title="Reihenfolge optimieren" aria-label="Reihenfolge optimieren">OPT</button>
-</div></div></fieldset><fieldset id="p2mAppleFieldset" class="p2m-apple-fieldset"><legend>Apple</legend><button type="button" id="openAppleMaps" class="route-circle route-apple-visible" title="Route in Apple Karten öffnen" aria-label="Route in Apple Karten öffnen"></button></fieldset><button type="button" id="routeReverse" class="route-reverse" title="Routing-Reihenfolge umkehren" aria-label="Routing-Reihenfolge umkehren">A→B</button><button type="button" id="transitStagesButton" title="Erste Etappe auf der Karte anzeigen" aria-label="Etappen auf Karte anzeigen">Etappen</button></div>
+</div></div></fieldset><fieldset id="p2mAppleFieldset" class="p2m-apple-fieldset"><legend>Apple</legend><button type="button" id="openAppleMaps" class="route-circle route-apple-visible" title="Route in Apple Karten öffnen" aria-label="Route in Apple Karten öffnen"></button></fieldset><button type="button" id="routeReverse" class="route-reverse" title="Routing-Reihenfolge umkehren" aria-label="Routing-Reihenfolge umkehren">A→B</button></div>
 <div class="route-toolbar-row route-toolbar-details">
 <div class="route-details-label-group"><button type="button" id="routeDetailsToggle" class="route-circle" title="Teilstrecken anzeigen" aria-label="Teilstrecken anzeigen" disabled><span aria-hidden="true">⏏︎</span></button><span id="routeDetailsLabel">Routendetails</span></div>
 
@@ -4014,48 +4019,19 @@ function p10735ShowLeg(i){
 }
 function p10732FocusLeg(i,row,leg,color){
  if(p10732FocusedLeg===i){p10732ClearFocus();return}
- p10732ClearFocus();var bounds=p10732LegBounds[i];
+ p10732ClearFocus();
+ var bounds=p10732LegBounds[i];
  if(!bounds||!bounds.isValid()){
   var a=leg.from&&leg.from.lat!==undefined?L.latLng(leg.from.lat,leg.from.lon):null;
   var b=leg.to&&leg.to.lat!==undefined?L.latLng(leg.to.lat,leg.to.lon):null;
   if(a&&b)bounds=L.latLngBounds([a,b]);
  }
  if(!bounds||!bounds.isValid())return;
- p10732FocusedLeg=i;var info=document.getElementById('routeInfo');info.classList.add('p10732-focused');row.classList.add('p10732-selected');
- var from=transitTime(leg.startTime||(leg.from&&leg.from.departure)),to=transitTime(leg.endTime||(leg.to&&leg.to.arrival));
- var walk=p10731IsWalk(leg),line=walk?'Fußweg':(leg.routeShortName||leg.routeName||leg.displayName||'ÖPNV');
- var direction=walk?'':p10735Direction(leg);
- var label=document.createElement('div');label.className='p10734-label p10736-label';label.style.setProperty('--leg-color',color);
- var heading=document.createElement('div');heading.className='p10736-heading';heading.textContent=line+(direction?' · Ri. '+direction:'');
- var subline=document.createElement('div');subline.className='p10736-subline';
- var symbol=document.createElement('span');symbol.className='p10736-symbol';symbol.textContent=transitModeLabel(leg.mode,leg.routeShortName||leg.routeName);
- var times=document.createElement('span');times.textContent=from+' – '+to;
- var startTime=document.createElement('span');startTime.className='p10737-time p10737-start';startTime.textContent=from;var endTime=document.createElement('span');endTime.className='p10737-time p10737-end';endTime.textContent=to;var mins=Math.max(0,Math.round((new Date(leg.endTime||(leg.to&&leg.to.arrival))-new Date(leg.startTime||(leg.from&&leg.from.departure)))/60000));var mid=document.createElement('span');mid.className='p10739-middle';mid.appendChild(symbol);var dur=document.createElement('span');dur.className='p10739-duration';dur.textContent=Number.isFinite(mins)?mins+' min':'';mid.appendChild(dur);subline.appendChild(startTime);subline.appendChild(mid);subline.appendChild(endTime);
- var zones=document.createElement('div');zones.className='p10736-clickzones';
- function p10736Tint(hex){var m=/^#([0-9a-f]{6})$/i.exec(hex||'');if(!m)return '#eef1f4';var v=m[1],r=parseInt(v.slice(0,2),16),g=parseInt(v.slice(2,4),16),b=parseInt(v.slice(4,6),16);return 'rgb('+Math.round(r*.16+255*.84)+','+Math.round(g*.16+255*.84)+','+Math.round(b*.16+255*.84)+')'}
- var left=document.createElement('button');left.type='button';left.className='p10736-half';left.setAttribute('aria-label','Vorherige Etappe');left.title='Vorherige Etappe';left.disabled=i===0;left.style.background='transparent';
- var right=document.createElement('button');right.type='button';right.className='p10736-half';right.setAttribute('aria-label','Nächste Etappe');right.title='Nächste Etappe';right.disabled=i===p10734Legs.length-1;right.style.background='transparent';
- zones.appendChild(left);zones.appendChild(right);label.appendChild(zones);label.appendChild(heading);label.appendChild(subline);
- // Einzelklick verzögert auswerten, damit Doppelklick nicht die Etappe wechselt.
- var clickTimer=null,lastTapTime=0;
- function p10736OpenList(e){if(e){e.preventDefault();e.stopPropagation()}if(clickTimer){clearTimeout(clickTimer);clickTimer=null}p10732ClearFocus();}
- function p10736Tap(e,delta){e.preventDefault();e.stopPropagation();if(e.detail>=2){p10736OpenList(e);return}if(clickTimer)clearTimeout(clickTimer);clickTimer=setTimeout(function(){clickTimer=null;p10734NavigateLeg(delta)},280)}
- left.addEventListener('click',function(e){p10736Tap(e,-1)});
- right.addEventListener('click',function(e){p10736Tap(e,1)});
- label.addEventListener('dblclick',p10736OpenList);
- label.addEventListener('touchend',function(e){var now=Date.now();if(now-lastTapTime<350){p10736OpenList(e)}lastTapTime=now},{passive:false});
- var point=p10733LegPoints[i]||bounds.getCenter();
- p10732FocusLabel=L.marker(point,{icon:L.divIcon({className:'p10733-invisible-anchor',iconSize:[1,1]}),interactive:false,zIndexOffset:1000}).addTo(map);
- p10732FocusLabel.bindTooltip(label,{permanent:true,direction:'top',offset:[0,-14],opacity:1,className:'p10733-route-tooltip p10734-route-tooltip',interactive:true}).openTooltip();
- map.fitBounds(bounds,{paddingTopLeft:[35,75],paddingBottomRight:[35,125],maxZoom:walk?18:16,animate:true});
+ p10732FocusedLeg=i;
+ row.classList.add('p10732-selected');
+ map.fitBounds(bounds,{paddingTopLeft:[35,75],paddingBottomRight:[35,125],maxZoom:p10731IsWalk(leg)?18:16,animate:true});
 }
-document.getElementById('transitStagesButton').addEventListener('click',function(e){
- e.preventDefault();e.stopPropagation();
- if(routeMode!=='transit'||!p10734Legs.length||!p10734Rows.length)return;
- var info=document.getElementById('routeInfo');
- info.classList.add('route-details-open');
- var first=p10734Rows[0];if(first)p10735ShowLeg(0);
-});
+
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='transitVehiclePreference'&&routeMode==='transit'&&routeStartItem&&routeTargetItem)calculateRoute()});
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='transitExtraTransfer'&&routeMode==='transit'&&routeStartItem&&routeTargetItem){try{calculateRoute()}catch(err){console.warn('Umsteigezeit:',err)}}});
 function calculateTransitRoute(routeItems){
