@@ -6944,4 +6944,62 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
   else init();
 })();
 </script>
+
+<style id="p2m-10859-iphone-unified-scroll">
+/* Nur iPhone: bei geöffneten Umstiegen scrollt ausschließlich der gesamte Dialog. */
+@media (max-width:600px) and (pointer:coarse) and (orientation:portrait) {
+  #mapScreen #routeInfo.p2m-transit-layout.route-details-open,
+  #mapScreen #routeInfo.p2m-transit-layout.p2m-fixed-scroll {
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior:contain!important;
+  }
+  #mapScreen #routeInfo.p2m-transit-layout .route-main,
+  #mapScreen #routeInfo.p2m-transit-layout.route-details-open .route-main {
+    max-height:none!important;
+    height:auto!important;
+    overflow:visible!important;
+  }
+  #mapScreen #routeInfo.p2m-transit-layout .route-legs,
+  #mapScreen #routeInfo.p2m-transit-layout.route-details-open .route-legs,
+  #mapScreen #routeInfo.p2m-transit-layout.p10732-focused .route-legs {
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  #mapScreen #routeInfo.p2m-transit-layout::-webkit-scrollbar {display:none!important;}
+  #mapScreen #routeInfo.p2m-transit-layout {scrollbar-width:none!important;}
+}
+</style>
+<script id="p2m-10859-iphone-unified-scroll-js">
+(function(){
+  function isPhone(){return window.matchMedia('(max-width:600px) and (pointer:coarse) and (orientation:portrait)').matches;}
+  function init(){
+    var info=document.getElementById('routeInfo');
+    var toggle=document.getElementById('routeDetailsToggle');
+    if(!info||!toggle)return;
+    toggle.addEventListener('click',function(){
+      if(!isPhone()||!info.classList.contains('p2m-transit-layout'))return;
+      if(!info.classList.contains('route-details-open')){
+        /* Höhe im zugeklappten Zustand festhalten, bevor Etappen erscheinen. */
+        var h=info.getBoundingClientRect().height;
+        if(h>0){
+          info.style.setProperty('height',h+'px','important');
+          info.style.setProperty('min-height',h+'px','important');
+          info.style.setProperty('max-height',h+'px','important');
+          info.classList.add('p2m-fixed-scroll');
+          info.scrollTop=0;
+        }
+      } else {
+        info.classList.remove('p2m-fixed-scroll');
+        info.style.removeProperty('height');
+        info.style.removeProperty('min-height');
+        info.style.removeProperty('max-height');
+        info.scrollTop=0;
+      }
+    },true);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
