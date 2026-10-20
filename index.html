@@ -2250,9 +2250,34 @@ html,body{max-width:100%;overflow-x:hidden}
 #mapScreen #routeInfo.p10732-focused .route-legs .p10728-transit-leg{display:grid!important}
 #mapScreen #routeInfo.p10732-focused .route-legs{max-height:none!important}
 </style>
+
+<style id="p2m-1093-desktop-divider">
+@media (min-width:701px) and (pointer:fine) {
+  #mapScreen #routeInfo .route-legs {
+    border-top: 0 !important;
+    padding-top: 7px !important;
+  }
+}
+</style>
+<style id="p2m-1094-desktop-transit-divider-spacing">
+@media (min-width:701px) and (pointer:fine) {
+  /* Gleicher Abstand oberhalb der Trennlinie wie bei der Autoroute. */
+  #mapScreen #routeInfo:has([data-route-mode="transit"].active) .route-legs {
+    margin-top: 14px !important;
+  }
+}
+</style>
+
+<style id="p2m-1095-selected-leg-highlight">
+/* Markierte ÖPNV-Etappe: dezentes Hellgelb, ohne Layoutänderung. */
+#mapScreen #routeInfo .route-legs .p10728-transit-leg.p10732-selected,
+#mapScreen #routeInfo.p10732-focused .route-legs .p10728-transit-leg.p10732-selected {
+  background-color: #f5f8b9 !important;
+}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.0)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.8)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -4017,8 +4042,8 @@ function p10735ShowLeg(i){
  if(p10732FocusedLeg===i)p10732ClearFocus();
  p10732FocusLeg(i,p10734Rows[i],p10734Legs[i],p10734Colors[i]);
 }
-function p10732FocusLeg(i,row,leg,color){
- if(p10732FocusedLeg===i){p10732ClearFocus();return}
+function p10732FocusLeg(i,row,leg,color,fromKeyboard){
+ if(p10732FocusedLeg===i){if(fromKeyboard)return;p10732ClearFocus();return}
  p10732ClearFocus();
  var bounds=p10732LegBounds[i];
  if(!bounds||!bounds.isValid()){
@@ -4031,6 +4056,23 @@ function p10732FocusLeg(i,row,leg,color){
  row.classList.add('p10732-selected');
  map.fitBounds(bounds,{paddingTopLeft:[35,75],paddingBottomRight:[35,125],maxZoom:p10731IsWalk(leg)?18:16,animate:true});
 }
+
+
+document.addEventListener('keydown',function(e){
+ if(e.key!=='ArrowDown'&&e.key!=='ArrowUp')return;
+ if(routeMode!=='transit')return;
+ var info=document.getElementById('routeInfo');
+ if(!info||info.hidden||getComputedStyle(info).display==='none')return;
+ var t=e.target;
+ if(t&&t.closest&&t.closest('input,textarea,select,[contenteditable="true"],[role="combobox"]'))return;
+ if(!p10734Rows.length||!p10734Legs.length)return;
+ var delta=e.key==='ArrowDown'?1:-1;
+ var next=p10732FocusedLeg===null?(delta>0?0:p10734Rows.length-1):p10732FocusedLeg+delta;
+ if(next<0||next>=p10734Rows.length)return;
+ e.preventDefault();
+ p10732FocusLeg(next,p10734Rows[next],p10734Legs[next],p10734Colors[next],true);
+ if(p10734Rows[next])p10734Rows[next].scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'});
+});
 
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='transitVehiclePreference'&&routeMode==='transit'&&routeStartItem&&routeTargetItem)calculateRoute()});
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='transitExtraTransfer'&&routeMode==='transit'&&routeStartItem&&routeTargetItem){try{calculateRoute()}catch(err){console.warn('Umsteigezeit:',err)}}});
@@ -6989,4 +7031,166 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
   }
 }
 </style>
+
+<style id="p2m-1091-desktop-unified-scroll">
+@media (min-width:701px) and (pointer:fine) {
+  #mapScreen #routeInfo {
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior:contain!important;
+    scrollbar-width:none!important;
+    -ms-overflow-style:none!important;
+  }
+  #mapScreen #routeInfo::-webkit-scrollbar {display:none!important;}
+  #mapScreen #routeInfo .route-main,
+  #mapScreen #routeInfo.route-details-open .route-main {
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  #mapScreen #routeInfo .route-legs,
+  #mapScreen #routeInfo.route-details-open .route-legs {
+    max-height:none!important;
+    overflow:visible!important;
+  }
+}
+</style>
+<script id="p2m-1091-desktop-unified-scroll-js">
+(function(){
+  function desktop(){return window.matchMedia('(min-width:701px) and (pointer:fine)').matches;}
+  function init(){
+    var box=document.getElementById('routeInfo');
+    var toggle=document.getElementById('routeDetailsToggle');
+    if(!box||!toggle)return;
+    function clear(){
+      box.style.removeProperty('height');
+      box.style.removeProperty('min-height');
+      box.style.removeProperty('max-height');
+      box.classList.remove('p2m-desktop-fixed-scroll');
+    }
+    toggle.addEventListener('click',function(){
+      if(!desktop())return;
+      if(box.classList.contains('route-details-open')){
+        clear();
+      }else{
+        clear();
+        var h=box.getBoundingClientRect().height;
+        if(h>0){
+          box.style.setProperty('height',h+'px','important');
+          box.style.setProperty('min-height',h+'px','important');
+          box.style.setProperty('max-height',h+'px','important');
+          box.classList.add('p2m-desktop-fixed-scroll');
+        }
+      }
+    },true);
+    /* Nach dem Wechsel der Routingart gilt wieder die natürliche Höhe des Kopfes. */
+    var observer=new MutationObserver(function(records){
+      if(!desktop())return;
+      for(var i=0;i<records.length;i++){
+        if(records[i].attributeName==='class' && !box.classList.contains('route-details-open')
+          && box.classList.contains('p2m-desktop-fixed-scroll')){clear();break;}
+      }
+    });
+    observer.observe(box,{attributes:true,attributeFilter:['class']});
+    window.addEventListener('resize',function(){if(!desktop())clear();},{passive:true});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<style id="p2m-1092-desktop-details-direct">
+@media (min-width:701px) and (pointer:fine) {
+ #mapScreen #routeInfo .route-toolbar-details {display:none!important;}
+ #mapScreen #routeInfo .route-legs {display:block!important;max-height:none!important;overflow:visible!important;}
+ #mapScreen #routeInfo .route-main {overflow:visible!important;max-height:none!important;}
+ #mapScreen #routeInfo {overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:none!important;}
+ #mapScreen #routeInfo::-webkit-scrollbar {display:none!important;}
+}
+</style>
+<script id="p2m-1092-desktop-details-direct-js">
+(function(){
+ function desktop(){return matchMedia('(min-width:701px) and (pointer:fine)').matches;}
+ function init(){
+  var box=document.getElementById('routeInfo'),legs=document.getElementById('routeLegs');
+  if(!box||!legs)return;
+  var pending=false;
+  function update(){
+   pending=false;
+   if(!desktop()){
+    box.style.removeProperty('height');
+    box.style.removeProperty('min-height');
+    box.style.removeProperty('max-height');
+    return;
+   }
+   /* Feste Höhe anhand des Bedienbereichs, unabhängig von der Etappenanzahl. */
+   box.style.removeProperty('height');
+   box.style.removeProperty('min-height');
+   box.style.removeProperty('max-height');
+   var boxTop=box.getBoundingClientRect().top;
+   var legsTop=legs.getBoundingClientRect().top;
+   if(!boxTop||!legsTop||legsTop<boxTop)return;
+   var hasRoute=legs.children.length>0;
+   var h=Math.max(100,Math.round(legsTop-boxTop+(hasRoute?66:-9)));
+   box.style.setProperty('height',h+'px','important');
+   box.style.setProperty('min-height',h+'px','important');
+   box.style.setProperty('max-height',h+'px','important');
+   box.classList.add('route-details-open');
+  }
+  function schedule(){if(!pending){pending=true;requestAnimationFrame(update);}}
+  new MutationObserver(schedule).observe(legs,{childList:true,subtree:false});
+  var summary=document.getElementById('routeSummary');
+  if(summary)new MutationObserver(schedule).observe(summary,{childList:true,subtree:true,characterData:true});
+  var modes=document.querySelectorAll('[data-route-mode]');
+  modes.forEach(function(b){b.addEventListener('click',function(){setTimeout(schedule,0);});});
+  window.addEventListener('resize',schedule,{passive:true});
+  schedule();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<style id="p2m-1098-iphone-direct-legs">
+@media (max-width:600px) and (pointer:coarse) and (orientation:portrait){
+ #mapScreen #routeInfo .route-toolbar-details{display:none!important}
+ #mapScreen #routeInfo,
+ #mapScreen #routeInfo:not(.p2m-transit-layout){overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important;scrollbar-width:none!important}
+ #mapScreen #routeInfo::-webkit-scrollbar{display:none!important}
+ #mapScreen #routeInfo .route-main,
+ #mapScreen #routeInfo:not(.p2m-transit-layout) .route-main{height:auto!important;max-height:none!important;overflow:visible!important}
+ #mapScreen #routeInfo .route-legs,
+ #mapScreen #routeInfo:not(.p2m-transit-layout) .route-legs{display:block!important;max-height:none!important;overflow:visible!important}
+ #mapScreen #routeInfo:not(.p2m-transit-layout){height:var(--p2m-phone-route-height,auto)!important;min-height:0!important;max-height:var(--p2m-phone-route-height,none)!important}
+ #mapScreen #routeInfo.p2m-transit-layout{height:var(--p2m-phone-route-height,auto)!important;min-height:0!important;max-height:var(--p2m-phone-route-height,none)!important}
+ #mapScreen #routeInfo .route-legs .p10728-transit-leg.p10732-selected{background:#f5f8b9!important}
+}
+</style>
+<script id="p2m-1098-iphone-direct-legs-js">
+(function(){
+ function phone(){return matchMedia('(max-width:600px) and (pointer:coarse) and (orientation:portrait)').matches}
+ function init(){
+  var box=document.getElementById('routeInfo'),legs=document.getElementById('routeLegs');
+  if(!box||!legs)return;
+  var pending=false;
+  function update(){
+   pending=false;
+   if(!phone()){box.style.removeProperty('--p2m-phone-route-height');return}
+   var saved=box.scrollTop;
+   box.style.removeProperty('--p2m-phone-route-height');
+   var a=box.getBoundingClientRect(),b=legs.getBoundingClientRect();
+   if(!a.height||!b.height)return;
+   var hasRoute=legs.children.length>0;
+   var target=Math.max(100,Math.round(b.top-a.top+(hasRoute?62:-8)));
+   box.style.setProperty('--p2m-phone-route-height',target+'px');
+   box.classList.add('route-details-open');
+   box.scrollTop=Math.min(saved,Math.max(0,box.scrollHeight-box.clientHeight));
+  }
+  function schedule(){if(!pending){pending=true;requestAnimationFrame(update)}}
+  new MutationObserver(schedule).observe(legs,{childList:true});
+  window.addEventListener('resize',schedule,{passive:true});
+  document.querySelectorAll('[data-route-mode]').forEach(function(b){b.addEventListener('click',function(){setTimeout(schedule,0)})});
+  schedule();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
