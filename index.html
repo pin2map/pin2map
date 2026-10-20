@@ -2277,7 +2277,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.8)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.9)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -7189,6 +7189,47 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
   window.addEventListener('resize',schedule,{passive:true});
   document.querySelectorAll('[data-route-mode]').forEach(function(b){b.addEventListener('click',function(){setTimeout(schedule,0)})});
   schedule();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<script id="p2m-1099-route-aware-autozoom">
+/* Fit the route into the part of the map not covered by the routing panel. */
+(function(){
+ function init(){
+  var m=window.pin2mapCurrentMap&&window.pin2mapCurrentMap();
+  if(!m||m._p2m1099FitBounds)return;
+  var original=m.fitBounds;
+  m._p2m1099FitBounds=original;
+  m.fitBounds=function(bounds,options){
+   var panel=document.getElementById('routeInfo');
+   var mapElement=m.getContainer();
+   if(!panel||!mapElement||getComputedStyle(panel).display==='none'||panel.hidden)
+    return original.call(m,bounds,options);
+   var mr=mapElement.getBoundingClientRect(),pr=panel.getBoundingClientRect();
+   var x1=Math.max(mr.left,pr.left),x2=Math.min(mr.right,pr.right);
+   var y1=Math.max(mr.top,pr.top),y2=Math.min(mr.bottom,pr.bottom);
+   if(x2<=x1||y2<=y1)return original.call(m,bounds,options);
+   var o=Object.assign({},options||{});
+   var tl=o.paddingTopLeft||o.padding||[0,0],br=o.paddingBottomRight||o.padding||[0,0];
+   tl=[Number(tl[0])||0,Number(tl[1])||0];
+   br=[Number(br[0])||0,Number(br[1])||0];
+   var gap=18;
+   /* A bottom overlay takes away space from the lower map viewport. */
+   if(pr.top>mr.top+mr.height*.22 && pr.bottom>=mr.bottom-mr.height*.3){
+    br[1]=Math.max(br[1],Math.ceil(mr.bottom-pr.top)+gap);
+   }else if(pr.bottom<mr.bottom-mr.height*.22 && pr.top<=mr.top+mr.height*.3){
+    tl[1]=Math.max(tl[1],Math.ceil(pr.bottom-mr.top)+gap);
+   }else return original.call(m,bounds,options);
+   if(tl[1]+br[1]>mr.height-80){
+    var scale=Math.max(0,(mr.height-80)/(tl[1]+br[1]));
+    tl[1]=Math.floor(tl[1]*scale);br[1]=Math.floor(br[1]*scale);
+   }
+   o.paddingTopLeft=tl;o.paddingBottomRight=br;
+   delete o.padding;
+   return original.call(m,bounds,o);
+  };
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
