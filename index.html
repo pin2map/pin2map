@@ -2295,9 +2295,52 @@ html,body{max-width:100%;overflow-x:hidden}
 #formScreen.p2m-settings-open .list-name-option,#formScreen.p2m-settings-open #input,#formScreen.p2m-settings-open .gpx-start-import,#formScreen.p2m-settings-open .buttons,#formScreen.p2m-settings-open #river980List{display:none!important}
 #formScreen.p2m-settings-open #p2mSettingsPanel{display:block}
 </style>
-<style id="p2m-1122-confirm-style">.p2m-move-confirm{position:absolute;z-index:1200;display:flex;align-items:center;gap:5px;padding:5px 7px;background:#fff;border:2px solid #d88918;border-radius:9px;box-shadow:0 3px 12px #0005;font:600 12px system-ui;white-space:nowrap;pointer-events:auto}.p2m-move-confirm button{cursor:pointer;border:0;border-radius:5px;padding:3px 7px;font-size:17px;background:#e9ecef}.p2m-move-confirm .p2m-move-ok{background:#d9f1de;color:#176c31}.p2m-pin-await-confirm{filter:drop-shadow(0 0 5px #f59e0b) drop-shadow(0 0 3px #f59e0b)!important}</style></head><body>
+<style id="p2m-1122-confirm-style">.p2m-move-confirm{position:absolute;z-index:1200;display:flex;align-items:center;gap:5px;padding:5px 7px;background:#fff;border:2px solid #d88918;border-radius:9px;box-shadow:0 3px 12px #0005;font:600 12px system-ui;white-space:nowrap;pointer-events:auto}.p2m-move-confirm button{cursor:pointer;border:0;border-radius:5px;padding:3px 7px;font-size:17px;background:#e9ecef}.p2m-move-confirm .p2m-move-ok{background:#d9f1de;color:#176c31}.p2m-pin-await-confirm{filter:drop-shadow(0 0 5px #f59e0b) drop-shadow(0 0 3px #f59e0b)!important}</style><style id="p2m-1141-swap-location-info-positions">
+/* Nur die Kartenpositionen der beiden Schalter tauschen. */
+#mapScreen #currentLocationButton{
+ position:absolute!important;left:auto!important;bottom:auto!important;
+ top:max(122px,calc(env(safe-area-inset-top) + 122px))!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+}
+#mapScreen #toggleElevations,
+#mapScreen #toggleElevations.off{
+ position:absolute!important;left:auto!important;top:auto!important;
+ bottom:calc(var(--p9100-bottom, max(8px,env(safe-area-inset-bottom))) + 66px)!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+}
+@media(max-width:600px){
+ #mapScreen #currentLocationButton{top:max(120px,calc(env(safe-area-inset-top) + 120px))!important;right:max(8px,env(safe-area-inset-right))!important}
+}
+</style>
+<style id="p2m-1142-swap-list-name-label-controls">
+/* Ausschließlich Positionen tauschen: Liste (#back) und Namens-Labels (#labelToggle). */
+#mapScreen #back{
+ top:max(66px,calc(env(safe-area-inset-top) + 66px))!important;
+ bottom:auto!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+ left:auto!important;
+}
+#mapScreen #labelToggle{
+ top:auto!important;
+ bottom:max(8px,env(safe-area-inset-bottom))!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+ left:auto!important;
+}
+@media(max-width:600px){
+ #mapScreen #back{top:max(64px,calc(env(safe-area-inset-top) + 64px))!important;right:max(8px,env(safe-area-inset-right))!important}
+ #mapScreen #labelToggle{right:max(10px,env(safe-area-inset-right))!important}
+}
+</style>
+<style id="p2m-1143-swap-screenshot-mapstyle">
+/* Nur die Positionen tauschen: Screenshot links oben, Kartendarstellung rechts oben. */
+#mapScreen #copyMap{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;top:max(10px,env(safe-area-inset-top))!important;bottom:auto!important}
+#mapScreen #mapStyleButton{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;top:max(10px,env(safe-area-inset-top))!important;bottom:auto!important}
+/* Auswahlmenü folgt seinem Kartendarstellungs-Button. */
+#mapScreen #mapStyleMenu{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;top:max(64px,calc(env(safe-area-inset-top) + 64px))!important}
+</style>
+</head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.35)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.45)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2868,7 +2911,16 @@ function p2mZoomDoublePin(marker){
  var second=p2mLastDoublePin===identity && marker._p2mDoubleZoomClose===true;
  var maxZoom=map.getMaxZoom();if(!isFinite(maxZoom))maxZoom=19;
  var target=Math.min(second?14:18,maxZoom);
- map.closePopup();map.setZoomAround(map.latLngToContainerPoint(ll),target,{animate:true});
+ map.closePopup();
+ // Den Pin am bisherigen Bildschirm-Punkt festhalten, auch beim ersten
+ // großen Zoomsprung (z.B. Zoom 6 -> 18). Keine Zoom-Animation, die
+ // bei großen Sprüngen einen anderen Ankerpunkt verwenden kann.
+ var anchor=map.latLngToContainerPoint(ll);
+ map.setZoomAround(ll,target,{animate:false});
+ // Pixelgenaue Korrektur gegen Rundungs-/Projektionsabweichungen.
+ var actual=map.latLngToContainerPoint(ll);
+ var delta=actual.subtract(anchor);
+ if(Math.abs(delta.x)>0.5||Math.abs(delta.y)>0.5)map.panBy(delta,{animate:false});
  p2mLastDoublePin=identity;
  marker._p2mDoubleZoomClose=!second;
  // Kein Eingriff in den separaten Autozoom-Wechselzustand.
@@ -2889,7 +2941,7 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // v10.11.35: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
+ // v10.11.45: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
  var pinClickTimer=null;
  var pendingMove=null;
  var activeGhost=null;
@@ -2974,7 +3026,7 @@ function p2mEnablePinMove(it,marker){
   controls.querySelector('.p2m-move-cancel').addEventListener('click',function(e){e.stopPropagation();cancelPending()});
   mapStatus.textContent='Pin verschoben – Position bestätigen oder rückgängig machen';
  }
- // v10.11.35: Tippen sofort, Halten ohne Bewegung = Zoom,
+ // v10.11.45: Tippen sofort, Halten ohne Bewegung = Zoom,
  // Halten mit deutlicher Bewegung = Verschieben. Kein Pin-Doppeltipp-Zoom.
  if(marker.dragging)marker.dragging.disable();
  marker.on('dragstart',function(){if(marker.dragging)marker.dragging.disable()});
@@ -3079,7 +3131,7 @@ function addNewItemDirectly(fullLine){
   }else{
    var marker=L.marker(p,{icon:icon(it.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(it)}).addTo(categoryLayers[it.category]);
    it._pinLayer=marker;p2mEnablePinMove(it,marker);
-   if(p2mHasPinName(it))marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(it);p2mSyncNoteDot(it);if(showElevations&&!isFinite(it.elevation))setTimeout(fetchMissingElevations,0);if(p2mInfoMode===2)setTimeout(fetchPinTemperatures,0);if(p2mInfoMode===3)setTimeout(fetchPinDailyTemperatures,0);if(p2mInfoMode===4)setTimeout(fetchPinSunTimes,0);
+   if(p2mHasPinName(it))marker.bindTooltip(it.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(it);p2mSyncNoteDot(it);if(showElevations&&!isFinite(it.elevation))setTimeout(fetchMissingElevations,0);if(p2mInfoMode===2)setTimeout(fetchPinTemperatures,0);if(p2mInfoMode===3)setTimeout(fetchPinDailyTemperatures,0);if(p2mInfoMode===4)setTimeout(fetchPinSunTimes,0);if(p2mInfoMode===5)setTimeout(fetchPinZones,0);
   }
   // Neue Pins und Flächen bleiben bis zur nächsten Filteränderung sichtbar und bearbeitbar.
   if(p2mFilterIsActive()){it._p2mTemporaryFilterVisible=true;p2mTemporaryFilterPins.add(it)}
@@ -4503,7 +4555,7 @@ document.getElementById('categoryEditSave').onclick=function(){
  for(var q in areaDeleteItems){var ar=areaDeleteItems[q];if(ar&&ar.category===oldName){ar.category=newName;ar.symbol=sym;ar.color=col}}
  document.getElementById('categoryEditor').style.display='none';pendingCategoryEditName=null;refreshAfterDirectDelete()
 };
-function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');Object.keys(cats).forEach(function(name){var v=cats[name],lab=document.createElement('div'),cb=document.createElement('input'),sw=document.createElement('span'),txt=document.createElement('span');lab.className='chip';lab.style.cursor='pointer';cb.type='checkbox';cb.checked=map&&categoryLayers[name]?map.hasLayer(categoryLayers[name]):true;sw.className='swatch';sw.style.background=v.color;txt.textContent=v.symbol+' '+name+' ('+v.count+')';cb.onclick=function(e){e.stopPropagation()};cb.onchange=function(){var l=categoryLayers[name];if(!l)return;p2mClearTemporaryFilterPins();if(cb.checked)l.addTo(map);else map.removeLayer(l);markFilterApply(false);autoZoomAllContent()};lab.onclick=function(e){if(e.target===cb)return;openCategoryEditor(name,v)};lab.appendChild(cb);lab.appendChild(sw);lab.appendChild(txt);box.appendChild(lab)})}
+function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');Object.keys(cats).forEach(function(name){var v=cats[name],lab=document.createElement('div'),cb=document.createElement('input'),sw=document.createElement('span'),txt=document.createElement('span');lab.className='chip';lab.style.cursor='pointer';cb.type='checkbox';cb.checked=map&&categoryLayers[name]?map.hasLayer(categoryLayers[name]):true;sw.className='swatch';sw.style.background=v.color;txt.textContent=name+' ('+v.count+')';var sym=document.createElement('span');sym.className='p2m-legend-symbol';sym.textContent=v.symbol;cb.onclick=function(e){e.stopPropagation()};cb.onchange=function(){var l=categoryLayers[name];if(!l)return;p2mClearTemporaryFilterPins();if(cb.checked)l.addTo(map);else map.removeLayer(l);markFilterApply(false);autoZoomAllContent()};lab.onclick=function(e){if(e.target===cb)return;openCategoryEditor(name,v)};lab.appendChild(txt);lab.appendChild(sym);lab.appendChild(sw);lab.appendChild(cb);box.appendChild(lab)})}
 function removeElevationLabel(it){if(!it||!it._elevationLayer)return;try{var grp=categoryLayers[it.category];if(grp&&grp.removeLayer)grp.removeLayer(it._elevationLayer);else if(map&&map.hasLayer(it._elevationLayer))map.removeLayer(it._elevationLayer)}catch(e){}it._elevationLayer=null}
 function renderElevationLabel(it){
  if(!it||!it._pinLayer)return;
@@ -4519,6 +4571,13 @@ function renderElevationLabel(it){
   if(it._p2mSun&&it._p2mSun.date===p2mLocalDate(it._p2mSun.offset)&&Date.now()-it._p2mSun.at<15*60*1000)
    label=it._p2mSun.rise+' | '+it._p2mSun.set;
   else label='–:– | –:–';
+ }
+ if(p2mInfoMode===5){
+  if(it._p2mZone&&it._p2mZone.key===it._pinLayer.getLatLng().lat.toFixed(4)+','+it._pinLayer.getLatLng().lng.toFixed(4)){
+   var off=p2mZoneOffset(it._p2mZone.zone,it._p2mZone.fallback);
+   var delta=(off+new Date().getTimezoneOffset())/60;
+   label='Δ '+(delta>0?'+':'')+String(Math.round(delta*100)/100).replace('.',',');
+  }else label='Δ …';
  }
  if(p2mInfoMode===2){
   if(it._p2mTemp&&Date.now()-it._p2mTemp.at<15*60*1000&&isFinite(it._p2mTemp.value))
@@ -4553,7 +4612,7 @@ function allCurrentPinItems(){return markFilterEntries.filter(function(it){retur
 function refreshElevationLabels(){allCurrentPinItems().forEach(renderElevationLabel)}
 function syncElevationButton(){
  var b=document.getElementById('toggleElevations');if(!b)return;
- var modes=['ℹ','m','°C','M/M','☀️|🌚'];
+ var modes=['ℹ','m','°C','M/M','☀️|🌚','Δ'];
  if(p2mInfoMode===3)b.innerHTML='<span class="p2m-mode-left">M</span><span class="p2m-mode-right">M</span>';
  else if(p2mInfoMode===4)b.innerHTML='<span class="p2m-mode-left">↑</span><span class="p2m-mode-right">↓</span>';
  else if(p2mInfoMode===0)b.innerHTML='<span class="p2m-info-glyph" aria-hidden="true">i</span>';
@@ -4563,7 +4622,7 @@ function syncElevationButton(){
  b.classList.toggle('p2m-temp-active',p2mInfoMode===2);
  b.classList.toggle('p2m-daily-active',p2mInfoMode===3);
  b.classList.toggle('p2m-sun-active',p2mInfoMode===4);
- b.title=['Pin-Informationen: Aus (Tippen für Höhen)','Pin-Informationen: Höhe (Tippen für Temperatur)','Pin-Informationen: Temperatur (Tippen für Tagesminimum/-maximum)','Pin-Informationen: Tagesminimum/-maximum (Tippen für Sonnenzeiten)','Pin-Informationen: Sonnenaufgang und Sonnenuntergang (Tippen zum Ausschalten)'][p2mInfoMode];
+ b.title=['Pin-Informationen: Aus (Tippen für Höhen)','Pin-Informationen: Höhe (Tippen für Temperatur)','Pin-Informationen: Temperatur (Tippen für Tagesminimum/-maximum)','Pin-Informationen: Tagesminimum/-maximum (Tippen für Sonnenzeiten)','Pin-Informationen: Sonnenaufgang und Sonnenuntergang (Tippen für Zeitzonen)','Pin-Informationen: Zeitzonenabweichung zur Gerätezeit (Tippen zum Ausschalten)'][p2mInfoMode];
  b.setAttribute('aria-label',b.title);
 }
 function fetchPinTemperatures(){
@@ -4670,7 +4729,7 @@ function fetchPinSunTimes(){
  next();
 }
 function setP2mInfoMode(mode){
- p2mInfoMode=((mode%5)+5)%5;
+ p2mInfoMode=((mode%6)+6)%6;
  showElevations=p2mInfoMode===1;
  try{localStorage.setItem('showElevations','0')}catch(e){}
  syncElevationButton();
@@ -4679,6 +4738,45 @@ function setP2mInfoMode(mode){
  if(p2mInfoMode===2)fetchPinTemperatures();
  if(p2mInfoMode===3)fetchPinDailyTemperatures();
  if(p2mInfoMode===4)fetchPinSunTimes();
+ if(p2mInfoMode===5)fetchPinZones();
+}
+var p2mZoneBusy=false,p2mZoneCache=new Map();
+function p2mZoneOffset(zone,fallback){
+ try{
+  var v=new Intl.DateTimeFormat('en-US',{timeZone:zone,timeZoneName:'shortOffset'}).formatToParts(new Date()).filter(function(p){return p.type==='timeZoneName'})[0].value;
+  if(v==='GMT'||v==='UTC')return 0;
+  var m=v.match(/(?:GMT|UTC)([+-])(\\d{1,2})(?::(\\d{2}))?/);
+  if(m)return (m[1]==='-'?-1:1)*(Number(m[2])*60+Number(m[3]||0));
+ }catch(e){}
+ return Number.isFinite(fallback)?fallback/60:NaN;
+}
+function fetchPinZones(){
+ if(p2mInfoMode!==5||p2mZoneBusy)return;
+ var pins=allCurrentPinItems(),pending=[];
+ pins.forEach(function(it){
+  var ll=it._pinLayer.getLatLng(),key=ll.lat.toFixed(4)+','+ll.lng.toFixed(4),cached=p2mZoneCache.get(key);
+  if(cached){it._p2mZone={key:key,zone:cached.zone,fallback:cached.fallback};return}
+  pending.push({it:it,key:key,lat:ll.lat,lon:ll.lng});
+ });
+ refreshElevationLabels();
+ if(!pending.length)return;
+ p2mZoneBusy=true;
+ var idx=0;
+ function next(){
+  if(p2mInfoMode!==5){p2mZoneBusy=false;return}
+  if(idx>=pending.length){p2mZoneBusy=false;return}
+  var batch=pending.slice(idx,idx+10);idx+=batch.length;
+  Promise.all(batch.map(function(entry){
+   var url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(entry.lat)+'&longitude='+encodeURIComponent(entry.lon)+'&current=temperature_2m&forecast_days=1&timezone=auto';
+   return fetch(url).then(function(r){if(!r.ok)throw Error('Zeitzone '+r.status);return r.json()}).then(function(data){
+    if(!data.timezone)return;
+    var value={zone:data.timezone,fallback:data.utc_offset_seconds};
+    p2mZoneCache.set(entry.key,value);
+    if(entry.it._pinLayer){var ll=entry.it._pinLayer.getLatLng();if(ll.lat.toFixed(4)+','+ll.lng.toFixed(4)===entry.key){entry.it._p2mZone={key:entry.key,zone:value.zone,fallback:value.fallback};if(p2mInfoMode===5)renderElevationLabel(entry.it)}}
+   }).catch(function(){});
+  })).then(next);
+ }
+ next();
 }
 function fetchMissingElevations(){if(!showElevations||elevationBusy)return;var pins=allCurrentPinItems(),missing=pins.filter(function(it){return !isFinite(it.elevation)});refreshElevationLabels();if(!missing.length){mapStatus.textContent='✓ Höhen angezeigt.';setTimeout(function(){if(mapStatus.textContent==='✓ Höhen angezeigt.')mapStatus.textContent=''},1600);return}elevationBusy=true;mapStatus.textContent='Lade Höhen für '+missing.length+' Pin'+(missing.length===1?'':'s')+' …';var batches=[];for(var i=0;i<missing.length;i+=100)batches.push(missing.slice(i,i+100));var done=0;function next(){if(!batches.length){elevationBusy=false;refreshElevationLabels();mapStatus.textContent='✓ Höhen geladen.';setTimeout(function(){if(mapStatus.textContent==='✓ Höhen geladen.')mapStatus.textContent=''},1800);return}var batch=batches.shift(),lats=[],lons=[];batch.forEach(function(it){var ll=it._pinLayer.getLatLng();lats.push(ll.lat);lons.push(ll.lng)});var u='https://api.open-meteo.com/v1/elevation?latitude='+encodeURIComponent(lats.join(','))+'&longitude='+encodeURIComponent(lons.join(','));fetch(u).then(function(r){if(!r.ok)throw new Error('Elevation HTTP '+r.status);return r.json()}).then(function(d){var e=d&&d.elevation;if(!Array.isArray(e)||e.length!==batch.length)throw new Error('Ungültige Höhendaten');batch.forEach(function(it,j){if(isFinite(e[j]))it.elevation=Number(e[j]);renderElevationLabel(it)});done+=batch.length;mapStatus.textContent='Lade Höhen … '+done+'/'+missing.length;next()}).catch(function(){elevationBusy=false;mapStatus.textContent='⚠️ Höhen konnten nicht geladen werden.'})}next()}
 function setElevationDisplay(on){setP2mInfoMode(on?1:0)}
@@ -6257,7 +6355,7 @@ var p2m41OriginalPopup=pinPopupHtml;
 pinPopupHtml=function(it){
  var html=p2m41OriginalPopup(it),id=it._popupId;
  var sym=escHtml(it.symbol||(ensurePinCategoryChoices().find(function(c){return c.name===it.category})||{}).symbol||'📍');
- var row='<div class="p2m-bottom-groups"><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button><button type="button" data-p2m-url="'+id+'" title="URL bearbeiten" aria-label="URL bearbeiten">URL</button><button type="button" data-p2m-edit-pin="'+id+'" title="Kategorie ändern" aria-label="Kategorie ändern">'+sym+'</button><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia">'+uiSymbol('wikipedia')+'</button><button type="button" class="p2m-weather-toggle" title="Wettervorhersage" aria-label="Wettervorhersage">🌦️</button><button type="button" class="p2m-hide-popup" data-p2m-close-popup="1" title="Pin-Dialog schließen" aria-label="Pin-Dialog schließen">✓</button></div>';
+ var row='<div class="p2m-bottom-groups"><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button><button type="button" data-p2m-url="'+id+'" title="URL bearbeiten" aria-label="URL bearbeiten">URL</button><button type="button" data-p2m-edit-pin="'+id+'" title="Kategorie ändern" aria-label="Kategorie ändern">'+sym+'</button><button type="button" class="p2m-hide-popup" data-p2m-close-popup="1" title="Pin-Dialog schließen" aria-label="Pin-Dialog schließen">✓</button><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia">'+uiSymbol('wikipedia')+'</button><button type="button" class="p2m-weather-toggle" title="Wettervorhersage" aria-label="Wettervorhersage">🌦️</button></div>';
  var start=html.indexOf('<div class="p2m-bottom-groups">');
  if(start<0)throw new Error('Pin-Aktionsleiste nicht gefunden');
  // Der Block steht am Ende des Popups. Die alte Zeile komplett ersetzen.
@@ -6591,7 +6689,8 @@ window.p2mExportReadPins=function(){return p2mExportVisiblePins().map(p2mExportP
 #mapScreen.p101-popup-active .route-info,
 #mapScreen.p101-popup-active .leaflet-control-zoom,
 #mapScreen.p101-popup-active .map-menu-toggle,
-#mapScreen.p101-popup-active .map-menu-panel{visibility:hidden!important;pointer-events:none!important}
+#mapScreen.p101-popup-active .map-menu-panel,
+#mapScreen.p101-popup-active #back{visibility:hidden!important;pointer-events:none!important}
 #mapScreen .leaflet-popup-content-wrapper{max-height:min(65dvh,650px);overflow-y:auto}
 </style>
 <script id="v9101-guards">
@@ -7600,6 +7699,12 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
 #mapScreen .leaflet-popup .p2m-wx-feels span{font-weight:600}
 @media(max-width:420px){#mapScreen .leaflet-popup .p2m-wx-mainline{gap:5px!important}#mapScreen .leaflet-popup .p2m-wx-feels{font-size:11px}}
 </style>
+<style id="p2m-1137-live-clock">
+#mapScreen .leaflet-popup .p2m-wx-local-clock{
+ text-align:right;font-size:12px;font-weight:500;color:#586779;
+ line-height:1.15;margin-top:3px;font-variant-numeric:tabular-nums;
+}
+</style>
 <script id="p2m-1110-weather-script">
 (function(){
 'use strict';
@@ -7620,6 +7725,18 @@ function description(code){if(code===0)return 'Klar';if(code<=2)return 'Leicht b
 function n(x,d){return Number.isFinite(Number(x))?Number(x).toLocaleString('de-DE',{maximumFractionDigits:d||0}):'–'}
 function escapeText(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function wxTempClass(v){if(v===null||v===undefined||!Number.isFinite(Number(v)))return '';var t=Number(v);return t<=-16?'p2m-wx-black':t< -5?'p2m-wx-darkblue':t<0?'p2m-wx-cold':t<13?'p2m-wx-darkgreen':t<19?'p2m-wx-lightgreen':t<26?'p2m-wx-warm':t<=32?'p2m-wx-hot':'p2m-wx-veryhot'}
+function p2mWxClockText(zone){
+ try{return new Intl.DateTimeFormat('de-DE',{timeZone:zone,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date())}
+ catch(e){return '–:–'}
+}
+function p2mWxRefreshClocks(){
+ document.querySelectorAll('.p2m-wx-local-clock[data-zone]').forEach(function(el){
+  var value=p2mWxClockText(el.getAttribute('data-zone'));
+  if(el.textContent!==value)el.textContent=value;
+ });
+}
+setInterval(p2mWxRefreshClocks,10000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)p2mWxRefreshClocks()});
 function render(data){
  var h=data.hourly||{},d=data.daily||{},c=data.current||{};
  if(!Array.isArray(d.time)||!d.time.length)throw Error('Keine Tagesprognose erhalten');
@@ -7634,7 +7751,7 @@ function render(data){
  var rainLabel=curCode>=71&&curCode<=77||curCode===85||curCode===86?'Schnee':curCode===45||curCode===48?'Nebel':'Niederschlag';
  var raining=(curCode>=51&&curCode<=67)||(curCode>=80&&curCode<=82)||(curCode>=95&&curCode<=99);
  var rainExtra=raining?'<span class="p2m-wx-amount">('+fmt(curRain,1)+' mm)</span>':'';
- var html='<div class="p2m-wx-current"><div><div class="p2m-wx-mainline"><span class="p2m-wx-temp '+wxTempClass(c.temperature_2m)+'">'+fmt(c.temperature_2m)+' °C</span><span class="p2m-wx-icon">'+symbol(curCode,c.is_day===0)+'</span>'+rainExtra+(Number.isFinite(Number(c.apparent_temperature))&&c.apparent_temperature!==null?'<span class="p2m-wx-feels">Gefühlt: <span class="'+wxTempClass(c.apparent_temperature)+'">'+fmt(c.apparent_temperature)+'°C</span></span>':'')+'</div><div>'+description(curCode)+' · Wind '+fmt(c.wind_speed_10m)+' km/h</div></div><div class="p2m-wx-today"><b><span class="'+wxTempClass((d.temperature_2m_min||[])[0])+'">'+fmt((d.temperature_2m_min||[])[0])+'°</span> / <span class="'+wxTempClass((d.temperature_2m_max||[])[0])+'">'+fmt((d.temperature_2m_max||[])[0])+'°</span></b></div></div>';
+ var html='<div class="p2m-wx-current"><div><div class="p2m-wx-mainline"><span class="p2m-wx-temp '+wxTempClass(c.temperature_2m)+'">'+fmt(c.temperature_2m)+' °C</span><span class="p2m-wx-icon">'+symbol(curCode,c.is_day===0)+'</span>'+rainExtra+(Number.isFinite(Number(c.apparent_temperature))&&c.apparent_temperature!==null?'<span class="p2m-wx-feels">Gefühlt: <span class="'+wxTempClass(c.apparent_temperature)+'">'+fmt(c.apparent_temperature)+'°C</span></span>':'')+'</div><div>'+description(curCode)+' · Wind '+fmt(c.wind_speed_10m)+' km/h</div></div><div class="p2m-wx-today"><b><span class="'+wxTempClass((d.temperature_2m_min||[])[0])+'">'+fmt((d.temperature_2m_min||[])[0])+'°</span> / <span class="'+wxTempClass((d.temperature_2m_max||[])[0])+'">'+fmt((d.temperature_2m_max||[])[0])+'°</span></b><div class="p2m-wx-local-clock" data-zone="'+escapeText(data.timezone||'UTC')+'">'+p2mWxClockText(data.timezone||'UTC')+'</div></div></div>';
  html+='<div class="p2m-wx-grid p2m-wx-head"><span>Tag</span><span>Min</span><span>7:00</span><span>13:00</span><span>19:00</span><span>0:00</span><span>Max</span><span>mm</span></div>';
  var dates=d.time;
  dates.slice(0,7).forEach(function(date,i){
@@ -7684,13 +7801,13 @@ function loadWeather(root){
  if(!it||!it._pinLayer){panel.textContent='Pin-Koordinaten konnten nicht ermittelt werden.';return}
  var ll=it._pinLayer.getLatLng();
  var key=ll.lat.toFixed(4)+','+ll.lng.toFixed(4),entry=cache.get(key);
- if(entry&&Date.now()-entry.time<15*60*1000){panel.innerHTML=entry.html;updatePlace(panel,key,entry.lat,entry.lon);return}
+ if(entry&&Date.now()-entry.time<15*60*1000){panel.innerHTML=entry.html;p2mWxRefreshClocks();updatePlace(panel,key,entry.lat,entry.lon);return}
  panel.innerHTML='<div class="p2m-wx-status" role="status">Wettervorhersage wird geladen …</div>';
  var url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(ll.lat)+'&longitude='+encodeURIComponent(ll.lng)+'&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation,is_day&hourly=weather_code,precipitation_probability,temperature_2m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=8&timezone=auto';
  fetch(url).then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(function(data){
   if(data.error)throw Error(data.reason||'Fehler beim Wetterdienst');
   var html=render(data);cache.set(key,{time:Date.now(),html:html,lat:data.latitude||ll.lat,lon:data.longitude||ll.lng});
-  if(panel.isConnected&&field.getAttribute('data-p2m-name-id')===id){panel.innerHTML=html;updatePlace(panel,key,data.latitude||ll.lat,data.longitude||ll.lng)}
+  if(panel.isConnected&&field.getAttribute('data-p2m-name-id')===id){panel.innerHTML=html;p2mWxRefreshClocks();updatePlace(panel,key,data.latitude||ll.lat,data.longitude||ll.lng)}
  }).catch(function(err){
   if(panel.isConnected)panel.innerHTML='<div class="p2m-wx-status" role="status">Wetterdaten konnten nicht geladen werden.<div class="p2m-wx-muted">Internetverbindung oder Zugriff auf Open-Meteo prüfen.</div><button type="button" class="p2m-wx-retry">Erneut versuchen</button></div>';
   console.warn('pin2map Wetter:',err);
@@ -7743,4 +7860,84 @@ window.addEventListener('resize',function(){var root=getPopup();if(root){root.st
    Nur Pin-Dialoge versetzen, andere Karten-Popups bleiben unverändert. */
 #mapScreen .leaflet-popup:has(.p2m-popup){margin-bottom:76px!important}
 </style>
+<style id="p2m-1145-legend-right-up">
+/* Erste Kategorie direkt über dem Schalter, weitere nach oben. */
+#mapScreen #legend{
+ left:auto!important;top:auto!important;
+ flex-direction:column-reverse!important;align-items:flex-end!important;
+ width:max-content!important;max-width:calc(100vw - 20px)!important;
+ gap:6px!important;overflow-y:auto!important;overflow-x:hidden!important;
+}
+#mapScreen #legend .chip{
+ display:flex!important;flex-direction:row!important;align-items:center!important;
+ width:max-content!important;max-width:100%!important;
+ gap:6px!important;white-space:nowrap!important;
+}
+#mapScreen #legend .chip .swatch{margin-left:0!important;flex:0 0 12px!important}
+#mapScreen #legend .chip .p2m-legend-symbol{flex:none;line-height:1}
+#mapScreen #legend .chip input[type=checkbox]{margin:0 0 0 2px!important;flex:none!important}
+</style>
+<style id="p2m-1144-mirrored-right-controls">
+/* Nur Positionen: rechte Steuerungen spiegeln die linke Zoomgruppe. */
+#mapScreen #legendToggle,#mapScreen #toggleElevations,#mapScreen #labelToggle{
+ left:auto!important;top:auto!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+}
+</style>
+<script id="p2m-1144-mirrored-right-controls-js">
+(function(){
+ function align(){
+  var screen=document.getElementById('mapScreen');
+  if(!screen||screen.style.display==='none')return;
+  var plus=screen.querySelector('.leaflet-control-zoom-in');
+  var minus=screen.querySelector('.leaflet-control-zoom-out');
+  var auto=document.getElementById('autoZoomButton');
+  var info=document.getElementById('toggleElevations');
+  var names=document.getElementById('labelToggle');
+  var categories=document.getElementById('legendToggle');
+  if(!plus||!minus||!auto||!info||!names||!categories)return;
+  var sr=screen.getBoundingClientRect();
+  var pr=plus.getBoundingClientRect();
+  var mr=minus.getBoundingClientRect();
+  var ar=auto.getBoundingClientRect();
+  if(!pr.height||!mr.height||!ar.height)return;
+  // Ober- und Unterkante der rechten Buttons exakt an der linken Gruppe ausrichten.
+  function place(el,rect){
+   el.style.setProperty('top','auto','important');
+   el.style.setProperty('bottom',Math.max(0,sr.bottom-rect.bottom).toFixed(2)+'px','important');
+   el.style.setProperty('right',Math.max(0,pr.left-sr.left).toFixed(2)+'px','important');
+   el.style.setProperty('left','auto','important');
+  }
+  place(names,mr); // Namens-Labels wie Zoom minus
+  place(info,pr);  // oberes Label wie Zoom plus
+  place(categories,ar); // Kategorien wie Autozoom, einschließlich größerem Abstand
+  var legend=document.getElementById('legend');
+  if(legend){
+   var cr=categories.getBoundingClientRect();
+   legend.style.setProperty('left','auto','important');
+   legend.style.setProperty('top','auto','important');
+   legend.style.setProperty('right',Math.max(0,sr.right-cr.right).toFixed(2)+'px','important');
+   legend.style.setProperty('bottom',Math.max(0,sr.bottom-cr.top+8).toFixed(2)+'px','important');
+   legend.style.setProperty('max-height',Math.max(70,cr.top-sr.top-18).toFixed(2)+'px','important');
+  }
+ }
+ function schedule(){requestAnimationFrame(function(){requestAnimationFrame(align)})}
+ function init(){
+  schedule();
+  window.addEventListener('resize',schedule,{passive:true});
+  window.addEventListener('orientationchange',schedule,{passive:true});
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',schedule,{passive:true});
+  var screen=document.getElementById('mapScreen');
+  if(screen&&window.ResizeObserver){
+   var ro=new ResizeObserver(schedule);
+   var zoom=screen.querySelector('.leaflet-control-zoom');
+   if(zoom)ro.observe(zoom);
+  }
+  window.addEventListener('load',schedule,{once:true});
+  // Autozoom wird beim Einblenden der Karte positioniert; danach spiegeln.
+  document.addEventListener('click',function(){setTimeout(align,120)},true);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body></html>
