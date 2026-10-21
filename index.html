@@ -2338,9 +2338,13 @@ html,body{max-width:100%;overflow-x:hidden}
 /* Auswahlmenü folgt seinem Kartendarstellungs-Button. */
 #mapScreen #mapStyleMenu{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;top:max(64px,calc(env(safe-area-inset-top) + 64px))!important}
 </style>
+<style id="p2m-1151-status-center">
+/* Feedback und Warnungen: gleiche vertikale Position, mittig im Kartenfenster. */
+#mapScreen #mapStatus.mapStatus{left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:max-content;max-width:calc(100vw - 28px)!important;text-align:center;white-space:normal;pointer-events:none!important}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.50)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.53)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2429,6 +2433,12 @@ html,body{max-width:100%;overflow-x:hidden}
 (function(){
 if(!window.L){var fs=document.getElementById('formStatus');if(fs)fs.textContent='Die Kartenbibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen und die Seite neu laden.';return}
 var input=document.getElementById('input'), form=document.getElementById('formScreen'), screen=document.getElementById('mapScreen'), formStatus=document.getElementById('formStatus'), mapStatus=document.getElementById('mapStatus');
+// Meldungen: Warnungen und eigenständige Rückmeldungen, immer 3 Sekunden.
+(function(){var d=Object.getOwnPropertyDescriptor(Node.prototype,'textContent'),t;
+ Object.defineProperty(mapStatus,'textContent',{configurable:true,get:function(){return d.get.call(this)},set:function(v){
+  clearTimeout(t);d.set.call(this,v);if(v)t=setTimeout(function(){d.set.call(mapStatus,'')},3000);
+ }});
+})();
 var defaults='# 📍 [Red] Rot\n\n# 🔹 [DodgerBlue] Blau\n\n# 🅿️ [LimeGreen] Aufenthalt\n\n# 🌲 [Gold] Grün\n\n# 😀 [DarkOrange] Gelb\n\n# 🔸 [BlueViolet] Orange\n\n# 🏛️ [DeepPink] Violett\n\n# 🏁 [DarkCyan] Grau\n\n# 🐂 [SaddleBrown] Braun\n';
 window.pin2mapCurrentMap=function(){return map};
 var map=null,baseLayer=null,categoryLayers={},allBounds=null,renderedAreas=[],areaRenderer=null,buildGeneration=0,areaPointTotal=0,gpxLayer=null,pendingGpxTracks=null;
@@ -2941,7 +2951,7 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // v10.11.50: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
+ // v10.11.53: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
  var pinClickTimer=null;
  var pendingMove=null;
  var activeGhost=null;
@@ -3005,7 +3015,7 @@ function p2mEnablePinMove(it,marker){
      (routeFixedWaypoints&&routeFixedWaypoints.indexOf(it)!==-1)){
    if(routeStartItem&&routeTargetItem)recalculateAfterRouteStructureChange();
   }
-  mapStatus.textContent='✓ Pin verschoben';setTimeout(function(){if(mapStatus.textContent==='✓ Pin verschoben')mapStatus.textContent=''},1600);
+  mapStatus.textContent='✓ Pin verschoben';
  }
  function stagePosition(original){
   if(pendingMove)cancelPending();
@@ -3024,9 +3034,9 @@ function p2mEnablePinMove(it,marker){
   controls.addEventListener('touchstart',function(e){e.stopPropagation()},{passive:true});
   controls.querySelector('.p2m-move-ok').addEventListener('click',function(e){e.stopPropagation();confirmPending()});
   controls.querySelector('.p2m-move-cancel').addEventListener('click',function(e){e.stopPropagation();cancelPending()});
-  mapStatus.textContent='Pin verschoben – Position bestätigen oder rückgängig machen';
+  
  }
- // v10.11.50: Tippen sofort, Halten ohne Bewegung = Zoom,
+ // v10.11.53: Tippen sofort, Halten ohne Bewegung = Zoom,
  // Halten mit deutlicher Bewegung = Verschieben. Kein Pin-Doppeltipp-Zoom.
  if(marker.dragging)marker.dragging.disable();
  marker.on('dragstart',function(){if(marker.dragging)marker.dragging.disable()});
@@ -3147,10 +3157,10 @@ function addNewItemDirectly(fullLine){
    requestAnimationFrame(function(){if(map){map.invalidateSize({pan:false});if(it._pinLayer&&it._pinLayer.update)it._pinLayer.update()}});
    // V9.6.6: Neue Pins nur zentrieren; Details erst bei bewusstem Antippen öffnen.
   }
-  mapStatus.textContent=it.area?'Fläche hinzugefügt.':'✓ '+it.label+' als Pin hinzugefügt.';setTimeout(function(){mapStatus.textContent=''},1800)
+  mapStatus.textContent=it.area?'Fläche hinzugefügt.':'✓ '+it.label+' als Pin hinzugefügt.';
  }).catch(function(){
   var nf=document.getElementById('notFoundList'),msg='<b>⚠️ Nicht gefunden</b><br>• '+esc(it.query);nf.innerHTML=msg;mapStatus.textContent='⚠️ '+it.query+' nicht gefunden.';
-  setTimeout(function(){if(nf.innerHTML===msg)nf.innerHTML='';if(mapStatus.textContent==='⚠️ '+it.query+' nicht gefunden.')mapStatus.textContent=''},5500)
+  setTimeout(function(){if(nf.innerHTML===msg)nf.innerHTML='';},5500)
  }).then(function(){progress.style.display='none'})
 }
 var pendingMapActionLatLng=null;
@@ -3895,7 +3905,7 @@ function savePinName(){
  }
  document.getElementById('pinNameEditor').style.display='none';pendingPinRename=null;refreshAfterDirectDelete();
  if(routeStartItem||routeTargetItem||routeWaypoints.length){var routeItems=(routeStartItem?[routeStartItem]:[]).concat(routeWaypoints).concat(routeTargetItem?[routeTargetItem]:[]);document.getElementById('routeEndpoints').textContent=routeItems.map(routeItemName).join(' → ')}
- mapStatus.textContent='✓ Name geändert.';setTimeout(function(){if(mapStatus.textContent==='✓ Name geändert.')mapStatus.textContent=''},1500)
+ mapStatus.textContent='✓ Name geändert.';
 }
 document.addEventListener('click',function(e){var b=e.target&&e.target.closest?e.target.closest('[data-rename-pin]'):null;if(!b)return;e.preventDefault();e.stopPropagation();var it=pinDeleteItems[b.getAttribute('data-rename-pin')];if(it)openPinNameEditor(it)});
 document.getElementById('pinNameCancel').onclick=function(){document.getElementById('pinNameEditor').style.display='none';pendingPinRename=null};
@@ -3916,7 +3926,7 @@ function saveAreaName(){
  input.value=lines.join('\n');it.label=name||it.query;it.sourceLine=newRaw;it.sourceFullLine=newFull;
  if(it._areaLabelLayer&&it._areaLabelLayer.setIcon){it._areaLabelLayer.setIcon(L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(it.label)+'</div>',iconSize:null}))}
  document.getElementById('areaNameEditor').style.display='none';pendingAreaRename=null;refreshAfterDirectDelete();
- mapStatus.textContent='✓ Name geändert.';setTimeout(function(){if(mapStatus.textContent==='✓ Name geändert.')mapStatus.textContent=''},1500)
+ mapStatus.textContent='✓ Name geändert.';
 }
 document.getElementById('areaNameCancel').onclick=function(){document.getElementById('areaNameEditor').style.display='none';pendingAreaRename=null};
 document.getElementById('areaNameSave').onclick=saveAreaName;
@@ -4041,7 +4051,7 @@ function addVisiblePinsToRoute(){
  if(routeAllActive){
   routeAllActive=false;routeWaypoints=[];setRouteOrderFixed(true);
   updateRouteAllButton();renderRouteEditor();updateAppleMapsButton();
-  mapStatus.textContent='Direktroute ohne Zwischenziele.';calculateRoute();return
+  calculateRoute();return
  }
  if(routeMode==='transit'){mapStatus.textContent='⚠️ ÖPNV unterstützt derzeit keine Zwischenziele.';return}
  var bounds=map.getBounds(),used=currentRouteItems(),seen=[],candidates=[];
@@ -4050,7 +4060,7 @@ function addVisiblePinsToRoute(){
  if(!candidates.length){mapStatus.textContent='Keine weiteren sichtbaren Pins gefunden.';return}
  routeAllActive=true;updateRouteAllButton();
  if(routeOrderMode==='optimal'){
-  var base=routeFixedWaypoints?routeFixedWaypoints.slice():routeWaypoints.slice();candidates.forEach(function(it){if(base.indexOf(it)<0)base.push(it)});routeFixedWaypoints=base.slice();routeWaypoints=base.slice();renderRouteEditor();updateAppleMapsButton();mapStatus.textContent='Optimiere '+candidates.length+' neue sichtbare Pins …';optimizeRouteOrder().then(function(){if(routeStartItem&&routeTargetItem)calculateRoute()})
+  var base=routeFixedWaypoints?routeFixedWaypoints.slice():routeWaypoints.slice();candidates.forEach(function(it){if(base.indexOf(it)<0)base.push(it)});routeFixedWaypoints=base.slice();routeWaypoints=base.slice();renderRouteEditor();updateAppleMapsButton();optimizeRouteOrder().then(function(){if(routeStartItem&&routeTargetItem)calculateRoute()})
  }else{candidates.forEach(function(it){routeWaypoints.push(it)});renderRouteEditor();updateAppleMapsButton();mapStatus.textContent='➕ '+candidates.length+' sichtbare Pins zur Route hinzugefügt.';calculateRoute()}
 }
 function setRouteItems(arr){
@@ -4099,7 +4109,7 @@ function exportRouteGpx(){
  var parts=['<?xml version="1.0" encoding="UTF-8"?>','<gpx version="1.1" creator="pin2map" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">','<metadata><name>'+xmlEsc(name)+'</name></metadata>'];
  x.items.forEach(function(it,i){if(!it||!it._pinLayer)return;var ll=it._pinLayer.getLatLng();parts.push('<wpt lat="'+ll.lat.toFixed(7)+'" lon="'+ll.lng.toFixed(7)+'"><name>'+xmlEsc((i+1)+'. '+routeItemName(it))+'</name></wpt>')});
  parts.push('<trk><name>'+xmlEsc(name)+'</name><type>'+xmlEsc(mode)+'</type><trkseg>');x.coords.forEach(function(c){if(isFinite(c[0])&&isFinite(c[1]))parts.push('<trkpt lat="'+c[1].toFixed(7)+'" lon="'+c[0].toFixed(7)+'"></trkpt>')});parts.push('</trkseg></trk></gpx>');
- var blob=new Blob([parts.join('\n')],{type:'application/gpx+xml;charset=utf-8'}),a=document.createElement('a'),url=URL.createObjectURL(blob),start=x.items[0]?routeItemName(x.items[0]):'Route';a.href=url;a.download=safeFilePart(start+' - '+mode)+'.gpx';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1500);mapStatus.textContent='✓ GPX-Datei erstellt.';setTimeout(function(){if(mapStatus.textContent==='✓ GPX-Datei erstellt.')mapStatus.textContent=''},1800)
+ var blob=new Blob([parts.join('\n')],{type:'application/gpx+xml;charset=utf-8'}),a=document.createElement('a'),url=URL.createObjectURL(blob),start=x.items[0]?routeItemName(x.items[0]):'Route';a.href=url;a.download=safeFilePart(start+' - '+mode)+'.gpx';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1500);mapStatus.textContent='✓ GPX-Datei erstellt.';
 }
 function formatRouteDuration(sec){var m=Math.round(sec/60),h=Math.floor(m/60),r=m%60;return h?(h+' h '+(r?r+' min':'')):(m+' min')}
 function routeModeIcon(){return routeMode==='bicycle'?'🚴‍♂️':routeMode==='pedestrian'?'🥾':routeMode==='transit'?'🚃':'🚗'}
@@ -4320,7 +4330,7 @@ function valhallaTripResult(d,routeItems){
 }
 function optimizeRouteOrder(){
  if(routeOptimizeBusy||routeOrderMode!=='optimal'||routeMode==='transit'||!routeStartItem||!routeTargetItem||routeWaypoints.length<2)return Promise.resolve(false);
- routeOptimizeBusy=true;updateRouteOrderButtons();mapStatus.textContent='Optimiere Reihenfolge …';
+ routeOptimizeBusy=true;updateRouteOrderButtons();
  var all=[routeStartItem].concat(routeWaypoints).concat([routeTargetItem]);
  /* Für Fuß/Fahrrad Valhalla selbst auf dem realen Wegenetz optimieren lassen. */
  if(routeMode==='pedestrian'||routeMode==='bicycle'){
@@ -4331,14 +4341,14 @@ function optimizeRouteOrder(){
    var ordered=d.trip.locations.map(function(loc,i){var oi=Number(loc.original_index);return all[Number.isInteger(oi)&&oi>=0&&oi<all.length?oi:i]});
    if(ordered[0]!==routeStartItem||ordered[ordered.length-1]!==routeTargetItem)throw new Error('Start/Ziel verändert');
    var nw=ordered.slice(1,-1),changed=nw.some(function(x,i){return x!==routeWaypoints[i]});routeWaypoints=nw;
-   routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();mapStatus.textContent=changed?'✓ Zwischenziele nach Wegenetz optimiert.':'✓ Reihenfolge bereits optimal.';return changed
+   routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();return changed
   }).catch(function(){routeOptimizeBusy=false;updateRouteOrderButtons();mapStatus.textContent='⚠️ Netzoptimierung nicht verfügbar – feste Reihenfolge bleibt erhalten.';return false})
  }
  /* Auto: kompakte lokale Voroptimierung; das eigentliche Routing bleibt OSRM. */
  var n=all.length,matrix=Array.from({length:n},function(){return Array(n).fill(0)});for(var i=0;i<n;i++)for(var j=0;j<n;j++)matrix[i][j]=i===j?0:routeAirDistance(all[i],all[j]);
  var unused=[];for(var q=1;q<n-1;q++)unused.push(q);var order=[0],cur=0;while(unused.length){var bi=0,best=Infinity;for(var k=0;k<unused.length;k++){var dd=matrix[cur][unused[k]];if(dd<best){best=dd;bi=k}}cur=unused.splice(bi,1)[0];order.push(cur)}order.push(n-1);
  var maxPasses=Math.max(1,(n-2)*(n-2)),pass=0;while(pass++<maxPasses){var bestGain=0,bestA=-1,bestB=-1;for(var a=1;a<order.length-2;a++)for(var b=a+1;b<order.length-1;b++){var before=matrix[order[a-1]][order[a]]+matrix[order[b]][order[b+1]],after=matrix[order[a-1]][order[b]]+matrix[order[a]][order[b+1]],gain=before-after;if(gain>bestGain+0.1){bestGain=gain;bestA=a;bestB=b}}if(bestA<0)break;var rev=order.slice(bestA,bestB+1).reverse();order.splice.apply(order,[bestA,bestB-bestA+1].concat(rev))}
- var nw=order.slice(1,-1).map(function(i){return all[i]}),changed=nw.some(function(x,i){return x!==routeWaypoints[i]});routeWaypoints=nw;routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();mapStatus.textContent=changed?'✓ Zwischenziele optimal sortiert.':'✓ Reihenfolge bereits optimal.';return Promise.resolve(changed)
+ var nw=order.slice(1,-1).map(function(i){return all[i]}),changed=nw.some(function(x,i){return x!==routeWaypoints[i]});routeWaypoints=nw;routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();return Promise.resolve(changed)
 }
 function calculateRoute(){
  p2mClearRouteFailures();
@@ -4346,7 +4356,7 @@ function calculateRoute(){
  if(!routeStartItem||!routeTargetItem||!routeStartItem._pinLayer||!routeTargetItem._pinLayer)return;
  var routeItems=[routeStartItem].concat(routeWaypoints).concat([routeTargetItem]);
  for(var ri=0;ri<routeItems.length;ri++)if(!routeItems[ri]||!routeItems[ri]._pinLayer)return;
- clearRoute(true);document.getElementById('routeInfo').style.display='flex';renderRouteEditor();updateRouteModeButtons();mapStatus.textContent='Berechne '+(routeMode==='bicycle'?'Fahrradroute':routeMode==='pedestrian'?'Fußweg':routeMode==='transit'?'ÖPNV-Verbindung':'Route')+' …';
+ clearRoute(true);document.getElementById('routeInfo').style.display='flex';renderRouteEditor();updateRouteModeButtons();
  if(routeMode==='transit'){
   calculateTransitRoute(routeItems);return
  }
@@ -4367,7 +4377,7 @@ function calculateRoute(){
   if(legIndex>=routeItems.length-1)return Promise.resolve();
   var from=routeItems[legIndex],to=routeItems[legIndex+1],a=from._pinLayer.getLatLng(),b=to._pinLayer.getLatLng();
   var req={locations:[{lat:a.lat,lon:a.lng},{lat:b.lat,lon:b.lng}],costing:(routeMode==='driving'?'auto':routeMode),units:'kilometers',language:'de-DE'};
-  mapStatus.textContent='Berechne '+(routeMode==='driving'?'Autoroute':routeMode==='bicycle'?'Fahrradroute':'Fußweg')+' … '+(legIndex+1)+'/'+(routeItems.length-1);
+  
   return fetch(vurl,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json','X-Client-Id':'pin2map.github.io'},body:JSON.stringify(req)}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){
    if(myGeneration!==routeRequestGeneration)throw {cancelled:true};
    if(!d.trip||!d.trip.legs||!d.trip.legs.length)throw new Error('Keine Route');
@@ -4401,7 +4411,7 @@ document.getElementById('routePanelHide').onclick=function(e){
  if(!(routeStartItem&&routeTargetItem))return;
  setRoutePanelHidden(true)
 };
-document.getElementById('routeClear').onclick=function(){clearRoute(false);mapStatus.textContent='Route entfernt.';setTimeout(function(){if(mapStatus.textContent==='Route entfernt.')mapStatus.textContent=''},1500)};
+document.getElementById('routeClear').onclick=function(){clearRoute(false);mapStatus.textContent='Route entfernt.';};
 document.getElementById('openAppleMaps').onclick=function(e){e.preventDefault();e.stopPropagation();openRouteInAppleMaps()};
 var bottomGpxAction=document.getElementById('bottomGpxAction');if(bottomGpxAction)bottomGpxAction.onclick=function(e){e.preventDefault();e.stopPropagation();if(gpxLayer){if(confirm("GPX-Track wirklich entfernen?"))removeImportedGpxTrack()}else exportRouteGpx()};updateGpxButton();
 document.getElementById('routeVisiblePins').onclick=function(e){e.preventDefault();e.stopPropagation();addVisiblePinsToRoute()};
@@ -4778,11 +4788,11 @@ function fetchPinZones(){
  }
  next();
 }
-function fetchMissingElevations(){if(!showElevations||elevationBusy)return;var pins=allCurrentPinItems(),missing=pins.filter(function(it){return !isFinite(it.elevation)});refreshElevationLabels();if(!missing.length){mapStatus.textContent='✓ Höhen angezeigt.';setTimeout(function(){if(mapStatus.textContent==='✓ Höhen angezeigt.')mapStatus.textContent=''},1600);return}elevationBusy=true;mapStatus.textContent='Lade Höhen für '+missing.length+' Pin'+(missing.length===1?'':'s')+' …';var batches=[];for(var i=0;i<missing.length;i+=100)batches.push(missing.slice(i,i+100));var done=0;function next(){if(!batches.length){elevationBusy=false;refreshElevationLabels();mapStatus.textContent='✓ Höhen geladen.';setTimeout(function(){if(mapStatus.textContent==='✓ Höhen geladen.')mapStatus.textContent=''},1800);return}var batch=batches.shift(),lats=[],lons=[];batch.forEach(function(it){var ll=it._pinLayer.getLatLng();lats.push(ll.lat);lons.push(ll.lng)});var u='https://api.open-meteo.com/v1/elevation?latitude='+encodeURIComponent(lats.join(','))+'&longitude='+encodeURIComponent(lons.join(','));fetch(u).then(function(r){if(!r.ok)throw new Error('Elevation HTTP '+r.status);return r.json()}).then(function(d){var e=d&&d.elevation;if(!Array.isArray(e)||e.length!==batch.length)throw new Error('Ungültige Höhendaten');batch.forEach(function(it,j){if(isFinite(e[j]))it.elevation=Number(e[j]);renderElevationLabel(it)});done+=batch.length;mapStatus.textContent='Lade Höhen … '+done+'/'+missing.length;next()}).catch(function(){elevationBusy=false;mapStatus.textContent='⚠️ Höhen konnten nicht geladen werden.'})}next()}
+function fetchMissingElevations(){if(!showElevations||elevationBusy)return;var pins=allCurrentPinItems(),missing=pins.filter(function(it){return !isFinite(it.elevation)});refreshElevationLabels();if(!missing.length){return}elevationBusy=true;var batches=[];for(var i=0;i<missing.length;i+=100)batches.push(missing.slice(i,i+100));var done=0;function next(){if(!batches.length){elevationBusy=false;refreshElevationLabels();return}var batch=batches.shift(),lats=[],lons=[];batch.forEach(function(it){var ll=it._pinLayer.getLatLng();lats.push(ll.lat);lons.push(ll.lng)});var u='https://api.open-meteo.com/v1/elevation?latitude='+encodeURIComponent(lats.join(','))+'&longitude='+encodeURIComponent(lons.join(','));fetch(u).then(function(r){if(!r.ok)throw new Error('Elevation HTTP '+r.status);return r.json()}).then(function(d){var e=d&&d.elevation;if(!Array.isArray(e)||e.length!==batch.length)throw new Error('Ungültige Höhendaten');batch.forEach(function(it,j){if(isFinite(e[j]))it.elevation=Number(e[j]);renderElevationLabel(it)});done+=batch.length;next()}).catch(function(){elevationBusy=false;mapStatus.textContent='⚠️ Höhen konnten nicht geladen werden.'})}next()}
 function setElevationDisplay(on){setP2mInfoMode(on?1:0)}
 function build(items){Object.keys(pinDeleteItems).forEach(function(k){delete pinDeleteItems[k]});clearMap();var myBuild=++buildGeneration;buildLegend(items);var labelled=document.getElementById('labelAddresses').checked,areasLabelled=document.getElementById('labelAreas').checked,idx=0,miss=0,missed=[],areaPoints=0;screen.classList.remove('labels-hidden');screen.classList.toggle('hide-address-labels',!labelled);screen.classList.toggle('hide-area-labels',!areasLabelled);labelToggle.classList.toggle('off',!labelled&&!areasLabelled);for(var i=0;i<items.length;i++){if(!categoryLayers[items[i].category])categoryLayers[items[i].category]=L.layerGroup().addTo(map)}
 function noteMissing(x){if(myBuild!==buildGeneration)return;miss++;missed.push(x.query);var box=document.getElementById('notFoundList');box.innerHTML='<b>⚠️ Nicht gefunden ('+missed.length+')</b><br>'+missed.map(function(v){return '• '+esc(v)}).join('<br>')}
-function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){p2mApplyImportedPinUrls();if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();mapStatus.textContent='Fertig'+(miss?' – '+miss+' nicht gefunden.':'.')+(areaPoints?' Flächenpunkte: '+areaPoints.toLocaleString('de-DE')+(isConstrainedTouchDevice()?' (mobil angepasst)':'')+'.':'');if(!miss)setTimeout(function(){if(myBuild===buildGeneration)mapStatus.textContent=''},5000);if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='alltext')markFilterApply(true);return}var x=items[idx],num=idx+1;mapStatus.textContent=(activeProjectCache&&activeProjectCache[projectCacheKey(x)]?'Lade ':'Suche ')+num+' von '+items.length+': '+x.query;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(x)}).addTo(categoryLayers[x.category]);x._pinLayer=marker;p2mEnablePinMove(x,marker);allBounds.extend(p);if(p2mHasPinName(x))marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x);p2mSyncNoteDot(x)}markFilterRegister(x);p2mSyncPinBadges(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
+function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){p2mApplyImportedPinUrls();if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();if(miss)mapStatus.textContent='⚠️ '+miss+' nicht gefunden.';if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='alltext')markFilterApply(true);return}var x=items[idx],num=idx+1;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(x)}).addTo(categoryLayers[x.category]);x._pinLayer=marker;p2mEnablePinMove(x,marker);allBounds.extend(p);if(p2mHasPinName(x))marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x);p2mSyncNoteDot(x)}markFilterRegister(x);p2mSyncPinBadges(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
 document.getElementById('go').onclick=function(){var items=parse(input.value);formStatus.textContent='';form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);if(items.length)build(items);else clearMap()},150)};
 document.getElementById('back').onclick=function(){river980UpdateList();screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
 function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length){build(items);if(importedFromUrl)clearImportedDataFromUrl()}else{clearMap();var q=document.getElementById('quickPlace');if(q)q.blur()}},150)}
@@ -5665,7 +5675,7 @@ function showCurrentLocation(pos){
  var acc=isFinite(accuracy)&&accuracy>0?'<div style="margin:4px 0 9px;color:#666">Genauigkeit etwa ± '+Math.round(accuracy)+' m</div>':'<div style="margin:4px 0 9px;color:#666">Genauigkeit unbekannt</div>';
  currentLocationMarker.bindPopup('<div><b>Aktueller Standort</b>'+acc+'<button type="button" id="takeCurrentLocationAsPin" style="display:block;width:100%;padding:8px 10px;border:0;border-radius:8px;background:#34a853;color:#fff;font-weight:400">Als Pin übernehmen</button></div>').openPopup();
  map.setView(currentLocationLatLng,Math.max(map.getZoom(),16));
- mapStatus.textContent='✓ Aktueller Standort angezeigt.';setTimeout(function(){if(mapStatus.textContent==='✓ Aktueller Standort angezeigt.')mapStatus.textContent=''},2200)
+ mapStatus.textContent='✓ Aktueller Standort angezeigt.';
 }
 function currentLocationError(err){
  var msg='Standort konnte nicht ermittelt werden.';
@@ -5676,7 +5686,7 @@ function currentLocationError(err){
 }
 document.getElementById('currentLocationButton').onclick=function(){
  if(!navigator.geolocation){mapStatus.textContent='⚠️ Standortabfrage wird von diesem Browser nicht unterstützt.';return}
- mapStatus.textContent='Standort wird einmalig ermittelt …';
+ 
  navigator.geolocation.getCurrentPosition(function(pos){try{showCurrentLocation(pos)}catch(e){currentLocationError()}},currentLocationError,{enableHighAccuracy:false,timeout:12000,maximumAge:60000})
 };
 document.addEventListener('click',function(e){
@@ -5824,8 +5834,8 @@ document.getElementById('autoZoomButton').onclick=function(){
   p2mRouteAutoZoomNext='route';
   if(!p2mTogglePinAutoZoom())autoZoomAllContent();
  }
- mapStatus.textContent='✓ Autozoom';
- setTimeout(function(){if(mapStatus.textContent==='✓ Autozoom')mapStatus.textContent=''},1200)
+ 
+ 
 };
 function positionAutoZoomButton(){
  var b=document.getElementById('autoZoomButton'),z=screen.querySelector('.leaflet-control-zoom');
@@ -6014,7 +6024,7 @@ function parseGpxText(txt){
  return {waypoints:wpts,tracks:tracks}
 }
 function updateGpxTrackControls(){var visible=!!gpxLayer,b=document.getElementById('removeGpxTrack');if(b)b.style.display=visible?'block':'none';updateGpxButton()}
-function removeImportedGpxTrack(){pendingGpxTracks=null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();river980UpdateList();mapStatus.textContent='GPX-Linie entfernt.';setTimeout(function(){if(mapStatus.textContent==='GPX-Linie entfernt.')mapStatus.textContent=''},1500)}
+function removeImportedGpxTrack(){pendingGpxTracks=null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();river980UpdateList();mapStatus.textContent='GPX-Linie entfernt.';}
 
 function drawPendingGpxTracks(){
  if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;
@@ -6133,7 +6143,7 @@ document.getElementById('projectFileInput').onchange=function(){
  var openedName=String(file.name||'').replace(/\.(?:pin2map|gpx)$/i,'').trim();
  var hasData=!!parse(input.value).length || !!(river959Saved&&river959Saved.length) || !!(gpxLayer&&map&&map.hasLayer(gpxLayer)) || !!(pendingGpxTracks&&pendingGpxTracks.length) || !!(window.pin2mapGpxTracks&&window.pin2mapGpxTracks.size);
  (hasData?p101ImportChoice():Promise.resolve('replace')).then(function(choice){if(!choice)return;
- mapStatus.textContent='Importiere '+file.name+' …';
+ 
  return file.text().then(function(txt){
   if(isGpx){if(choice==='add')p101AppendGpx(txt,file.name);else openGpxFileText(txt,file.name);return}
   if(txt.indexOf('PIN2MAP\n')===0)txt=txt.slice(8);
@@ -6223,7 +6233,7 @@ function renderMapPng(){
  })})
  .then(function(canvas){p2mScreenshotSplitLabels(canvas);return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error('PNG konnte nicht erzeugt werden.'))},'image/png')})});
 }
-document.getElementById('copyMap').onclick=function(){var btn=this;if(!window.html2canvas){mapStatus.textContent='Die Screenshot-Funktion konnte nicht geladen werden. Bitte Seite neu laden.';return}if(!navigator.clipboard||!window.ClipboardItem||!navigator.clipboard.write){mapStatus.textContent='Bild-Zwischenablage wird in diesem Browser nicht unterstützt. Bitte die Seite in Safari über HTTPS öffnen.';return}btn.disabled=true;mapStatus.textContent='Erzeuge Kartenbild …';var item;try{item=new ClipboardItem({'image/png':renderMapPng()})}catch(e){mapStatus.textContent='Kopieren wird von diesem Browser nicht unterstützt.';btn.disabled=false;return}navigator.clipboard.write([item]).then(function(){mapStatus.textContent='✓ Karte kopiert.'}).catch(function(){mapStatus.textContent='Kopieren nicht möglich. Bitte in Safari über HTTPS öffnen und erneut tippen.'}).then(function(){btn.disabled=false})};
+document.getElementById('copyMap').onclick=function(){var btn=this;if(!window.html2canvas){mapStatus.textContent='Die Screenshot-Funktion konnte nicht geladen werden. Bitte Seite neu laden.';return}if(!navigator.clipboard||!window.ClipboardItem||!navigator.clipboard.write){mapStatus.textContent='Bild-Zwischenablage wird in diesem Browser nicht unterstützt. Bitte die Seite in Safari über HTTPS öffnen.';return}btn.disabled=true;var item;try{item=new ClipboardItem({'image/png':renderMapPng()})}catch(e){mapStatus.textContent='Kopieren wird von diesem Browser nicht unterstützt.';btn.disabled=false;return}navigator.clipboard.write([item]).then(function(){mapStatus.textContent='✓ Karte kopiert.'}).catch(function(){mapStatus.textContent='Kopieren nicht möglich. Bitte in Safari über HTTPS öffnen und erneut tippen.'}).then(function(){btn.disabled=false})};
 function refreshMapSize(){if(map&&screen.style.display!=='none')setTimeout(function(){map.invalidateSize(true)},180)}
 window.addEventListener('resize',refreshMapSize);
 window.addEventListener('orientationchange',function(){setTimeout(refreshMapSize,350)});
