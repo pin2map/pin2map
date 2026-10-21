@@ -2295,9 +2295,9 @@ html,body{max-width:100%;overflow-x:hidden}
 #formScreen.p2m-settings-open .list-name-option,#formScreen.p2m-settings-open #input,#formScreen.p2m-settings-open .gpx-start-import,#formScreen.p2m-settings-open .buttons,#formScreen.p2m-settings-open #river980List{display:none!important}
 #formScreen.p2m-settings-open #p2mSettingsPanel{display:block}
 </style>
-</head><body>
+<style id="p2m-1122-confirm-style">.p2m-move-confirm{position:absolute;z-index:1200;display:flex;align-items:center;gap:5px;padding:5px 7px;background:#fff;border:2px solid #d88918;border-radius:9px;box-shadow:0 3px 12px #0005;font:600 12px system-ui;white-space:nowrap;pointer-events:auto}.p2m-move-confirm button{cursor:pointer;border:0;border-radius:5px;padding:3px 7px;font-size:17px;background:#e9ecef}.p2m-move-confirm .p2m-move-ok{background:#d9f1de;color:#176c31}.p2m-pin-await-confirm{filter:drop-shadow(0 0 5px #f59e0b) drop-shadow(0 0 3px #f59e0b)!important}</style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.10)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.24)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2868,7 +2868,7 @@ function p2mZoomDoublePin(marker){
  var second=p2mLastDoublePin===identity && marker._p2mDoubleZoomClose===true;
  var maxZoom=map.getMaxZoom();if(!isFinite(maxZoom))maxZoom=19;
  var target=Math.min(second?14:18,maxZoom);
- map.closePopup();map.setView(ll,target,{animate:true});
+ map.closePopup();map.setZoomAround(map.latLngToContainerPoint(ll),target,{animate:true});
  p2mLastDoublePin=identity;
  marker._p2mDoubleZoomClose=!second;
  // Kein Eingriff in den separaten Autozoom-Wechselzustand.
@@ -2889,10 +2889,29 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // v10.11.18: Standarddialog sofort öffnen; Doppelklick/-tipp zoomt weiterhin.
+ // v10.11.24: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
  var pinClickTimer=null;
+ var pendingMove=null;
+ var activeGhost=null;
+ function clearActiveGhost(){if(activeGhost){if(map.hasLayer(activeGhost))map.removeLayer(activeGhost);activeGhost=null}}
+ function cancelPending(){
+  if(!pendingMove)return;var p=pendingMove;pendingMove=null;
+  if(p.ghost&&map.hasLayer(p.ghost))map.removeLayer(p.ghost);
+  if(p.controls){p.controls.remove();map.off('move zoom resize',p.reposition)}
+  marker.setLatLng(p.original);marker.setOpacity(1);
+  var el=marker.getElement();if(el)el.classList.remove('p2m-pin-await-confirm');
+ }
+ function confirmPending(){
+  if(!pendingMove)return;var p=pendingMove;
+  if(p.ghost&&map.hasLayer(p.ghost))map.removeLayer(p.ghost);
+  if(p.controls){p.controls.remove();map.off('move zoom resize',p.reposition)}
+  pendingMove=null;marker.setOpacity(1);
+  var el=marker.getElement();if(el)el.classList.remove('p2m-pin-await-confirm');
+  marker._p2mMoveStarted=true;marker._p2mOriginalPosition=p.original;savePosition();
+ }
  marker.off('click');
  marker.on('click',function(ev){
+  if(pendingMove){if(Date.now()<(marker._p2mSuppressClickUntil||0)){if(ev&&ev.originalEvent)L.DomEvent.stop(ev.originalEvent);return}confirmPending();if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}return}
   if(Date.now()<(marker._p2mSuppressClickUntil||0)){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}return;}
   // Sofortiger Umschalter: ein erneuter Einzelklick auf denselben Pin schließt.
   // Ein zweiter schneller Tipp wird unabhängig davon im Touch-Ende als Zoom erkannt.
@@ -2900,12 +2919,8 @@ function p2mEnablePinMove(it,marker){
   else marker.openPopup();
   if(ev&&ev.originalEvent)L.DomEvent.stopPropagation(ev.originalEvent);
  });
- marker.on('dblclick',function(ev){
-  if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null}
-  if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}
-  if(!map)return;
-  p2mZoomDoublePin(marker);
- });
+ marker.off('dblclick');
+ marker.on('dblclick',function(ev){if(ev&&ev.originalEvent){L.DomEvent.preventDefault(ev.originalEvent);L.DomEvent.stopPropagation(ev.originalEvent)}});
  function stopTimer(){if(touchTimer){clearTimeout(touchTimer);touchTimer=null}if(pressTimer){clearTimeout(pressTimer);pressTimer=null}}
  function feedback(el){
   moveUnlocked=true;touchReady=true;
@@ -2940,87 +2955,109 @@ function p2mEnablePinMove(it,marker){
   }
   mapStatus.textContent='✓ Pin verschoben';setTimeout(function(){if(mapStatus.textContent==='✓ Pin verschoben')mapStatus.textContent=''},1600);
  }
- // Eigene Halte-/Ziehsteuerung: Leaflet-Dragging darf den Start nicht vorzeitig abfangen.
+ function stagePosition(original){
+  if(pendingMove)cancelPending();
+  clearActiveGhost();
+  var destination=marker.getLatLng();
+  if(original.distanceTo(destination)<0.03){marker.setLatLng(original);return}
+  var ghost=L.circleMarker(original,{radius:11,color:'#e58a22',weight:2,dashArray:'4 4',fillColor:'#fff',fillOpacity:0.23,opacity:0.85,interactive:false}).addTo(map);
+  var controls=document.createElement('div');controls.className='p2m-move-confirm';
+  controls.innerHTML='<span>Neue Position?</span><button type="button" class="p2m-move-ok" title="Position übernehmen">✓</button><button type="button" class="p2m-move-cancel" title="Verschiebung rückgängig">↶</button>';
+  map.getContainer().appendChild(controls);
+  var pending={original:original,ghost:ghost,controls:controls};pendingMove=pending;
+  pending.reposition=function(){if(pendingMove!==pending)return;var point=map.latLngToContainerPoint(marker.getLatLng());controls.style.left=Math.max(5,Math.min(map.getSize().x-185,point.x+18))+'px';controls.style.top=Math.max(5,Math.min(map.getSize().y-45,point.y-48))+'px'};
+  map.on('move zoom resize',pending.reposition);pending.reposition();
+  var el=marker.getElement();if(el)el.classList.add('p2m-pin-await-confirm');
+  controls.addEventListener('mousedown',function(e){e.stopPropagation()});
+  controls.addEventListener('touchstart',function(e){e.stopPropagation()},{passive:true});
+  controls.querySelector('.p2m-move-ok').addEventListener('click',function(e){e.stopPropagation();confirmPending()});
+  controls.querySelector('.p2m-move-cancel').addEventListener('click',function(e){e.stopPropagation();cancelPending()});
+  mapStatus.textContent='Pin verschoben – Position bestätigen oder rückgängig machen';
+ }
+ // v10.11.24: Tippen sofort, Halten ohne Bewegung = Zoom,
+ // Halten mit deutlicher Bewegung = Verschieben. Kein Pin-Doppeltipp-Zoom.
  if(marker.dragging)marker.dragging.disable();
+ marker.on('dragstart',function(){if(marker.dragging)marker.dragging.disable()});
  function bindPinMoveHandlers(){
   var el=marker.getElement();if(!el||el._p2mMoveBound)return;el._p2mMoveBound=true;
-  var active=null,ready=false,dragged=false,origin=null,last=null,hold=null;
   el.style.touchAction='none';
-  function clear(){if(hold){clearTimeout(hold);hold=null}if(el)el.classList.remove('p2m-pin-move-ready');if(map&&map.dragging)map.dragging.enable();active=null;ready=false;dragged=false;marker._p2mMoveStarted=false;}
-  function point(ev){var t=ev.touches&&ev.touches[0]||ev.changedTouches&&ev.changedTouches[0]||ev;return {x:t.clientX,y:t.clientY};}
-  var lastTapAt=0,lastTapPoint=null,touchDownAt=0,touchDownPoint=null,touchMoved=false;
-  function down(ev){
-   if(active!==null)return;if(ev.type==='mousedown'&&ev.button!==0)return;
-   if(ev.type==='touchstart'&&ev.touches.length!==1)return;
-   active=ev.type==='touchstart'?'touch':'mouse';origin=point(ev);last=origin;ready=false;dragged=false;
-   if(active==='touch'){touchDownAt=Date.now();touchDownPoint=origin;touchMoved=false;}
-   // Leaflet darf den Fingerkontakt nicht als Kartenverschiebung übernehmen.
-   ev.stopPropagation();
+  var gesture=null;
+  var MOVE_MS=330,ZOOM_MS=550;
+  function pos(ev){var t=ev.touches&&ev.touches[0]||ev.changedTouches&&ev.changedTouches[0]||ev;return {x:t.clientX,y:t.clientY};}
+  function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+  function limit(g){return g.type==='touch'?26:14}
+  function stopTimers(g){if(g&&g.zoomTimer){clearTimeout(g.zoomTimer);g.zoomTimer=null}if(g&&g.moveTimer){clearTimeout(g.moveTimer);g.moveTimer=null}}
+  function finish(g){clearActiveGhost();stopTimers(g);el.classList.remove('p2m-pin-move-ready');if(map&&map.dragging)map.dragging.enable();if(gesture===g)gesture=null;moveUnlocked=false;touchReady=false;marker._p2mMoveStarted=false}
+  function suppress(){marker._p2mSuppressClickUntil=Date.now()+850}
+  function startDrag(g){
+   if(gesture!==g||g.mode!=='pending'||Date.now()-g.startAt<MOVE_MS||distance(g.origin,g.last)<limit(g))return false;
+   g.mode='drag';stopTimers(g);clearActiveGhost();activeGhost=L.circleMarker(g.original,{radius:11,color:'#e58a22',weight:2,dashArray:'4 4',fillColor:'#fff',fillOpacity:0.2,interactive:false}).addTo(map);marker._p2mOriginalPosition=g.original;marker._p2mMoveStarted=true;
+   el.classList.add('p2m-pin-move-ready');moveUnlocked=true;touchReady=true;
    if(map&&map.dragging)map.dragging.disable();
-   hold=setTimeout(function(){hold=null;if(active===null)return;ready=true;moveUnlocked=true;touchReady=true;marker._p2mOriginalPosition=marker.getLatLng();marker._p2mMoveStarted=true;feedback(el);if(map&&map.dragging)map.dragging.disable();},HOLD_MS);
+   // Noch nicht sofort versetzen: erst die nächste tatsächliche Bewegung zieht den Pin.
+   return true;
   }
-  function move(ev){
-   if(active===null||((ev.type==='touchmove')!==(active==='touch')))return;
-   var p=point(ev);last=p;
-   if(active==='touch'&&touchDownPoint&&Math.hypot(p.x-touchDownPoint.x,p.y-touchDownPoint.y)>24)touchMoved=true;
-   if(!ready){if(Math.hypot(p.x-origin.x,p.y-origin.y)>24){clear();}if(ev.cancelable)ev.preventDefault();ev.stopPropagation();return;}
-   if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
-   if(!map)return;
-   var rect=map.getContainer().getBoundingClientRect();
-   marker.setLatLng(map.containerPointToLatLng(L.point(p.x-rect.left,p.y-rect.top)));
-   dragged=true;
-  }
-  function up(ev){
-   if(active===null)return;
-   if(active==='touch'&&ev.type!=='touchend'&&ev.type!=='touchcancel')return;
-   if(active==='mouse'&&ev.type!=='mouseup')return;
-   // iOS Safari liefert auf Markern nicht zuverlässig ein natives dblclick.
-   // Zwei kurze Touch-Tipps direkt am Pin deshalb separat erkennen.
-   if(active==='touch'&&ev.type==='touchend'&&!ready&&!dragged&&!touchMoved&&Date.now()-touchDownAt<350){
-    var now=Date.now(),tap=point(ev);
-    if(lastTapAt&&now-lastTapAt<450&&lastTapPoint&&Math.hypot(tap.x-lastTapPoint.x,tap.y-lastTapPoint.y)<45){
-     lastTapAt=0;lastTapPoint=null;
-     marker._p2mSuppressClickUntil=now+900;
-     if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null;}
-     if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
-     p2mZoomDoublePin(marker);
-     clear();moveUnlocked=false;touchReady=false;
-     return;
-    }
-    lastTapAt=now;lastTapPoint=tap;
-   }
-   if(ready&&dragged){marker._p2mSuppressClickUntil=Date.now()+850;savePosition();if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
-    if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null;}
-    marker.closePopup();}
-   else marker._p2mMoveStarted=false;
-   clear();moveUnlocked=false;touchReady=false;
-  }
-  // Ein sofort geöffnetes Popup kann den zweiten Fingertipp überlagern.
-  // Nur einen zweiten Tipp in unmittelbarer Nähe des ersten Pin-Tipps abfangen.
-  function popupSecondTap(ev){
-   if(!lastTapAt||Date.now()-lastTapAt>450||!lastTapPoint||!ev.changedTouches||ev.changedTouches.length!==1)return;
-   var t=ev.changedTouches[0];
-   if(Math.hypot(t.clientX-lastTapPoint.x,t.clientY-lastTapPoint.y)>=45)return;
-   var popup=marker.getPopup&&marker.getPopup();
-   if(!popup||!popup.isOpen||!popup.isOpen())return;
-   lastTapAt=0;lastTapPoint=null;
-   marker._p2mSuppressClickUntil=Date.now()+900;
-   if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
+  function zoom(g){
+   if(gesture!==g||g.mode!=='pending')return;
+   if(distance(g.origin,g.last)>=limit(g)&&Date.now()-g.startAt>=MOVE_MS){startDrag(g);return}
+   g.mode='zoom';stopTimers(g);suppress();
+   if(marker.isPopupOpen&&marker.isPopupOpen())marker.closePopup();
    p2mZoomDoublePin(marker);
   }
-  document.addEventListener('touchend',popupSecondTap,{passive:false,capture:true});
+  function down(ev){
+   if(pendingMove||gesture||ev.type==='mousedown'&&ev.button!==0||ev.type==='touchstart'&&ev.touches.length!==1)return;
+   var type=ev.type==='touchstart'?'touch':'mouse',p=pos(ev);
+   var g={type:type,origin:p,last:p,startAt:Date.now(),mode:'pending',zoomTimer:null,moveTimer:null,original:marker.getLatLng()};gesture=g;
+   ev.stopPropagation();if(map&&map.dragging)map.dragging.disable();
+   g.zoomTimer=setTimeout(function(){zoom(g)},ZOOM_MS);
+   g.moveTimer=setTimeout(function(){if(gesture===g&&g.mode==='pending')startDrag(g)},MOVE_MS);
+  }
+  function move(ev){
+   var g=gesture;if(!g||((ev.type==='touchmove')!==(g.type==='touch')))return;
+   g.last=pos(ev);
+   if(g.mode==='pending')startDrag(g);
+   if(g.mode==='drag'){
+    if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
+    var rect=map.getContainer().getBoundingClientRect();
+    marker.setLatLng(map.containerPointToLatLng(L.point(g.last.x-rect.left,g.last.y-rect.top)));
+    g.dragged=true;
+   }else if(g.type==='touch'){if(ev.cancelable)ev.preventDefault();ev.stopPropagation()}
+  }
+  function up(ev){
+   var g=gesture;if(!g||g.type==='touch'&&ev.type!=='touchend'&&ev.type!=='touchcancel'||g.type==='mouse'&&ev.type!=='mouseup')return;
+   var cancelled=ev.type==='touchcancel';
+   if(!cancelled)g.last=pos(ev);
+   if(g.mode==='pending'&&!cancelled){
+    var held=Date.now()-g.startAt;
+    if(held>=MOVE_MS){
+     if(distance(g.origin,g.last)>=limit(g))startDrag(g);
+     else zoom(g); // Mittlere Haltezeit: Zoom, kein dritter Zustand.
+    }
+   }
+   if(g.mode==='drag'){
+    suppress();
+    if(!cancelled&&g.original&&g.original.distanceTo(marker.getLatLng())>0.03){
+     try{stagePosition(g.original);marker.closePopup()}catch(err){marker.setLatLng(g.original);mapStatus.textContent='Verschiebung abgebrochen – bitte erneut versuchen';console.error('Pin-Verschiebung:',err)}
+    }else if(g.original)marker.setLatLng(g.original);
+    if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
+   }else if(g.mode==='zoom'){
+    suppress();if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
+   }
+   finish(g);
+  }
   el.addEventListener('mousedown',down,true);
   el.addEventListener('touchstart',down,{passive:false,capture:true});
   document.addEventListener('mousemove',move,true);
   document.addEventListener('touchmove',move,{passive:false,capture:true});
+  window.addEventListener('mouseup',up,true);
   document.addEventListener('mouseup',up,true);
-  document.addEventListener('touchend',up,true);
-  document.addEventListener('touchcancel',up,true);
+  window.addEventListener('pointerup',function(ev){if(gesture&&gesture.type==='mouse')up({type:'mouseup',clientX:ev.clientX,clientY:ev.clientY,cancelable:false,stopPropagation:function(){}})},true);
+  window.addEventListener('touchend',up,{capture:true,passive:false});
+  window.addEventListener('touchcancel',up,{capture:true,passive:false});
+  window.addEventListener('blur',function(){if(gesture&&gesture.mode==='drag'){var g=gesture; if(g.original)marker.setLatLng(g.original);finish(g)}},true);
  }
  marker.on('add',bindPinMoveHandlers);
- // Der Marker ist beim Aufruf bereits auf der Karte: 'add' wurde schon ausgelöst.
  bindPinMoveHandlers();
-
 }
 function addNewItemDirectly(fullLine){
  var it=findParsedItemByFullLine(fullLine);if(!it)return;
@@ -7541,6 +7578,7 @@ function loadWeather(root){
  if(!panel)return;
  if(!field){panel.textContent='Pin-Koordinaten konnten nicht ermittelt werden.';return}
  var id=field.getAttribute('data-p2m-name-id'),items=window.pin2mapPinDeleteItems, it=items&&items[id];
+ if(!it||!it._pinLayer){var opened=map&&map._popup,source=opened&&opened._source;for(var k in items){if(items[k]&&items[k]._pinLayer===source){it=items[k];break}}}
  if(!it||!it._pinLayer){panel.textContent='Pin-Koordinaten konnten nicht ermittelt werden.';return}
  var ll=it._pinLayer.getLatLng();
  var key=ll.lat.toFixed(4)+','+ll.lng.toFixed(4),entry=cache.get(key);
