@@ -2340,7 +2340,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.45)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.46)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2941,7 +2941,7 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // v10.11.45: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
+ // v10.11.46: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
  var pinClickTimer=null;
  var pendingMove=null;
  var activeGhost=null;
@@ -3026,7 +3026,7 @@ function p2mEnablePinMove(it,marker){
   controls.querySelector('.p2m-move-cancel').addEventListener('click',function(e){e.stopPropagation();cancelPending()});
   mapStatus.textContent='Pin verschoben – Position bestätigen oder rückgängig machen';
  }
- // v10.11.45: Tippen sofort, Halten ohne Bewegung = Zoom,
+ // v10.11.46: Tippen sofort, Halten ohne Bewegung = Zoom,
  // Halten mit deutlicher Bewegung = Verschieben. Kein Pin-Doppeltipp-Zoom.
  if(marker.dragging)marker.dragging.disable();
  marker.on('dragstart',function(){if(marker.dragging)marker.dragging.disable()});
@@ -7940,4 +7940,31 @@ window.addEventListener('resize',function(){var root=getPopup();if(root){root.st
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
+<style id="p2m-1146-mobile-right-controls-fix">
+/* Auf dem iPhone verschob eine ältere Header-Regel die rechts unten
+   verankerten Steuerelemente um die Headerhöhe nach unten. */
+@media(max-width:600px){
+ #mapScreen #legendToggle,
+ #mapScreen #toggleElevations,
+ #mapScreen #labelToggle,
+ #mapScreen #legend{
+  translate:none!important;
+ }
+ #mapScreen #legend{
+  position:absolute!important;
+  display:flex;
+  flex-direction:column-reverse!important;
+  align-items:flex-end!important;
+  box-sizing:border-box!important;
+  width:max-content!important;
+  max-width:calc(100vw - 20px)!important;
+  padding:0!important;
+  overflow-x:hidden!important;
+ }
+ #mapScreen #legend .chip{
+  box-sizing:border-box!important;
+  flex-shrink:0!important;
+ }
+}
+</style>
 </body></html>
