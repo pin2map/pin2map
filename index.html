@@ -2275,7 +2275,7 @@ html,body{max-width:100%;overflow-x:hidden}
   background-color: #f5f8b9 !important;
 }
 
-/* v10.11.9: Oberes Pin-Info-Label ist ein eigenständiger Wetter-Link. */
+/* v10.11.10: Oberes Pin-Info-Label ist ein eigenständiger Wetter-Link. */
 .elevation-label-wrap{pointer-events:auto!important}
 .p2m-pin-weather-link{cursor:pointer!important;text-decoration:none!important;pointer-events:auto!important;touch-action:manipulation;color:inherit!important}
 .p2m-pin-weather-link:focus-visible{outline:2px solid #0a84ff;outline-offset:2px}
@@ -2297,7 +2297,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.9)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.10)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2466,7 +2466,7 @@ function markFilterZoom(){
  else if(markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote)mapStatus.textContent='Keine passenden Markierungen gefunden.';
 }
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
-// v10.11.9: Wetterdienst ist eine Projekteinstellung; localStorage dient nur als Zwischenablage.
+// v10.11.10: Wetterdienst ist eine Projekteinstellung; localStorage dient nur als Zwischenablage.
 var p2mWeatherProvider='meteoblue';
 try{var p2mWeatherCached=localStorage.getItem('p2mWeatherProvider');if(p2mWeatherCached==='windy'||p2mWeatherCached==='meteoblue'||p2mWeatherCached==='yr')p2mWeatherProvider=p2mWeatherCached}catch(e){}
 function p2mSetWeatherProvider(provider){
@@ -4467,7 +4467,7 @@ function renderElevationLabel(it){
   if(sunParts.length===2)labelHtml='<span class="p2m-label-half p2m-label-rise">'+sunParts[0]+'</span><span class="p2m-label-half p2m-label-set">'+sunParts[1]+'</span>';
  }
  var ll=it._pinLayer.getLatLng();
- // v10.11.9: Das obere Info-Label öffnet immer die Wetterprognose des Pins.
+ // v10.11.10: Das obere Info-Label öffnet immer die Wetterprognose des Pins.
  // Der Link nutzt die Pin-Koordinaten, unabhängig von der angezeigten Information.
  var weatherUrl=p2mWeatherUrl(ll.lat,ll.lng);
  it._elevationLayer=L.marker(ll,{interactive:true,zIndexOffset:450,icon:L.divIcon({
@@ -6098,7 +6098,7 @@ if(legendToggle)legendToggle.onclick=function(e){e.preventDefault();e.stopPropag
 })();
 var _buildLegendV854=buildLegend;buildLegend=function(items){_buildLegendV854(items);syncLegendToggle()};
 
-/* v10.11.9: Listenansicht um ein Einstellungs-Tab ergänzen. */
+/* v10.11.10: Listenansicht um ein Einstellungs-Tab ergänzen. */
 (function(){
  var listTab=document.getElementById('p2mListTab'),settingsTab=document.getElementById('p2mSettingsTab');
  function showSettings(open){form.classList.toggle('p2m-settings-open',open);listTab.setAttribute('aria-selected',String(!open));settingsTab.setAttribute('aria-selected',String(open))}
@@ -7440,7 +7440,7 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
 
 
 
-/* v10.11.9: kompakte Wetterdaten, ohne Änderungen am Dialograhmen. */
+/* v10.11.10: kompakte Wetterdaten, ohne Änderungen am Dialograhmen. */
 #mapScreen .leaflet-popup .p2m-wx-status {padding:18px 7px;text-align:center;line-height:1.7;color:#46566a}
 #mapScreen .leaflet-popup .p2m-wx-retry {display:inline-block;margin-top:12px;border:1px solid #b5c5d8;border-radius:8px;padding:7px 12px;background:#fff;color:#173e67;cursor:pointer;font-size:12px}
 #mapScreen .leaflet-popup .p2m-wx-today {text-align:right;white-space:nowrap}
@@ -7508,7 +7508,7 @@ function loadWeather(root){
  var field=root.querySelector('[data-p2m-name-id]'),panel=root.querySelector('.p2m-weather-panel');
  if(!panel)return;
  if(!field){panel.textContent='Pin-Koordinaten konnten nicht ermittelt werden.';return}
- var id=field.getAttribute('data-p2m-name-id'),it=typeof pinDeleteItems!=='undefined'?pinDeleteItems[id]:null;
+ var id=field.getAttribute('data-p2m-name-id'),items=window.pin2mapPinDeleteItems, it=items&&items[id];
  if(!it||!it._pinLayer){panel.textContent='Pin-Koordinaten konnten nicht ermittelt werden.';return}
  var ll=it._pinLayer.getLatLng();
  var key=ll.lat.toFixed(4)+','+ll.lng.toFixed(4),entry=cache.get(key);
@@ -7528,7 +7528,35 @@ function prepare(){var root=getPopup();if(!root)return;var b=root.querySelector(
 document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('.p2m-wx-retry');if(!b)return;e.preventDefault();e.stopPropagation();var root=b.closest('.p2m-popup');if(root)loadWeather(root)},true);
 // Direkter Delegations-Handler: Button wird bereits vom echten Popup-HTML erzeugt.
 document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('.p2m-weather-toggle');if(!b)return;e.preventDefault();e.stopPropagation();setMode(!b.closest('.p2m-popup').classList.contains('p2m-weather-active'))},true);
-window.p2mWeatherOpenForPin=function(it){if(!it||!it._pinLayer)return;weatherOnLabel=true;it._pinLayer.openPopup();setTimeout(function(){prepare();weatherOnLabel=false},0)};
+window.p2mWeatherOpenForPin=function(it){
+ if(!it||!it._pinLayer)return;
+ var layer=it._pinLayer, popup=layer.getPopup&&layer.getPopup();
+ // Den bewährten Leaflet-Aufruf beibehalten; nur die Wetter-Aktivierung
+ // an den tatsächlich sichtbaren Dialog des Ziel-Pins binden.
+ weatherOnLabel=false;
+ layer.openPopup();
+ function activate(){
+  var current=layer.getPopup&&layer.getPopup();
+  if(!current||!current.isOpen||!current.isOpen())return false;
+  var el=current.getElement&&current.getElement();
+  if(!el||!el.isConnected)return false;
+  var root=el.querySelector('.p2m-popup');
+  if(!root||!root.querySelector('.p2m-weather-toggle'))return false;
+  var name=root.querySelector('[data-p2m-name-id]');
+  var items=window.pin2mapPinDeleteItems;
+  if(!name||!items||items[name.getAttribute('data-p2m-name-id')]!==it)return false;
+  // setMode nutzt getPopup(): Der Ziel-Dialog muss der sichtbare sein.
+  if(getPopup()!==root)return false;
+  setMode(true);
+  return true;
+ }
+ // Der vorherige Dialog kann während des synchronen popupopen noch aktiv sein.
+ // Mehrere kurze Prüfungen sind nur bei einem Label-Klick aktiv.
+ if(!activate()){
+  var tries=0;
+  (function retry(){if(activate()||++tries>=12)return;setTimeout(retry,25)})();
+ }
+};
 // Direkter Layer-Klick ist bereits in renderElevationLabel mit dem Pin verknüpft.
 // Keine Dokument-Capture-Sperre: Sie würde den Leaflet-Layer-Klick unterbinden.
 if(typeof map!=='undefined'&&map&&map.on)map.on('popupopen',function(){prepare()});
