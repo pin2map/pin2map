@@ -2873,6 +2873,18 @@ function p2mZoomDoublePin(marker){
  marker._p2mDoubleZoomClose=!second;
  // Kein Eingriff in den separaten Autozoom-Wechselzustand.
 }
+// v10.11.20: Pin-Gesten auch bei kleinen Fingerbewegungen von Karten-Gesten trennen.
+window.p2mPinTouchNear=function(x,y,radius){
+ if(!map||!isFinite(x)||!isFinite(y))return false;
+ var rect=map.getContainer().getBoundingClientRect(),items=window.pin2mapPinDeleteItems||{};
+ for(var key in items){
+  var m=items[key]&&items[key]._pinLayer;
+  if(!m||!m.getLatLng||!map.hasLayer(m))continue;
+  var p=map.latLngToContainerPoint(m.getLatLng());
+  if(Math.hypot(x-rect.left-p.x,y-rect.top-p.y)<(radius||42))return true;
+ }
+ return false;
+};
 function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
@@ -2882,8 +2894,10 @@ function p2mEnablePinMove(it,marker){
  marker.off('click');
  marker.on('click',function(ev){
   if(Date.now()<(marker._p2mSuppressClickUntil||0)){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}return;}
-  // Nicht auf einen möglichen zweiten Klick warten.
-  marker.openPopup();
+  // Sofortiger Umschalter: ein erneuter Einzelklick auf denselben Pin schließt.
+  // Ein zweiter schneller Tipp wird unabhängig davon im Touch-Ende als Zoom erkannt.
+  if(marker.isPopupOpen&&marker.isPopupOpen())marker.closePopup();
+  else marker.openPopup();
   if(ev&&ev.originalEvent)L.DomEvent.stopPropagation(ev.originalEvent);
  });
  marker.on('dblclick',function(ev){
@@ -2948,8 +2962,8 @@ function p2mEnablePinMove(it,marker){
   function move(ev){
    if(active===null||((ev.type==='touchmove')!==(active==='touch')))return;
    var p=point(ev);last=p;
-   if(active==='touch'&&touchDownPoint&&Math.hypot(p.x-touchDownPoint.x,p.y-touchDownPoint.y)>12)touchMoved=true;
-   if(!ready){if(Math.hypot(p.x-origin.x,p.y-origin.y)>9){clear();}if(ev.cancelable)ev.preventDefault();ev.stopPropagation();return;}
+   if(active==='touch'&&touchDownPoint&&Math.hypot(p.x-touchDownPoint.x,p.y-touchDownPoint.y)>24)touchMoved=true;
+   if(!ready){if(Math.hypot(p.x-origin.x,p.y-origin.y)>24){clear();}if(ev.cancelable)ev.preventDefault();ev.stopPropagation();return;}
    if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
    if(!map)return;
    var rect=map.getContainer().getBoundingClientRect();
@@ -2964,7 +2978,7 @@ function p2mEnablePinMove(it,marker){
    // Zwei kurze Touch-Tipps direkt am Pin deshalb separat erkennen.
    if(active==='touch'&&ev.type==='touchend'&&!ready&&!dragged&&!touchMoved&&Date.now()-touchDownAt<350){
     var now=Date.now(),tap=point(ev);
-    if(lastTapAt&&now-lastTapAt<400&&lastTapPoint&&Math.hypot(tap.x-lastTapPoint.x,tap.y-lastTapPoint.y)<35){
+    if(lastTapAt&&now-lastTapAt<450&&lastTapPoint&&Math.hypot(tap.x-lastTapPoint.x,tap.y-lastTapPoint.y)<45){
      lastTapAt=0;lastTapPoint=null;
      marker._p2mSuppressClickUntil=now+900;
      if(pinClickTimer){clearTimeout(pinClickTimer);pinClickTimer=null;}
@@ -2984,9 +2998,9 @@ function p2mEnablePinMove(it,marker){
   // Ein sofort geöffnetes Popup kann den zweiten Fingertipp überlagern.
   // Nur einen zweiten Tipp in unmittelbarer Nähe des ersten Pin-Tipps abfangen.
   function popupSecondTap(ev){
-   if(!lastTapAt||Date.now()-lastTapAt>400||!lastTapPoint||!ev.changedTouches||ev.changedTouches.length!==1)return;
+   if(!lastTapAt||Date.now()-lastTapAt>450||!lastTapPoint||!ev.changedTouches||ev.changedTouches.length!==1)return;
    var t=ev.changedTouches[0];
-   if(Math.hypot(t.clientX-lastTapPoint.x,t.clientY-lastTapPoint.y)>=35)return;
+   if(Math.hypot(t.clientX-lastTapPoint.x,t.clientY-lastTapPoint.y)>=45)return;
    var popup=marker.getPopup&&marker.getPopup();
    if(!popup||!popup.isOpen||!popup.isOpen())return;
    lastTapAt=0;lastTapPoint=null;
@@ -3316,6 +3330,9 @@ function installMapPinGestures(){
  if(!mapEl.dataset.pin2mapContextInstalled){
   mapEl.dataset.pin2mapContextInstalled='1';
   mapEl.addEventListener('contextmenu',function(ev){
+   // iOS kann nach einem leicht verschobenen Doppeltipp ein Kontextmenü
+   // synthetisieren. In der Nähe eines Pins niemals 'Pin setzen' öffnen.
+   if(window.p2mPinTouchNear&&window.p2mPinTouchNear(ev.clientX,ev.clientY,48)) {ev.preventDefault();ev.stopPropagation();return}
    ev.preventDefault();ev.stopPropagation();
    var target=ev.target;
    if(target&&target.closest&&target.closest('.leaflet-control,.map-ui-control,.topbar,.legend,.bottom,.label-toggle,.elevation-toggle,.route-info,.leaflet-marker-icon,.leaflet-tooltip,.leaflet-popup'))return;
@@ -3367,7 +3384,7 @@ function installMapPinGestures(){
   function blockedTarget(target){return target&&target.closest&&target.closest('.leaflet-control,.map-ui-control,.topbar,.legend,.bottom,.label-toggle,.elevation-toggle,.route-info,.leaflet-marker-icon,.leaflet-tooltip,.leaflet-popup,#mapActionChooser,#areaClickChooser,#areaSearchBox,#pinCategoryChooser,#placeResultChooser,#categoryEditor,#pinNameEditor,#areaNameEditor')}
   mapEl.addEventListener('touchstart',function(ev){
    if(!ev.touches)return;
-   uiTouch=!!blockedTarget(ev.target);
+   uiTouch=!!blockedTarget(ev.target)||!!(window.p2mPinTouchNear&&ev.touches.length===1&&window.p2mPinTouchNear(ev.touches[0].clientX,ev.touches[0].clientY,45));
    if(uiTouch){clearTimer();start=null;moved=false;longPressOpened=false;return}
    if(ev.touches.length===1){
     var t=ev.touches[0];start={x:t.clientX,y:t.clientY};moved=false;longPressOpened=false;clearTimer();
@@ -3393,6 +3410,7 @@ function installMapPinGestures(){
    }
    if(!moved){
     var now=Date.now(),changed=ev.changedTouches&&ev.changedTouches[0];
+    if(changed&&window.p2mPinTouchNear&&window.p2mPinTouchNear(changed.clientX,changed.clientY,45)){start=null;moved=false;return}
     /* Einfinger-Doppeltipp: +1 Zoomstufe. */
     if(ev.touches&&ev.touches.length===0&&changed){
      if(now-lastOneTap<330){
