@@ -2877,13 +2877,13 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // Klick auf Pins verzögert öffnen, damit ein Doppelklick nicht zuerst das Popup zeigt.
+ // v10.11.18: Standarddialog sofort öffnen; Doppelklick/-tipp zoomt weiterhin.
  var pinClickTimer=null;
  marker.off('click');
  marker.on('click',function(ev){
   if(Date.now()<(marker._p2mSuppressClickUntil||0)){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}return;}
-  if(pinClickTimer)clearTimeout(pinClickTimer);
-  pinClickTimer=setTimeout(function(){pinClickTimer=null;if(Date.now()>=(marker._p2mSuppressClickUntil||0))marker.openPopup()},280);
+  // Nicht auf einen möglichen zweiten Klick warten.
+  marker.openPopup();
   if(ev&&ev.originalEvent)L.DomEvent.stopPropagation(ev.originalEvent);
  });
  marker.on('dblclick',function(ev){
@@ -2981,6 +2981,20 @@ function p2mEnablePinMove(it,marker){
    else marker._p2mMoveStarted=false;
    clear();moveUnlocked=false;touchReady=false;
   }
+  // Ein sofort geöffnetes Popup kann den zweiten Fingertipp überlagern.
+  // Nur einen zweiten Tipp in unmittelbarer Nähe des ersten Pin-Tipps abfangen.
+  function popupSecondTap(ev){
+   if(!lastTapAt||Date.now()-lastTapAt>400||!lastTapPoint||!ev.changedTouches||ev.changedTouches.length!==1)return;
+   var t=ev.changedTouches[0];
+   if(Math.hypot(t.clientX-lastTapPoint.x,t.clientY-lastTapPoint.y)>=35)return;
+   var popup=marker.getPopup&&marker.getPopup();
+   if(!popup||!popup.isOpen||!popup.isOpen())return;
+   lastTapAt=0;lastTapPoint=null;
+   marker._p2mSuppressClickUntil=Date.now()+900;
+   if(ev.cancelable)ev.preventDefault();ev.stopPropagation();
+   p2mZoomDoublePin(marker);
+  }
+  document.addEventListener('touchend',popupSecondTap,{passive:false,capture:true});
   el.addEventListener('mousedown',down,true);
   el.addEventListener('touchstart',down,{passive:false,capture:true});
   document.addEventListener('mousemove',move,true);
@@ -7564,4 +7578,11 @@ window.addEventListener('resize',function(){var root=getPopup();if(root){root.st
 })();
 </script>
 
+
+<!-- v10.11.19: Pin-Popup nach oben versetzen, damit der Pin für den zweiten Klick frei bleibt. -->
+<style id="p2m-1119-pin-popup-clearance">
+/* Leaflet positioniert das Popup relativ zum Marker über margin-bottom.
+   Nur Pin-Dialoge versetzen, andere Karten-Popups bleiben unverändert. */
+#mapScreen .leaflet-popup:has(.p2m-popup){margin-bottom:76px!important}
+</style>
 </body></html>
