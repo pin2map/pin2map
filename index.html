@@ -2274,10 +2274,15 @@ html,body{max-width:100%;overflow-x:hidden}
 #mapScreen #routeInfo.p10732-focused .route-legs .p10728-transit-leg.p10732-selected {
   background-color: #f5f8b9 !important;
 }
+
+/* v10.10.1: Oberes Pin-Info-Label ist ein eigenständiger Wetter-Link. */
+.elevation-label-wrap{pointer-events:auto!important}
+.p2m-pin-weather-link{cursor:pointer!important;text-decoration:none!important;pointer-events:auto!important;touch-action:manipulation;color:inherit!important}
+.p2m-pin-weather-link:focus-visible{outline:2px solid #0a84ff;outline-offset:2px}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.16)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.10.1)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -4042,7 +4047,7 @@ function p10735ShowLeg(i){
  if(p10732FocusedLeg===i)p10732ClearFocus();
  p10732FocusLeg(i,p10734Rows[i],p10734Legs[i],p10734Colors[i]);
 }
-// v10.9.16: iPhone-Etappenzoom anhand des TATSAECHLICH sichtbaren Kartenrechtecks.
+// v10.10.0: iPhone-Etappenzoom anhand des TATSAECHLICH sichtbaren Kartenrechtecks.
 // Unabhaengig von den frueheren fitBounds-Overrides und von pointer:coarse.
 function p2m10913FitVisibleRoute(bounds,maxZoom){
  if(!map||!bounds||!bounds.isValid()||window.innerWidth>700)return false;
@@ -4422,13 +4427,23 @@ function renderElevationLabel(it){
   if(sunParts.length===2)labelHtml='<span class="p2m-label-half p2m-label-rise">'+sunParts[0]+'</span><span class="p2m-label-half p2m-label-set">'+sunParts[1]+'</span>';
  }
  var ll=it._pinLayer.getLatLng();
- it._elevationLayer=L.marker(ll,{interactive:false,zIndexOffset:450,icon:L.divIcon({
+ // v10.10.1: Das obere Info-Label öffnet immer die Wetterprognose des Pins.
+ // Der Link nutzt die Pin-Koordinaten, unabhängig von der angezeigten Information.
+ var weatherUrl='https://www.windy.com/'+Number(ll.lat).toFixed(5)+'/'+Number(ll.lng).toFixed(5);
+ it._elevationLayer=L.marker(ll,{interactive:true,zIndexOffset:450,icon:L.divIcon({
   className:'elevation-label-wrap',
-  html:'<div class="elevation-label'+(p2mInfoMode===2?' p2m-temperature-label':p2mInfoMode===3?' p2m-daily-label':p2mInfoMode===4?' p2m-sun-label':'')+'">'+labelHtml+'</div>',
+  html:'<a class="p2m-pin-weather-link elevation-label'+(p2mInfoMode===2?' p2m-temperature-label':p2mInfoMode===3?' p2m-daily-label':p2mInfoMode===4?' p2m-sun-label':'')+'" href="'+weatherUrl+'" target="_blank" rel="noopener noreferrer" title="Wetterprognose für diesen Pin öffnen" aria-label="Wetterprognose für diesen Pin öffnen">'+labelHtml+'</a>',
   iconSize:null,iconAnchor:[0,42]
  })}).addTo(categoryLayers[it.category]);
+ it._elevationLayer.on('click',function(e){if(e.originalEvent)L.DomEvent.stopPropagation(e.originalEvent)});
  markFilterApplyOne(it);
 }
+
+// v10.10.1: Klicks auf Wetter-Labels dürfen nicht gleichzeitig den Pin/die Karte bedienen.
+document.addEventListener('click',function(e){
+ var link=e.target&&e.target.closest&&e.target.closest('.p2m-pin-weather-link');
+ if(link)e.stopPropagation();
+},true);
 function allCurrentPinItems(){return markFilterEntries.filter(function(it){return !!(it&&!it.area&&it._pinLayer)})}
 function refreshElevationLabels(){allCurrentPinItems().forEach(renderElevationLabel)}
 function syncElevationButton(){
@@ -7314,7 +7329,7 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
 })();
 </script>
 
-<!-- v10.9.16: iPad / Touch-Tablet bekommt dieselbe direkte Etappenansicht wie iPhone und Mac. -->
+<!-- v10.10.0: iPad / Touch-Tablet bekommt dieselbe direkte Etappenansicht wie iPhone und Mac. -->
 <style id="p2m-10914-tablet-direct-legs">
 @media (min-width:601px) and (pointer:coarse),
        (min-width:601px) and (hover:none) {
