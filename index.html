@@ -2297,7 +2297,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 <style id="p2m-1122-confirm-style">.p2m-move-confirm{position:absolute;z-index:1200;display:flex;align-items:center;gap:5px;padding:5px 7px;background:#fff;border:2px solid #d88918;border-radius:9px;box-shadow:0 3px 12px #0005;font:600 12px system-ui;white-space:nowrap;pointer-events:auto}.p2m-move-confirm button{cursor:pointer;border:0;border-radius:5px;padding:3px 7px;font-size:17px;background:#e9ecef}.p2m-move-confirm .p2m-move-ok{background:#d9f1de;color:#176c31}.p2m-pin-await-confirm{filter:drop-shadow(0 0 5px #f59e0b) drop-shadow(0 0 3px #f59e0b)!important}</style></head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.24)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.25)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2889,7 +2889,7 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // v10.11.24: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
+ // v10.11.25: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
  var pinClickTimer=null;
  var pendingMove=null;
  var activeGhost=null;
@@ -2974,7 +2974,7 @@ function p2mEnablePinMove(it,marker){
   controls.querySelector('.p2m-move-cancel').addEventListener('click',function(e){e.stopPropagation();cancelPending()});
   mapStatus.textContent='Pin verschoben – Position bestätigen oder rückgängig machen';
  }
- // v10.11.24: Tippen sofort, Halten ohne Bewegung = Zoom,
+ // v10.11.25: Tippen sofort, Halten ohne Bewegung = Zoom,
  // Halten mit deutlicher Bewegung = Verschieben. Kein Pin-Doppeltipp-Zoom.
  if(marker.dragging)marker.dragging.disable();
  marker.on('dragstart',function(){if(marker.dragging)marker.dragging.disable()});
@@ -7517,10 +7517,18 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
 #mapScreen .leaflet-popup .p2m-wx-grid {width:100%}
 #mapScreen .leaflet-popup .p2m-wx-row .p2m-wx-icon {font-size:19px}
 </style>
+<style id="p2m-1125-weather-layout">
+#mapScreen .leaflet-popup .p2m-wx-current .p2m-wx-temp{font-size:22px!important}
+#mapScreen .leaflet-popup .p2m-wx-mainline{display:flex;align-items:center;gap:9px;white-space:nowrap}
+#mapScreen .leaflet-popup .p2m-wx-mainline .p2m-wx-icon{font-size:19px!important}
+#mapScreen .leaflet-popup .p2m-wx-amount{font-size:12px;font-weight:400;color:#344154}
+#mapScreen .leaflet-popup .p2m-wx-location{font-size:11px;line-height:1.35}
+#mapScreen .leaflet-popup .p2m-wx-head{font-size:8px}
+</style>
 <script id="p2m-1110-weather-script">
 (function(){
 'use strict';
-var cache=new Map(), weatherOnLabel=false;
+var cache=new Map(), placeCache=new Map(), weatherOnLabel=false;
 function getPopup(){return document.querySelector('.leaflet-popup .p2m-popup')}
 function symbol(code,night){
  if(code===0)return night?'🌙':'☀️';
@@ -7548,8 +7556,10 @@ function render(data){
  var hourKey=String(c.time||'').slice(0,13),hi=lookup.get(hourKey);
  if(hi!==undefined&&h.precipitation_probability)curProb=h.precipitation_probability[hi];
  var rainLabel=curCode>=71&&curCode<=77||curCode===85||curCode===86?'Schnee':curCode===45||curCode===48?'Nebel':'Niederschlag';
- var html='<div class="p2m-wx-current"><div><div class="p2m-wx-muted">Aktuelles Wetter</div><div><span class="p2m-wx-temp">'+fmt(c.temperature_2m)+' °C</span> <span class="p2m-wx-icon">'+symbol(curCode,c.is_day===0)+'</span></div><div>'+description(curCode)+' · Wind '+fmt(c.wind_speed_10m)+' km/h</div><div class="p2m-wx-muted">'+rainLabel+' '+fmt(curRain,1)+' mm'+(curProb===null?'':' ('+fmt(curProb)+' %)')+' · aktuell / 1 Std.</div></div><div class="p2m-wx-today"><div class="p2m-wx-muted">Heute</div><b>'+fmt((d.temperature_2m_min||[])[0])+'° / '+fmt((d.temperature_2m_max||[])[0])+'°</b></div></div>';
- html+='<div class="p2m-wx-grid p2m-wx-head"><span>Tag</span><span>Mo.</span><span>Mi.</span><span>Ab.</span><span>Na.</span><span>Min/Max</span><span>mm</span></div>';
+ var raining=(curCode>=51&&curCode<=67)||(curCode>=80&&curCode<=82)||(curCode>=95&&curCode<=99);
+ var rainExtra=raining?'<span class="p2m-wx-amount">('+fmt(curRain,1)+' mm)</span>':'';
+ var html='<div class="p2m-wx-current"><div><div class="p2m-wx-muted p2m-wx-location">Aktuelles Wetter am Standort</div><div class="p2m-wx-mainline"><span class="p2m-wx-temp">'+fmt(c.temperature_2m)+' °C</span><span class="p2m-wx-icon">'+symbol(curCode,c.is_day===0)+'</span>'+rainExtra+'</div><div>'+description(curCode)+' · Wind '+fmt(c.wind_speed_10m)+' km/h</div></div><div class="p2m-wx-today"><div class="p2m-wx-muted">Heute</div><b>'+fmt((d.temperature_2m_min||[])[0])+'° / '+fmt((d.temperature_2m_max||[])[0])+'°</b></div></div>';
+ html+='<div class="p2m-wx-grid p2m-wx-head"><span>Tag</span><span>8:00</span><span>13:00</span><span>19:00</span><span>1:00</span><span>Min/Max</span><span>mm</span></div>';
  var dates=d.time;
  dates.slice(0,7).forEach(function(date,i){
   var wd=['So','Mo','Di','Mi','Do','Fr','Sa'][new Date(date+'T12:00:00').getDay()];
@@ -7557,6 +7567,15 @@ function render(data){
   html+='<div class="p2m-wx-grid p2m-wx-row"><span class="p2m-wx-day">'+wd+'</span>'+icons.map(function(x){return '<span class="p2m-wx-icon">'+x+'</span>'}).join('')+'<span class="p2m-wx-tmax">'+fmt((d.temperature_2m_min||[])[i])+'°/'+fmt((d.temperature_2m_max||[])[i])+'°</span><span class="p2m-wx-rain">'+fmt((d.precipitation_sum||[])[i],1)+'</span></div>';
  });
  return html+'<div class="p2m-wx-foot">Open-Meteo · Tageswerte in Ortszeit · Nacht: 01 Uhr des Folgetags</div>';
+}
+function updatePlace(panel,key,lat,lon){
+ var title=panel.querySelector('.p2m-wx-location');if(!title)return;
+ function show(place){var current=panel.querySelector('.p2m-wx-location');if(current)current.textContent='Aktuelles Wetter '+(place?'in '+place:'am Standort');}
+ if(placeCache.has(key)){show(placeCache.get(key));return}
+ fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&addressdetails=1&lat='+encodeURIComponent(lat)+'&lon='+encodeURIComponent(lon),{headers:{'Accept':'application/json'}})
+ .then(function(r){if(!r.ok)throw Error('Ortsauflösung '+r.status);return r.json()})
+ .then(function(info){var a=info.address||{};var place=a.city||a.town||a.village||a.municipality||a.hamlet||a.county||'';placeCache.set(key,place);if(panel.isConnected)show(place)})
+ .catch(function(){if(panel.isConnected)show('')});
 }
 function stabilize(root){
  if(!root)return;
@@ -7582,13 +7601,13 @@ function loadWeather(root){
  if(!it||!it._pinLayer){panel.textContent='Pin-Koordinaten konnten nicht ermittelt werden.';return}
  var ll=it._pinLayer.getLatLng();
  var key=ll.lat.toFixed(4)+','+ll.lng.toFixed(4),entry=cache.get(key);
- if(entry&&Date.now()-entry.time<15*60*1000){panel.innerHTML=entry.html;return}
+ if(entry&&Date.now()-entry.time<15*60*1000){panel.innerHTML=entry.html;updatePlace(panel,key,entry.lat,entry.lon);return}
  panel.innerHTML='<div class="p2m-wx-status" role="status">Wettervorhersage wird geladen …</div>';
  var url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(ll.lat)+'&longitude='+encodeURIComponent(ll.lng)+'&current=temperature_2m,weather_code,wind_speed_10m,precipitation,is_day&hourly=weather_code,precipitation_probability&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=8&timezone=auto';
  fetch(url).then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(function(data){
   if(data.error)throw Error(data.reason||'Fehler beim Wetterdienst');
-  var html=render(data);cache.set(key,{time:Date.now(),html:html});
-  if(panel.isConnected&&field.getAttribute('data-p2m-name-id')===id)panel.innerHTML=html;
+  var html=render(data);cache.set(key,{time:Date.now(),html:html,lat:data.latitude||ll.lat,lon:data.longitude||ll.lng});
+  if(panel.isConnected&&field.getAttribute('data-p2m-name-id')===id){panel.innerHTML=html;updatePlace(panel,key,data.latitude||ll.lat,data.longitude||ll.lng)}
  }).catch(function(err){
   if(panel.isConnected)panel.innerHTML='<div class="p2m-wx-status" role="status">Wetterdaten konnten nicht geladen werden.<div class="p2m-wx-muted">Internetverbindung oder Zugriff auf Open-Meteo prüfen.</div><button type="button" class="p2m-wx-retry">Erneut versuchen</button></div>';
   console.warn('pin2map Wetter:',err);
