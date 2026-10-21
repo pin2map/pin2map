@@ -2275,7 +2275,7 @@ html,body{max-width:100%;overflow-x:hidden}
   background-color: #f5f8b9 !important;
 }
 
-/* v10.11.8: Oberes Pin-Info-Label ist ein eigenständiger Wetter-Link. */
+/* v10.11.9: Oberes Pin-Info-Label ist ein eigenständiger Wetter-Link. */
 .elevation-label-wrap{pointer-events:auto!important}
 .p2m-pin-weather-link{cursor:pointer!important;text-decoration:none!important;pointer-events:auto!important;touch-action:manipulation;color:inherit!important}
 .p2m-pin-weather-link:focus-visible{outline:2px solid #0a84ff;outline-offset:2px}
@@ -2297,7 +2297,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.8)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.9)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2466,7 +2466,7 @@ function markFilterZoom(){
  else if(markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote)mapStatus.textContent='Keine passenden Markierungen gefunden.';
 }
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
-// v10.11.8: Wetterdienst ist eine Projekteinstellung; localStorage dient nur als Zwischenablage.
+// v10.11.9: Wetterdienst ist eine Projekteinstellung; localStorage dient nur als Zwischenablage.
 var p2mWeatherProvider='meteoblue';
 try{var p2mWeatherCached=localStorage.getItem('p2mWeatherProvider');if(p2mWeatherCached==='windy'||p2mWeatherCached==='meteoblue'||p2mWeatherCached==='yr')p2mWeatherProvider=p2mWeatherCached}catch(e){}
 function p2mSetWeatherProvider(provider){
@@ -2883,7 +2883,7 @@ function p2mEnablePinMove(it,marker){
  marker.on('click',function(ev){
   if(Date.now()<(marker._p2mSuppressClickUntil||0)){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}return;}
   if(pinClickTimer)clearTimeout(pinClickTimer);
-  pinClickTimer=setTimeout(function(){pinClickTimer=null;if(Date.now()>=(marker._p2mSuppressClickUntil||0))marker.openPopup()},180);
+  pinClickTimer=setTimeout(function(){pinClickTimer=null;if(Date.now()>=(marker._p2mSuppressClickUntil||0))marker.openPopup()},280);
   if(ev&&ev.originalEvent)L.DomEvent.stopPropagation(ev.originalEvent);
  });
  marker.on('dblclick',function(ev){
@@ -4467,7 +4467,7 @@ function renderElevationLabel(it){
   if(sunParts.length===2)labelHtml='<span class="p2m-label-half p2m-label-rise">'+sunParts[0]+'</span><span class="p2m-label-half p2m-label-set">'+sunParts[1]+'</span>';
  }
  var ll=it._pinLayer.getLatLng();
- // v10.11.8: Das obere Info-Label öffnet immer die Wetterprognose des Pins.
+ // v10.11.9: Das obere Info-Label öffnet immer die Wetterprognose des Pins.
  // Der Link nutzt die Pin-Koordinaten, unabhängig von der angezeigten Information.
  var weatherUrl=p2mWeatherUrl(ll.lat,ll.lng);
  it._elevationLayer=L.marker(ll,{interactive:true,zIndexOffset:450,icon:L.divIcon({
@@ -6098,7 +6098,7 @@ if(legendToggle)legendToggle.onclick=function(e){e.preventDefault();e.stopPropag
 })();
 var _buildLegendV854=buildLegend;buildLegend=function(items){_buildLegendV854(items);syncLegendToggle()};
 
-/* v10.11.8: Listenansicht um ein Einstellungs-Tab ergänzen. */
+/* v10.11.9: Listenansicht um ein Einstellungs-Tab ergänzen. */
 (function(){
  var listTab=document.getElementById('p2mListTab'),settingsTab=document.getElementById('p2mSettingsTab');
  function showSettings(open){form.classList.toggle('p2m-settings-open',open);listTab.setAttribute('aria-selected',String(!open));settingsTab.setAttribute('aria-selected',String(open))}
@@ -7439,6 +7439,14 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
 @media(max-width:390px){.p2m-wx-grid{grid-template-columns:25px repeat(4,minmax(0,1fr)) 62px 32px}.p2m-wx-row{font-size:11px}.p2m-wx-icon{font-size:19px}}
 
 
+
+/* v10.11.9: kompakte Wetterdaten, ohne Änderungen am Dialograhmen. */
+#mapScreen .leaflet-popup .p2m-wx-status {padding:18px 7px;text-align:center;line-height:1.7;color:#46566a}
+#mapScreen .leaflet-popup .p2m-wx-retry {display:inline-block;margin-top:12px;border:1px solid #b5c5d8;border-radius:8px;padding:7px 12px;background:#fff;color:#173e67;cursor:pointer;font-size:12px}
+#mapScreen .leaflet-popup .p2m-wx-today {text-align:right;white-space:nowrap}
+#mapScreen .leaflet-popup .p2m-wx-current {align-items:flex-start;line-height:1.45}
+#mapScreen .leaflet-popup .p2m-wx-grid {width:100%}
+#mapScreen .leaflet-popup .p2m-wx-row .p2m-wx-icon {font-size:19px}
 </style>
 <script id="p2m-1110-weather-script">
 (function(){
@@ -7460,15 +7468,26 @@ function description(code){if(code===0)return 'Klar';if(code<=2)return 'Leicht b
 function n(x,d){return Number.isFinite(Number(x))?Number(x).toLocaleString('de-DE',{maximumFractionDigits:d||0}):'–'}
 function escapeText(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function render(data){
- var h=data.hourly,d=data.daily,c=data.current||{},html='<div class="p2m-wx-current"><div><div class="p2m-wx-muted">Aktuelles Wetter</div><div><span class="p2m-wx-temp">'+n(c.temperature_2m)+' °C</span> <span class="p2m-wx-icon">'+symbol(c.weather_code,false)+'</span></div><div>'+description(c.weather_code)+' · Wind '+n(c.wind_speed_10m)+' km/h</div><div class="p2m-wx-muted">Niederschlag heute '+n(d.precipitation_sum[0],1)+' mm ('+n(d.precipitation_probability_max[0])+' %)</div></div><div style="text-align:right"><div class="p2m-wx-muted">Heute</div><b>'+n(d.temperature_2m_min[0])+'° / '+n(d.temperature_2m_max[0])+'°</b></div></div>';
+ var h=data.hourly||{},d=data.daily||{},c=data.current||{};
+ if(!Array.isArray(d.time)||!d.time.length)throw Error('Keine Tagesprognose erhalten');
+ var fmt=function(v,digits){return v===null||v===undefined||!Number.isFinite(Number(v))?'–':Number(v).toLocaleString('de-DE',{maximumFractionDigits:digits||0})};
+ var curCode=c.weather_code;
+ var curRain=c.precipitation;
+ var curProb=null;
+ var ht=h.time||[],lookup=new Map();
+ ht.forEach(function(t,i){lookup.set(t.slice(0,13),i)});
+ var hourKey=String(c.time||'').slice(0,13),hi=lookup.get(hourKey);
+ if(hi!==undefined&&h.precipitation_probability)curProb=h.precipitation_probability[hi];
+ var rainLabel=curCode>=71&&curCode<=77||curCode===85||curCode===86?'Schnee':curCode===45||curCode===48?'Nebel':'Niederschlag';
+ var html='<div class="p2m-wx-current"><div><div class="p2m-wx-muted">Aktuelles Wetter</div><div><span class="p2m-wx-temp">'+fmt(c.temperature_2m)+' °C</span> <span class="p2m-wx-icon">'+symbol(curCode,c.is_day===0)+'</span></div><div>'+description(curCode)+' · Wind '+fmt(c.wind_speed_10m)+' km/h</div><div class="p2m-wx-muted">'+rainLabel+' '+fmt(curRain,1)+' mm'+(curProb===null?'':' ('+fmt(curProb)+' %)')+' · aktuell / 1 Std.</div></div><div class="p2m-wx-today"><div class="p2m-wx-muted">Heute</div><b>'+fmt((d.temperature_2m_min||[])[0])+'° / '+fmt((d.temperature_2m_max||[])[0])+'°</b></div></div>';
  html+='<div class="p2m-wx-grid p2m-wx-head"><span>Tag</span><span>Mo.</span><span>Mi.</span><span>Ab.</span><span>Na.</span><span>Min/Max</span><span>mm</span></div>';
- var dates=d.time||[],ht=h.time||[];var lookup=new Map();ht.forEach(function(t,i){lookup.set(t.slice(0,13),i)});
+ var dates=d.time;
  dates.slice(0,7).forEach(function(date,i){
   var wd=['So','Mo','Di','Mi','Do','Fr','Sa'][new Date(date+'T12:00:00').getDay()];
-  var icons=[8,13,19,1].map(function(hour,j){var key=j===3?dates[i+1]:date;if(!key)return '–';var index=lookup.get(key+'T'+String(hour).padStart(2,'0'));return index===undefined?'–':symbol(h.weather_code[index],j===3)});
-  html+='<div class="p2m-wx-grid p2m-wx-row"><span class="p2m-wx-day">'+wd+'</span>'+icons.map(function(x){return '<span class="p2m-wx-icon">'+x+'</span>'}).join('')+'<span class="p2m-wx-tmax">'+n(d.temperature_2m_min[i])+'°/'+n(d.temperature_2m_max[i])+'°</span><span class="p2m-wx-rain">'+n(d.precipitation_sum[i],1)+'</span></div>';
+  var icons=[8,13,19,1].map(function(hour,j){var key=j===3?dates[i+1]:date;if(!key)return '–';var index=lookup.get(key+'T'+String(hour).padStart(2,'0'));return index===undefined?'–':symbol((h.weather_code||[])[index],j===3)});
+  html+='<div class="p2m-wx-grid p2m-wx-row"><span class="p2m-wx-day">'+wd+'</span>'+icons.map(function(x){return '<span class="p2m-wx-icon">'+x+'</span>'}).join('')+'<span class="p2m-wx-tmax">'+fmt((d.temperature_2m_min||[])[i])+'°/'+fmt((d.temperature_2m_max||[])[i])+'°</span><span class="p2m-wx-rain">'+fmt((d.precipitation_sum||[])[i],1)+'</span></div>';
  });
- return html+'<div class="p2m-wx-foot">Vorhersage: Open-Meteo · Nacht = Folgetag 01 Uhr</div>';
+ return html+'<div class="p2m-wx-foot">Open-Meteo · Tageswerte in Ortszeit · Nacht: 01 Uhr des Folgetags</div>';
 }
 function stabilize(root){
  if(!root)return;
@@ -7486,17 +7505,27 @@ function stabilize(root){
 }
 function setMode(on){var root=getPopup();if(!root)return;stabilize(root);root.classList.toggle('p2m-weather-active',!!on);var b=root.querySelector('.p2m-weather-toggle');if(b){b.textContent=on?'↩':'🌦️';b.title=on?'Zurück zum Pin':'Wettervorhersage';b.setAttribute('aria-label',b.title)}if(on)loadWeather(root)}
 function loadWeather(root){
- var field=root.querySelector('[data-p2m-name-id]');if(!field)return;
+ var field=root.querySelector('[data-p2m-name-id]'),panel=root.querySelector('.p2m-weather-panel');
+ if(!panel)return;
+ if(!field){panel.textContent='Pin-Koordinaten konnten nicht ermittelt werden.';return}
  var id=field.getAttribute('data-p2m-name-id'),it=typeof pinDeleteItems!=='undefined'?pinDeleteItems[id]:null;
- if(!it||!it._pinLayer)return;
- var ll=it._pinLayer.getLatLng(),panel=root.querySelector('.p2m-weather-panel');if(!panel)return;
+ if(!it||!it._pinLayer){panel.textContent='Pin-Koordinaten konnten nicht ermittelt werden.';return}
+ var ll=it._pinLayer.getLatLng();
  var key=ll.lat.toFixed(4)+','+ll.lng.toFixed(4),entry=cache.get(key);
  if(entry&&Date.now()-entry.time<15*60*1000){panel.innerHTML=entry.html;return}
- panel.textContent='Wettervorhersage wird geladen …';
- var url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(ll.lat)+'&longitude='+encodeURIComponent(ll.lng)+'&current=temperature_2m,weather_code,wind_speed_10m&hourly=weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&forecast_days=8&timezone=auto';
- fetch(url).then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(function(data){var html=render(data);cache.set(key,{time:Date.now(),html:html});if(panel.isConnected)panel.innerHTML=html}).catch(function(){if(panel.isConnected)panel.textContent='Wetterdaten nicht verfügbar. Bitte Internetverbindung prüfen.'});
+ panel.innerHTML='<div class="p2m-wx-status" role="status">Wettervorhersage wird geladen …</div>';
+ var url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(ll.lat)+'&longitude='+encodeURIComponent(ll.lng)+'&current=temperature_2m,weather_code,wind_speed_10m,precipitation,is_day&hourly=weather_code,precipitation_probability&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=8&timezone=auto';
+ fetch(url).then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(function(data){
+  if(data.error)throw Error(data.reason||'Fehler beim Wetterdienst');
+  var html=render(data);cache.set(key,{time:Date.now(),html:html});
+  if(panel.isConnected&&field.getAttribute('data-p2m-name-id')===id)panel.innerHTML=html;
+ }).catch(function(err){
+  if(panel.isConnected)panel.innerHTML='<div class="p2m-wx-status" role="status">Wetterdaten konnten nicht geladen werden.<div class="p2m-wx-muted">Internetverbindung oder Zugriff auf Open-Meteo prüfen.</div><button type="button" class="p2m-wx-retry">Erneut versuchen</button></div>';
+  console.warn('pin2map Wetter:',err);
+ });
 }
 function prepare(){var root=getPopup();if(!root)return;var b=root.querySelector('.p2m-weather-toggle');if(!b)return;stabilize(root);if(weatherOnLabel){weatherOnLabel=false;setMode(true)}}
+document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('.p2m-wx-retry');if(!b)return;e.preventDefault();e.stopPropagation();var root=b.closest('.p2m-popup');if(root)loadWeather(root)},true);
 // Direkter Delegations-Handler: Button wird bereits vom echten Popup-HTML erzeugt.
 document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('.p2m-weather-toggle');if(!b)return;e.preventDefault();e.stopPropagation();setMode(!b.closest('.p2m-popup').classList.contains('p2m-weather-active'))},true);
 window.p2mWeatherOpenForPin=function(it){if(!it||!it._pinLayer)return;weatherOnLabel=true;it._pinLayer.openPopup();setTimeout(function(){prepare();weatherOnLabel=false},0)};
