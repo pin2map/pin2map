@@ -2340,7 +2340,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.47)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.48)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2941,7 +2941,7 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // v10.11.47: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
+ // v10.11.48: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
  var pinClickTimer=null;
  var pendingMove=null;
  var activeGhost=null;
@@ -3026,7 +3026,7 @@ function p2mEnablePinMove(it,marker){
   controls.querySelector('.p2m-move-cancel').addEventListener('click',function(e){e.stopPropagation();cancelPending()});
   mapStatus.textContent='Pin verschoben – Position bestätigen oder rückgängig machen';
  }
- // v10.11.47: Tippen sofort, Halten ohne Bewegung = Zoom,
+ // v10.11.48: Tippen sofort, Halten ohne Bewegung = Zoom,
  // Halten mit deutlicher Bewegung = Verschieben. Kein Pin-Doppeltipp-Zoom.
  if(marker.dragging)marker.dragging.disable();
  marker.on('dragstart',function(){if(marker.dragging)marker.dragging.disable()});
@@ -7991,4 +7991,39 @@ window.addEventListener('resize',function(){var root=getPopup();if(root){root.st
  }
 }
 </style>
+
+<style id="p2m-1148-iphone-header-aware-controls">
+/* Die Suchleiste ist auf iPhone eine eigene, feste Kopfzone.
+   Der Screenshot-Button ist die verlässliche Referenz für die erste Karten-Zeile. */
+@media(max-width:600px){
+ #mapScreen #back,#mapScreen #mapStyleButton,#mapScreen #currentLocationButton{
+  position:absolute!important;left:auto!important;
+  right:max(8px,env(safe-area-inset-right))!important;
+  bottom:auto!important;transform:none!important;translate:none!important;
+ }
+ #mapScreen #back{top:var(--p2m-iphone-controls-top,160px)!important}
+ #mapScreen #mapStyleButton{top:calc(var(--p2m-iphone-controls-top,160px) + var(--p2m-iphone-controls-step,54px))!important}
+ #mapScreen #currentLocationButton{top:calc(var(--p2m-iphone-controls-top,160px) + 2 * var(--p2m-iphone-controls-step,54px))!important}
+ #mapScreen #mapStyleMenu{top:calc(var(--p2m-iphone-controls-top,160px) + 2 * var(--p2m-iphone-controls-step,54px))!important;left:auto!important;right:max(8px,env(safe-area-inset-right))!important}
+}
+</style>
+<script id="p2m-1148-iphone-header-aware-controls-js">
+(function(){
+ function align(){
+  if(!window.matchMedia('(max-width:600px)').matches)return;
+  var screen=document.getElementById('mapScreen'),shot=document.getElementById('copyMap'),black=document.getElementById('back');
+  if(!screen||!shot||!black||screen.style.display==='none')return;
+  var sr=screen.getBoundingClientRect(),r=shot.getBoundingClientRect();
+  if(!r.height)return;
+  screen.style.setProperty('--p2m-iphone-controls-top',Math.max(0,r.top-sr.top).toFixed(2)+'px');
+  screen.style.setProperty('--p2m-iphone-controls-step',Math.max(54,r.height+8).toFixed(2)+'px');
+ }
+ function schedule(){requestAnimationFrame(function(){requestAnimationFrame(align)})}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',schedule,{once:true});else schedule();
+ window.addEventListener('load',schedule);window.addEventListener('resize',schedule,{passive:true});
+ window.addEventListener('orientationchange',schedule,{passive:true});
+ if(window.visualViewport)window.visualViewport.addEventListener('resize',schedule,{passive:true});
+ document.addEventListener('click',function(){setTimeout(align,50)},true);
+})();
+</script>
 </body></html>
