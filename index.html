@@ -2277,7 +2277,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.13)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.9.14)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -4042,7 +4042,7 @@ function p10735ShowLeg(i){
  if(p10732FocusedLeg===i)p10732ClearFocus();
  p10732FocusLeg(i,p10734Rows[i],p10734Legs[i],p10734Colors[i]);
 }
-// v10.9.13: iPhone-Etappenzoom anhand des TATSAECHLICH sichtbaren Kartenrechtecks.
+// v10.9.14: iPhone-Etappenzoom anhand des TATSAECHLICH sichtbaren Kartenrechtecks.
 // Unabhaengig von den frueheren fitBounds-Overrides und von pointer:coarse.
 function p2m10913FitVisibleRoute(bounds,maxZoom){
  if(!map||!bounds||!bounds.isValid()||window.innerWidth>700)return false;
@@ -7302,6 +7302,49 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
    delete o.padding;
    return original.call(m,bounds,o);
   };
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<!-- v10.9.14: iPad / Touch-Tablet bekommt dieselbe direkte Etappenansicht wie iPhone und Mac. -->
+<style id="p2m-10914-tablet-direct-legs">
+@media (min-width:601px) and (pointer:coarse),
+       (min-width:601px) and (hover:none) {
+  #mapScreen #routeInfo .route-toolbar-details {display:none!important}
+  #mapScreen #routeInfo .route-legs {display:block!important;max-height:none!important;overflow:visible!important}
+  #mapScreen #routeInfo .route-main {height:auto!important;max-height:none!important;overflow:visible!important}
+  #mapScreen #routeInfo {overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important;scrollbar-width:none!important}
+  #mapScreen #routeInfo::-webkit-scrollbar {display:none!important}
+}
+</style>
+<script id="p2m-10914-tablet-direct-legs-js">
+(function(){
+ function tablet(){return window.innerWidth>600 && (matchMedia('(pointer:coarse)').matches||matchMedia('(hover:none)').matches) && !matchMedia('(pointer:fine) and (hover:hover)').matches;}
+ function init(){
+  var box=document.getElementById('routeInfo'),legs=document.getElementById('routeLegs');
+  if(!box||!legs)return;
+  var pending=false;
+  function update(){
+   pending=false;
+   if(!tablet())return;
+   box.style.removeProperty('height');box.style.removeProperty('min-height');box.style.removeProperty('max-height');
+   var a=box.getBoundingClientRect(),b=legs.getBoundingClientRect();
+   if(!a.height||!b.height||b.top<a.top)return;
+   var hasRoute=legs.children.length>0;
+   var h=Math.max(100,Math.round(b.top-a.top+(hasRoute?66:-9)));
+   box.style.setProperty('height',h+'px','important');
+   box.style.setProperty('min-height',h+'px','important');
+   box.style.setProperty('max-height',h+'px','important');
+   box.classList.add('route-details-open');
+  }
+  function schedule(){if(!pending){pending=true;requestAnimationFrame(update);}}
+  new MutationObserver(schedule).observe(legs,{childList:true});
+  var summary=document.getElementById('routeSummary');
+  if(summary)new MutationObserver(schedule).observe(summary,{childList:true,subtree:true,characterData:true});
+  document.querySelectorAll('[data-route-mode]').forEach(function(el){el.addEventListener('click',function(){setTimeout(schedule,0);});});
+  window.addEventListener('resize',schedule,{passive:true});
+  schedule();
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
