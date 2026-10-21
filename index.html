@@ -769,8 +769,7 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 #mapScreen .topbar #quickAreaBtn{background:#d5f3dc!important;color:#145d30!important;border:1px solid #8bd4a0!important}
 #mapScreen .topbar #quickWaterBtn{background:#d5edff!important;color:#075da3!important;border:1px solid #88c9f5!important}
 #mapScreen .topbar #quickPlace{font-size:16px!important}
-#mapScreen .topbar .quick-place button small{display:none!important}#river980List{margin:10px 0;padding:10px;background:#fff;border:1px solid #ddd;border-radius:12px}
-#river980List button{background:#e53935;color:#fff;padding:7px 11px;font-size:14px}
+#mapScreen .topbar .quick-place button small{display:none!important}
 @media(max-width:600px){#mapScreen .topbar{width:calc(100vw - 26px)!important}#mapScreen .topbar .quick-place button{flex-basis:45px!important;width:45px!important;min-width:45px!important;height:45px!important;min-height:45px!important;font-size:19px!important}}
 
 
@@ -990,14 +989,6 @@ button,#mapActionChooser button,.leaflet-popup-content button{font-weight:400!im
 
 
 #mapScreen #routeVisiblePins{display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important}#mapScreen #routeVisiblePins .route-all-icon{display:block!important;width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;flex:none!important;overflow:visible!important;pointer-events:none!important}
-
-
-.gpx-start-import{margin:12px 0;padding:12px;border:1px solid #c5c8ce;border-radius:12px;background:#f8f9fb;color:#24272b;font:inherit}
-.gpx-start-actions{display:flex;flex-wrap:wrap;gap:8px;margin:9px 0}
-.gpx-start-actions button{border:1px solid #b5bdca;border-radius:9px;background:#e4ebfa;color:#15335b;padding:9px 12px;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
-.gpx-start-import small{display:block;color:#565d66;line-height:1.4}
-#gpxStartStatus{margin:6px 0 0;font-size:13px;white-space:pre-line}
-
 
 
 /* V9.10.34: ausschließlich Such-/Filter-Bedienelemente. */
@@ -2280,21 +2271,6 @@ html,body{max-width:100%;overflow-x:hidden}
 .p2m-pin-weather-link{cursor:pointer!important;text-decoration:none!important;pointer-events:auto!important;touch-action:manipulation;color:inherit!important}
 .p2m-pin-weather-link:focus-visible{outline:2px solid #0a84ff;outline-offset:2px}
 </style>
-<style id="p2m-10102-settings-css">
-#p2mConfigTabs{display:flex;gap:8px;margin:12px 0 16px}
-#p2mConfigTabs button{flex:1;min-height:44px;border:1px solid #c5c5ca;border-radius:11px;background:#eeeef1;color:#242424;font-weight:650;font-size:16px}
-#p2mConfigTabs button[aria-selected="true"]{background:#147de8;color:white;border-color:#147de8}
-#p2mSettingsPanel{display:none;padding:12px 4px 26px;color:#222}
-#p2mSettingsPanel h2{font-size:22px;margin:0 0 12px}
-#p2mSettingsPanel fieldset{border:1px solid #d1d1d6;border-radius:13px;padding:15px;margin:0 0 16px}
-#p2mSettingsPanel legend{font-weight:700;padding:0 6px}
-#p2mSettingsPanel label{display:flex;gap:12px;align-items:center;padding:10px 0;font-size:17px;cursor:pointer}
-#p2mSettingsPanel input[type=radio]{width:20px;height:20px;accent-color:#147de8}
-#p2mSettingsPanel p{font-size:14px;color:#626269;line-height:1.45}
-#p2mSettingsBack{width:100%;min-height:46px;border:0;border-radius:11px;background:#e5e5ea;color:#222;font-size:17px}
-#formScreen.p2m-settings-open .list-name-option,#formScreen.p2m-settings-open #input,#formScreen.p2m-settings-open .gpx-start-import,#formScreen.p2m-settings-open .buttons,#formScreen.p2m-settings-open #river980List{display:none!important}
-#formScreen.p2m-settings-open #p2mSettingsPanel{display:block}
-</style>
 <style id="p2m-1122-confirm-style">.p2m-move-confirm{position:absolute;z-index:1200;display:flex;align-items:center;gap:5px;padding:5px 7px;background:#fff;border:2px solid #d88918;border-radius:9px;box-shadow:0 3px 12px #0005;font:600 12px system-ui;white-space:nowrap;pointer-events:auto}.p2m-move-confirm button{cursor:pointer;border:0;border-radius:5px;padding:3px 7px;font-size:17px;background:#e9ecef}.p2m-move-confirm .p2m-move-ok{background:#d9f1de;color:#176c31}.p2m-pin-await-confirm{filter:drop-shadow(0 0 5px #f59e0b) drop-shadow(0 0 3px #f59e0b)!important}</style><style id="p2m-1141-swap-location-info-positions">
 /* Nur die Kartenpositionen der beiden Schalter tauschen. */
 #mapScreen #currentLocationButton{
@@ -2344,19 +2320,8 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.53)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.55)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
-<div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
-<section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
-<h2>Projekteinstellungen</h2>
-<fieldset><legend>Wetterdienst für Pin-Info-Labels</legend>
-<label><input type="radio" name="p2mWeatherProvider" value="meteoblue" checked>meteoblue – mehrtägige Vorhersage</label>
-<label><input type="radio" name="p2mWeatherProvider" value="windy">Windy – Wetterkarte</label>
-<label><input type="radio" name="p2mWeatherProvider" value="yr">Yr.no – Koordinatensuche (Test)</label>
-</fieldset>
-<p>Ein Tipp auf das obere Info-Label eines Pins öffnet den ausgewählten Wetterdienst in einem neuen Tab. Yr.no ist ein Versuch über die Koordinatensuche; gegebenenfalls muss der passende Suchtreffer noch ausgewählt werden. Die Einstellung wird vorübergehend im Browser und beim Speichern in der .pin2map-Projektdatei gesichert. Beim Öffnen eines Projekts wird sie daraus wiederhergestellt.</p>
-<button id="p2mSettingsBack" type="button">Zurück zur Karte</button>
-</section>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
 
@@ -2375,8 +2340,8 @@ html,body{max-width:100%;overflow-x:hidden}
 # 🏁 [DarkCyan] Grau
 
 # 🐂 [SaddleBrown] Braun</textarea>
-<div class="gpx-start-import"><strong>🥾 GPX-Startpunkte</strong><div class="gpx-start-actions"><button type="button" id="gpxStartFiles">Dateien auswählen</button><button type="button" id="gpxStartFolder">Ordner auswählen</button></div><small>Ersten Koordinateneintrag jeder GPX-Datei übernehmen; anschließend „✓ Rendern“ wählen.</small><input type="file" id="gpxStartFilesInput" accept=".gpx,application/gpx+xml" multiple hidden><input type="file" id="gpxStartFolderInput" webkitdirectory directory multiple hidden><p id="gpxStartStatus" role="status" aria-live="polite"></p></div>
-<div class="buttons"><button id="addCategoryBtn" type="button" class="list-category-btn">＋ Kategorie</button><button id="clear" type="button" class="list-delete-btn">× Reset</button><button id="go">✓ Rendern</button><button id="cancelListBtn" type="button" class="list-cancel-btn">Zurück zur Karte</button></div><section id="river980List" aria-label="Routen und Flüsse"></section>
+<input type="file" id="gpxStartFilesInput" accept=".gpx,application/gpx+xml" multiple hidden><input type="file" id="gpxStartFolderInput" webkitdirectory directory multiple hidden>
+<div class="buttons"><button id="addCategoryBtn" type="button" class="list-category-btn">＋ Kategorie</button><button id="clear" type="button" class="list-delete-btn">× Reset</button><button id="go">✓ Rendern</button><button id="cancelListBtn" type="button" class="list-cancel-btn">Zurück zur Karte</button></div>
 
 <div id="p2mUrlModal" class="p2m-url-modal" role="dialog" aria-modal="true" aria-labelledby="p2mUrlModalTitle" hidden>
  <div class="p2m-url-modal-card">
@@ -2425,7 +2390,7 @@ html,body{max-width:100%;overflow-x:hidden}
     <button type="button" id="manualAreaSearchBtn" style="width:auto;padding:9px 14px;margin:0">Suchen</button>
   </div>
   <div id="manualAreaResults"></div>
-</div><button type="button" id="areaSearchClose" style="display:block;width:100%;margin-top:12px;background:#666">Abbrechen</button></div><div id="pinProgress" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5000;background:rgba(255,255,255,.96);color:#111;padding:14px 18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.28);font:600 15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;max-width:min(360px,82vw);pointer-events:none">⏳ Angeklickte Position wird ermittelt und der Pin gesetzt …</div><button type="button" id="labelToggle" class="label-toggle" title="Beschriftungen ein-/ausblenden" aria-label="Beschriftungen ein-/ausblenden">🏷️</button><button type="button" id="toggleElevations" class="elevation-toggle map-ui-control" title="Höhen ein-/ausblenden" aria-label="Höhen ein-/ausblenden"><span aria-hidden="true">m</span></button><div class="bottom"><button type="button" id="openProjectFile" class="list-round" title="pin2map- oder GPX-Datei öffnen" aria-label="pin2map- oder GPX-Datei öffnen">↑</button><button type="button" id="routePanelToggle" class="map-round-control map-ui-control" title="Kein Routing aktiv" aria-label="Routing (nicht aktiv)" aria-pressed="false" disabled>➰</button><button type="button" id="saveProjectFile" class="list-round" title="pin2map-Datei sichern" aria-label="pin2map-Datei sichern">↓</button></div><button type="button" id="back" class="back" title="Liste und Einstellungen" aria-label="Liste und Einstellungen">⚙</button><input id="projectFileInput" type="file" style="display:none"><div id="p107ImportDialog" class="p107-overlay" hidden role="dialog" aria-modal="true" aria-label="Importieren"><div class="p107-panel"><div class="p107-head"><strong id="p107ImportTitle">Importieren</strong><button type="button" id="p107ImportClose" aria-label="Schließen">✕</button></div><div id="p107ImportMain"><button type="button" id="p107ImportNormal" class="p107-choice p107-primary"><span>📄</span><span><b>pin2map</b> <span class="p107-or">oder</span> <b>GPX</b></span><span>›</span></button><button type="button" id="p107ImportHike" class="p107-choice"><span>🥾</span><span><span class="p107-hike-label"><b>GPX-Startpunkte</b><span>mit integrierten Tracks</span></span></span><span>›</span></button></div><div id="p107ImportHikeOptions" hidden><div class="p107-two"><button type="button" id="p107ImportHikeFiles">📄<b>Einzeldatei</b></button><button type="button" id="p107ImportHikeFolder">📁<b>Alle im Ordner</b></button></div><button type="button" id="p107ImportBack" class="p107-back">‹ Zurück</button></div><button type="button" id="p107ImportCancel" class="p107-cancel">Abbrechen</button></div></div>
+</div><button type="button" id="areaSearchClose" style="display:block;width:100%;margin-top:12px;background:#666">Abbrechen</button></div><div id="pinProgress" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5000;background:rgba(255,255,255,.96);color:#111;padding:14px 18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.28);font:600 15px -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;text-align:center;max-width:min(360px,82vw);pointer-events:none">⏳ Angeklickte Position wird ermittelt und der Pin gesetzt …</div><button type="button" id="labelToggle" class="label-toggle" title="Beschriftungen ein-/ausblenden" aria-label="Beschriftungen ein-/ausblenden">🏷️</button><button type="button" id="toggleElevations" class="elevation-toggle map-ui-control" title="Höhen ein-/ausblenden" aria-label="Höhen ein-/ausblenden"><span aria-hidden="true">m</span></button><div class="bottom"><button type="button" id="openProjectFile" class="list-round" title="pin2map- oder GPX-Datei öffnen" aria-label="pin2map- oder GPX-Datei öffnen">↑</button><button type="button" id="routePanelToggle" class="map-round-control map-ui-control" title="Kein Routing aktiv" aria-label="Routing (nicht aktiv)" aria-pressed="false" disabled>➰</button><button type="button" id="saveProjectFile" class="list-round" title="pin2map-Datei sichern" aria-label="pin2map-Datei sichern">↓</button></div><button type="button" id="back" class="back" title="Pins und Listen" aria-label="Pins und Listen">⚙</button><input id="projectFileInput" type="file" style="display:none"><div id="p107ImportDialog" class="p107-overlay" hidden role="dialog" aria-modal="true" aria-label="Importieren"><div class="p107-panel"><div class="p107-head"><strong id="p107ImportTitle">Importieren</strong><button type="button" id="p107ImportClose" aria-label="Schließen">✕</button></div><div id="p107ImportMain"><button type="button" id="p107ImportNormal" class="p107-choice p107-primary"><span>📄</span><span><b>pin2map</b> <span class="p107-or">oder</span> <b>GPX</b></span><span>›</span></button><button type="button" id="p107ImportHike" class="p107-choice"><span>🥾</span><span><span class="p107-hike-label"><b>GPX-Startpunkte</b><span>mit integrierten Tracks</span></span></span><span>›</span></button></div><div id="p107ImportHikeOptions" hidden><div class="p107-two"><button type="button" id="p107ImportHikeFiles">📄<b>Einzeldatei</b></button><button type="button" id="p107ImportHikeFolder">📁<b>Alle im Ordner</b></button></div><button type="button" id="p107ImportBack" class="p107-back">‹ Zurück</button></div><button type="button" id="p107ImportCancel" class="p107-cancel">Abbrechen</button></div></div>
 </section>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -2521,13 +2486,6 @@ function markFilterZoom(){
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
 // v10.11.10: Wetterdienst ist eine Projekteinstellung; localStorage dient nur als Zwischenablage.
 var p2mWeatherProvider='meteoblue';
-try{var p2mWeatherCached=localStorage.getItem('p2mWeatherProvider');if(p2mWeatherCached==='windy'||p2mWeatherCached==='meteoblue'||p2mWeatherCached==='yr')p2mWeatherProvider=p2mWeatherCached}catch(e){}
-function p2mSetWeatherProvider(provider){
- p2mWeatherProvider=(provider==='windy'||provider==='yr')?provider:'meteoblue';
- try{localStorage.setItem('p2mWeatherProvider',p2mWeatherProvider)}catch(e){}
- document.querySelectorAll('input[name="p2mWeatherProvider"]').forEach(function(el){el.checked=el.value===p2mWeatherProvider});
- if(typeof refreshElevationLabels==='function')refreshElevationLabels();
-}
 function p2mWeatherUrl(lat,lon){
  var a=Number(lat).toFixed(5),b=Number(lon).toFixed(5);
  if(p2mWeatherProvider==='yr')return 'https://www.yr.no/en/search?q='+encodeURIComponent(a+', '+b);
@@ -2951,7 +2909,7 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // v10.11.53: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
+ // v10.11.55: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
  var pinClickTimer=null;
  var pendingMove=null;
  var activeGhost=null;
@@ -3036,7 +2994,7 @@ function p2mEnablePinMove(it,marker){
   controls.querySelector('.p2m-move-cancel').addEventListener('click',function(e){e.stopPropagation();cancelPending()});
   
  }
- // v10.11.53: Tippen sofort, Halten ohne Bewegung = Zoom,
+ // v10.11.55: Tippen sofort, Halten ohne Bewegung = Zoom,
  // Halten mit deutlicher Bewegung = Verschieben. Kein Pin-Doppeltipp-Zoom.
  if(marker.dragging)marker.dragging.disable();
  marker.on('dragstart',function(){if(marker.dragging)marker.dragging.disable()});
@@ -4794,7 +4752,7 @@ function build(items){Object.keys(pinDeleteItems).forEach(function(k){delete pin
 function noteMissing(x){if(myBuild!==buildGeneration)return;miss++;missed.push(x.query);var box=document.getElementById('notFoundList');box.innerHTML='<b>⚠️ Nicht gefunden ('+missed.length+')</b><br>'+missed.map(function(v){return '• '+esc(v)}).join('<br>')}
 function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){p2mApplyImportedPinUrls();if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();if(miss)mapStatus.textContent='⚠️ '+miss+' nicht gefunden.';if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='alltext')markFilterApply(true);return}var x=items[idx],num=idx+1;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(x)}).addTo(categoryLayers[x.category]);x._pinLayer=marker;p2mEnablePinMove(x,marker);allBounds.extend(p);if(p2mHasPinName(x))marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x);p2mSyncNoteDot(x)}markFilterRegister(x);p2mSyncPinBadges(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
 document.getElementById('go').onclick=function(){var items=parse(input.value);formStatus.textContent='';form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);if(items.length)build(items);else clearMap()},150)};
-document.getElementById('back').onclick=function(){river980UpdateList();screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
+document.getElementById('back').onclick=function(){screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
 function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length){build(items);if(importedFromUrl)clearImportedDataFromUrl()}else{clearMap();var q=document.getElementById('quickPlace');if(q)q.blur()}},150)}
 var quickSearchNoticeTimer=null;
 function clearQuickSearchNotice(){var n=document.getElementById('quickSearchNotice');if(quickSearchNoticeTimer){clearTimeout(quickSearchNoticeTimer);quickSearchNoticeTimer=null}if(!n)return;n.textContent='';n.classList.remove('show','river-search-progress')}
@@ -5062,28 +5020,6 @@ function river1015ChooseColor(item){
  panel.appendChild(grid);var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Abbrechen';cancel.style.cssText='display:block;margin:14px 0 0 auto;background:#e5e5e9;color:#222;border-radius:8px;padding:9px 16px';cancel.onclick=function(){shade.remove()};panel.appendChild(cancel);
  shade.appendChild(panel);shade.addEventListener('click',function(e){if(e.target===shade)shade.remove()});document.body.appendChild(shade)
 }
-function river980UpdateList(){
- var host=document.getElementById('river980List');if(!host)return;
- host.innerHTML='';
- host.style.display='block';
- var heading=document.createElement('strong');heading.textContent='Routen und Flüsse';host.appendChild(heading);
- var tracks=(gpxLayer&&gpxLayer.getLayers)?gpxLayer.getLayers().filter(function(l){return l instanceof L.Polyline}):[];
- var route=projectRouteDocument();
- if(route&&route.items&&route.items.length){var r=document.createElement('div');r.textContent='🧭 Berechnete Route ('+route.items.length+' Punkte)';host.appendChild(r)}
- if(tracks.length){var r=document.createElement('div');r.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0';
- var t=document.createElement('span');t.textContent='🥾 GPX-Track ('+tracks.length+' Abschnitt'+(tracks.length===1?'':'e')+')';r.appendChild(t);
- var b=document.createElement('button');b.textContent='Entfernen';b.type='button';b.onclick=function(){if(!confirm('GPX-Track entfernen?'))return;removeImportedGpxTrack();river980UpdateList()};r.appendChild(b);host.appendChild(r)}
- if(!river959Saved.length&&!tracks.length&&!(route&&route.items&&route.items.length)){var empty=document.createElement('div');empty.textContent='Keine Routen oder Flüsse im Projekt';empty.style.cssText='color:#777;margin-top:8px';host.appendChild(empty)}
-
- river959Saved.forEach(function(item,index){
-  var row=document.createElement('div');row.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #eee';
-  var name=document.createElement('span');name.textContent=item.name;row.appendChild(name);
-  var color=document.createElement('button');color.type='button';color.textContent='Farbe';color.style.cssText='background:#e6f1ff;color:#125caa;padding:7px 10px;font-size:14px;margin-left:auto';color.onclick=function(){river1015ChooseColor(item)};row.appendChild(color);
-  var del=document.createElement('button');del.type='button';del.textContent='Entfernen';
-  del.onclick=function(){if(!confirm('Fluss „'+item.name+'“ entfernen?'))return;river959Saved.splice(index,1);if(river950Layer)river950Layer.clearLayers();river959Current=null;river959Render()};
-  row.appendChild(del);host.appendChild(row)
- })
-}
 function river1016LabelPosition(chains){
  var best=null,bestLength=0;
  (chains||[]).forEach(function(pts){
@@ -5124,7 +5060,7 @@ function river959Render(){
  if(!map)return;
  if(river959SavedLayer&&map.hasLayer(river959SavedLayer))map.removeLayer(river959SavedLayer);
  river959SavedLayer=L.layerGroup().addTo(map);
- river980UpdateList();
+ 
  river959Saved.forEach(function(item,index){
   var labelPos=river1016LabelPosition(item.chains);
   if(labelPos&&item.name){
@@ -5859,7 +5795,7 @@ function collectProjectCache(){
  }
  return cache
 }
-function projectDocument(){return {gpxStartRoutes:window.pin2mapExportStartRoutes?window.pin2mapExportStartRoutes():[],format:'pin2map',version:1,list:input.value,options:{labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value,optionalEsriRelief:optionalEsriRelief,showElevations:showElevations,weatherProvider:p2mWeatherProvider},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache(),rivers:river959Saved,gpxTracks:(gpxLayer&&gpxLayer.getLayers)?gpxLayer.getLayers().filter(function(l){return l instanceof L.Polyline&&!l.options._p2m106Hit}).map(function(l){return l.getLatLngs().map(function(p){return [p.lat,p.lng]})}):[],route:projectRouteDocument()}}
+function projectDocument(){return {gpxStartRoutes:window.pin2mapExportStartRoutes?window.pin2mapExportStartRoutes():[],format:'pin2map',version:1,list:input.value,options:{labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value,optionalEsriRelief:optionalEsriRelief,showElevations:showElevations},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache(),rivers:river959Saved,gpxTracks:(gpxLayer&&gpxLayer.getLayers)?gpxLayer.getLayers().filter(function(l){return l instanceof L.Polyline&&!l.options._p2m106Hit}).map(function(l){return l.getLatLngs().map(function(p){return [p.lat,p.lng]})}):[],route:projectRouteDocument()}}
 function suggestedProjectName(){
  var items=parse(input.value),first=items.filter(function(x){return !x.area})[0]||items[0],base=(first&&(first.label||first.query))||'pin2map';
  base=String(base).replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,60)||'pin2map';
@@ -6024,7 +5960,7 @@ function parseGpxText(txt){
  return {waypoints:wpts,tracks:tracks}
 }
 function updateGpxTrackControls(){var visible=!!gpxLayer,b=document.getElementById('removeGpxTrack');if(b)b.style.display=visible?'block':'none';updateGpxButton()}
-function removeImportedGpxTrack(){pendingGpxTracks=null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();river980UpdateList();mapStatus.textContent='GPX-Linie entfernt.';}
+function removeImportedGpxTrack(){pendingGpxTracks=null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();mapStatus.textContent='GPX-Linie entfernt.';}
 
 function drawPendingGpxTracks(){
  if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;
@@ -6062,8 +5998,8 @@ function openPin2MapProject(doc){
  if(!doc||doc.format!=='pin2map'||typeof doc.list!=='string')throw new Error('Keine gültige pin2map-Datei.');
  resetRoutingBeforeImport();
  if(window.pin2mapRestoreStartRoutes)window.pin2mapRestoreStartRoutes(doc.gpxStartRoutes);
- pendingGpxTracks=Array.isArray(doc.gpxTracks)&&doc.gpxTracks.length?doc.gpxTracks:null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();input.value=doc.list;river959Saved=Array.isArray(doc.rivers)?doc.rivers.filter(function(x){return x&&Array.isArray(x.chains)&&typeof x.name==='string'}):[];river980UpdateList();activeProjectCache=(doc.cache&&typeof doc.cache==='object')?doc.cache:{};pinNoteSession={};pinNoteByLocation=Object.create(null);pendingProjectRoute=(doc.route&&typeof doc.route==='object')?doc.route:null;setTimeout(function(){if(map){river959Render();autoZoomAllContent();p2mRefreshLoadedNoteBadges()}},600);
-  p2mSetWeatherProvider(doc.options&&doc.options.weatherProvider);
+ pendingGpxTracks=Array.isArray(doc.gpxTracks)&&doc.gpxTracks.length?doc.gpxTracks:null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();input.value=doc.list;river959Saved=Array.isArray(doc.rivers)?doc.rivers.filter(function(x){return x&&Array.isArray(x.chains)&&typeof x.name==='string'}):[];activeProjectCache=(doc.cache&&typeof doc.cache==='object')?doc.cache:{};pinNoteSession={};pinNoteByLocation=Object.create(null);pendingProjectRoute=(doc.route&&typeof doc.route==='object')?doc.route:null;setTimeout(function(){if(map){river959Render();autoZoomAllContent();p2mRefreshLoadedNoteBadges()}},600);
+
  if(doc.options){document.getElementById('labelAddresses').checked=doc.options.labelAddresses!==false;document.getElementById('labelAreas').checked=doc.options.labelAreas!==false;if(typeof doc.options.optionalEsriRelief==='boolean')setOptionalEsriRelief(doc.options.optionalEsriRelief);showElevations=false;p2mInfoMode=0;syncElevationButton();if(doc.options.mapStyle&&baseMaps[doc.options.mapStyle]){document.getElementById('mapStyle').value=doc.options.mapStyle;if(map)setBase(doc.options.mapStyle)}}
  form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();
  setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else{clearMap();if(pendingGpxTracks)drawPendingGpxTracks()};setTimeout(function(){if(doc.view&&Array.isArray(doc.view.center)&&doc.view.center.length===2&&isFinite(doc.view.zoom))map.setView(doc.view.center,doc.view.zoom);mapStatus.textContent='✓ pin2map-Projekt geladen.'},80)},80)
@@ -6275,16 +6211,6 @@ if(legendToggle)legendToggle.onclick=function(e){e.preventDefault();e.stopPropag
 })();
 var _buildLegendV854=buildLegend;buildLegend=function(items){_buildLegendV854(items);syncLegendToggle()};
 
-/* v10.11.10: Listenansicht um ein Einstellungs-Tab ergänzen. */
-(function(){
- var listTab=document.getElementById('p2mListTab'),settingsTab=document.getElementById('p2mSettingsTab');
- function showSettings(open){form.classList.toggle('p2m-settings-open',open);listTab.setAttribute('aria-selected',String(!open));settingsTab.setAttribute('aria-selected',String(open))}
- listTab.addEventListener('click',function(){showSettings(false)});
- settingsTab.addEventListener('click',function(){showSettings(true)});
- document.querySelectorAll('input[name="p2mWeatherProvider"]').forEach(function(el){el.addEventListener('change',function(){if(this.checked)p2mSetWeatherProvider(this.value)})});
- document.getElementById('p2mSettingsBack').addEventListener('click',function(){document.getElementById('cancelListBtn').click()});
- p2mSetWeatherProvider(p2mWeatherProvider);
-})();
 /* Listenansicht */
 document.getElementById('addCategoryBtn').onclick=function(){
  var v=input.value.replace(/\r/g,'').replace(/\s+$/,'');
@@ -6839,13 +6765,10 @@ document.addEventListener('click',async function(e){
 <script id="v91013-gpx-start-import">
 (function(){
 'use strict';
-var fileButton=document.getElementById('gpxStartFiles');
-var folderButton=document.getElementById('gpxStartFolder');
 var fileInput=document.getElementById('gpxStartFilesInput');
 var folderInput=document.getElementById('gpxStartFolderInput');
-var status=document.getElementById('gpxStartStatus');
 var list=document.getElementById('input');
-if(!fileButton||!folderButton||!fileInput||!folderInput||!list)return;
+if(!fileInput||!folderInput||!list)return;
 // iOS kann über webkitdirectory die Dateien eines Ordners bereitstellen.
 // Diese bestehende Ordnerauswahl darf auf Mobilgeräten nicht entfernt werden.
 // Nur den MIME-Dateifilter für die Einzeldateiauswahl auf iOS lockern.
@@ -6853,8 +6776,6 @@ var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||
  (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 if(isIOS){fileInput.removeAttribute('accept');}
 
-fileButton.addEventListener('click',function(){fileInput.click()});
-folderButton.addEventListener('click',function(){folderInput.click()});
 fileInput.addEventListener('change',function(){importFiles(fileInput.files);fileInput.value=''});
 folderInput.addEventListener('change',function(){importFiles(folderInput.files);folderInput.value=''});
 function nameFor(file){return file.name.replace(/\.gpx$/i,'').replace(/\s*\(\d+\)$/,'').replace(/_\d+_\d+$/,'').trim().replace(/[\r\n()]/g,' ').trim()}
@@ -6904,9 +6825,7 @@ function getFirstPosition(xml){
 }
 async function importFiles(fileList){
  var files=Array.from(fileList||[]).filter(function(f){return /\.gpx$/i.test(f.name)}).sort(function(a,b){return (a.webkitRelativePath||a.name).localeCompare(b.webkitRelativePath||b.name,'de',{numeric:true})});
- if(!files.length){status.textContent='Keine GPX-Dateien ausgewählt.';return}
- fileButton.disabled=folderButton.disabled=true;
- status.textContent=files.length+' GPX-Datei(en) werden eingelesen …';
+ if(!files.length)return;
  var lines=[],errors=[];
  for(var i=0;i<files.length;i++){
   try{
@@ -6926,8 +6845,7 @@ async function importFiles(fileList){
   list.dispatchEvent(new Event('input',{bubbles:true}));
  }
  document.dispatchEvent(new CustomEvent('p2mHikeImportFinished',{detail:{count:lines.length,errors:errors.length}}));
- status.textContent=lines.length+' Startpunkte zur Liste hinzugefügt.'+(errors.length?'\n'+errors.length+' Dateien übersprungen: '+errors.slice(0,5).join('; '):'')+'\nMit „✓ Rendern“ auf der Karte anzeigen.';
- fileButton.disabled=folderButton.disabled=false;
+ if(errors.length){var feedback=document.getElementById('formStatus');if(feedback)feedback.textContent='⚠️ '+errors.length+' GPX-Datei(en) übersprungen: '+errors.slice(0,5).join('; ');}
 }
 })();
 </script>
