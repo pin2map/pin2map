@@ -2275,7 +2275,7 @@ html,body{max-width:100%;overflow-x:hidden}
   background-color: #f5f8b9 !important;
 }
 
-/* v10.11.7: Oberes Pin-Info-Label ist ein eigenständiger Wetter-Link. */
+/* v10.11.8: Oberes Pin-Info-Label ist ein eigenständiger Wetter-Link. */
 .elevation-label-wrap{pointer-events:auto!important}
 .p2m-pin-weather-link{cursor:pointer!important;text-decoration:none!important;pointer-events:auto!important;touch-action:manipulation;color:inherit!important}
 .p2m-pin-weather-link:focus-visible{outline:2px solid #0a84ff;outline-offset:2px}
@@ -2297,7 +2297,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.7)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.8)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2466,7 +2466,7 @@ function markFilterZoom(){
  else if(markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote)mapStatus.textContent='Keine passenden Markierungen gefunden.';
 }
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
-// v10.11.7: Wetterdienst ist eine Projekteinstellung; localStorage dient nur als Zwischenablage.
+// v10.11.8: Wetterdienst ist eine Projekteinstellung; localStorage dient nur als Zwischenablage.
 var p2mWeatherProvider='meteoblue';
 try{var p2mWeatherCached=localStorage.getItem('p2mWeatherProvider');if(p2mWeatherCached==='windy'||p2mWeatherCached==='meteoblue'||p2mWeatherCached==='yr')p2mWeatherProvider=p2mWeatherCached}catch(e){}
 function p2mSetWeatherProvider(provider){
@@ -2883,7 +2883,7 @@ function p2mEnablePinMove(it,marker){
  marker.on('click',function(ev){
   if(Date.now()<(marker._p2mSuppressClickUntil||0)){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}return;}
   if(pinClickTimer)clearTimeout(pinClickTimer);
-  pinClickTimer=setTimeout(function(){pinClickTimer=null;if(Date.now()>=(marker._p2mSuppressClickUntil||0))marker.openPopup()},220);
+  pinClickTimer=setTimeout(function(){pinClickTimer=null;if(Date.now()>=(marker._p2mSuppressClickUntil||0))marker.openPopup()},180);
   if(ev&&ev.originalEvent)L.DomEvent.stopPropagation(ev.originalEvent);
  });
  marker.on('dblclick',function(ev){
@@ -4467,7 +4467,7 @@ function renderElevationLabel(it){
   if(sunParts.length===2)labelHtml='<span class="p2m-label-half p2m-label-rise">'+sunParts[0]+'</span><span class="p2m-label-half p2m-label-set">'+sunParts[1]+'</span>';
  }
  var ll=it._pinLayer.getLatLng();
- // v10.11.7: Das obere Info-Label öffnet immer die Wetterprognose des Pins.
+ // v10.11.8: Das obere Info-Label öffnet immer die Wetterprognose des Pins.
  // Der Link nutzt die Pin-Koordinaten, unabhängig von der angezeigten Information.
  var weatherUrl=p2mWeatherUrl(ll.lat,ll.lng);
  it._elevationLayer=L.marker(ll,{interactive:true,zIndexOffset:450,icon:L.divIcon({
@@ -6098,7 +6098,7 @@ if(legendToggle)legendToggle.onclick=function(e){e.preventDefault();e.stopPropag
 })();
 var _buildLegendV854=buildLegend;buildLegend=function(items){_buildLegendV854(items);syncLegendToggle()};
 
-/* v10.11.7: Listenansicht um ein Einstellungs-Tab ergänzen. */
+/* v10.11.8: Listenansicht um ein Einstellungs-Tab ergänzen. */
 (function(){
  var listTab=document.getElementById('p2mListTab'),settingsTab=document.getElementById('p2mSettingsTab');
  function showSettings(open){form.classList.toggle('p2m-settings-open',open);listTab.setAttribute('aria-selected',String(!open));settingsTab.setAttribute('aria-selected',String(open))}
