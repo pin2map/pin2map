@@ -2340,7 +2340,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.46)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.47)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
 <section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
@@ -2941,7 +2941,7 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // v10.11.46: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
+ // v10.11.47: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
  var pinClickTimer=null;
  var pendingMove=null;
  var activeGhost=null;
@@ -3026,7 +3026,7 @@ function p2mEnablePinMove(it,marker){
   controls.querySelector('.p2m-move-cancel').addEventListener('click',function(e){e.stopPropagation();cancelPending()});
   mapStatus.textContent='Pin verschoben – Position bestätigen oder rückgängig machen';
  }
- // v10.11.46: Tippen sofort, Halten ohne Bewegung = Zoom,
+ // v10.11.47: Tippen sofort, Halten ohne Bewegung = Zoom,
  // Halten mit deutlicher Bewegung = Verschieben. Kein Pin-Doppeltipp-Zoom.
  if(marker.dragging)marker.dragging.disable();
  marker.on('dragstart',function(){if(marker.dragging)marker.dragging.disable()});
@@ -7964,6 +7964,30 @@ window.addEventListener('resize',function(){var root=getPopup();if(root){root.st
  #mapScreen #legend .chip{
   box-sizing:border-box!important;
   flex-shrink:0!important;
+ }
+}
+</style>
+<style id="p2m-1147-iphone-top-right-stack">
+/* iPhone: drei obere rechte Kartenbuttons unabhängig von alten
+   responsiven Versätzen in derselben Reihenfolge wie am Desktop. */
+@media (max-width:600px){
+ #mapScreen #mapStyleButton,
+ #mapScreen #back,
+ #mapScreen #currentLocationButton{
+  position:absolute!important;
+  left:auto!important;
+  right:max(8px,env(safe-area-inset-right))!important;
+  bottom:auto!important;
+  translate:none!important;
+  transform:none!important;
+ }
+ #mapScreen #mapStyleButton{top:10px!important}
+ #mapScreen #back{top:64px!important}
+ #mapScreen #currentLocationButton{top:120px!important}
+ #mapScreen #mapStyleMenu{
+  left:auto!important;
+  right:max(8px,env(safe-area-inset-right))!important;
+  top:64px!important;
  }
 }
 </style>
