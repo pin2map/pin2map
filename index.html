@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -2316,7 +2316,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.71)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.72)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
@@ -2905,7 +2905,7 @@ function p2mEnablePinMove(it,marker){
  if(!it||!marker)return;
  var touchTimer=null,touchReady=false,startPoint=null,pressStarted=0,moveUnlocked=false,pressTimer=null;
  var HOLD_MS=550;
- // v10.11.71: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
+ // v10.11.72: Einzelklick sofort; Halten übernimmt den Pin-Zoom.
  var pinClickTimer=null;
  var pendingMove=null;
  var activeGhost=null;
@@ -2990,7 +2990,7 @@ function p2mEnablePinMove(it,marker){
   controls.querySelector('.p2m-move-cancel').addEventListener('click',function(e){e.stopPropagation();cancelPending()});
   
  }
- // v10.11.71: Tippen sofort, Halten ohne Bewegung = Zoom,
+ // v10.11.72: Tippen sofort, Halten ohne Bewegung = Zoom,
  // Halten mit deutlicher Bewegung = Verschieben. Kein Pin-Doppeltipp-Zoom.
  if(marker.dragging)marker.dragging.disable();
  marker.on('dragstart',function(){if(marker.dragging)marker.dragging.disable()});
@@ -4509,7 +4509,7 @@ function openCategoryEditor(name,v){
  pendingCategoryEditName=name;document.getElementById('categoryEditName').value=name;document.getElementById('categoryEditSymbol').value=v.symbol||'';document.getElementById('categoryEditColor').value=v.color||'#1976d2';document.getElementById('categoryEditColorText').textContent=v.color||'';document.getElementById('categoryEditor').style.display='block';
  var nameInput=document.getElementById('categoryEditName');nameInput.focus();nameInput.select()
 }
-// v10.11.71: Window-Capture vor anderen Escape-Handlern; nur bei geöffnetem Kategorie-Editor.
+// v10.11.72: Window-Capture vor anderen Escape-Handlern; nur bei geöffnetem Kategorie-Editor.
 window.addEventListener('keydown',function(e){
  var editor=document.getElementById('categoryEditor');
  if(!editor||editor.style.display!=='block')return;
@@ -6183,7 +6183,7 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden){ref
 window.addEventListener('pageshow',function(){setTimeout(restorePin2MapAfterExternalView,80)});
 window.addEventListener('focus',function(){setTimeout(restorePin2MapAfterExternalView,80)});
 
-/* v10.11.71: Anzahl sichtbarer/verwendeter Kategorien am Kategorienbutton. */
+/* v10.11.72: Anzahl sichtbarer/verwendeter Kategorien am Kategorienbutton. */
 function p2mUpdateCategoryCount(){
  var button=document.getElementById('legendToggle'),legend=document.getElementById('legend');
  if(!button||!legend)return;
@@ -8071,4 +8071,26 @@ window.addEventListener('resize',function(){var root=getPopup();if(root){root.st
 #mapScreen #toggleElevations.p2m-sun-active .p2m-mode-left{background:rgba(255,240,163,.50)!important}
 #mapScreen #toggleElevations.p2m-sun-active .p2m-mode-right{background:rgba(24,59,120,.50)!important}
 </style>
+
+<!-- v10.11.72: iOS Safari: Browser-Seitenzoom unterbinden; Leaflet-Kartenzoom per Touch bleibt erhalten. -->
+<script id="p2m-ios-page-zoom-guard">
+(function(){
+  // iOS Safari verwendet eigene gesture*-Ereignisse für den Seitenzoom.
+  // Leaflet verarbeitet Karten-Pinch unabhängig davon über touch*-Ereignisse.
+  ['gesturestart','gesturechange','gestureend'].forEach(function(type){
+    document.addEventListener(type,function(event){
+      if(event.cancelable)event.preventDefault();
+    },{capture:true,passive:false});
+  });
+  // Zweifinger-Gesten auf Formularen/Bedienelementen dürfen die Seite nicht skalieren.
+  // Auf der eigentlichen Kartenfläche bleiben die Touch-Ereignisse für Leaflet unangetastet.
+  document.addEventListener('touchmove',function(event){
+    if(!event.touches||event.touches.length<2||!event.cancelable)return;
+    var target=event.target;
+    if(target&&target.closest&&target.closest('#map') &&
+       !target.closest('.leaflet-popup,.leaflet-control,.map-ui-control,button,input,textarea,select,[role="dialog"]'))return;
+    event.preventDefault();
+  },{capture:true,passive:false});
+})();
+</script>
 </body></html>
