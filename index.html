@@ -2275,15 +2275,41 @@ html,body{max-width:100%;overflow-x:hidden}
   background-color: #f5f8b9 !important;
 }
 
-/* v10.10.1: Oberes Pin-Info-Label ist ein eigenständiger Wetter-Link. */
+/* v10.11.7: Oberes Pin-Info-Label ist ein eigenständiger Wetter-Link. */
 .elevation-label-wrap{pointer-events:auto!important}
 .p2m-pin-weather-link{cursor:pointer!important;text-decoration:none!important;pointer-events:auto!important;touch-action:manipulation;color:inherit!important}
 .p2m-pin-weather-link:focus-visible{outline:2px solid #0a84ff;outline-offset:2px}
 </style>
+<style id="p2m-10102-settings-css">
+#p2mConfigTabs{display:flex;gap:8px;margin:12px 0 16px}
+#p2mConfigTabs button{flex:1;min-height:44px;border:1px solid #c5c5ca;border-radius:11px;background:#eeeef1;color:#242424;font-weight:650;font-size:16px}
+#p2mConfigTabs button[aria-selected="true"]{background:#147de8;color:white;border-color:#147de8}
+#p2mSettingsPanel{display:none;padding:12px 4px 26px;color:#222}
+#p2mSettingsPanel h2{font-size:22px;margin:0 0 12px}
+#p2mSettingsPanel fieldset{border:1px solid #d1d1d6;border-radius:13px;padding:15px;margin:0 0 16px}
+#p2mSettingsPanel legend{font-weight:700;padding:0 6px}
+#p2mSettingsPanel label{display:flex;gap:12px;align-items:center;padding:10px 0;font-size:17px;cursor:pointer}
+#p2mSettingsPanel input[type=radio]{width:20px;height:20px;accent-color:#147de8}
+#p2mSettingsPanel p{font-size:14px;color:#626269;line-height:1.45}
+#p2mSettingsBack{width:100%;min-height:46px;border:0;border-radius:11px;background:#e5e5ea;color:#222;font-size:17px}
+#formScreen.p2m-settings-open .list-name-option,#formScreen.p2m-settings-open #input,#formScreen.p2m-settings-open .gpx-start-import,#formScreen.p2m-settings-open .buttons,#formScreen.p2m-settings-open #river980List{display:none!important}
+#formScreen.p2m-settings-open #p2mSettingsPanel{display:block}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.10.1)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.11.7)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
+<div id="p2mConfigTabs" role="tablist" aria-label="Listenansicht und Einstellungen"><button id="p2mListTab" type="button" role="tab" aria-selected="true" aria-controls="input">Pins und Listen</button><button id="p2mSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="p2mSettingsPanel">Einstellungen</button></div>
+<section id="p2mSettingsPanel" role="tabpanel" aria-label="Projekteinstellungen">
+<h2>Projekteinstellungen</h2>
+<fieldset><legend>Wetterdienst für Pin-Info-Labels</legend>
+<label><input type="radio" name="p2mWeatherProvider" value="meteoblue" checked>meteoblue – mehrtägige Vorhersage</label>
+<label><input type="radio" name="p2mWeatherProvider" value="windy">Windy – Wetterkarte</label>
+<label><input type="radio" name="p2mWeatherProvider" value="yr">Yr.no – Koordinatensuche (Test)</label>
+</fieldset>
+<p>Ein Tipp auf das obere Info-Label eines Pins öffnet den ausgewählten Wetterdienst in einem neuen Tab. Yr.no ist ein Versuch über die Koordinatensuche; gegebenenfalls muss der passende Suchtreffer noch ausgewählt werden. Die Einstellung wird vorübergehend im Browser und beim Speichern in der .pin2map-Projektdatei gesichert. Beim Öffnen eines Projekts wird sie daraus wiederhergestellt.</p>
+<button id="p2mSettingsBack" type="button">Zurück zur Karte</button>
+</section>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Rot
 
@@ -2440,6 +2466,20 @@ function markFilterZoom(){
  else if(markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote)mapStatus.textContent='Keine passenden Markierungen gefunden.';
 }
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
+// v10.11.7: Wetterdienst ist eine Projekteinstellung; localStorage dient nur als Zwischenablage.
+var p2mWeatherProvider='meteoblue';
+try{var p2mWeatherCached=localStorage.getItem('p2mWeatherProvider');if(p2mWeatherCached==='windy'||p2mWeatherCached==='meteoblue'||p2mWeatherCached==='yr')p2mWeatherProvider=p2mWeatherCached}catch(e){}
+function p2mSetWeatherProvider(provider){
+ p2mWeatherProvider=(provider==='windy'||provider==='yr')?provider:'meteoblue';
+ try{localStorage.setItem('p2mWeatherProvider',p2mWeatherProvider)}catch(e){}
+ document.querySelectorAll('input[name="p2mWeatherProvider"]').forEach(function(el){el.checked=el.value===p2mWeatherProvider});
+ if(typeof refreshElevationLabels==='function')refreshElevationLabels();
+}
+function p2mWeatherUrl(lat,lon){
+ var a=Number(lat).toFixed(5),b=Number(lon).toFixed(5);
+ if(p2mWeatherProvider==='yr')return 'https://www.yr.no/en/search?q='+encodeURIComponent(a+', '+b);
+ return p2mWeatherProvider==='windy'?'https://www.windy.com/'+a+'/'+b:'https://www.meteoblue.com/de/wetter/woche/index?lat='+encodeURIComponent(a)+'&lon='+encodeURIComponent(b);
+}
 var showElevations=false,elevationBusy=false,p2mInfoMode=0,p2mTemperatureBusy=false,p2mTemperatureGeneration=0,p2mDailyBusy=false,p2mDailyRefreshPending=false,p2mSunBusy=false,p2mSunPending=false;
 var currentProjectName=''; /* Dateiname ohne .pin2map des geöffneten bzw. zuletzt gespeicherten Projekts. */
 function cleanProjectBaseName(value){return String(value||'').replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,100)}
@@ -2843,7 +2883,7 @@ function p2mEnablePinMove(it,marker){
  marker.on('click',function(ev){
   if(Date.now()<(marker._p2mSuppressClickUntil||0)){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev.originalEvent);L.DomEvent.preventDefault(ev.originalEvent)}return;}
   if(pinClickTimer)clearTimeout(pinClickTimer);
-  pinClickTimer=setTimeout(function(){pinClickTimer=null;if(Date.now()>=(marker._p2mSuppressClickUntil||0))marker.openPopup()},280);
+  pinClickTimer=setTimeout(function(){pinClickTimer=null;if(Date.now()>=(marker._p2mSuppressClickUntil||0))marker.openPopup()},220);
   if(ev&&ev.originalEvent)L.DomEvent.stopPropagation(ev.originalEvent);
  });
  marker.on('dblclick',function(ev){
@@ -3534,7 +3574,7 @@ function pinPopupHtml(it){p2mSyncPinBadges(it);
  var inRoute=routePosition(it)>0,toggleClass=inRoute?' route-toggle-remove':'',toggleText=inRoute?uiSymbol('routeWaypointRemove'):uiSymbol('routeWaypointAdd'),toggleTitle=inRoute?'Aus Route entfernen':'Zwischenziel hinzufügen';
  var isStart=it===routeStartItem,isTarget=it===routeTargetItem,startBg=isStart?'#ef3737':'#e5e5ea',startFg=isStart?'#fff':'#111',wayBg=inRoute?'#ffd84d':'#e5e5ea',wayFg='#111',targetBg=isTarget?'#34a853':'#e5e5ea',targetFg=isTarget?'#fff':'#111';
  var pinLabel=p2mHasPinName(it)?String(it.label).trim():'';
- return '<div class="p2m-popup"><fieldset class="p2m-name-field"><legend>Pin Name</legend><input type="text" class="p2m-inline-name" data-p2m-name-id="'+id+'" aria-label="Pin Name" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" value="'+escHtml(pinLabel)+'"></fieldset><div class="p2m-created">Erstellt: '+escHtml(new Date(p2mMeta.createdAt).toLocaleString('de-DE'))+'</div><div class="p2m-five-actions"><fieldset class="p2m-top-coords"><legend>Navi extern</legend>'+'<button type="button" data-copy-pin="'+id+'" title="In Zwischenablage kopieren" aria-label="In Zwischenablage kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#087df5;color:#fff;font-size:31px;font-weight:600">+</button>'+'<button type="button" data-pin-nav-apple="'+id+'" title="Mit Apple Karten zum Pin" aria-label="Mit Apple Karten zum Pin" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px;font-weight:600"></button></fieldset><fieldset class="p2m-top-route"><legend>pin2map Routing</legend>'+'<button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="width:42px;height:42px;min-width:42px;padding:0;border:2px solid #ef3737;border-radius:50%;background:'+startBg+';color:'+startFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeStart')+'</button>'+'<button type="button" class="'+toggleClass+'" data-route-waypoint="'+id+'" title="'+toggleTitle+'" aria-label="'+toggleTitle+'" style="width:42px;height:42px;min-width:42px;padding:0;border:2px solid #ffd84d;border-radius:50%;background:'+wayBg+';color:'+wayFg+';font-size:23px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+toggleText+'</button>'+'<button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="width:42px;height:42px;min-width:42px;padding:0;border:2px solid #34a853;border-radius:50%;background:'+targetBg+';color:'+targetFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeTarget')+'</button></fieldset></div>'+gpxButton+'<fieldset class="p2m-notes-field"><legend>Pin Notizen</legend><textarea class="p2m-inline-note" data-p2m-inline-note="'+id+'" aria-label="Notiz zum Pin" placeholder="Notiz eingeben …" rows="7">'+escHtml(p2mMeta.note||'')+'</textarea></fieldset>'+'<div class="p2m-bottom-groups"><fieldset class="p2m-bottom-delete"><legend>Entfernen</legend><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button></fieldset><fieldset class="p2m-bottom-pin"><legend>Pin</legend><div class="p2m-bottom-pin-buttons"><button type="button" data-rename-pin="'+id+'">Name</button><button type="button" data-change-pin-category="'+id+'">Symbol</button></div></fieldset><fieldset class="p2m-bottom-wiki"><legend>Wikipedia</legend><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px">'+uiSymbol('wikipedia')+'</button></fieldset></div></div>'
+ return '<div class="p2m-popup"><fieldset class="p2m-name-field"><legend>Pin Name</legend><input type="text" class="p2m-inline-name" data-p2m-name-id="'+id+'" aria-label="Pin Name" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" value="'+escHtml(pinLabel)+'"></fieldset><div class="p2m-created">Erstellt: '+escHtml(new Date(p2mMeta.createdAt).toLocaleString('de-DE'))+'</div><div class="p2m-five-actions"><fieldset class="p2m-top-coords"><legend>Navi extern</legend>'+'<button type="button" data-copy-pin="'+id+'" title="In Zwischenablage kopieren" aria-label="In Zwischenablage kopieren" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#087df5;color:#fff;font-size:31px;font-weight:600">+</button>'+'<button type="button" data-pin-nav-apple="'+id+'" title="Mit Apple Karten zum Pin" aria-label="Mit Apple Karten zum Pin" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px;font-weight:600"></button></fieldset><fieldset class="p2m-top-route"><legend>pin2map Routing</legend>'+'<button type="button" data-route-start="'+id+'" title="Als Start" aria-label="Als Start" style="width:42px;height:42px;min-width:42px;padding:0;border:2px solid #ef3737;border-radius:50%;background:'+startBg+';color:'+startFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeStart')+'</button>'+'<button type="button" class="'+toggleClass+'" data-route-waypoint="'+id+'" title="'+toggleTitle+'" aria-label="'+toggleTitle+'" style="width:42px;height:42px;min-width:42px;padding:0;border:2px solid #ffd84d;border-radius:50%;background:'+wayBg+';color:'+wayFg+';font-size:23px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+toggleText+'</button>'+'<button type="button" data-route-target="'+id+'" title="Als Ziel" aria-label="Als Ziel" style="width:42px;height:42px;min-width:42px;padding:0;border:2px solid #34a853;border-radius:50%;background:'+targetBg+';color:'+targetFg+';font-size:21px;font-weight:400;display:inline-flex;align-items:center;justify-content:center">'+uiSymbol('routeTarget')+'</button></fieldset></div>'+gpxButton+'<fieldset class="p2m-notes-field"><legend>Pin Notizen</legend><textarea class="p2m-inline-note" data-p2m-inline-note="'+id+'" aria-label="Notiz zum Pin" placeholder="Notiz eingeben …" rows="7">'+escHtml(p2mMeta.note||'')+'</textarea></fieldset>'+'<div class="p2m-weather-panel" role="region" aria-label="Wettervorhersage"></div><div class="p2m-bottom-groups"><fieldset class="p2m-bottom-delete"><legend>Entfernen</legend><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button></fieldset><fieldset class="p2m-bottom-pin"><legend>Pin</legend><div class="p2m-bottom-pin-buttons"><button type="button" data-rename-pin="'+id+'">Name</button><button type="button" data-change-pin-category="'+id+'">Symbol</button></div></fieldset><fieldset class="p2m-bottom-wiki"><legend>Wikipedia</legend><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia" style="width:42px;height:42px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid #c7c7cc;border-radius:50%;background:#fff;color:#111;font-size:23px">'+uiSymbol('wikipedia')+'</button></fieldset><button type="button" class="p2m-weather-toggle" aria-label="Wettervorhersage" title="Wettervorhersage">🌦️</button></div></div>'
 }
 
 
@@ -4427,23 +4467,19 @@ function renderElevationLabel(it){
   if(sunParts.length===2)labelHtml='<span class="p2m-label-half p2m-label-rise">'+sunParts[0]+'</span><span class="p2m-label-half p2m-label-set">'+sunParts[1]+'</span>';
  }
  var ll=it._pinLayer.getLatLng();
- // v10.10.1: Das obere Info-Label öffnet immer die Wetterprognose des Pins.
+ // v10.11.7: Das obere Info-Label öffnet immer die Wetterprognose des Pins.
  // Der Link nutzt die Pin-Koordinaten, unabhängig von der angezeigten Information.
- var weatherUrl='https://www.windy.com/'+Number(ll.lat).toFixed(5)+'/'+Number(ll.lng).toFixed(5);
+ var weatherUrl=p2mWeatherUrl(ll.lat,ll.lng);
  it._elevationLayer=L.marker(ll,{interactive:true,zIndexOffset:450,icon:L.divIcon({
   className:'elevation-label-wrap',
-  html:'<a class="p2m-pin-weather-link elevation-label'+(p2mInfoMode===2?' p2m-temperature-label':p2mInfoMode===3?' p2m-daily-label':p2mInfoMode===4?' p2m-sun-label':'')+'" href="'+weatherUrl+'" target="_blank" rel="noopener noreferrer" title="Wetterprognose für diesen Pin öffnen" aria-label="Wetterprognose für diesen Pin öffnen">'+labelHtml+'</a>',
+  html:'<a class="p2m-pin-weather-link elevation-label'+(p2mInfoMode===2?' p2m-temperature-label':p2mInfoMode===3?' p2m-daily-label':p2mInfoMode===4?' p2m-sun-label':'')+'" href="#" title="Wetterprognose für diesen Pin öffnen" aria-label="Wetterprognose für diesen Pin öffnen">'+labelHtml+'</a>',
   iconSize:null,iconAnchor:[0,42]
  })}).addTo(categoryLayers[it.category]);
- it._elevationLayer.on('click',function(e){if(e.originalEvent)L.DomEvent.stopPropagation(e.originalEvent)});
+ it._elevationLayer.on('click',function(e){if(e.originalEvent){L.DomEvent.preventDefault(e.originalEvent);L.DomEvent.stopPropagation(e.originalEvent)}window.p2mWeatherOpenForPin&&window.p2mWeatherOpenForPin(it)});
  markFilterApplyOne(it);
 }
 
-// v10.10.1: Klicks auf Wetter-Labels dürfen nicht gleichzeitig den Pin/die Karte bedienen.
-document.addEventListener('click',function(e){
- var link=e.target&&e.target.closest&&e.target.closest('.p2m-pin-weather-link');
- if(link)e.stopPropagation();
-},true);
+// Wetter-Label-Klick wird zentral vom Wetterdialog behandelt.
 function allCurrentPinItems(){return markFilterEntries.filter(function(it){return !!(it&&!it.area&&it._pinLayer)})}
 function refreshElevationLabels(){allCurrentPinItems().forEach(renderElevationLabel)}
 function syncElevationButton(){
@@ -5646,7 +5682,7 @@ function collectProjectCache(){
  }
  return cache
 }
-function projectDocument(){return {gpxStartRoutes:window.pin2mapExportStartRoutes?window.pin2mapExportStartRoutes():[],format:'pin2map',version:1,list:input.value,options:{labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value,optionalEsriRelief:optionalEsriRelief,showElevations:showElevations},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache(),rivers:river959Saved,gpxTracks:(gpxLayer&&gpxLayer.getLayers)?gpxLayer.getLayers().filter(function(l){return l instanceof L.Polyline&&!l.options._p2m106Hit}).map(function(l){return l.getLatLngs().map(function(p){return [p.lat,p.lng]})}):[],route:projectRouteDocument()}}
+function projectDocument(){return {gpxStartRoutes:window.pin2mapExportStartRoutes?window.pin2mapExportStartRoutes():[],format:'pin2map',version:1,list:input.value,options:{labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value,optionalEsriRelief:optionalEsriRelief,showElevations:showElevations,weatherProvider:p2mWeatherProvider},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache(),rivers:river959Saved,gpxTracks:(gpxLayer&&gpxLayer.getLayers)?gpxLayer.getLayers().filter(function(l){return l instanceof L.Polyline&&!l.options._p2m106Hit}).map(function(l){return l.getLatLngs().map(function(p){return [p.lat,p.lng]})}):[],route:projectRouteDocument()}}
 function suggestedProjectName(){
  var items=parse(input.value),first=items.filter(function(x){return !x.area})[0]||items[0],base=(first&&(first.label||first.query))||'pin2map';
  base=String(base).replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,60)||'pin2map';
@@ -5850,6 +5886,7 @@ function openPin2MapProject(doc){
  resetRoutingBeforeImport();
  if(window.pin2mapRestoreStartRoutes)window.pin2mapRestoreStartRoutes(doc.gpxStartRoutes);
  pendingGpxTracks=Array.isArray(doc.gpxTracks)&&doc.gpxTracks.length?doc.gpxTracks:null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();input.value=doc.list;river959Saved=Array.isArray(doc.rivers)?doc.rivers.filter(function(x){return x&&Array.isArray(x.chains)&&typeof x.name==='string'}):[];river980UpdateList();activeProjectCache=(doc.cache&&typeof doc.cache==='object')?doc.cache:{};pinNoteSession={};pinNoteByLocation=Object.create(null);pendingProjectRoute=(doc.route&&typeof doc.route==='object')?doc.route:null;setTimeout(function(){if(map){river959Render();autoZoomAllContent();p2mRefreshLoadedNoteBadges()}},600);
+  p2mSetWeatherProvider(doc.options&&doc.options.weatherProvider);
  if(doc.options){document.getElementById('labelAddresses').checked=doc.options.labelAddresses!==false;document.getElementById('labelAreas').checked=doc.options.labelAreas!==false;if(typeof doc.options.optionalEsriRelief==='boolean')setOptionalEsriRelief(doc.options.optionalEsriRelief);showElevations=false;p2mInfoMode=0;syncElevationButton();if(doc.options.mapStyle&&baseMaps[doc.options.mapStyle]){document.getElementById('mapStyle').value=doc.options.mapStyle;if(map)setBase(doc.options.mapStyle)}}
  form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();
  setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length)build(items);else{clearMap();if(pendingGpxTracks)drawPendingGpxTracks()};setTimeout(function(){if(doc.view&&Array.isArray(doc.view.center)&&doc.view.center.length===2&&isFinite(doc.view.zoom))map.setView(doc.view.center,doc.view.zoom);mapStatus.textContent='✓ pin2map-Projekt geladen.'},80)},80)
@@ -6061,6 +6098,16 @@ if(legendToggle)legendToggle.onclick=function(e){e.preventDefault();e.stopPropag
 })();
 var _buildLegendV854=buildLegend;buildLegend=function(items){_buildLegendV854(items);syncLegendToggle()};
 
+/* v10.11.7: Listenansicht um ein Einstellungs-Tab ergänzen. */
+(function(){
+ var listTab=document.getElementById('p2mListTab'),settingsTab=document.getElementById('p2mSettingsTab');
+ function showSettings(open){form.classList.toggle('p2m-settings-open',open);listTab.setAttribute('aria-selected',String(!open));settingsTab.setAttribute('aria-selected',String(open))}
+ listTab.addEventListener('click',function(){showSettings(false)});
+ settingsTab.addEventListener('click',function(){showSettings(true)});
+ document.querySelectorAll('input[name="p2mWeatherProvider"]').forEach(function(el){el.addEventListener('change',function(){if(this.checked)p2mSetWeatherProvider(this.value)})});
+ document.getElementById('p2mSettingsBack').addEventListener('click',function(){document.getElementById('cancelListBtn').click()});
+ p2mSetWeatherProvider(p2mWeatherProvider);
+})();
 /* Listenansicht */
 document.getElementById('addCategoryBtn').onclick=function(){
  var v=input.value.replace(/\r/g,'').replace(/\s+$/,'');
@@ -6141,7 +6188,7 @@ var p2m41OriginalPopup=pinPopupHtml;
 pinPopupHtml=function(it){
  var html=p2m41OriginalPopup(it),id=it._popupId;
  var sym=escHtml(it.symbol||(ensurePinCategoryChoices().find(function(c){return c.name===it.category})||{}).symbol||'📍');
- var row='<div class="p2m-bottom-groups"><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button><button type="button" data-p2m-url="'+id+'" title="URL bearbeiten" aria-label="URL bearbeiten">URL</button><button type="button" data-p2m-edit-pin="'+id+'" title="Kategorie ändern" aria-label="Kategorie ändern">'+sym+'</button><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia">'+uiSymbol('wikipedia')+'</button><button type="button" class="p2m-hide-popup" data-p2m-close-popup="1" title="Pin-Dialog schließen" aria-label="Pin-Dialog schließen">✓</button></div>';
+ var row='<div class="p2m-bottom-groups"><button type="button" class="p2m-round-delete p2m-danger-x" data-delete-pin="'+id+'" title="Pin entfernen" aria-label="Pin entfernen">✕</button><button type="button" data-p2m-url="'+id+'" title="URL bearbeiten" aria-label="URL bearbeiten">URL</button><button type="button" data-p2m-edit-pin="'+id+'" title="Kategorie ändern" aria-label="Kategorie ändern">'+sym+'</button><button type="button" data-wikipedia-pin="'+id+'" title="Wikipedia" aria-label="Wikipedia">'+uiSymbol('wikipedia')+'</button><button type="button" class="p2m-weather-toggle" title="Wettervorhersage" aria-label="Wettervorhersage">🌦️</button><button type="button" class="p2m-hide-popup" data-p2m-close-popup="1" title="Pin-Dialog schließen" aria-label="Pin-Dialog schließen">✓</button></div>';
  var start=html.indexOf('<div class="p2m-bottom-groups">');
  if(start<0)throw new Error('Pin-Aktionsleiste nicht gefunden');
  // Der Block steht am Ende des Popups. Die alte Zeile komplett ersetzen.
@@ -7371,4 +7418,93 @@ btn.addEventListener('click',function(e){e.preventDefault();if(held||ignoreClick
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
+<style id="p2m-1115-weather-dialog">
+/* Wetter: eine einzige Umschaltregel, Standard-Layout bleibt als Platzhalter erhalten. */
+#mapScreen .leaflet-popup .p2m-popup {position:relative!important;box-sizing:border-box!important}
+#mapScreen .leaflet-popup .p2m-popup .p2m-weather-panel {display:none!important;box-sizing:border-box;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 5px;border:1px solid #d4dce6;border-radius:10px;background:#f5f8fc;color:#17253a;font-size:12px}
+#mapScreen .leaflet-popup .p2m-popup.p2m-weather-active .p2m-created,
+#mapScreen .leaflet-popup .p2m-popup.p2m-weather-active .p2m-five-actions,
+#mapScreen .leaflet-popup .p2m-popup.p2m-weather-active .p2m-notes-field {visibility:hidden!important;pointer-events:none!important}
+#mapScreen .leaflet-popup .p2m-popup.p2m-weather-active .p2m-weather-panel {display:block!important;position:absolute!important;top:var(--p2m-wx-top,85px)!important;bottom:var(--p2m-wx-bottom,64px)!important;left:0;right:0;width:100%;max-height:none!important;min-height:0!important;z-index:2}
+#mapScreen .leaflet-popup .p2m-popup .p2m-bottom-groups {display:flex!important;flex-wrap:nowrap!important;justify-content:space-between!important;gap:clamp(2px,1vw,8px)!important}
+#mapScreen .leaflet-popup .p2m-popup .p2m-bottom-groups>button {flex:0 1 42px!important;width:42px!important;min-width:0!important;height:42px!important;padding:0!important}
+#mapScreen .leaflet-popup .p2m-popup .p2m-bottom-groups>button.p2m-weather-toggle {display:inline-flex!important;visibility:visible!important;opacity:1!important;align-items:center;justify-content:center;border-radius:50%!important;border:1px solid #c7c7cc!important;background:#fff!important;color:#111!important;font-size:21px!important;cursor:pointer}
+.p2m-wx-current{display:flex;justify-content:space-between;gap:5px;align-items:center;padding:5px 4px 10px}
+.p2m-wx-temp{font-size:25px;font-weight:700}.p2m-wx-muted{font-size:11px;color:#586779}.p2m-wx-icon{font-size:22px}
+.p2m-wx-grid{display:grid;grid-template-columns:29px repeat(4,minmax(0,1fr)) 69px 36px;gap:1px;align-items:center;text-align:center}
+.p2m-wx-head{font-size:9px;color:#556477;padding:7px 0 5px}
+.p2m-wx-row{background:#fff;border-radius:6px;margin:3px 0;padding:7px 1px;min-height:26px}
+.p2m-wx-row span{white-space:nowrap}.p2m-wx-day{font-weight:700}.p2m-wx-rain{color:#0875d1}.p2m-wx-tmax{color:#b71c1c;font-size:10px}
+.p2m-wx-foot{font-size:10px;color:#65758a;text-align:right;margin-top:7px}
+@media(max-width:390px){.p2m-wx-grid{grid-template-columns:25px repeat(4,minmax(0,1fr)) 62px 32px}.p2m-wx-row{font-size:11px}.p2m-wx-icon{font-size:19px}}
+
+
+</style>
+<script id="p2m-1110-weather-script">
+(function(){
+'use strict';
+var cache=new Map(), weatherOnLabel=false;
+function getPopup(){return document.querySelector('.leaflet-popup .p2m-popup')}
+function symbol(code,night){
+ if(code===0)return night?'🌙':'☀️';
+ if(code===1||code===2)return night?'☁️':'🌤️';
+ if(code===3)return '☁️';
+ if(code===45||code===48)return '🌫️';
+ if(code===51||code===53||code===55||code===56||code===57)return '🌦️';
+ if(code===61||code===63||code===65||code===66||code===67||code===80||code===81||code===82)return '🌧️';
+ if(code===71||code===73||code===75||code===77||code===85||code===86)return '🌨️';
+ if(code===95||code===96||code===99)return '⛈️';
+ return '🌤️';
+}
+function description(code){if(code===0)return 'Klar';if(code<=2)return 'Leicht bewölkt';if(code===3)return 'Bewölkt';if(code===45||code===48)return 'Nebel';if(code>=51&&code<=67||code>=80&&code<=82)return 'Regen';if(code>=71&&code<=77||code>=85&&code<=86)return 'Schnee';if(code>=95)return 'Gewitter';return 'Wechselhaft'}
+function n(x,d){return Number.isFinite(Number(x))?Number(x).toLocaleString('de-DE',{maximumFractionDigits:d||0}):'–'}
+function escapeText(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function render(data){
+ var h=data.hourly,d=data.daily,c=data.current||{},html='<div class="p2m-wx-current"><div><div class="p2m-wx-muted">Aktuelles Wetter</div><div><span class="p2m-wx-temp">'+n(c.temperature_2m)+' °C</span> <span class="p2m-wx-icon">'+symbol(c.weather_code,false)+'</span></div><div>'+description(c.weather_code)+' · Wind '+n(c.wind_speed_10m)+' km/h</div><div class="p2m-wx-muted">Niederschlag heute '+n(d.precipitation_sum[0],1)+' mm ('+n(d.precipitation_probability_max[0])+' %)</div></div><div style="text-align:right"><div class="p2m-wx-muted">Heute</div><b>'+n(d.temperature_2m_min[0])+'° / '+n(d.temperature_2m_max[0])+'°</b></div></div>';
+ html+='<div class="p2m-wx-grid p2m-wx-head"><span>Tag</span><span>Mo.</span><span>Mi.</span><span>Ab.</span><span>Na.</span><span>Min/Max</span><span>mm</span></div>';
+ var dates=d.time||[],ht=h.time||[];var lookup=new Map();ht.forEach(function(t,i){lookup.set(t.slice(0,13),i)});
+ dates.slice(0,7).forEach(function(date,i){
+  var wd=['So','Mo','Di','Mi','Do','Fr','Sa'][new Date(date+'T12:00:00').getDay()];
+  var icons=[8,13,19,1].map(function(hour,j){var key=j===3?dates[i+1]:date;if(!key)return '–';var index=lookup.get(key+'T'+String(hour).padStart(2,'0'));return index===undefined?'–':symbol(h.weather_code[index],j===3)});
+  html+='<div class="p2m-wx-grid p2m-wx-row"><span class="p2m-wx-day">'+wd+'</span>'+icons.map(function(x){return '<span class="p2m-wx-icon">'+x+'</span>'}).join('')+'<span class="p2m-wx-tmax">'+n(d.temperature_2m_min[i])+'°/'+n(d.temperature_2m_max[i])+'°</span><span class="p2m-wx-rain">'+n(d.precipitation_sum[i],1)+'</span></div>';
+ });
+ return html+'<div class="p2m-wx-foot">Vorhersage: Open-Meteo · Nacht = Folgetag 01 Uhr</div>';
+}
+function stabilize(root){
+ if(!root)return;
+ // Beim ersten Öffnen die tatsächliche Standardhöhe einmal fixieren.
+ // Wetterdaten und CSS-Sichtbarkeit können danach die Popupgröße nicht verändern.
+ if(!root.dataset.p2mFixedHeight){
+  var natural=root.getBoundingClientRect().height;
+  if(natural>100){root.style.height=natural+'px';root.dataset.p2mFixedHeight='1'}
+ }
+ var name=root.querySelector('.p2m-name-field'),bottom=root.querySelector('.p2m-bottom-groups');
+ if(!name||!bottom)return;
+ var r=root.getBoundingClientRect(),nr=name.getBoundingClientRect(),br=bottom.getBoundingClientRect();
+ root.style.setProperty('--p2m-wx-top',Math.max(0,nr.bottom-r.top+8)+'px');
+ root.style.setProperty('--p2m-wx-bottom',Math.max(0,r.bottom-br.top+8)+'px');
+}
+function setMode(on){var root=getPopup();if(!root)return;stabilize(root);root.classList.toggle('p2m-weather-active',!!on);var b=root.querySelector('.p2m-weather-toggle');if(b){b.textContent=on?'↩':'🌦️';b.title=on?'Zurück zum Pin':'Wettervorhersage';b.setAttribute('aria-label',b.title)}if(on)loadWeather(root)}
+function loadWeather(root){
+ var field=root.querySelector('[data-p2m-name-id]');if(!field)return;
+ var id=field.getAttribute('data-p2m-name-id'),it=typeof pinDeleteItems!=='undefined'?pinDeleteItems[id]:null;
+ if(!it||!it._pinLayer)return;
+ var ll=it._pinLayer.getLatLng(),panel=root.querySelector('.p2m-weather-panel');if(!panel)return;
+ var key=ll.lat.toFixed(4)+','+ll.lng.toFixed(4),entry=cache.get(key);
+ if(entry&&Date.now()-entry.time<15*60*1000){panel.innerHTML=entry.html;return}
+ panel.textContent='Wettervorhersage wird geladen …';
+ var url='https://api.open-meteo.com/v1/forecast?latitude='+encodeURIComponent(ll.lat)+'&longitude='+encodeURIComponent(ll.lng)+'&current=temperature_2m,weather_code,wind_speed_10m&hourly=weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&forecast_days=8&timezone=auto';
+ fetch(url).then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(function(data){var html=render(data);cache.set(key,{time:Date.now(),html:html});if(panel.isConnected)panel.innerHTML=html}).catch(function(){if(panel.isConnected)panel.textContent='Wetterdaten nicht verfügbar. Bitte Internetverbindung prüfen.'});
+}
+function prepare(){var root=getPopup();if(!root)return;var b=root.querySelector('.p2m-weather-toggle');if(!b)return;stabilize(root);if(weatherOnLabel){weatherOnLabel=false;setMode(true)}}
+// Direkter Delegations-Handler: Button wird bereits vom echten Popup-HTML erzeugt.
+document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('.p2m-weather-toggle');if(!b)return;e.preventDefault();e.stopPropagation();setMode(!b.closest('.p2m-popup').classList.contains('p2m-weather-active'))},true);
+window.p2mWeatherOpenForPin=function(it){if(!it||!it._pinLayer)return;weatherOnLabel=true;it._pinLayer.openPopup();setTimeout(function(){prepare();weatherOnLabel=false},0)};
+// Direkter Layer-Klick ist bereits in renderElevationLabel mit dem Pin verknüpft.
+// Keine Dokument-Capture-Sperre: Sie würde den Leaflet-Layer-Klick unterbinden.
+if(typeof map!=='undefined'&&map&&map.on)map.on('popupopen',function(){prepare()});
+window.addEventListener('resize',function(){var root=getPopup();if(root){root.style.height='';delete root.dataset.p2mFixedHeight;stabilize(root)}},{passive:true});
+})();
+</script>
+
 </body></html>
