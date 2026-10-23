@@ -2323,7 +2323,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.12.19)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.12.30)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Eins
@@ -2373,7 +2373,7 @@ html,body{max-width:100%;overflow-x:hidden}
 <div id="markFilterPanel" class="map-ui-control" role="dialog" aria-label="Markierungen filtern" style="display:none">
  <div class="p2m-filter-head"><strong>⚲ Markierungen filtern</strong><button type="button" id="markFilterClose" aria-label="Filter schließen">×</button></div>
  <div class="p2m-filter-searchrow"><input type="search" id="markFilterText" placeholder="Beschriftung, z. B. FAO" autocomplete="off" aria-label="Beschriftung filtern"><button type="button" id="markFilterReset" title="Alle anzeigen" aria-label="Alle anzeigen">ALL</button></div>
- <div class="p2m-filter-inforow"><div class="p2m-filter-typecol"><select id="markFilterType" aria-label="Markierungstyp"><option value="all">Pins und Flächen</option><option value="pins">Nur Pins</option><option value="areas">Nur Flächen</option><option value="alltext" selected>Pins, Flächen, Text</option><option value="pinstext">Nur Pins und Text</option></select><div id="markFilterCount" role="status" aria-live="polite">sichtbar: alle</div></div><button type="button" id="markFilterExport" title="Sichtbare Pins als Text kopieren" aria-label="Sichtbare Pins als Text kopieren">📋</button></div>
+ <div class="p2m-filter-inforow"><div class="p2m-filter-typecol"><select id="markFilterType" aria-label="Markierungstyp"><option value="all">Pins und Flächen</option><option value="pins">Nur Pins</option><option value="areas">Nur Flächen</option><option value="rivers">Nur Flüsse</option><option value="allrivertext" selected>Pins, Flächen, Flüsse, Text</option><option value="alltext">Pins, Flächen, Text</option><option value="pinstext">Nur Pins und Text</option></select><div id="markFilterCount" role="status" aria-live="polite">sichtbar: alle</div></div><button type="button" id="markFilterExport" title="Sichtbare Pins als Text kopieren" aria-label="Sichtbare Pins als Text kopieren">📋</button></div>
  <div class="p2m-filter-options" role="group" aria-label="Pins mit Inhalt"><label><input type="checkbox" id="markFilterTrack"> <span>Mit Track</span></label><label><input type="checkbox" id="markFilterLink"> <span>Mit Link</span></label><label><input type="checkbox" id="markFilterNote"> <span>Mit Notiz</span></label></div>
 </div>
 <button type="button" id="legendToggle" class="map-round-control map-ui-control p2m-control-six" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">×</span></button></div><div class="route-toolbar-row route-toolbar-primary"><fieldset class="route-mode-fieldset"><legend>Routing für</legend><div class="route-mode-options"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button></div></fieldset><button type="button" id="routeClear" title="Route entfernen" aria-label="Route beenden">Beenden</button></div><div class="route-toolbar-row route-toolbar-secondary"><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="arrive" selected>Ankunft</option><option value="depart">Abfahrt</option></select><div id="p2mTransitDateTimePair" class="p2m-transit-datetime-pair" style="display:none"><input id="p2mTransitDate" type="date" aria-label="ÖPNV-Datum"><input id="p2mTransitClock" type="time" aria-label="ÖPNV-Uhrzeit" step="60"></div><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"><select id="transitVehiclePreference" aria-label="Bevorzugtes Verkehrsmittel" title="ÖPNV-Verkehrsmittel"><option value="all">Alle</option><option value="rail">Bahn</option><option value="bus">Bus</option></select><select id="transitExtraTransfer" aria-label="Zusätzliche Umsteigezeit" title="Zusätzliche Umsteigezeit"><option value="0">+0 min</option><option value="3">+3 min</option><option value="5" selected>+5 min</option><option value="10">+10 min</option><option value="15">+15 min</option></select></div>
@@ -2410,13 +2410,13 @@ var input=document.getElementById('input'), form=document.getElementById('formSc
 var defaults='# 📍 [Red] Eins\n\n# 🌀 [#1e90ff] Zwei\n\n# 🌲 [#32cd32] Drei\n\n# ⭐️ [#ffd700] Vier\n\n# 🔸 [#ff8c00] Fünf\n\n# 🏛️ [#8a2be2] Sechs\n\n# 🍇 [#ff1493] Sieben\n\n# 🅿️ [#008b8b] Acht\n\n# 🐂 [SaddleBrown] Neun\n';
 window.pin2mapCurrentMap=function(){return map};
 var map=null,baseLayer=null,categoryLayers={},allBounds=null,renderedAreas=[],areaRenderer=null,buildGeneration=0,areaPointTotal=0,gpxLayer=null,pendingGpxTracks=null;
-var markFilterEntries=[],markFilterQuery='',markFilterKind='alltext';
+var markFilterEntries=[],markFilterQuery='',markFilterKind='allrivertext';
 var markFilterTrack=false,markFilterLink=false,markFilterNote=false;
 // Nur während einer unveränderten Filterphase: neu angelegte Pins zusätzlich anzeigen.
 var p2mTemporaryFilterPins=new Set();
 function p2mFilterSignature(){return JSON.stringify([markFilterQuery,markFilterKind,markFilterTrack,markFilterLink,markFilterNote])}
 var p2mLastFilterSignature=p2mFilterSignature();
-function p2mFilterIsActive(){return !!markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote||!!(map&&Object.keys(categoryLayers).some(function(k){return !map.hasLayer(categoryLayers[k])}))}
+function p2mFilterIsActive(){return !!markFilterQuery.trim()||markFilterKind!=='allrivertext'||markFilterTrack||markFilterLink||markFilterNote||!!(map&&Object.keys(categoryLayers).some(function(k){return !map.hasLayer(categoryLayers[k])}))}
 function p2mClearTemporaryFilterPins(){
  p2mTemporaryFilterPins.forEach(function(it){it._p2mTemporaryFilterVisible=false});
  p2mTemporaryFilterPins.clear();
@@ -2433,8 +2433,9 @@ function p2mFilterTrackName(it){
  return name;
 }
 function markFilterMatches(it){
+ if(markFilterKind==='rivers')return false;
  var q=markFilterQuery.trim().toLocaleLowerCase('de');
- var includeText=markFilterKind==='alltext'||markFilterKind==='pinstext';
+ var includeText=markFilterKind==='allrivertext'||markFilterKind==='alltext'||markFilterKind==='pinstext';
  if(q){
   var searchable=String(it.label||'');
   if(includeText&&!it.area)searchable+=' '+String(pinMeta(it).note||'')+' '+String(p2m41UrlGet(it)||'')+' '+p2mFilterTrackName(it);
@@ -2470,14 +2471,32 @@ function p2mMarkActuallyVisible(it){
   ((it._pinLayer&&group.hasLayer(it._pinLayer))||
    (it._areaLayer&&group.hasLayer(it._areaLayer))));
 }
+function p2mRiverFilterMatches(item){
+ if((markFilterKind!=='allrivertext'&&markFilterKind!=='rivers')||markFilterTrack||markFilterLink||markFilterNote)return false;
+ var q=markFilterQuery.trim().toLocaleLowerCase('de');
+ return !q||String(item.name||'').toLocaleLowerCase('de').includes(q);
+}
+function p2mRiverFilterRefresh(){
+ if(!map||!river959SavedLayer)return;
+ // Jeder Fluss besitzt eine eigene Unterebene; nur passende bleiben sichtbar.
+ river959Saved.forEach(function(item){
+  var layer=item._p2mRiverDisplayLayer;
+  if(!layer)return;
+  var show=river959Visible&&p2mRiverFilterMatches(item);
+  if(show&&!river959SavedLayer.hasLayer(layer))river959SavedLayer.addLayer(layer);
+  else if(!show&&river959SavedLayer.hasLayer(layer))river959SavedLayer.removeLayer(layer);
+ });
+ if(river959Visible){if(!map.hasLayer(river959SavedLayer))river959SavedLayer.addTo(map)}
+ else if(map.hasLayer(river959SavedLayer))map.removeLayer(river959SavedLayer);
+}
 function markFilterApply(zoom){
  // Projektimport und direkt gesetzte Pins koennen ausserhalb der normalen Aufbau-Liste liegen.
  var registry=window.pin2mapPinDeleteItems;
  if(registry){Object.keys(registry).forEach(function(k){var it=registry[k];if(it&&it._pinLayer&&markFilterEntries.indexOf(it)<0)markFilterEntries.push(it)})}
  var signature=p2mFilterSignature();
  if(signature!==p2mLastFilterSignature){p2mClearTemporaryFilterPins();p2mLastFilterSignature=signature}
- var count=0;markFilterEntries.forEach(function(it){markFilterApplyOne(it);if(p2mMarkActuallyVisible(it))count++});
- var active=!!markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote;
+ var count=0;markFilterEntries.forEach(function(it){markFilterApplyOne(it);if(p2mMarkActuallyVisible(it))count++});p2mRiverFilterRefresh();count+=river959Visible?river959Saved.filter(p2mRiverFilterMatches).length:0;
+ var active=!!markFilterQuery.trim()||markFilterKind!=='allrivertext'||markFilterTrack||markFilterLink||markFilterNote;
  var hiddenCategory=Object.keys(categoryLayers).some(function(k){return !map.hasLayer(categoryLayers[k])});
  var button=document.getElementById('markFilterButton');if(button)button.classList.toggle('p2m-filter-active',active);
  var countEl=document.getElementById('markFilterCount');if(countEl)countEl.textContent='sichtbar: '+((active||hiddenCategory)?String(count):'alle');
@@ -2486,8 +2505,9 @@ function markFilterApply(zoom){
 function markFilterZoom(){
  if(!map)return;var bounds=L.latLngBounds([]);
  markFilterEntries.forEach(function(it){if(!p2mMarkActuallyVisible(it))return;var layer=it._areaLayer||it._pinLayer;if(!layer)return;try{if(layer.getBounds)bounds.extend(layer.getBounds());else if(layer.getLatLng)bounds.extend(layer.getLatLng())}catch(e){}});
+ if((markFilterKind==='allrivertext'||markFilterKind==='rivers')&&river959Visible){river959Saved.filter(p2mRiverFilterMatches).forEach(function(item){(item.chains||[]).forEach(function(chain){chain.forEach(function(pt){if(Array.isArray(pt)&&pt.length>=2)bounds.extend(pt)})})})}
  if(bounds.isValid())map.fitBounds(bounds,{padding:[55,55],maxZoom:15});
- else if(markFilterQuery.trim()||markFilterKind!=='alltext'||markFilterTrack||markFilterLink||markFilterNote)mapStatus.textContent='Keine passenden Markierungen gefunden.';
+ else if(markFilterQuery.trim()||markFilterKind!=='allrivertext'||markFilterTrack||markFilterLink||markFilterNote)mapStatus.textContent='Keine passenden Markierungen gefunden.';
 }
 var pendingProjectCategoryVisibility=null;
 var activeProjectCache=null; /* Nur für explizit geöffnete .pin2map-Projekte; Schlüssel = ursprüngliche Listenzeile. */
@@ -2511,7 +2531,29 @@ var named={'red':'#ff0000','dodgerblue':'#1e90ff','limegreen':'#32cd32','gold':'
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function color(v){v=(v||'').toLowerCase().trim();return named[v]||(/^#[0-9a-f]{3}([0-9a-f]{3})?$/.test(v)?v:'#1976d2')}
 function parse(s){var lines=s.replace(/\r/g,'').split('\n'),cat={name:'Ohne Kategorie',symbol:'📍',color:'#1976d2'},out=[];for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;if(line.charAt(0)==='#'){var t=line.slice(1).trim(),m=t.match(/\[([^\]]+)\]/),col=color(m?m[1]:''),clean=m?t.replace(m[0],'').trim():t,parts=clean.split(/\s+/),sym='📍';if(parts.length>1){sym=parts.shift();clean=parts.join(' ')}cat={name:clean||'Kategorie',symbol:sym,color:col};continue}var area=line.charAt(0)==='@',raw=(area?line.slice(1):line).trim(),q=raw,label='';var lm=raw.match(/\s+\((.*)\)\s*$/);if(lm){label=lm[1].trim();q=raw.slice(0,lm.index).trim()}if(/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(q))area=false;if(q)out.push({query:q,label:label||q,area:area,category:cat.name,symbol:cat.symbol,color:cat.color,sourceLine:raw,sourceFullLine:line})}return out}
-function ensureMap(){if(map)return;map=L.map('map',{preferCanvas:true,zoomControl:false}).setView([51.1,10.4],6);areaRenderer=L.canvas({padding:0.5});L.control.zoom({position:'bottomleft'}).addTo(map);L.control.scale({position:'bottomleft',metric:true,imperial:false,maxWidth:160}).addTo(map);setBase(document.getElementById('mapStyle').value);installMapPinGestures();setTimeout(positionAutoZoomButton,0)}
+
+// v10.12.30: Bei schmalen Displays den tatsächlichen Suchbalken beim Autozoom aussparen.
+// Die Werte werden bei jedem fitBounds neu gemessen (Safari-Viewport/Rotation).
+function p2m121230InstallTopbarFitPadding(m){
+ if(!m||m._p2m121230TopbarFit)return;
+ m._p2m121230TopbarFit=true;
+ var original=m.fitBounds;
+ m.fitBounds=function(bounds,options){
+  var screen=document.getElementById('mapScreen');
+  var topbar=screen&&screen.querySelector('.topbar');
+  var rect=m.getContainer().getBoundingClientRect();
+  if(!topbar||rect.width>700||getComputedStyle(topbar).display==='none')return original.call(m,bounds,options);
+  var bar=topbar.getBoundingClientRect();
+  if(bar.bottom<=rect.top||bar.top>=rect.bottom)return original.call(m,bounds,options);
+  var o=Object.assign({},options||{});
+  var p=o.padding||[0,0],tl=o.paddingTopLeft||p,br=o.paddingBottomRight||p;
+  var top=Math.max(Number(tl[1])||0,Math.ceil(bar.bottom-rect.top)+18);
+  o.paddingTopLeft=[Number(tl[0])||0,top];
+  o.paddingBottomRight=[Number(br[0])||0,Number(br[1])||0];
+  return original.call(m,bounds,o);
+ };
+}
+function ensureMap(){if(map)return;map=L.map('map',{preferCanvas:true,zoomControl:false}).setView([51.1,10.4],6);p2m121230InstallTopbarFitPadding(map);areaRenderer=L.canvas({padding:0.5});L.control.zoom({position:'bottomleft'}).addTo(map);L.control.scale({position:'bottomleft',metric:true,imperial:false,maxWidth:160}).addTo(map);setBase(document.getElementById('mapStyle').value);installMapPinGestures();setTimeout(positionAutoZoomButton,0)}
 function setBase(k){
  if(!map)return;
  if(reliefOverlay){map.removeLayer(reliefOverlay);reliefOverlay=null}
@@ -4576,7 +4618,19 @@ document.getElementById('categoryEditSave').onclick=function(){
  for(var q in areaDeleteItems){var ar=areaDeleteItems[q];if(ar&&ar.category===oldName){ar.category=newName;ar.symbol=sym;ar.color=col}}
  document.getElementById('categoryEditor').style.display='none';pendingCategoryEditName=null;refreshAfterDirectDelete()
 };
-function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');Object.keys(cats).reverse().forEach(function(name){var v=cats[name],lab=document.createElement('div'),cb=document.createElement('input'),sw=document.createElement('span'),txt=document.createElement('span');lab.className='chip';lab.style.cursor='pointer';cb.type='checkbox';cb.checked=map&&categoryLayers[name]?map.hasLayer(categoryLayers[name]):true;sw.className='swatch';sw.style.background=v.color;txt.textContent=name+' ('+v.count+')';var sym=document.createElement('span');sym.className='p2m-legend-symbol';sym.textContent=v.symbol;cb.onclick=function(e){e.stopPropagation()};cb.onchange=function(){var l=categoryLayers[name];if(!l)return;p2mClearTemporaryFilterPins();if(cb.checked)l.addTo(map);else map.removeLayer(l);markFilterApply(false);autoZoomAllContent()};lab.onclick=function(e){if(e.target===cb)return;var edge=sym.getBoundingClientRect().left;if(e.clientX>=edge){cb.click();return}openCategoryEditor(name,v)};lab.appendChild(txt);lab.appendChild(sym);lab.appendChild(sw);lab.appendChild(cb);box.appendChild(lab)})}
+function p2mRiverLegendRow(box){
+ if(!box||!river959Saved.length)return;
+ var lab=document.createElement('div'),txt=document.createElement('span'),cb=document.createElement('input');
+ lab.className='chip p2m-river-legend';lab.style.cssText='background:#cfeeff!important;cursor:pointer';
+ txt.textContent='Flüsse ('+river959Saved.length+') 🌊';cb.type='checkbox';cb.checked=river959Visible;
+ cb.setAttribute('aria-label','Flüsse anzeigen');
+ cb.onclick=function(e){e.stopPropagation()};
+ cb.onchange=function(){river959Visible=cb.checked;if(!map)return;if(river959SavedLayer)p2mRiverFilterRefresh();autoZoomAllContent()};
+ lab.onclick=function(e){if(e.target!==cb)cb.click()};
+ lab.appendChild(txt);lab.appendChild(cb);box.appendChild(lab)
+}
+function p2mRefreshRiverLegend(){var box=document.getElementById('legend');if(!box)return;var old=box.querySelector('.p2m-river-legend');if(old)old.remove();if(river959Saved.length)p2mRiverLegendRow(box);if(typeof syncLegendToggle==='function')syncLegendToggle()}
+function buildLegend(items){var cats={};for(var i=0;i<items.length;i++){var x=items[i];if(!cats[x.category])cats[x.category]={symbol:x.symbol,color:x.color,count:0};cats[x.category].count++}var box=document.getElementById('legend');box.innerHTML='';p2mRiverLegendRow(box);Object.keys(cats).reverse().forEach(function(name){var v=cats[name],lab=document.createElement('div'),cb=document.createElement('input'),sw=document.createElement('span'),txt=document.createElement('span');lab.className='chip';lab.style.cursor='pointer';cb.type='checkbox';cb.checked=map&&categoryLayers[name]?map.hasLayer(categoryLayers[name]):true;sw.className='swatch';sw.style.background=v.color;txt.textContent=name+' ('+v.count+')';var sym=document.createElement('span');sym.className='p2m-legend-symbol';sym.textContent=v.symbol;cb.onclick=function(e){e.stopPropagation()};cb.onchange=function(){var l=categoryLayers[name];if(!l)return;p2mClearTemporaryFilterPins();if(cb.checked)l.addTo(map);else map.removeLayer(l);markFilterApply(false);autoZoomAllContent()};lab.onclick=function(e){if(e.target===cb)return;var edge=sym.getBoundingClientRect().left;if(e.clientX>=edge){cb.click();return}openCategoryEditor(name,v)};lab.appendChild(txt);lab.appendChild(sym);lab.appendChild(sw);lab.appendChild(cb);box.appendChild(lab)})}
 function removeElevationLabel(it){if(!it||!it._elevationLayer)return;try{var grp=categoryLayers[it.category];if(grp&&grp.removeLayer)grp.removeLayer(it._elevationLayer);else if(map&&map.hasLayer(it._elevationLayer))map.removeLayer(it._elevationLayer)}catch(e){}it._elevationLayer=null}
 function renderElevationLabel(it){
  if(!it||!it._pinLayer)return;
@@ -4806,7 +4860,7 @@ function build(items){Object.keys(pinDeleteItems).forEach(function(k){delete pin
  if(savedVisibility&&typeof savedVisibility==='object')Object.keys(categoryLayers).forEach(function(name){if(savedVisibility[name]===false)map.removeLayer(categoryLayers[name])});
  buildLegend(items);
 function noteMissing(x){if(myBuild!==buildGeneration)return;miss++;missed.push(x.query);var box=document.getElementById('notFoundList');box.innerHTML='<b>⚠️ Nicht gefunden ('+missed.length+')</b><br>'+missed.map(function(v){return '• '+esc(v)}).join('<br>')}
-function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){p2mApplyImportedPinUrls();if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();if(miss)mapStatus.textContent='⚠️ '+miss+' nicht gefunden.';if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='alltext')markFilterApply(true);return}var x=items[idx],num=idx+1;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(x)}).addTo(categoryLayers[x.category]);x._pinLayer=marker;p2mEnablePinMove(x,marker);allBounds.extend(p);if(p2mHasPinName(x))marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x);p2mSyncNoteDot(x)}markFilterRegister(x);p2mSyncPinBadges(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
+function next(){if(myBuild!==buildGeneration)return;if(idx>=items.length){if(river959Saved.length)river959Render();p2mApplyImportedPinUrls();if(pendingGpxTracks){drawPendingGpxTracks();autoZoomLoadedLayers()}else if(pendingProjectRoute){restoreProjectRoute(items)}else autoZoomLoadedLayers();if(miss)mapStatus.textContent='⚠️ '+miss+' nicht gefunden.';if(showElevations)setTimeout(fetchMissingElevations,0);if(markFilterQuery.trim()||markFilterKind!=='allrivertext')markFilterApply(true);return}var x=items[idx],num=idx+1;resolveItemData(x).then(function(a){if(myBuild!==buildGeneration)return;if(!a.length){noteMissing(x);return}var p=[parseFloat(a[0].lat),parseFloat(a[0].lon)];if(x.area&&a[0].geojson){var pg=prepareAreaGeoJSON(a[0].geojson);areaPoints+=pg.after;var poly=L.geoJSON(pg.geometry,{renderer:areaRenderer,style:{color:x.color,weight:2,fillColor:x.color,fillOpacity:.28}}).addTo(categoryLayers[x.category]);x._areaLayer=poly;x._geoPointCount=pg.after;renderedAreas.push({layer:poly,item:x});poly.on('click',function(ev){if(ev&&ev.originalEvent){L.DomEvent.stopPropagation(ev);L.DomEvent.preventDefault(ev)}});var center=poly.getBounds().getCenter();var areaLabelMarker=L.marker(center,{interactive:false,icon:L.divIcon({className:'area-label-wrap',html:'<div class="area-label">'+esc(x.label)+'</div>',iconSize:null})}).addTo(categoryLayers[x.category]);x._areaLabelLayer=areaLabelMarker;allBounds.extend(poly.getBounds())}else{var marker=L.marker(p,{icon:icon(x.symbol,num,false)}).bindPopup(function(){return pinPopupHtml(x)}).addTo(categoryLayers[x.category]);x._pinLayer=marker;p2mEnablePinMove(x,marker);allBounds.extend(p);if(p2mHasPinName(x))marker.bindTooltip(x.label,{permanent:true,direction:'right',offset:[12,-18],className:'address-label'});renderElevationLabel(x);p2mSyncNoteDot(x)}markFilterRegister(x);p2mSyncPinBadges(x)}).catch(function(){noteMissing(x)}).then(function(){if(myBuild!==buildGeneration)return;idx++;sleep((x._fromProjectCache||/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(x.query))?0:1050).then(next)})}next()}
 document.getElementById('go').onclick=function(){var items=parse(input.value);formStatus.textContent='';form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);if(items.length)build(items);else clearMap()},150)};
 document.getElementById('back').onclick=function(){screen.style.display='none';form.style.display='block';document.body.style.overflow='auto';mapStatus.textContent=''};
 function openMapInitially(){form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();setTimeout(function(){map.invalidateSize(true);var items=parse(input.value);if(items.length){build(items);if(importedFromUrl)clearImportedDataFromUrl()}else{clearMap();var q=document.getElementById('quickPlace');if(q)q.blur()}},150)}
@@ -5065,25 +5119,28 @@ async function area960Search(){
  }catch(e){if(run===area960Run)notice.textContent='⚠️ '+String(e&&e.message||e)}
 }
 
-var river950Layer=null,river950Run=0,river959Current=null,river959Saved=[],river959SavedLayer=null;
+var river950Layer=null,river950Run=0,river959Current=null,river959Saved=[],river959SavedLayer=null,river959Visible=true;
 // Flussfarben immer aus den aktuell definierten Kategorien beziehen.
 function river1015ChooseColor(item){
- var cats=categoryDefinitions();
- var shade=document.createElement('div');shade.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:999999;display:flex;align-items:center;justify-content:center;padding:18px';
- var panel=document.createElement('div');panel.style.cssText='background:white;border-radius:14px;padding:18px;max-width:360px;width:100%;box-shadow:0 10px 35px #0004';
- var title=document.createElement('h3');title.textContent='Farbe für '+item.name;title.style.margin='0 0 14px';panel.appendChild(title);
- var grid=document.createElement('div');grid.style.cssText='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px';
- cats.forEach(function(c){
-  var b=document.createElement('button');b.type='button';
-  b.title=c.name;b.setAttribute('aria-label','Farbe der Kategorie '+c.name);
-  b.style.cssText='background:'+c.color+';min-height:64px;color:transparent;border:3px solid '+(item.color===c.color?'#222':'transparent')+';border-radius:8px;padding:12px 3px;cursor:pointer';
-  b.onclick=function(){item.color=c.color;shade.remove();river959Render()};
-  grid.appendChild(b)
+ // Den vorhandenen Flächen-Farbdialog unverändert auch für Flüsse benutzen.
+ var cats=categoryDefinitions(),box=document.getElementById('pinCategoryChooser'),buttons=document.getElementById('pinCategoryButtons');
+ if(!box||!buttons)return;
+ var title=box.querySelector('div');
+ box.classList.add('area-color-only');
+ if(title)title.textContent='Farbe für Fläche wählen';
+ buttons.innerHTML='';
+ cats.forEach(function(c,i){
+  var bt=document.createElement('button');bt.type='button';
+  bt.textContent=String(i+1);bt.title=(i+1)+' · '+c.name;
+  bt.setAttribute('aria-label',(i+1)+' · '+c.name);
+  bt.style.cssText='display:block;width:64px;height:64px;min-height:64px;padding:0;border:1px solid #d1d1d6;border-radius:0;background:'+hexToRgba(c.color,.55)+';font-size:22px;font-weight:800;color:#111;text-shadow:0 1px 2px #fff;cursor:pointer';
+  bt.onclick=function(){
+   box.style.display='none';box.classList.remove('area-color-only');
+   if(map)map.closePopup();item.color=c.color;river959Render()
+  };
+  buttons.appendChild(bt)
  });
- panel.appendChild(grid);
- if(!cats.length){var hint=document.createElement('p');hint.textContent='Keine Kategorien vorhanden.';panel.appendChild(hint)}
- var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Nicht speichern';cancel.style.cssText='display:block;margin:14px 0 0 auto;background:#e5e5e9;color:#222;border-radius:8px;padding:9px 16px';cancel.onclick=function(){shade.remove()};panel.appendChild(cancel);
- shade.appendChild(panel);shade.addEventListener('click',function(e){if(e.target===shade)shade.remove()});document.body.appendChild(shade)
+ box.style.display='block'
 }
 function river1016LabelPosition(chains){
  var best=null,bestLength=0;
@@ -5119,34 +5176,57 @@ function river1018PaleColor(color){
  probe.remove();
  var m=rgb.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
  if(!m)return 'rgb(184,220,245)';
- return 'rgb('+[1,2,3].map(function(i){return Math.round(Number(m[i])*.45+255*.55)}).join(',')+')';
+ return 'rgb('+[1,2,3].map(function(i){return Math.round(Number(m[i])*.12+255*.88)}).join(',')+')';
 }
 function river959Render(){
  if(!map)return;
+ if(!map.getPane('p2mRiverPane')){var rp=map.createPane('p2mRiverPane');rp.style.zIndex='460';rp.style.pointerEvents='auto'}
  if(river959SavedLayer&&map.hasLayer(river959SavedLayer))map.removeLayer(river959SavedLayer);
- river959SavedLayer=L.layerGroup().addTo(map);
+ river959SavedLayer=L.layerGroup();if(river959Visible)river959SavedLayer.addTo(map);
  
+ p2mRefreshRiverLegend();
  river959Saved.forEach(function(item,index){
+  var itemLayer=L.layerGroup();item._p2mRiverDisplayLayer=itemLayer;
   var labelPos=river1016LabelPosition(item.chains);
   if(labelPos&&item.name){
    var labelIcon=L.divIcon({className:'river-name-wrap',html:'<span class="river-name-label" style="color:#111!important;border-color:'+escHtml(item.color||'#1689e5')+'!important;background:'+river1018PaleColor(item.color||'#1689e5')+'!important">'+escHtml(item.name)+'</span>',iconSize:[0,0],iconAnchor:[0,0]});
-   L.marker(labelPos,{icon:labelIcon,interactive:false,keyboard:false,zIndexOffset:300}).addTo(river959SavedLayer)
+   L.marker(labelPos,{icon:labelIcon,interactive:false,keyboard:false,zIndexOffset:300}).addTo(itemLayer)
   }
   (item.chains||[]).forEach(function(pts){
-   var line=L.polyline(pts,{color:item.color||'#1689e5',weight:5,opacity:.9,lineCap:'round',lineJoin:'round'}).addTo(river959SavedLayer);
-   var hit=L.polyline(pts,{color:item.color||'#1689e5',weight:24,opacity:0,interactive:true}).addTo(river959SavedLayer);
-   var popup=document.createElement('div'),label=document.createElement('strong'),del=document.createElement('button');popup.className='p2m106-path-popup';
-   label.textContent='🌊 '+item.name;popup.appendChild(label);popup.appendChild(document.createElement('br'));
-   del.textContent='Entfernen';del.style.cssText='margin-top:8px;background:#e53935;color:white;padding:7px 10px;border-radius:7px';
-   del.onclick=function(){if(!confirm('Gewässer „'+item.name+'“ entfernen?'))return;river959Saved.splice(index,1);if(river950Layer)river950Layer.clearLayers();river959Current=null;map.closePopup();river959Render()};
-   var colorBtn=document.createElement('button');colorBtn.type='button';colorBtn.textContent='🎨 Farbe';colorBtn.style.cssText='margin:8px 8px 0 0;background:#e6f1ff;color:#125caa;padding:7px 10px;border:1px solid #bdd9f5;border-radius:7px;font-weight:600;cursor:pointer';
-   colorBtn.onclick=function(e){e.stopPropagation();river1015ChooseColor(item)};
-   popup.appendChild(colorBtn);popup.appendChild(del);line.bindPopup(popup,{minWidth:185,maxWidth:260});hit.bindPopup(popup,{minWidth:185,maxWidth:260});
+   var line=L.polyline(pts,{pane:'p2mRiverPane',color:item.color||'#1689e5',weight:5,opacity:.9,lineCap:'round',lineJoin:'round'}).addTo(itemLayer);
+   var hit=L.polyline(pts,{pane:'p2mRiverPane',color:item.color||'#1689e5',weight:24,opacity:0,interactive:true}).addTo(itemLayer);
+   var popup=document.createElement('div');popup.className='p2m106-path-popup';
+   popup.style.cssText='min-width:190px;max-width:250px';
+   var nameField=document.createElement('fieldset');nameField.style.cssText='border:1px solid #c7c7cc;border-radius:9px;padding:3px 8px 8px;margin:0 0 10px';
+   var nameLegend=document.createElement('legend');nameLegend.textContent='Flussname';nameLegend.style.cssText='font-weight:600;padding:0 5px';nameField.appendChild(nameLegend);
+   var nameInput=document.createElement('input');nameInput.type='text';nameInput.value=item.name;nameInput.setAttribute('aria-label','Flussname');
+   nameInput.style.cssText='width:100%;box-sizing:border-box;border:0;outline:none;background:transparent;font-size:16px;min-height:30px';
+   nameField.appendChild(nameInput);popup.appendChild(nameField);
+   var actions=document.createElement('div');actions.style.cssText='display:flex;gap:8px;align-items:center;justify-content:center';
+   var roundStyle='width:42px;height:42px;min-width:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;font-family:Arial,sans-serif;font-weight:700;line-height:1';
+   var del=document.createElement('button');del.type='button';del.textContent='✕';del.title='Fluss entfernen';del.setAttribute('aria-label','Fluss entfernen');
+   del.style.cssText=roundStyle+';background:#e53935;color:#fff;border:0;font-size:27px';
+   del.onclick=function(e){e.stopPropagation();if(!confirm('Gewässer „'+item.name+'“ entfernen?'))return;river959Saved.splice(index,1);if(river950Layer)river950Layer.clearLayers();river959Current=null;map.closePopup();river959Render()};
+   var colorBtn=document.createElement('button');colorBtn.type='button';colorBtn.textContent='🌈';colorBtn.title='Flussfarbe ändern';colorBtn.setAttribute('aria-label','Flussfarbe ändern');
+   colorBtn.style.cssText=roundStyle+';background:#e6f1ff;color:#125caa;border:1px solid #bdd9f5;font-size:24px';
+   colorBtn.onclick=function(e){e.stopPropagation();commitRiverName();river1015ChooseColor(item)};
+   var wikiBtn=document.createElement('button');wikiBtn.type='button';wikiBtn.textContent=uiSymbol('wikipedia');wikiBtn.title='Wikipedia';wikiBtn.setAttribute('aria-label','Wikipedia');
+   wikiBtn.style.cssText=roundStyle+';background:#fff;color:#111;border:1px solid #c7c7cc;font-size:23px';
+   wikiBtn.onclick=function(e){e.stopPropagation();commitRiverName();openWikipediaForItem({label:item.name})};
+   var closeBtn=document.createElement('button');closeBtn.type='button';closeBtn.textContent='✓';closeBtn.title='Übernehmen und schließen';closeBtn.setAttribute('aria-label','Übernehmen und schließen');
+   closeBtn.style.cssText=roundStyle+';background:#34a853;color:#fff;border:0;font-size:27px';
+   closeBtn.onclick=function(e){e.stopPropagation();commitRiverName();map.closePopup()};
+   function commitRiverName(){var next=nameInput.value.trim();if(next&&next!==item.name){item.name=next;river959Render()}}
+   nameInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();nameInput.blur();commitRiverName();map.closePopup()}else if(e.key==='Escape'){e.preventDefault();nameInput.value=item.name;map.closePopup()}});
+   nameInput.addEventListener('change',commitRiverName);
+   actions.appendChild(del);actions.appendChild(colorBtn);actions.appendChild(wikiBtn);actions.appendChild(closeBtn);popup.appendChild(actions);
+   line.bindPopup(popup,{minWidth:195,maxWidth:270});hit.bindPopup(popup,{minWidth:195,maxWidth:270});
    // Breite unsichtbare Trefferzone auch auf Touchgeräten anklickbar halten.
    hit.setStyle({opacity:0.015});hit.bringToFront();hit.options.bubblingMouseEvents=false;
    hit.on('click',function(e){L.DomEvent.stopPropagation(e);hit.openPopup(e.latlng)});
    line.on('click',function(e){L.DomEvent.stopPropagation(e);line.openPopup(e.latlng)})
   })
+  if(river959Visible&&p2mRiverFilterMatches(item))river959SavedLayer.addLayer(itemLayer);
  })
 }
 function river959OfferSave(){
@@ -5714,7 +5794,7 @@ document.getElementById('markFilterType').addEventListener('change',function(){m
   markFilterApply(true);
  });
 });
-document.getElementById('markFilterReset').onclick=function(){p2mClearTemporaryFilterPins();markFilterQuery='';markFilterKind='alltext';markFilterTrack=false;markFilterLink=false;markFilterNote=false;document.getElementById('markFilterText').value='';document.getElementById('markFilterType').value='alltext';['markFilterTrack','markFilterLink','markFilterNote'].forEach(function(id){document.getElementById(id).checked=false});markFilterApply(false);autoZoomAllContent()};
+document.getElementById('markFilterReset').onclick=function(){p2mClearTemporaryFilterPins();markFilterQuery='';markFilterKind='allrivertext';markFilterTrack=false;markFilterLink=false;markFilterNote=false;document.getElementById('markFilterText').value='';document.getElementById('markFilterType').value='allrivertext';['markFilterTrack','markFilterLink','markFilterNote'].forEach(function(id){document.getElementById(id).checked=false});markFilterApply(false);autoZoomAllContent()};
 document.addEventListener('keydown',function(e){
  if(markFilterPanel.style.display!=='block'||(e.key!=='Escape'&&e.key!=='Enter'))return;
  e.preventDefault();e.stopImmediatePropagation();
@@ -5861,7 +5941,7 @@ function collectProjectCache(){
  return cache
 }
 function projectCategoryVisibility(){var state={};if(map)Object.keys(categoryLayers).forEach(function(name){state[name]=map.hasLayer(categoryLayers[name])});return state}
-function projectDocument(){return {categoryVisibility:projectCategoryVisibility(),gpxStartRoutes:window.pin2mapExportStartRoutes?window.pin2mapExportStartRoutes():[],format:'pin2map',version:1,list:input.value,options:{labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value,optionalEsriRelief:optionalEsriRelief,showElevations:showElevations},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache(),rivers:river959Saved,gpxTracks:(gpxLayer&&gpxLayer.getLayers)?gpxLayer.getLayers().filter(function(l){return l instanceof L.Polyline&&!l.options._p2m106Hit}).map(function(l){return l.getLatLngs().map(function(p){return [p.lat,p.lng]})}):[],route:projectRouteDocument()}}
+function projectDocument(){return {categoryVisibility:projectCategoryVisibility(),gpxStartRoutes:window.pin2mapExportStartRoutes?window.pin2mapExportStartRoutes():[],format:'pin2map',version:1,list:input.value,options:{labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value,optionalEsriRelief:optionalEsriRelief,showElevations:showElevations},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache(),rivers:river959Saved,riversVisible:river959Visible,gpxTracks:(gpxLayer&&gpxLayer.getLayers)?gpxLayer.getLayers().filter(function(l){return l instanceof L.Polyline&&!l.options._p2m106Hit}).map(function(l){return l.getLatLngs().map(function(p){return [p.lat,p.lng]})}):[],route:projectRouteDocument()}}
 function suggestedProjectName(){
  var items=parse(input.value),first=items.filter(function(x){return !x.area})[0]||items[0],base=(first&&(first.label||first.query))||'pin2map';
  base=String(base).replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,60)||'pin2map';
@@ -6080,7 +6160,7 @@ function openPin2MapProject(doc){
  if(!doc||doc.format!=='pin2map'||typeof doc.list!=='string')throw new Error('Keine gültige pin2map-Datei.');
  resetRoutingBeforeImport();pendingProjectCategoryVisibility=(doc.categoryVisibility&&typeof doc.categoryVisibility==='object'&&!Array.isArray(doc.categoryVisibility))?doc.categoryVisibility:null;
  if(window.pin2mapRestoreStartRoutes)window.pin2mapRestoreStartRoutes(doc.gpxStartRoutes);
- pendingGpxTracks=Array.isArray(doc.gpxTracks)&&doc.gpxTracks.length?doc.gpxTracks:null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();input.value=doc.list;river959Saved=Array.isArray(doc.rivers)?doc.rivers.filter(function(x){return x&&Array.isArray(x.chains)&&typeof x.name==='string'}):[];activeProjectCache=(doc.cache&&typeof doc.cache==='object')?doc.cache:{};pinNoteSession={};pinNoteByLocation=Object.create(null);pendingProjectRoute=(doc.route&&typeof doc.route==='object')?doc.route:null;setTimeout(function(){if(map){river959Render();autoZoomAllContent();p2mRefreshLoadedNoteBadges()}},600);
+ pendingGpxTracks=Array.isArray(doc.gpxTracks)&&doc.gpxTracks.length?doc.gpxTracks:null;if(gpxLayer&&map&&map.hasLayer(gpxLayer))map.removeLayer(gpxLayer);gpxLayer=null;updateGpxTrackControls();input.value=doc.list;river959Saved=Array.isArray(doc.rivers)?doc.rivers.filter(function(x){return x&&Array.isArray(x.chains)&&typeof x.name==='string'}):[];river959Visible=doc.riversVisible!==false;activeProjectCache=(doc.cache&&typeof doc.cache==='object')?doc.cache:{};pinNoteSession={};pinNoteByLocation=Object.create(null);pendingProjectRoute=(doc.route&&typeof doc.route==='object')?doc.route:null;setTimeout(function(){if(map){river959Render();autoZoomAllContent();p2mRefreshLoadedNoteBadges()}},600);
 
  if(doc.options){document.getElementById('labelAddresses').checked=doc.options.labelAddresses!==false;document.getElementById('labelAreas').checked=doc.options.labelAreas!==false;if(typeof doc.options.optionalEsriRelief==='boolean')setOptionalEsriRelief(doc.options.optionalEsriRelief);showElevations=false;p2mInfoMode=0;syncElevationButton();if(doc.options.mapStyle&&baseMaps[doc.options.mapStyle]){document.getElementById('mapStyle').value=doc.options.mapStyle;if(map)setBase(doc.options.mapStyle)}}
  form.style.display='none';screen.style.display='block';document.body.style.overflow='hidden';ensureMap();
@@ -6286,7 +6366,7 @@ function p2mUpdateCategoryCount(){
  var legend=document.getElementById('legend');
  if(!legend)return;
  legend.addEventListener('change',function(e){if(e.target&&e.target.matches('input[type="checkbox"]'))p2mUpdateCategoryCount()});
- new MutationObserver(p2mUpdateCategoryCount).observe(legend,{childList:true});
+ new MutationObserver(function(){p2mUpdateCategoryCount();syncLegendToggle()}).observe(legend,{childList:true});
  p2mUpdateCategoryCount();
 })();
 /* V8.54: Kategorien-Legende dynamisch ein-/ausblenden. */
