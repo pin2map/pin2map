@@ -2321,9 +2321,57 @@ html,body{max-width:100%;overflow-x:hidden}
 #mapScreen #newMapButton.p2m-control-six{position:absolute!important;left:max(10px,env(safe-area-inset-left))!important;right:auto!important;top:max(120px,calc(env(safe-area-inset-top) + 120px))!important;bottom:auto!important;z-index:1200!important;--p2m-six-background:#b9e9b4;--p2m-six-color:#16551a;font-size:27px!important;display:flex!important;align-items:center!important;justify-content:center!important}
 @media(max-width:600px){#mapScreen #newMapButton.p2m-control-six{left:max(8px,env(safe-area-inset-left))!important;top:calc(var(--p2m-iphone-controls-top,160px) + 2 * var(--p2m-iphone-controls-step,54px))!important}}
 </style>
+<style id="p2m-1231-unified-filter">
+#mapScreen #markFilterPanel{position:absolute!important;z-index:1250!important;box-sizing:border-box!important;width:min(370px,calc(100vw - 24px))!important;max-width:calc(100vw - 24px)!important;background:rgba(255,255,255,.97)!important;border-radius:13px!important;padding:10px 12px!important;box-shadow:0 4px 15px #0002!important}
+#markFilterPanel .p2m-filter-inforow{display:flex!important;align-items:center!important;gap:10px!important;margin:0 0 8px!important}
+#markFilterPanel #markFilterType{flex:1!important;min-width:0!important;width:0!important;font-size:14px!important}
+#markFilterPanel #markFilterCount{flex:0 0 auto!important;min-width:24px!important;font-size:16px!important;font-weight:800!important;color:#222!important;text-align:center!important}
+#markFilterPanel .p2m-filter-options{border:0!important;padding:0!important;margin:0!important;display:flex!important;justify-content:space-between!important;gap:4px!important;flex-wrap:nowrap!important}
+#markFilterPanel .p2m-filter-options label{font-size:13px!important;white-space:nowrap!important;display:flex!important;align-items:center!important;gap:3px!important}
+#markFilterPanel .p2m-filter-options input{width:17px!important;height:17px!important}
+#markFilterPanel [hidden]{display:none!important}
+#mapScreen .topbar .quick983-inputwrap.p2m1231-filter-input{border:2px solid #e53935!important;border-radius:10px!important;box-shadow:0 0 0 1px #e5393520!important}
+#mapScreen .topbar .quick-place>#markFilterButton.p2m-filter-active{background:#e53935!important;color:white!important;border-color:#e53935!important}
+@media(max-width:700px){#mapScreen #markFilterPanel{width:calc(100vw - 36px)!important;max-width:370px!important;padding:9px!important}#markFilterPanel .p2m-filter-options label{font-size:12px!important}}
+</style>
+<style id="p2m-1233-filter-correction">
+/* Kompakter Filterkasten: feste schmale Breite, auch auf iPhone. */
+#mapScreen #markFilterPanel{width:min(300px,calc(100vw - 88px))!important;max-width:min(300px,calc(100vw - 88px))!important;padding:7px 9px!important}
+#mapScreen #markFilterPanel .p2m-filter-inforow{margin-bottom:3px!important;gap:6px!important}
+#mapScreen #markFilterPanel .p2m-filter-options{gap:3px!important;justify-content:space-between!important}
+#mapScreen #markFilterPanel .p2m-filter-options label{font-size:clamp(10px,2.7vw,12px)!important;gap:2px!important}
+#mapScreen #markFilterPanel .p2m-filter-options input{width:15px!important;height:15px!important;min-width:15px!important}
+/* Identische Rahmenstaerke: blau im Suchmodus, rot im Filtermodus. */
+#mapScreen .topbar .quick-place>.quick983-inputwrap{border:2px solid #358ed5!important;border-radius:10px!important;box-sizing:border-box!important}
+#mapScreen .topbar .quick-place>.quick983-inputwrap.p2m1231-filter-input{border-color:#e53935!important}
+</style>
+<style id="p2m-1239-field-label-count">
+/* Kleine Feldlegende direkt auf dem Eingaberahmen, wie im Pin-Dialog. */
+#mapScreen .topbar .quick-place>.quick983-inputwrap{position:relative!important;overflow:visible!important}
+#mapScreen .quick983-inputwrap .p2m1239-caption{position:absolute;left:12px;top:-11px;z-index:4;background:#fff;padding:0 5px;font-size:12px;line-height:18px;font-weight:700;color:#358ed5;white-space:nowrap;pointer-events:none}
+#mapScreen .quick983-inputwrap.p2m1231-filter-input .p2m1239-caption{color:#e53935}
+#mapScreen .quick983-inputwrap #markFilterCount{position:absolute;right:43px;top:50%;transform:translateY(-50%);z-index:3;font-size:13px;font-weight:700;color:#888;pointer-events:none;min-width:0;text-align:right;white-space:nowrap}
+#mapScreen .quick983-inputwrap.p2m1231-filter-input #quickPlace{padding-right:88px!important}
+#mapScreen .quick983-inputwrap:not(.p2m1231-filter-input) #markFilterCount{display:none!important}
+#mapScreen #markFilterPanel{width:min(270px,calc(100vw - 40px))!important;max-width:min(270px,calc(100vw - 40px))!important}
+#mapScreen #markFilterPanel .p2m-filter-inforow{margin-bottom:4px!important}
+#mapScreen #markFilterPanel #markFilterType{width:100%!important;flex:1 1 auto!important;font-size:clamp(11px,2.5vw,13px)!important}
+</style>
+<style id="p2m-1242-filter-alignment">
+/* Ausschließlich Darstellung: Die Filterlogik aus v10.12.40 bleibt unverändert. */
+#mapScreen .quick983-inputwrap .p2m1239-caption{top:-5px!important;line-height:16px!important}
+#mapScreen .topbar .quick-place>.quick983-inputwrap{align-items:center!important}
+#mapScreen .topbar .quick983-inputwrap #quickPlace{align-self:center!important;line-height:normal!important}
+#mapScreen .quick983-inputwrap #markFilterCount{top:50%!important;transform:translateY(-50%)!important;line-height:1!important}
+#mapScreen .topbar #quick983Clear{top:50%!important;transform:translateY(-50%)!important}
+</style>
+<style id="p2m-1244-count-in-caption">
+#mapScreen .quick983-inputwrap #markFilterCount{display:none!important}
+#mapScreen .quick983-inputwrap.p2m1231-filter-input #quickPlace{padding-right:43px!important}
+</style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.12.30)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.12.44)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Eins
@@ -2370,11 +2418,10 @@ html,body{max-width:100%;overflow-x:hidden}
 <button type="button" id="copyMap" class="map-round-control map-ui-control p2m-control-six" title="Karte kopieren" aria-label="Karte kopieren">📸</button>
 
 
-<div id="markFilterPanel" class="map-ui-control" role="dialog" aria-label="Markierungen filtern" style="display:none">
- <div class="p2m-filter-head"><strong>⚲ Markierungen filtern</strong><button type="button" id="markFilterClose" aria-label="Filter schließen">×</button></div>
- <div class="p2m-filter-searchrow"><input type="search" id="markFilterText" placeholder="Beschriftung, z. B. FAO" autocomplete="off" aria-label="Beschriftung filtern"><button type="button" id="markFilterReset" title="Alle anzeigen" aria-label="Alle anzeigen">ALL</button></div>
- <div class="p2m-filter-inforow"><div class="p2m-filter-typecol"><select id="markFilterType" aria-label="Markierungstyp"><option value="all">Pins und Flächen</option><option value="pins">Nur Pins</option><option value="areas">Nur Flächen</option><option value="rivers">Nur Flüsse</option><option value="allrivertext" selected>Pins, Flächen, Flüsse, Text</option><option value="alltext">Pins, Flächen, Text</option><option value="pinstext">Nur Pins und Text</option></select><div id="markFilterCount" role="status" aria-live="polite">sichtbar: alle</div></div><button type="button" id="markFilterExport" title="Sichtbare Pins als Text kopieren" aria-label="Sichtbare Pins als Text kopieren">📋</button></div>
+<div id="markFilterPanel" class="map-ui-control" aria-label="Filteroptionen" style="display:none">
+ <div class="p2m-filter-inforow"><select id="markFilterType" aria-label="Markierungstyp"><option value="all">Pins und Flächen</option><option value="pins">Nur Pins</option><option value="areas">Nur Flächen</option><option value="rivers">Nur Flüsse</option><option value="allrivertext" selected>Pins, Flächen, Flüsse, Text</option><option value="alltext">Pins, Flächen, Text</option><option value="pinstext">Nur Pins und Text</option></select></div>
  <div class="p2m-filter-options" role="group" aria-label="Pins mit Inhalt"><label><input type="checkbox" id="markFilterTrack"> <span>Mit Track</span></label><label><input type="checkbox" id="markFilterLink"> <span>Mit Link</span></label><label><input type="checkbox" id="markFilterNote"> <span>Mit Notiz</span></label></div>
+ <input type="hidden" id="markFilterText"><button type="button" id="markFilterReset" hidden>ALL</button><button type="button" id="markFilterClose" hidden>×</button><button type="button" id="markFilterExport" hidden>📋</button>
 </div>
 <button type="button" id="legendToggle" class="map-round-control map-ui-control p2m-control-six" title="Kategorien ausblenden" aria-label="Kategorien ausblenden" aria-pressed="true"><span class="p102-menu-glyph" aria-hidden="true">☰</span></button><div id="legend" class="legend"></div><div id="addressList" class="address-list"></div><div id="mapStatus" class="mapStatus"></div><div id="routeInfo" class="route-info"><div class="route-main"><div class="route-toolbar-row route-toolbar-summary"><div id="routeSummary" class="route-summary">Route</div><button type="button" id="routePanelHide" class="route-circle route-panel-hide" title="Navigationsdialog ausblenden" aria-label="Navigationsdialog ausblenden"><span aria-hidden="true">×</span></button></div><div class="route-toolbar-row route-toolbar-primary"><fieldset class="route-mode-fieldset"><legend>Routing für</legend><div class="route-mode-options"><button type="button" data-route-mode="driving" class="active route-circle" title="Auto" aria-label="Auto">🚗</button><button type="button" data-route-mode="bicycle" class="route-circle" title="Fahrrad" aria-label="Fahrrad">🚴‍♂️</button><button type="button" data-route-mode="pedestrian" class="route-circle" title="Zu Fuß" aria-label="Zu Fuß">🥾</button><button type="button" data-route-mode="transit" class="route-circle" title="ÖPNV" aria-label="ÖPNV">🚃</button></div></fieldset><button type="button" id="routeClear" title="Route entfernen" aria-label="Route beenden">Beenden</button></div><div class="route-toolbar-row route-toolbar-secondary"><div id="transitTimeControls" class="transit-time-controls"><select id="transitTimeMode" aria-label="ÖPNV-Zeit"><option value="arrive" selected>Ankunft</option><option value="depart">Abfahrt</option></select><div id="p2mTransitDateTimePair" class="p2m-transit-datetime-pair" style="display:none"><input id="p2mTransitDate" type="date" aria-label="ÖPNV-Datum"><input id="p2mTransitClock" type="time" aria-label="ÖPNV-Uhrzeit" step="60"></div><input id="transitDateTime" type="datetime-local" aria-label="Datum und Uhrzeit" style="display:none"><select id="transitVehiclePreference" aria-label="Bevorzugtes Verkehrsmittel" title="ÖPNV-Verkehrsmittel"><option value="all">Alle</option><option value="rail">Bahn</option><option value="bus">Bus</option></select><select id="transitExtraTransfer" aria-label="Zusätzliche Umsteigezeit" title="Zusätzliche Umsteigezeit"><option value="0">+0 min</option><option value="3">+3 min</option><option value="5" selected>+5 min</option><option value="10">+10 min</option><option value="15">+15 min</option></select></div>
 <fieldset class="route-multipin-fieldset"><legend>Multi Pin Routing</legend><div class="route-multipin-options"><button type="button" id="routeVisiblePins" class="route-circle route-visible-pins" title="Alle noch nicht verwendeten Pins im aktuellen Kartenausschnitt als Zwischenziele hinzufügen" aria-label="Sichtbare Pins hinzufügen"><svg class="route-all-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42" width="36" height="36" aria-hidden="true" focusable="false"><rect x="6" y="7" width="30" height="28" rx="0" fill="none" stroke="#111" stroke-width="1.5"/><text x="21" y="21" fill="#111" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="central">ALL</text></svg></button>
@@ -2498,8 +2545,8 @@ function markFilterApply(zoom){
  var count=0;markFilterEntries.forEach(function(it){markFilterApplyOne(it);if(p2mMarkActuallyVisible(it))count++});p2mRiverFilterRefresh();count+=river959Visible?river959Saved.filter(p2mRiverFilterMatches).length:0;
  var active=!!markFilterQuery.trim()||markFilterKind!=='allrivertext'||markFilterTrack||markFilterLink||markFilterNote;
  var hiddenCategory=Object.keys(categoryLayers).some(function(k){return !map.hasLayer(categoryLayers[k])});
- var button=document.getElementById('markFilterButton');if(button)button.classList.toggle('p2m-filter-active',active);
- var countEl=document.getElementById('markFilterCount');if(countEl)countEl.textContent='sichtbar: '+((active||hiddenCategory)?String(count):'alle');
+ var button=document.getElementById('markFilterButton');if(button)button.classList.toggle('p2m-filter-active',typeof p2m1231FilterOn==='boolean'?p2m1231FilterOn:active);
+ var countEl=document.getElementById('markFilterCount');if(countEl)countEl.textContent=(active||hiddenCategory)?String(count):'alle';
  if(zoom)markFilterZoom();
 }
 function markFilterZoom(){
@@ -2532,7 +2579,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&am
 function color(v){v=(v||'').toLowerCase().trim();return named[v]||(/^#[0-9a-f]{3}([0-9a-f]{3})?$/.test(v)?v:'#1976d2')}
 function parse(s){var lines=s.replace(/\r/g,'').split('\n'),cat={name:'Ohne Kategorie',symbol:'📍',color:'#1976d2'},out=[];for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;if(line.charAt(0)==='#'){var t=line.slice(1).trim(),m=t.match(/\[([^\]]+)\]/),col=color(m?m[1]:''),clean=m?t.replace(m[0],'').trim():t,parts=clean.split(/\s+/),sym='📍';if(parts.length>1){sym=parts.shift();clean=parts.join(' ')}cat={name:clean||'Kategorie',symbol:sym,color:col};continue}var area=line.charAt(0)==='@',raw=(area?line.slice(1):line).trim(),q=raw,label='';var lm=raw.match(/\s+\((.*)\)\s*$/);if(lm){label=lm[1].trim();q=raw.slice(0,lm.index).trim()}if(/^[-+]?\d+(?:\.\d+)?\s*,\s*[-+]?\d+(?:\.\d+)?$/.test(q))area=false;if(q)out.push({query:q,label:label||q,area:area,category:cat.name,symbol:cat.symbol,color:cat.color,sourceLine:raw,sourceFullLine:line})}return out}
 
-// v10.12.30: Bei schmalen Displays den tatsächlichen Suchbalken beim Autozoom aussparen.
+// v10.12.36: Bei schmalen Displays den tatsächlichen Suchbalken beim Autozoom aussparen.
 // Die Werte werden bei jedem fitBounds neu gemessen (Safari-Viewport/Rotation).
 function p2m121230InstallTopbarFitPadding(m){
  if(!m||m._p2m121230TopbarFit)return;
@@ -5530,20 +5577,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.ge
 function quick983Search(mode){
  var menu=document.getElementById('quick984Menu'),sel=document.getElementById('quick983Type');if(menu)menu.classList.remove('open');if(sel){sel.setAttribute('aria-expanded','false');sel.blur()}
  var el=document.getElementById('quickPlace'),q=el.value.trim();
- if(mode==='filter'){
-  // Suchbegriff in den bestehenden Markierungsfilter übernehmen.
-  el.value='';
-  el.dispatchEvent(new Event('input',{bubbles:true}));
-  var panel=document.getElementById('markFilterPanel');
-  var button=document.getElementById('markFilterButton');
-  var filter=document.getElementById('markFilterText');
-  if(panel.style.display!=='block')button.click();
-  filter.value=q;
-  filter.dispatchEvent(new Event('input',{bubbles:true}));
-  filter.focus();
-  return;
- }
+ if(mode==='filter'){if(!p2m1231FilterOn)document.getElementById('markFilterButton').click();return}
  if(!q)return;
+ if(p2m1231FilterOn){p2m1231SearchMode=true;p2m1231SearchPending=true;p2m1231Refresh()}
  if(mode==='pin'){submitQuickPlace();return}
  if(mode==='area'){el.value=q.replace(/^(fläche|flaeche|see|lake)\s+/i,'');area960Search();return}
  if(mode==='lake'){el.value='see '+q.replace(/^(fläche|flaeche|see|lake)\s+/i,'');area960Search();return}
@@ -5554,16 +5590,28 @@ function quick983Search(mode){
  var options=Array.prototype.slice.call(menu.querySelectorAll('[data-search]')),active=0;
  function updateClear(){clear.style.display=field.value?'flex':'none'}
  function highlight(i){active=(i+options.length)%options.length;options.forEach(function(b,j){b.classList.toggle('active',j===active)})}
- function openMenu(){menu.classList.add('open');selector.setAttribute('aria-expanded','true');highlight(0)}
+ function openMenu(){
+  // Erster Globus-Klick bei aktivem Filter: explizit in den Suchmodus wechseln.
+  // Erst der zweite Klick öffnet die Auswahl der Suchart.
+  if(p2m1231FilterOn&&!p2m1231SearchMode){
+   p2m1231SearchMode=true;p2m1231SearchPending=false;
+   // Filtertext als editierbaren Ausgangspunkt der Suche beibehalten.
+   // markFilterQuery bleibt bis zur bewussten Rueckkehr zum Filter unveraendert.
+   updateClear();p2m1231Refresh();
+   selector.setAttribute('aria-expanded','false');menu.classList.remove('open');
+   field.focus();return;
+  }
+  menu.classList.add('open');selector.setAttribute('aria-expanded','true');highlight(0)
+ }
  function closeMenu(){menu.classList.remove('open');selector.setAttribute('aria-expanded','false')}
  function choose(i){var mode=options[i].getAttribute('data-search');closeMenu();selector.blur();quick983Search(mode);updateClear()}
- field.addEventListener('input',function(){clearQuickSearchNotice();updateClear()});
- clear.addEventListener('click',function(){field.value='';updateClear();clearQuickSearchNotice();field.focus()});
+ field.addEventListener('input',function(){if(p2m1231FilterOn&&!p2m1231SearchMode){markFilterQuery=field.value;p2m1231LastFilter=field.value;document.getElementById('markFilterText').value=field.value;markFilterApply(false);p2m1236ScheduleZoom()}clearQuickSearchNotice();updateClear()});field.addEventListener('p2m1231-sync',updateClear);
+ clear.addEventListener('click',function(){if(p2m1231FilterOn&&!p2m1231SearchMode){p2m1231Reset()}else{field.value='';updateClear()}clearQuickSearchNotice();field.focus()});
  field.addEventListener('keydown',function(e){
-  if(e.key==='Enter'){e.preventDefault();quick983Search('pin');updateClear()}
+  if(e.key==='Enter'){e.preventDefault();if(p2m1231FilterOn&&!p2m1231SearchMode){field.blur()}else{quick983Search('pin');updateClear()}}
   else if(e.key==='Tab'&&!e.shiftKey){e.preventDefault();selector.focus();openMenu()}
  });
- selector.addEventListener('focus',function(){openMenu()});
+ selector.addEventListener('focus',function(){if(!p2m1231FilterOn||p2m1231SearchMode)openMenu()});
  selector.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openMenu()});
  selector.addEventListener('keydown',function(e){
   if(e.key==='Escape'){e.preventDefault();closeMenu();field.focus();return}
@@ -5588,6 +5636,20 @@ function quick983Search(mode){
  updateClear()
 })();
 
+// Nach Abschluss oder Abbruch der Ortssuche wieder den Filterbegriff anzeigen.
+(function(){
+ var watchIds=['placeResultChooser','pinCategoryChooser','areaClickChooser','areaSearchBox','river955-choice'];
+ function visible(id){var e=document.getElementById(id);return !!(e&&getComputedStyle(e).display!=='none'&&e.getClientRects().length)}
+ document.addEventListener('click',function(e){
+  if(!p2m1231SearchMode)return;
+  var t=e.target&&e.target.closest&&e.target.closest('button');
+  if(!t)return;
+  var id=t.id||'',txt=(t.textContent||'').trim();
+  if(/Cancel|Abbrechen/.test(id+' '+txt)||/pinCategoryButtons|placeResultButtons|areaClickButtons/.test(t.parentElement&&t.parentElement.id||''))setTimeout(p2m1231Restore,450);
+ },false);
+ var observer=new MutationObserver(function(){if(!p2m1231SearchPending)return;if(watchIds.some(visible))return;if(document.getElementById('quickSearchNotice').classList.contains('river989-preview'))return;if(document.activeElement===p2m1231Input)return;setTimeout(function(){if(!watchIds.some(visible)&&p2m1231SearchPending)p2m1231Restore()},450)});
+ observer.observe(document.getElementById('mapScreen'),{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
+})();
 function decodeUrlDataValue(v){
  try{return decodeURIComponent(String(v||'').replace(/\+/g,' '))}catch(e){return String(v||'').replace(/\+/g,' ')}
 }
@@ -5781,8 +5843,95 @@ mapStyleButton.onclick=function(e){e.stopPropagation();syncMapStyleMenu();mapSty
 mapStyleMenu.onclick=function(e){if(e.target&&(e.target.id==='esriReliefToggle'||e.target.closest('#esriReliefToggleLabel')))return;if(e.target&&e.target.id==='toggleElevations'){e.preventDefault();e.stopPropagation();setP2mInfoMode(p2mInfoMode+1);mapStyleMenu.style.display='none';return}if(e.target&&e.target.id==='removeGpxTrack'){e.preventDefault();e.stopPropagation();removeImportedGpxTrack();mapStyleMenu.style.display='none';return}var b=e.target.closest('[data-map-style]');if(!b)return;styleSel.value=b.getAttribute('data-map-style');setBase(styleSel.value);syncMapStyleMenu();mapStyleMenu.style.display='none'};
 document.addEventListener('click',function(e){if(mapStyleMenu.style.display==='block'&&!mapStyleMenu.contains(e.target)&&e.target!==mapStyleButton)mapStyleMenu.style.display='none'});
 var markFilterButton=document.getElementById('markFilterButton'),markFilterPanel=document.getElementById('markFilterPanel');
-markFilterButton.onclick=function(e){e.preventDefault();e.stopPropagation();var open=markFilterPanel.style.display!=='block';markFilterPanel.style.display=open?'block':'none';markFilterButton.setAttribute('aria-expanded',open?'true':'false');if(open){var bar=document.querySelector('.topbar'),r=bar.getBoundingClientRect(),w=markFilterPanel.getBoundingClientRect().width||325;markFilterPanel.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+(r.width-w)/2))+'px';markFilterPanel.style.top=Math.min(r.bottom+8,window.innerHeight-80)+'px';document.getElementById('markFilterText').focus()}};
-document.getElementById('markFilterClose').onclick=function(){markFilterPanel.style.display='none';markFilterButton.setAttribute('aria-expanded','false')};
+// v10.12.36: gemeinsames Eingabefeld und kompakte Filteroptionen.
+var p2m1231FilterOn=false,p2m1231SearchMode=false,p2m1231LastFilter='',p2m1231SearchPending=false,p2m1231SavedOptions=null;
+var p2m1231Input=document.getElementById('quickPlace');
+// Status bleibt am ursprünglichen DOM-Element: bestehende Zähl-Logik unverändert.
+var p2m1239Wrap=document.querySelector('.quick983-inputwrap');
+var p2m1239Caption=document.createElement('span');
+p2m1239Caption.className='p2m1239-caption';
+p2m1239Caption.textContent='Neu hinzufügen:';
+p2m1239Wrap.appendChild(p2m1239Caption);
+var p2m1239Count=document.getElementById('markFilterCount');
+if(!p2m1239Count){p2m1239Count=document.createElement('span');p2m1239Count.id='markFilterCount';p2m1239Count.setAttribute('aria-live','polite');}
+p2m1239Wrap.appendChild(p2m1239Count);
+// v10.12.44: Trefferzahl nur in der Feldlegende statt im Eingabefeld.
+function p2m1244UpdateCaption(){
+ var active=p2m1231FilterOn&&!p2m1231SearchMode;
+ var n=(p2m1239Count.textContent||'').trim();
+ p2m1239Caption.textContent=active?'Gefiltert nach: (sichtbar: '+(n||'0')+')':'Neu hinzufügen:';
+}
+new MutationObserver(p2m1244UpdateCaption).observe(p2m1239Count,{childList:true,characterData:true,subtree:true});
+
+// v10.12.36: Nach jedem Filterwechsel den Kartenausschnitt neu berechnen.
+// Debounce verhindert konkurrierende fitBounds-Aufrufe während der Texteingabe.
+var p2m1236ZoomTimer=null;
+function p2m1236ScheduleZoom(){
+ if(p2m1236ZoomTimer!==null)clearTimeout(p2m1236ZoomTimer);
+ p2m1236ZoomTimer=setTimeout(function(){
+  p2m1236ZoomTimer=null;
+  if(!map)return;
+  if(p2m1231FilterOn&&!p2m1231SearchMode)markFilterZoom();
+  else if(!p2m1231FilterOn)autoZoomAllContent();
+ },220);
+}
+
+function p2m1231Refresh(){
+ var panel=markFilterPanel,button=markFilterButton,wrap=document.querySelector('.quick983-inputwrap');
+ panel.style.display=p2m1231FilterOn&&!p2m1231SearchMode?'block':'none';
+ button.classList.toggle('p2m-filter-active',p2m1231FilterOn);button.setAttribute('aria-pressed',String(p2m1231FilterOn));
+ wrap.classList.toggle('p2m1231-filter-input',p2m1231FilterOn&&!p2m1231SearchMode);
+ p2m1244UpdateCaption();
+ if(panel.style.display==='block'){
+  var r=document.querySelector('.topbar').getBoundingClientRect();
+  panel.style.left=Math.max(8,Math.min(innerWidth-panel.offsetWidth-8,r.left+(r.width-panel.offsetWidth)/2))+'px';
+  panel.style.top=(r.bottom+3)+'px';
+ }
+}
+function p2m1231Restore(){
+ if(!p2m1231SearchMode)return;
+ p2m1231SearchMode=false;p2m1231SearchPending=false;
+ p2m1231Input.value=p2m1231FilterOn?markFilterQuery:'';
+ p2m1231Input.dispatchEvent(new Event('p2m1231-sync'));
+ p2m1231Refresh();
+ markFilterApply(false);p2m1236ScheduleZoom();
+}
+function p2m1231Reset(){
+ p2m1231LastFilter='';p2m1231SavedOptions=null;
+ p2m1231FilterOn=false;p2m1231SearchMode=false;p2m1231SearchPending=false;
+ document.getElementById('markFilterReset').click();
+ p2m1231Input.value='';p2m1231Input.dispatchEvent(new Event('p2m1231-sync'));p2m1231Refresh();p2m1236ScheduleZoom();
+}
+markFilterButton.onclick=function(e){
+ e.preventDefault();e.stopPropagation();
+ // Im Suchmodus bedeutet der rote Filterknopf: zur Filterbearbeitung
+ // zurueckkehren, nicht den bestehenden Filter ausschalten.
+ if(p2m1231FilterOn&&p2m1231SearchMode){
+  var entered=p2m1231Input.value.trim();
+  // Ein neuer, bewusst eingegebener Text kann direkt als Filter dienen.
+  // Bei leerem Feld den bisherigen Filter wiederherstellen.
+  if(entered){markFilterQuery=entered;p2m1231LastFilter=entered;}
+  p2m1231SearchMode=false;p2m1231SearchPending=false;
+  p2m1231Input.value=markFilterQuery;
+  document.getElementById('markFilterText').value=markFilterQuery;
+  p2m1231Input.dispatchEvent(new Event('p2m1231-sync'));
+  markFilterApply(false);p2m1231Refresh();p2m1236ScheduleZoom();
+  return;
+ }
+ if(p2m1231FilterOn){if(markFilterQuery.trim())p2m1231LastFilter=markFilterQuery;p2m1231SavedOptions=[markFilterKind,markFilterTrack,markFilterLink,markFilterNote];p2m1231FilterOn=false;p2m1231SearchMode=false;markFilterQuery='';markFilterKind='allrivertext';markFilterTrack=markFilterLink=markFilterNote=false;document.getElementById('markFilterText').value='';p2m1231Input.value='';markFilterApply(false)}
+ else {if(p2m1231SavedOptions){markFilterKind=p2m1231SavedOptions[0];markFilterTrack=p2m1231SavedOptions[1];markFilterLink=p2m1231SavedOptions[2];markFilterNote=p2m1231SavedOptions[3];document.getElementById('markFilterType').value=markFilterKind;[['markFilterTrack',markFilterTrack],['markFilterLink',markFilterLink],['markFilterNote',markFilterNote]].forEach(function(a){document.getElementById(a[0]).checked=a[1]})}p2m1231FilterOn=true;p2m1231SearchMode=false;markFilterQuery=p2m1231Input.value.trim()||p2m1231LastFilter;p2m1231Input.value=markFilterQuery;document.getElementById('markFilterText').value=markFilterQuery;markFilterApply(true)}
+ p2m1231Input.dispatchEvent(new Event('p2m1231-sync'));p2m1231Refresh();
+ p2m1236ScheduleZoom();
+ if(p2m1231FilterOn&&!p2m1231Input.value.trim()){p2m1231Input.focus();try{p2m1231Input.setSelectionRange(0,0)}catch(e){}}
+};
+document.getElementById('markFilterClose').onclick=function(){p2m1231Refresh()};
+// v10.12.43: Klick/Fokus ins rote Filterfeld blendet geschlossene Optionen wieder ein.
+p2m1231Input.addEventListener('focus',function(){
+ if(p2m1231FilterOn&&!p2m1231SearchMode&&markFilterPanel.style.display!=='block')p2m1231Refresh();
+});
+p2m1231Input.addEventListener('input',function(){if(!p2m1231FilterOn||p2m1231SearchMode)return;markFilterQuery=this.value;p2m1231LastFilter=this.value;document.getElementById('markFilterText').value=this.value;markFilterApply(false);p2m1236ScheduleZoom()});
+p2m1231Input.addEventListener('keydown',function(e){if(e.key==='Enter'&&p2m1231FilterOn&&!p2m1231SearchMode){e.preventDefault();e.stopImmediatePropagation();this.blur()}},true);
+window.addEventListener('resize',p2m1231Refresh);
 document.getElementById('markFilterText').addEventListener('input',function(){markFilterQuery=this.value;markFilterApply(true)});
 document.getElementById('markFilterType').addEventListener('change',function(){markFilterKind=this.value;markFilterApply(true)});
 
@@ -5795,23 +5944,6 @@ document.getElementById('markFilterType').addEventListener('change',function(){m
  });
 });
 document.getElementById('markFilterReset').onclick=function(){p2mClearTemporaryFilterPins();markFilterQuery='';markFilterKind='allrivertext';markFilterTrack=false;markFilterLink=false;markFilterNote=false;document.getElementById('markFilterText').value='';document.getElementById('markFilterType').value='allrivertext';['markFilterTrack','markFilterLink','markFilterNote'].forEach(function(id){document.getElementById(id).checked=false});markFilterApply(false);autoZoomAllContent()};
-document.addEventListener('keydown',function(e){
- if(markFilterPanel.style.display!=='block'||(e.key!=='Escape'&&e.key!=='Enter'))return;
- e.preventDefault();e.stopImmediatePropagation();
- if(e.key==='Escape'){
-  var reset=document.getElementById('markFilterReset');
-  reset.click(); // Vorhandene ALL-Funktion unverändert verwenden
-  reset.classList.add('p2m-filter-reset-flash');
-  window.setTimeout(function(){
-   reset.classList.remove('p2m-filter-reset-flash');
-   markFilterPanel.style.display='none';
-   markFilterButton.setAttribute('aria-expanded','false');
-  },220);
- }else{
-  markFilterPanel.style.display='none';
-  markFilterButton.setAttribute('aria-expanded','false');
- }
-},true);
 // v10.8.25.2: Offene Flaechen-Aktionsdialoge haben Vorrang vor dem Filter-Esc-Reset.
 document.addEventListener('keydown',function(e){
  if(e.key!=='Escape'||e.defaultPrevented)return;
@@ -5848,7 +5980,7 @@ window.addEventListener('keydown',function(e){
 // v10.8.25: Esc beendet einen aktiven Filter auch bei geschlossenem Filterdialog.
 // Offene Bearbeitungs-, Fluss- und Routingdialoge behalten ihre eigene Esc-Funktion.
 document.addEventListener('keydown',function(e){
- if(e.key!=='Escape'||e.defaultPrevented||markFilterPanel.style.display==='block'||!p2mFilterIsActive())return;
+ if(e.key!=='Escape'||e.defaultPrevented||p2m1231FilterOn||!p2mFilterIsActive())return;
  function visible(el){return !!(el&&!el.hidden&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden'&&el.getClientRects().length)}
  if(map&&map._popup&&visible(map._popup.getElement&&map._popup.getElement()))return;
  if(['pinNameEditor','areaNameEditor','river955-choice','p2m41-dialog','p2m51-url-notice','p107ImportDialog','routeInfo'].some(function(id){return visible(document.getElementById(id))}))return;
@@ -5941,7 +6073,18 @@ function collectProjectCache(){
  return cache
 }
 function projectCategoryVisibility(){var state={};if(map)Object.keys(categoryLayers).forEach(function(name){state[name]=map.hasLayer(categoryLayers[name])});return state}
-function projectDocument(){return {categoryVisibility:projectCategoryVisibility(),gpxStartRoutes:window.pin2mapExportStartRoutes?window.pin2mapExportStartRoutes():[],format:'pin2map',version:1,list:input.value,options:{labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value,optionalEsriRelief:optionalEsriRelief,showElevations:showElevations},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache(),rivers:river959Saved,riversVisible:river959Visible,gpxTracks:(gpxLayer&&gpxLayer.getLayers)?gpxLayer.getLayers().filter(function(l){return l instanceof L.Polyline&&!l.options._p2m106Hit}).map(function(l){return l.getLatLngs().map(function(p){return [p.lat,p.lng]})}):[],route:projectRouteDocument()}}
+/* Persist only river data, never Leaflet layers attached by river959Render(). */
+function p2m1235SerializableRivers(items){
+ return (Array.isArray(items)?items:[]).map(function(item){
+  return {name:String(item.name||''),color:typeof item.color==='string'?item.color:undefined,
+   chains:(Array.isArray(item.chains)?item.chains:[]).map(function(chain){
+    return (Array.isArray(chain)?chain:[]).map(function(pt){
+     return Array.isArray(pt)?[Number(pt[0]),Number(pt[1])]:null
+    }).filter(function(pt){return pt&&isFinite(pt[0])&&isFinite(pt[1])})
+   }).filter(function(chain){return chain.length>1})};
+ }).filter(function(item){return item.chains.length>0})
+}
+function projectDocument(){return {categoryVisibility:projectCategoryVisibility(),gpxStartRoutes:window.pin2mapExportStartRoutes?window.pin2mapExportStartRoutes():[],format:'pin2map',version:1,list:input.value,options:{labelAddresses:document.getElementById('labelAddresses').checked,labelAreas:document.getElementById('labelAreas').checked,mapStyle:document.getElementById('mapStyle').value,optionalEsriRelief:optionalEsriRelief,showElevations:showElevations},view:map?{center:[map.getCenter().lat,map.getCenter().lng],zoom:map.getZoom()}:null,cache:collectProjectCache(),rivers:p2m1235SerializableRivers(river959Saved),riversVisible:river959Visible,gpxTracks:(gpxLayer&&gpxLayer.getLayers)?gpxLayer.getLayers().filter(function(l){return l instanceof L.Polyline&&!l.options._p2m106Hit}).map(function(l){return l.getLatLngs().map(function(p){return [p.lat,p.lng]})}):[],route:projectRouteDocument()}}
 function suggestedProjectName(){
  var items=parse(input.value),first=items.filter(function(x){return !x.area})[0]||items[0],base=(first&&(first.label||first.query))||'pin2map';
  base=String(base).replace(/\.pin2map$/i,'').replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,' ').trim().slice(0,60)||'pin2map';
@@ -5988,16 +6131,14 @@ function p2mSaveNameDialog(afterDialog){
  var nameRow=document.createElement('div');nameRow.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:14px';
  var field=document.createElement('textarea');field.rows=1;field.value=String((document.getElementById('listNameInput')||{}).value||currentProjectName||'').trim()||p2m1211Timestamp();field.placeholder='Dateiname';field.setAttribute('aria-label','Dateiname');field.autocapitalize='off';field.setAttribute('autocomplete','off');field.setAttribute('autocorrect','off');field.spellcheck=false;
  field.style.cssText='display:block;flex:1;min-width:0;width:100%;height:45px;min-height:45px;max-height:45px;resize:none;overflow:hidden;white-space:nowrap;box-sizing:border-box;border:1px solid #aaa;border-radius:9px;padding:11px;font:16px -apple-system,BlinkMacSystemFont,sans-serif';nameRow.appendChild(field);
- var urlMode=false;var modeButton=document.createElement('button');modeButton.type='button';modeButton.textContent='URL';modeButton.setAttribute('aria-label','URL-Modus umschalten');modeButton.style.cssText='flex:0 0 45px;width:45px;height:45px;border-radius:50%;border:1px solid #bbb;background:#e5e5e9;color:#111;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;padding:0;line-height:1;box-sizing:border-box';nameRow.appendChild(modeButton);panel.appendChild(nameRow);
+ var urlMode=false;var modeButton=document.createElement('button');modeButton.type='button';modeButton.textContent='URL';modeButton.setAttribute('aria-label','URL-Modus umschalten');modeButton.style.cssText='flex:0 0 45px;width:45px;height:45px;border-radius:50%;border:1px solid #bbb;background:#e5e5e9;color:#111;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;padding:0;line-height:1;box-sizing:border-box';panel.appendChild(nameRow);
  function group(label,choices,selected,horizontal){var wrap=document.createElement('fieldset');wrap.style.cssText='border:1px solid #d0d0d5;border-radius:10px;margin:0 0 12px;padding:9px 12px 11px'+(horizontal?';display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap':'');var legend=document.createElement('legend');legend.textContent=label;legend.style.cssText='font-weight:600;padding:0 5px';wrap.appendChild(legend);var radios=[];choices.forEach(function(c){var row=document.createElement('label');row.style.cssText='display:flex;align-items:center;gap:9px;padding:7px 2px;cursor:pointer;line-height:1.3';var radio=document.createElement('input');radio.type='radio';radio.name='p2m106_'+label;radio.value=c[0];radio.checked=c[0]===selected;radio.style.cssText='width:19px;height:19px;flex:none;accent-color:#007aff';row.appendChild(radio);row.appendChild(document.createTextNode(c[1]));wrap.appendChild(row);radios.push(radio)});panel.appendChild(wrap);return {wrap:wrap,radios:radios}}
- var scope=group('Was speichern?',[['all','Alles'],['visible','Nur Angezeigte'],['route','Nur Routing']],'all',true);scope.wrap.style.gap='5px';scope.wrap.style.flexWrap='nowrap';scope.radios.forEach(function(r){r.parentElement.style.gap='5px';r.parentElement.style.whiteSpace='nowrap';r.parentElement.style.fontSize='14px';r.style.width='17px';r.style.height='17px'});
- var routeChoice=scope.radios.filter(function(r){return r.value==='route'})[0];var routeChoiceRow=routeChoice.parentElement;
- function updateRouteChoice(){var available=!!projectRouteDocument();routeChoiceRow.hidden=!available;routeChoiceRow.style.display=available?'flex':'none';if(!available&&routeChoice.checked)scope.radios[0].checked=true}updateRouteChoice();
- var format=group('Dateiformat',[['gpx','GPX'],['pin2map','pin2map']],'pin2map',true);
+ var scope=group('Was speichern?',[['pintext','Pin-Texte'],['visible','Nur Sichtbare'],['all','Alles']],'all',true);scope.wrap.style.gap='5px';scope.wrap.style.flexWrap='nowrap';scope.radios.forEach(function(r){r.parentElement.style.gap='5px';r.parentElement.style.whiteSpace='nowrap';r.parentElement.style.fontSize='14px';r.style.width='17px';r.style.height='17px'});
+ var updateRouteChoice=function(){};
+ var format=group('Dateiformat',[['url','URL'],['gpx','GPX'],['pin2map','pin2map']],'pin2map',true);
  var urlSection=document.createElement('fieldset');urlSection.style.cssText='border:1px solid #d0d0d5;border-radius:10px;margin:0 0 12px;padding:9px 12px 11px';var urlLegend=document.createElement('legend');urlLegend.textContent='Pins als URL';urlLegend.style.cssText='font-weight:600;padding:0 5px';urlSection.appendChild(urlLegend);
  var description=document.createElement('p');description.textContent='Erzeuge aus dem aktuellen Inhalt der Liste eine URL. Nur verwendete Kategorien und nichtleere Listeneinträge werden übernommen und in die Zwischenablage kopiert. Die URL kann anschließend geteilt und in pin2map geöffnet werden.';description.style.cssText='margin:3px 0 12px;line-height:1.4';urlSection.appendChild(description);
  var urlLabel=document.createElement('label');urlLabel.style.cssText='display:flex;align-items:center;gap:9px;padding:5px 0';var urlCheck=document.createElement('input');urlCheck.type='checkbox';urlCheck.style.cssText='width:19px;height:19px;accent-color:#007aff';urlLabel.appendChild(urlCheck);urlLabel.appendChild(document.createTextNode('auch Pin-URLs'));urlSection.appendChild(urlLabel);urlSection.hidden=true;urlSection.style.display='none';panel.appendChild(urlSection);
- modeButton.onclick=function(){urlMode=!urlMode;field.disabled=urlMode;field.style.background=urlMode?'#ededf0':'#fff';field.style.color=urlMode?'#888':'#161616';save.textContent=urlMode?'URL erzeugen':'Speichern';if(!urlMode)updateRouteChoice();scope.wrap.hidden=urlMode;scope.wrap.style.display=urlMode?'none':'flex';format.wrap.hidden=urlMode;format.wrap.style.display=urlMode?'none':'flex';urlSection.hidden=!urlMode;urlSection.style.display=urlMode?'':'none';modeButton.style.background=urlMode?'#007aff':'#e5e5e9';modeButton.style.color=urlMode?'white':'#111';modeButton.setAttribute('aria-pressed',String(urlMode));status.textContent=''};
  var status=document.createElement('div');status.style.cssText='color:#b3261e;font-size:13px;min-height:'+(afterDialog?'0':'17px')+';margin-bottom:'+(afterDialog?'3px':'8px');panel.appendChild(status);
  var buttons=document.createElement('div');buttons.style.cssText='display:flex;gap:10px';var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Abbrechen';cancel.style.cssText='flex:1;padding:12px;border:0;border-radius:9px;background:#e5e5e9;color:#111;font-size:16px';var save=document.createElement('button');save.type='button';save.textContent='Speichern';save.style.cssText='flex:1;padding:12px;border:0;border-radius:9px;background:#007aff;color:#fff;font-size:16px;font-weight:600';
  var discard=null;if(afterDialog){discard=document.createElement('button');discard.type='button';discard.textContent='Nicht speichern';discard.style.cssText='flex:1;padding:12px 6px;border:0;border-radius:9px;background:#dc3545;color:#fff;font-size:15px;font-weight:600'}
@@ -6006,20 +6147,20 @@ function p2mSaveNameDialog(afterDialog){
  cancel.onclick=function(){close(false)};
  if(discard)discard.onclick=function(){close(false);setTimeout(afterDialog,0)};
  save.onclick=async function(){
-  if(urlMode){
+  try{
+  if(value(format.radios)==='url'){
    var url=p2m106GenerateShareUrl(urlCheck.checked);
    if(!url){status.textContent='Die Liste enthält keine Einträge.';return}
    try{if(!navigator.clipboard||!navigator.clipboard.writeText)throw Error('Clipboard API nicht verfügbar');await navigator.clipboard.writeText(url);close()}
    catch(e){var temporary=document.createElement('textarea');temporary.value=url;temporary.style.cssText='position:fixed;left:0;top:0;opacity:.01';document.body.appendChild(temporary);temporary.focus();temporary.select();var copied=false;try{copied=document.execCommand('copy')}catch(err){}temporary.remove();if(copied)close();else status.textContent='Kopieren nicht möglich. Bitte Clipboard-Zugriff erlauben.'}
    return;
   }
-  var fmt=value(format.radios),what=value(scope.radios),base=cleanProjectBaseName(field.value.replace(/\.(pin2map|gpx)$/i,''));if(!base){status.textContent='Bitte einen Dateinamen eingeben.';field.focus();return}
-  if(what==='route'&&!projectRouteDocument()){status.textContent='Es ist keine aktive Route vorhanden.';return}
-  if(fmt==='gpx'&&what==='route'&&(!lastRouteExport||!lastRouteExport.coords.length)){status.textContent='Die Route muss zuerst berechnet werden.';return}
-  var doc=what==='all'?projectDocument():what==='visible'?p2m106VisibleDocument():p2m106RouteDocument();var payload=fmt==='gpx'?p2m106GpxDocument(doc,what):JSON.stringify(doc);
+  var fmt=value(format.radios),what=value(scope.radios),base=cleanProjectBaseName(field.value.replace(/\.(pin2map|gpx)$/i,''));if(what==='pintext'){close(false);p2mExportCopy();return}if(!base){status.textContent='Bitte einen Dateinamen eingeben.';field.focus();return}
+  var doc=what==='all'?projectDocument():p2m106VisibleDocument();var payload=fmt==='gpx'?p2m106GpxDocument(doc,what):JSON.stringify(doc);
   if(!payload){status.textContent='Keine passenden Daten zum Speichern vorhanden.';return}
   if(fmt==='gpx'&&!window.confirm('GPX speichert geografische Wegpunkte und Strecken, aber keine pin2map-spezifischen Kategorien, Farben, Notizen, Filter oder vollständig bearbeitbaren Flächen. Flächen werden als Umriss-Tracks exportiert. Für eine vollständige Sicherung bitte pin2map wählen. Trotzdem als GPX speichern?'))return;
-  setCurrentProjectName(base);var saveResult=p2m106SavePayload(base+'.'+fmt,payload,fmt);if(saveResult===false){status.textContent='Speichern konnte nicht gestartet werden.';return}close(saveResult)
+  var saveResult=p2m106SavePayload(base+'.'+fmt,payload,fmt);if(saveResult===false){status.textContent='Speichern konnte nicht gestartet werden. Bitte Dateifreigabe prüfen.';return}setCurrentProjectName(base);close(saveResult)
+  }catch(e){console.error('pin2map Speichern fehlgeschlagen:',e);status.textContent='Speichern fehlgeschlagen: '+(e&&e.message?e.message:String(e));}
  };
  field.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing){e.preventDefault();save.click()}});
  overlay.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();close(false)}else if(e.key==='Enter'&&!e.isComposing&&e.target!==field&&e.target.tagName!=='BUTTON'){e.preventDefault();save.click()}});
@@ -6078,10 +6219,10 @@ function p2m106GpxDocument(doc,scope){
 function p2m106SavePayload(name,payload,fmt){
  var mime=fmt==='gpx'?'application/gpx+xml':'application/json',blob=new Blob([payload],{type:mime});
  if(isConstrainedTouchDevice()){
-  if(!(navigator.share&&navigator.canShare)){mapStatus.textContent='⚠️ Speichern wird auf diesem Gerät nicht unterstützt.';return false}
+  if(!(navigator.share&&navigator.canShare)){downloadProjectBlob(blob,name);return Promise.resolve(true)}
   try{
    var file=new File([payload],name,{type:mime});
-   if(!navigator.canShare({files:[file]})){mapStatus.textContent='⚠️ Datei kann nicht an iOS übergeben werden.';return false}
+   if(!navigator.canShare({files:[file]})){downloadProjectBlob(blob,name);return Promise.resolve(true)}
    // Die Freigabe muss unmittelbar im ursprünglichen Klick-/Enter-Ereignis starten.
    return navigator.share({files:[file]}).then(function(){
     mapStatus.textContent='✓ Datei zum Sichern übergeben.';restoreMapAfterSystemDialog();return true
@@ -6090,7 +6231,7 @@ function p2m106SavePayload(name,payload,fmt){
     mapStatus.textContent=e&&e.name==='AbortError'?'Speichern abgebrochen.':'⚠️ Speichern wurde nicht abgeschlossen.';
     return false
    })
-  }catch(e){mapStatus.textContent='⚠️ Datei konnte nicht übergeben werden.';return false}
+  }catch(e){console.error('Dateifreigabe fehlgeschlagen:',e);downloadProjectBlob(blob,name);return Promise.resolve(true)}
  }
  if(typeof window.showSaveFilePicker==='function'){
   return window.showSaveFilePicker({suggestedName:name,types:[{description:fmt==='gpx'?'GPX-Datei':'pin2map-Datei',accept:fmt==='gpx'?{'application/gpx+xml':['.gpx']}:{'application/json':['.pin2map']}}]})
