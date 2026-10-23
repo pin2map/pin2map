@@ -2319,12 +2319,11 @@ html,body{max-width:100%;overflow-x:hidden}
 </style>
 <style id="p2m-1211-new-map">
 #mapScreen #newMapButton.p2m-control-six{position:absolute!important;left:max(10px,env(safe-area-inset-left))!important;right:auto!important;top:max(120px,calc(env(safe-area-inset-top) + 120px))!important;bottom:auto!important;z-index:1200!important;--p2m-six-background:#b9e9b4;--p2m-six-color:#16551a;font-size:27px!important;display:flex!important;align-items:center!important;justify-content:center!important}
-#mapScreen #newMapButton.p2m-control-six.p2m-new-map-flash{background:#ff9800!important;color:#fff!important}
 @media(max-width:600px){#mapScreen #newMapButton.p2m-control-six{left:max(8px,env(safe-area-inset-left))!important;top:calc(var(--p2m-iphone-controls-top,160px) + 2 * var(--p2m-iphone-controls-step,54px))!important}}
 </style>
 </head><body>
 <main id="formScreen" class="wrap">
-<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.12.12)</h1>
+<h1 style="font-weight:700;display:flex;align-items:center;gap:10px"><img id="p2mHeaderLogo" alt="" aria-hidden="true" style="width:38px;height:38px;border-radius:9px;flex:0 0 auto">pin2map (v10.12.18)</h1>
 <script>document.getElementById('p2mHeaderLogo').src=document.querySelector('link[rel="icon"]').href;</script>
 <div class="options list-name-option"><label for="listNameInput">Name der Liste</label><input type="text" id="listNameInput" autocomplete="off" placeholder="Name der Liste"></div><input type="checkbox" id="labelAddresses" checked hidden><input type="checkbox" id="labelAreas" checked hidden>
 <textarea id="input"># 📍 [Red] Eins
@@ -3369,13 +3368,49 @@ function findAreasAt(ll){
    return
   }
   res.innerHTML='';
+  // Ein Hierarchie-Eintrag aus Reverse-Geocoding enthält nur einen Namen,
+  // keine OSM-ID. Vor dem Einfügen das tatsächliche Polygon am Klickpunkt ermitteln.
+  function containsPoint(geometry,lon,lat){
+   function ringContains(ring){var inside=false;for(var i=0,j=ring.length-1;i<ring.length;j=i++){
+    var a=ring[i],b=ring[j];if((a[1]>lat)!==(b[1]>lat)&&lon<(b[0]-a[0])*(lat-a[1])/(b[1]-a[1])+a[0])inside=!inside
+   }return inside}
+   function polygonContains(poly){if(!poly||!poly.length||!ringContains(poly[0]))return false;for(var h=1;h<poly.length;h++)if(ringContains(poly[h]))return false;return true}
+   if(!geometry)return false;
+   if(geometry.type==='Polygon')return polygonContains(geometry.coordinates);
+   if(geometry.type==='MultiPolygon')return geometry.coordinates.some(polygonContains);
+   return false
+  }
+  function selectHierarchyArea(x,d){
+   // Keine globale Namenssuche: nur Ergebnisse, deren Polygon den Klickpunkt enthält.
+   var old=d.style.opacity;d.style.opacity='.55';d.style.pointerEvents='none';
+   var span=document.createElement('div');span.textContent='⏳ Gebietsgrenze wird geprüft …';span.style.cssText='font-size:11px;color:#666';d.appendChild(span);
+   var lat=ll.lat,lon=ll.lng,delta=3;
+   var params=new URLSearchParams({format:'jsonv2',polygon_geojson:'1',addressdetails:'1',limit:'50',dedupe:'0',q:x.name,
+    viewbox:[lon-delta,lat+delta,lon+delta,lat-delta].join(','),bounded:'1'});
+   if(a.country_code)params.set('countrycodes',String(a.country_code).toLowerCase());
+   fetch('https://nominatim.openstreetmap.org/search?'+params.toString(),{headers:{'Accept-Language':'de'}})
+    .then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()})
+    .then(function(results){
+     var candidates=(results||[]).filter(function(z){
+      return z.osm_id&&/^(relation|way)$/.test(z.osm_type||'')&&
+       containsPoint(z.geojson,lon,lat)&&
+       (String(z.name||'').toLocaleLowerCase()===String(x.name).toLocaleLowerCase()||
+        String(z.display_name||'').split(',')[0].trim().toLocaleLowerCase()===String(x.name).toLocaleLowerCase())
+     });
+     if(!candidates.length)throw Error('Keine eindeutig passende Gebietsgrenze am ausgewählten Kartenpunkt gefunden.');
+     // Bei mehreren Treffern bevorzugt dieselbe Gebietsebene.
+     candidates.sort(function(u,v){return (v.addresstype===x.kind?1:0)-(u.addresstype===x.kind?1:0)});
+     var match=candidates[0],prefix=match.osm_type==='relation'?'R':'W';
+     chooseCategoryForArea({query:'osm:'+prefix+match.osm_id,label:x.name,osm_type:match.osm_type,osm_id:match.osm_id})
+    }).catch(function(err){span.textContent='⚠️ '+err.message;span.style.color='#b00020';d.style.pointerEvents='auto';d.style.opacity=old})
+  }
   rows.forEach(function(x){
    var d=document.createElement('div');
    d.style.cssText='padding:9px 0;border-bottom:1px solid #ddd;cursor:pointer;border-radius:8px';
    d.setAttribute('role','button');d.setAttribute('tabindex','0');
    d.innerHTML='<div style="font-weight:700">'+esc(osmTypeLabel(x.kind))+' — '+esc(x.name)+'</div>'+
     '<div style="font-size:11px;color:#666;margin-top:3px;word-break:break-word">'+esc(x.extra)+'</div>';
-   d.onclick=function(){chooseCategoryForArea({query:x.query,label:x.label})};
+   d.onclick=function(){selectHierarchyArea(x,d)};
    d.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();d.click()}};
    res.appendChild(d)
   });
@@ -5031,14 +5066,23 @@ async function area960Search(){
 }
 
 var river950Layer=null,river950Run=0,river959Current=null,river959Saved=[],river959SavedLayer=null;
-var river1015Colors=[['Rot','Red'],['Blau','DodgerBlue'],['Aufenthalt','LimeGreen'],['Grün','Gold'],['Gelb','DarkOrange'],['Orange','BlueViolet'],['Violett','DeepPink'],['Grau','DarkCyan'],['Braun','SaddleBrown']];
+// Flussfarben immer aus den aktuell definierten Kategorien beziehen.
 function river1015ChooseColor(item){
+ var cats=categoryDefinitions();
  var shade=document.createElement('div');shade.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:999999;display:flex;align-items:center;justify-content:center;padding:18px';
  var panel=document.createElement('div');panel.style.cssText='background:white;border-radius:14px;padding:18px;max-width:360px;width:100%;box-shadow:0 10px 35px #0004';
  var title=document.createElement('h3');title.textContent='Farbe für '+item.name;title.style.margin='0 0 14px';panel.appendChild(title);
  var grid=document.createElement('div');grid.style.cssText='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px';
- river1015Colors.forEach(function(c){var b=document.createElement('button');b.type='button';b.textContent=c[0];b.style.cssText='background:'+c[1]+';color:white;border:2px solid '+(item.color===c[1]?'#222':'transparent')+';border-radius:8px;padding:12px 3px;font-weight:bold;text-shadow:0 1px 2px #0009;cursor:pointer';b.onclick=function(){item.color=c[1];shade.remove();river959Render()};grid.appendChild(b)});
- panel.appendChild(grid);var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Nicht speichern';cancel.style.cssText='display:block;margin:14px 0 0 auto;background:#e5e5e9;color:#222;border-radius:8px;padding:9px 16px';cancel.onclick=function(){shade.remove()};panel.appendChild(cancel);
+ cats.forEach(function(c){
+  var b=document.createElement('button');b.type='button';
+  b.title=c.name;b.setAttribute('aria-label','Farbe der Kategorie '+c.name);
+  b.style.cssText='background:'+c.color+';min-height:64px;color:transparent;border:3px solid '+(item.color===c.color?'#222':'transparent')+';border-radius:8px;padding:12px 3px;cursor:pointer';
+  b.onclick=function(){item.color=c.color;shade.remove();river959Render()};
+  grid.appendChild(b)
+ });
+ panel.appendChild(grid);
+ if(!cats.length){var hint=document.createElement('p');hint.textContent='Keine Kategorien vorhanden.';panel.appendChild(hint)}
+ var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Nicht speichern';cancel.style.cssText='display:block;margin:14px 0 0 auto;background:#e5e5e9;color:#222;border-radius:8px;padding:9px 16px';cancel.onclick=function(){shade.remove()};panel.appendChild(cancel);
  shade.appendChild(panel);shade.addEventListener('click',function(e){if(e.target===shade)shade.remove()});document.body.appendChild(shade)
 }
 function river1016LabelPosition(chains){
@@ -5860,7 +5904,8 @@ function p2m1211Timestamp(){var d=new Date(),pad=function(n){return String(n).pa
 function p2mSaveNameDialog(afterDialog){
  var overlay=document.createElement('div');overlay.style.cssText='position:fixed;inset:0;z-index:2147483600;background:rgba(0,0,0,.38);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box';
  var panel=document.createElement('div');panel.style.cssText='background:#fff;color:#161616;border-radius:17px;padding:20px;width:min(100%,420px);box-sizing:border-box;box-shadow:0 8px 30px #0003;font:16px -apple-system,BlinkMacSystemFont,sans-serif;max-height:95%;overflow:auto';
- var title=document.createElement('div');title.textContent='Speichern';title.style.cssText='font-weight:700;font-size:21px;margin-bottom:13px';panel.appendChild(title);
+ var title=document.createElement('div');title.textContent=afterDialog?'Neue Karte':'Speichern';title.style.cssText='font-weight:700;font-size:21px;margin-bottom:13px';panel.appendChild(title);
+ if(afterDialog){var hint=document.createElement('div');hint.textContent='Aktuelle Karte vor dem Zurücksetzen speichern?';hint.style.cssText='margin:-3px 0 14px;font-size:15px';panel.appendChild(hint)}
  var nameRow=document.createElement('div');nameRow.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:14px';
  var field=document.createElement('textarea');field.rows=1;field.value=String((document.getElementById('listNameInput')||{}).value||currentProjectName||'').trim()||p2m1211Timestamp();field.placeholder='Dateiname';field.setAttribute('aria-label','Dateiname');field.autocapitalize='off';field.setAttribute('autocomplete','off');field.setAttribute('autocorrect','off');field.spellcheck=false;
  field.style.cssText='display:block;flex:1;min-width:0;width:100%;height:45px;min-height:45px;max-height:45px;resize:none;overflow:hidden;white-space:nowrap;box-sizing:border-box;border:1px solid #aaa;border-radius:9px;padding:11px;font:16px -apple-system,BlinkMacSystemFont,sans-serif';nameRow.appendChild(field);
@@ -5876,9 +5921,11 @@ function p2mSaveNameDialog(afterDialog){
  modeButton.onclick=function(){urlMode=!urlMode;field.disabled=urlMode;field.style.background=urlMode?'#ededf0':'#fff';field.style.color=urlMode?'#888':'#161616';save.textContent=urlMode?'URL erzeugen':'Speichern';if(!urlMode)updateRouteChoice();scope.wrap.hidden=urlMode;scope.wrap.style.display=urlMode?'none':'flex';format.wrap.hidden=urlMode;format.wrap.style.display=urlMode?'none':'flex';urlSection.hidden=!urlMode;urlSection.style.display=urlMode?'':'none';modeButton.style.background=urlMode?'#007aff':'#e5e5e9';modeButton.style.color=urlMode?'white':'#111';modeButton.setAttribute('aria-pressed',String(urlMode));status.textContent=''};
  var status=document.createElement('div');status.style.cssText='color:#b3261e;font-size:13px;min-height:17px;margin-bottom:8px';panel.appendChild(status);
  var buttons=document.createElement('div');buttons.style.cssText='display:flex;gap:10px';var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Abbrechen';cancel.style.cssText='flex:1;padding:12px;border:0;border-radius:9px;background:#e5e5e9;color:#111;font-size:16px';var save=document.createElement('button');save.type='button';save.textContent='Speichern';save.style.cssText='flex:1;padding:12px;border:0;border-radius:9px;background:#007aff;color:#fff;font-size:16px;font-weight:600';
+ var discard=null;if(afterDialog){discard=document.createElement('button');discard.type='button';discard.textContent='Nicht speichern';discard.style.cssText='flex:1;padding:12px 6px;border:0;border-radius:9px;background:#dc3545;color:#fff;font-size:15px;font-weight:600'}
  function value(radios){return radios.filter(function(r){return r.checked})[0].value}
- var dialogClosed=false;function close(saved){if(dialogClosed)return;dialogClosed=true;if(window.visualViewport){window.visualViewport.removeEventListener('resize',placeDialog);window.visualViewport.removeEventListener('scroll',placeDialog)}overlay.remove();if(afterDialog){if(saved&&typeof saved.then==='function')saved.then(function(ok){if(ok!==false)setTimeout(afterDialog,700)},function(e){console.error('Speichern fehlgeschlagen',e)});else if(saved!==false)setTimeout(afterDialog,700)}}
- cancel.onclick=function(){close()};
+ var dialogClosed=false;function close(saved){if(dialogClosed)return;dialogClosed=true;if(window.visualViewport){window.visualViewport.removeEventListener('resize',placeDialog);window.visualViewport.removeEventListener('scroll',placeDialog)}overlay.remove();if(afterDialog&&saved!==false){if(saved&&typeof saved.then==='function')saved.then(function(ok){if(ok!==false)setTimeout(afterDialog,700)},function(e){console.error('Speichern fehlgeschlagen',e)});else if(saved!==false)setTimeout(afterDialog,700)}}
+ cancel.onclick=function(){close(false)};
+ if(discard)discard.onclick=function(){close(false);setTimeout(afterDialog,0)};
  save.onclick=async function(){
   if(urlMode){
    var url=p2m106GenerateShareUrl(urlCheck.checked);
@@ -5896,8 +5943,8 @@ function p2mSaveNameDialog(afterDialog){
   setCurrentProjectName(base);var saveResult=p2m106SavePayload(base+'.'+fmt,payload,fmt);if(saveResult===false){status.textContent='Speichern konnte nicht gestartet werden.';return}close(saveResult)
  };
  field.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.isComposing){e.preventDefault();save.click()}});
- overlay.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();close()}else if(e.key==='Enter'&&!e.isComposing&&e.target!==field&&e.target.tagName!=='BUTTON'){e.preventDefault();save.click()}});
- buttons.appendChild(cancel);buttons.appendChild(save);panel.appendChild(buttons);overlay.appendChild(panel);overlay.addEventListener('click',function(e){if(e.target===overlay)close()});document.body.appendChild(overlay);
+ overlay.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();close(false)}else if(e.key==='Enter'&&!e.isComposing&&e.target!==field&&e.target.tagName!=='BUTTON'){e.preventDefault();save.click()}});
+ buttons.appendChild(cancel);if(discard)buttons.appendChild(discard);buttons.appendChild(save);panel.appendChild(buttons);overlay.appendChild(panel);overlay.addEventListener('click',function(e){if(e.target===overlay)close(false)});document.body.appendChild(overlay);
  function placeDialog(){var vv=window.visualViewport;overlay.style.top=(vv?vv.offsetTop:0)+'px';overlay.style.bottom='auto';overlay.style.height=(vv?vv.height:window.innerHeight)+'px'}
  placeDialog();field.focus({preventScroll:true});field.setSelectionRange(field.value.length,field.value.length);if(window.visualViewport){window.visualViewport.addEventListener('resize',placeDialog);window.visualViewport.addEventListener('scroll',placeDialog)}
 }
@@ -6049,7 +6096,7 @@ var p2m1211NewButton=document.getElementById('newMapButton');
 if(p2m1211NewButton){if(window.L&&L.DomEvent){L.DomEvent.disableClickPropagation(p2m1211NewButton);L.DomEvent.disableScrollPropagation(p2m1211NewButton)}p2m1211NewButton.addEventListener('click',p2m1211NewMap)}
 try{if(sessionStorage.getItem('p2m1211NewMap')==='1'){
  sessionStorage.removeItem('p2m1211NewMap');document.getElementById('mapStyle').value='standard';
- setTimeout(function(){if(map)setBase('standard');mapStatus.textContent='Neue Karte aktiviert.';if(p2m1211NewButton){p2m1211NewButton.classList.add('p2m-new-map-flash');setTimeout(function(){p2m1211NewButton.classList.remove('p2m-new-map-flash')},850)}},500);
+ setTimeout(function(){mapStatus.textContent='Neue Karte aktiviert.';},500);
 }}catch(e){}
 
 document.getElementById('openProjectFile').onclick=null; // Import-Gesten werden in p10743-import-gestures behandelt
