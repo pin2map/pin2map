@@ -21,6 +21,10 @@ jobs:
           python-version: '3.12'
       - name: Verify quality rules catch deliberate violations
         run: python quality/test_guardrails.py
+      - name: Test ADR-007 removal checker
+        run: python quality/test_adr007_check.py
+      - name: Inspect registered ADR-007 replacements
+        run: python quality/adr007_check.py
       - name: Check registered domain modules
         run: python quality/check_architecture.py
       - name: Self-test change scope guard
