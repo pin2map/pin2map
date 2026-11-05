@@ -8754,6 +8754,7 @@ window.addEventListener('resize',function(){var root=getPopup();if(root){root.st
     // Original mode buttons remain in the DOM with their native listeners.
     // Collapse only their presentation; never replace their event handlers.
     const modeFieldset = modes.closest('fieldset');
+    if (!modeFieldset) throw new Error('Missing routing mode fieldset');
     const actions = doc.createElement('div');
     actions.className = 'p2m-shell-actions';
     const reverseWrap = doc.createElement('div');
@@ -8773,10 +8774,14 @@ window.addEventListener('resize',function(){var root=getPopup();if(root){root.st
     const buttons = Array.from(modes.querySelectorAll('[data-route-mode]'));
     const sync = () => {
       const active = buttons.find(b => b.classList.contains('active')) || buttons[0];
-      buttons.forEach(b => { b.classList.toggle('p2m-shell-mode-visible', b === active); });
+      buttons.forEach(b => { b.classList.toggle('p2m-shell-mode-visible', panel.classList.contains('p2m-shell-modes-open') || b === active); });
       panel.dataset.p2mMode = modeMap[active.dataset.routeMode] || 'car';
     };
     const collapse = () => { panel.classList.remove('p2m-shell-modes-open'); sync(); };
+    // Click outside the picker dismisses the overlay without changing the route.
+    doc.addEventListener('pointerdown', function (event) {
+      if (panel.classList.contains('p2m-shell-modes-open') && !modeFieldset.contains(event.target)) collapse();
+    });
     const open = () => { panel.classList.add('p2m-shell-modes-open'); buttons.forEach(b => b.classList.add('p2m-shell-mode-visible')); };
     buttons.forEach(b => b.addEventListener('click', function () {
       if (panel.classList.contains('p2m-shell-modes-open')) {
