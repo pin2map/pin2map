@@ -135,11 +135,18 @@ with sync_playwright() as pw:
             if panel_result != {"hidden": True, "pressedHidden": "false", "reopened": True, "pressedOpen": "true"}:
                 raise AssertionError(f"{label}: routing panel click contract failed: {panel_result}")
             print(f"PASS {label}: real two-pin routing selection and hide/reopen")
-            page.wait_for_function("""() => {
-                const summary = document.getElementById('routeSummary');
-                return summary && summary.textContent.includes('0,2 km')
-                    && document.querySelectorAll('.leaflet-overlay-pane path').length > 0;
-            }""", timeout=15000)
+            # The app's summary uses de-DE formatting; capture explicit
+            # diagnostics instead of obscuring failures behind a timeout.
+            page.wait_for_timeout(1500)
+            route_state = page.evaluate("""() => ({
+                summary: document.getElementById('routeSummary')?.textContent,
+                hint: document.getElementById('routeHint')?.textContent,
+                pathCount: document.querySelectorAll('.leaflet-overlay-pane path').length,
+                legCount: document.querySelectorAll('#routeLegs .route-leg').length
+            })""")
+            if not (route_state["summary"] and "0,2 km" in route_state["summary"]
+                    and route_state["pathCount"] > 0):
+                raise AssertionError(f"{label}: mocked OSRM route not rendered: state={route_state}; osrm_calls={osrm_calls}; js_errors={errors[:3]}")
             if len(osrm_calls) != 1:
                 raise AssertionError(f"{label}: expected one OSRM request, got {len(osrm_calls)}")
             if page.locator("#routeLegs .route-leg").count() != 1:
