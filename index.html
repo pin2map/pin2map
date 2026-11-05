@@ -4585,11 +4585,9 @@ function optimizeRouteOrder(){
    routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();return changed
   }).catch(function(){routeOptimizeBusy=false;updateRouteOrderButtons();mapStatus.textContent='⚠️ Netzoptimierung nicht verfügbar – feste Reihenfolge bleibt erhalten.';return false})
  }
- /* Auto: kompakte lokale Voroptimierung; das eigentliche Routing bleibt OSRM. */
- var n=all.length,matrix=Array.from({length:n},function(){return Array(n).fill(0)});for(var i=0;i<n;i++)for(var j=0;j<n;j++)matrix[i][j]=i===j?0:routeAirDistance(all[i],all[j]);
- var unused=[];for(var q=1;q<n-1;q++)unused.push(q);var order=[0],cur=0;while(unused.length){var bi=0,best=Infinity;for(var k=0;k<unused.length;k++){var dd=matrix[cur][unused[k]];if(dd<best){best=dd;bi=k}}cur=unused.splice(bi,1)[0];order.push(cur)}order.push(n-1);
- var maxPasses=Math.max(1,(n-2)*(n-2)),pass=0;while(pass++<maxPasses){var bestGain=0,bestA=-1,bestB=-1;for(var a=1;a<order.length-2;a++)for(var b=a+1;b<order.length-1;b++){var before=matrix[order[a-1]][order[a]]+matrix[order[b]][order[b+1]],after=matrix[order[a-1]][order[b]]+matrix[order[a]][order[b+1]],gain=before-after;if(gain>bestGain+0.1){bestGain=gain;bestA=a;bestB=b}}if(bestA<0)break;var rev=order.slice(bestA,bestB+1).reverse();order.splice.apply(order,[bestA,bestB-bestA+1].concat(rev))}
- var nw=order.slice(1,-1).map(function(i){return all[i]}),changed=nw.some(function(x,i){return x!==routeWaypoints[i]});routeWaypoints=nw;routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();return Promise.resolve(changed)
+ /* Auto: ADR-008 domain optimizes plain coordinates; Leaflet access stays in adapter. */
+ var ordered=P2MRoutingPinAdapter.optimizeItems(all);
+ var nw=ordered.slice(1,-1),changed=nw.some(function(x,i){return x!==routeWaypoints[i]});routeWaypoints=nw;routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();return Promise.resolve(changed)
 }
 function calculateRoute(){
  p2mClearRouteFailures();
