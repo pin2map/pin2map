@@ -10,7 +10,10 @@ config = json.loads((ROOT / "quality/guardrails.json").read_text())
 modules = json.loads((ROOT / "quality/domain_modules.json").read_text())["modules"]
 errors = []
 for rel in modules:
-    p = ROOT / rel
+    p = (ROOT / rel).resolve()
+    if not p.is_relative_to(ROOT.resolve()):
+        errors.append(f"INVALID PATH outside repository: {rel}")
+        continue
     if not p.is_file():
         errors.append(f"MISSING: {rel}")
         continue
@@ -21,6 +24,7 @@ for rel in modules:
 if errors:
     print("\n".join(errors))
     sys.exit(1)
-print(f"PASS: ADR-008 domain scan of {len(modules)} registered modules")
 if not modules:
-    print("NOTICE: No domain modules registered; this is NOT a full architecture audit.")
+    print("NOT CERTIFIED: No production domain modules registered; ADR-008 not assessed.")
+else:
+    print(f"PASS: ADR-008 pattern scan of {len(modules)} registered domain modules (not full architecture certification)")
