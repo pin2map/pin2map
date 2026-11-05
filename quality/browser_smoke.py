@@ -113,6 +113,16 @@ with sync_playwright() as pw:
             markers = page.locator(".leaflet-marker-icon")
             if markers.count() < 2:
                 raise AssertionError(f"{label}: fixture pins not rendered")
+            # Spy on Leaflet's polyline constructor before routing.
+            # The app uses preferCanvas; SVG path counting is invalid.
+            page.evaluate("""() => {
+                window.__qaRoutePolylines = [];
+                const original = L.polyline;
+                L.polyline = function(latlngs, options) {
+                    window.__qaRoutePolylines.push(latlngs);
+                    return original.apply(this, arguments);
+                };
+            }""")
             markers.nth(0).click()
             page.locator(".leaflet-popup [data-route-start]").click()
             markers.nth(1).click()
@@ -141,11 +151,13 @@ with sync_playwright() as pw:
             route_state = page.evaluate("""() => ({
                 summary: document.getElementById('routeSummary')?.textContent,
                 hint: document.getElementById('routeHint')?.textContent,
-                pathCount: document.querySelectorAll('.leaflet-overlay-pane path').length,
+                routePolylineCount: (window.__qaRoutePolylines || []).length,
+                canvasCount: document.querySelectorAll('.leaflet-overlay-pane canvas').length,
                 legCount: document.querySelectorAll('#routeLegs .route-leg').length
             })""")
-            if not (route_state["summary"] and "0,2 km" in route_state["summary"]
-                    and route_state["pathCount"] > 0):
+            if not (route_state["summary"] and "0.2 km" in route_state["summary"]
+                    and route_state["routePolylineCount"] > 0
+                    and route_state["canvasCount"] > 0):
                 raise AssertionError(f"{label}: mocked OSRM route not rendered: state={route_state}; osrm_calls={osrm_calls}; js_errors={errors[:3]}")
             if len(osrm_calls) != 1:
                 raise AssertionError(f"{label}: expected one OSRM request, got {len(osrm_calls)}")
