@@ -242,6 +242,52 @@ with sync_playwright() as pw:
             if len(malformed_calls) != 1:
                 raise AssertionError(f"{label}: malformed JSON request count {len(malformed_calls)}")
             print(f"PASS {label}: malformed routing JSON handled without crash")
+            # Deterministic stale-response race: hold the first driving fetch
+            # in the browser, clear the route, then complete a fresh request.
+            # Releasing the old NoRoute response must not overwrite success.
+            page.locator("#routeClear").evaluate("(el) => el.click()")
+            page.unroute("**/route/v1/driving/**", malformed_osrm)
+            race_calls = []
+            def race_osrm(route):
+                race_calls.append(route.request.url)
+                route.fulfill(status=200, content_type="application/json", body='{"code":"Ok","routes":[{"distance":180,"duration":45,"geometry":{"type":"LineString","coordinates":[[9.1829,48.7758],[9.1840,48.7768]]},"legs":[{"distance":180,"duration":45,"steps":[{"geometry":{"coordinates":[[9.1829,48.7758],[9.1840,48.7768]]}}]}]}]}')
+            page.route("**/route/v1/driving/**", race_osrm)
+            page.evaluate("""() => {
+                const realFetch = window.fetch.bind(window);
+                window.__qaHeld = 0;
+                window.__qaReleaseOld = null;
+                window.fetch = function(url, opts) {
+                    if (String(url).includes('/route/v1/driving/') && window.__qaHeld++ === 0) {
+                        return new Promise(resolve => {
+                            window.__qaReleaseOld = () => resolve(new Response(
+                                '{"code":"NoRoute","routes":[]}',
+                                {status: 200, headers: {'Content-Type': 'application/json'}}
+                            ));
+                        });
+                    }
+                    return realFetch(url, opts);
+                };
+            }""")
+            page.locator(".leaflet-marker-icon").nth(0).click()
+            page.locator(".leaflet-popup [data-route-start]").click()
+            page.locator(".leaflet-marker-icon").nth(1).click()
+            page.locator(".leaflet-popup [data-route-target]").click()
+            page.wait_for_function("typeof window.__qaReleaseOld === 'function'", timeout=15000)
+            page.locator("#routeClear").evaluate("(el) => el.click()")
+            page.locator(".leaflet-marker-icon").nth(0).click()
+            page.locator(".leaflet-popup [data-route-start]").click()
+            page.locator(".leaflet-marker-icon").nth(1).click()
+            page.locator(".leaflet-popup [data-route-target]").click()
+            page.wait_for_function("""() => document.getElementById('routeSummary')?.textContent.includes('0.2 km')""", timeout=15000)
+            page.evaluate("window.__qaReleaseOld()")
+            page.wait_for_timeout(300)
+            race_state = page.evaluate("""() => ({
+                summary: document.getElementById('routeSummary')?.textContent,
+                failed: document.querySelector('[data-route-mode="driving"]')?.classList.contains('p2m-route-failed')
+            })""")
+            if "0.2 km" not in (race_state["summary"] or "") or race_state["failed"] or len(race_calls) != 1:
+                raise AssertionError(f"{label}: stale response corrupted new route: {race_state}, calls={race_calls}")
+            print(f"PASS {label}: stale NoRoute response ignored after successful replacement")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
