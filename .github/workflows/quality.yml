@@ -45,5 +45,5 @@ jobs:
           if-no-files-found: warn
       - name: Explicit release limitation
         run: |
-          echo "Baseline only: no ADR-007 certification, browser tests or regression approval."
+          echo "Baseline only: browser smoke tests run; no ADR-007/ADR-008 certification or routing regression approval."
           echo "DO NOT configure this job alone as sufficient production release approval."
