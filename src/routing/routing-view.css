@@ -1,0 +1,26 @@
+/* RoutingView layout scaffold. Loaded only in isolated prototype, not production. */
+.p2m-routing-view { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; height:100%; min-height:0; }
+.p2m-routing-main { display:flex; flex-direction:column; min-width:0; min-height:0; }
+.p2m-routing-header { display:flex; align-items:center; gap:8px; flex:none; }
+.p2m-routing-modes { display:flex; align-items:center; gap:4px; flex:none; }
+.p2m-routing-mode { display:grid; place-items:center; border:0; border-radius:50%; background:#e5e7eb; width:34px; height:34px; cursor:pointer; }
+.p2m-routing-mode.is-expanded { background:#2563eb; color:white; }
+.p2m-routing-summary { min-width:0; overflow-wrap:anywhere; }
+.p2m-routing-controls { display:flex; gap:6px; flex:none; }
+.p2m-routing-control-slot { min-width:0; flex:1; }
+.p2m-routing-scroll { min-height:0; overflow:auto; overscroll-behavior:contain; }
+.p2m-routing-alternatives { display:flex; flex-direction:column; gap:2px; }
+.p2m-routing-alternative { display:flex; align-items:center; gap:6px; width:100%; border:0; background:transparent; color:#111; text-align:left; padding:5px; cursor:pointer; }
+.p2m-routing-alternative.is-active { color:#c52222; }
+.p2m-routing-number { display:grid; place-items:center; width:24px; height:24px; flex:none; border-radius:50%; background:#d1d5db; color:#111; }
+.is-active .p2m-routing-number { background:#c52222; color:white; }
+.p2m-routing-check { color:#c52222; }
+.p2m-routing-legs { margin-top:6px; }
+.p2m-routing-actions { display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:8px; flex:none; }
+.p2m-routing-action { display:flex; align-items:center; justify-content:center; gap:5px; border:0; border-radius:6px; padding:8px; background:#e5e7eb; cursor:pointer; }
+.p2m-routing-action.is-danger { background:#b91c1c; color:white; }
+@media (max-width:600px) {
+  .p2m-routing-actions { align-items:center; }
+  .p2m-routing-action { width:36px; height:36px; padding:0; border-radius:50%; }
+  .p2m-routing-action-caption { display:none; }
+}
