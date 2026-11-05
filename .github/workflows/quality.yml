@@ -30,6 +30,19 @@ jobs:
         run: python quality/check_change_scope.py
       - name: Check legacy baseline structure
         run: python quality/check_baseline.py
+      - name: Install browser test dependencies
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Run Chromium desktop and mobile smoke tests
+        run: python quality/browser_smoke.py
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-smoke-screenshots
+          path: quality-artifacts/
+          if-no-files-found: warn
       - name: Explicit release limitation
         run: |
           echo "Baseline only: no ADR-007 certification, browser tests or regression approval."
