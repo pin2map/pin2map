@@ -27,7 +27,15 @@ with sync_playwright() as pw:
             if not body_text.strip():
                 raise AssertionError(f"{label}: empty body text")
             if not page.locator("body").is_visible():
-                raise AssertionError(f"{label}: body not visible")
+                state = page.locator("body").evaluate("""el => ({
+                    display: getComputedStyle(el).display,
+                    visibility: getComputedStyle(el).visibility,
+                    opacity: getComputedStyle(el).opacity,
+                    rect: {width: el.getBoundingClientRect().width, height: el.getBoundingClientRect().height},
+                    classes: el.className,
+                    htmlClasses: document.documentElement.className
+                })""")
+                raise AssertionError(f"{label}: body not visible; computed state={state}; js_errors={errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
             if errors:
                 print(f"NOTICE {label}: JS errors observed (not yet release-blocking): {errors[:3]}")
