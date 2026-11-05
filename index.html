@@ -8803,7 +8803,7 @@ window.addEventListener('resize',function(){var root=getPopup();if(root){root.st
 </script>
 <script id="p2m-dev-routing-shell-bootstrap">
 (function(){
-  if(!new URLSearchParams(location.search).has('routingShell'))return;
+  if(new URLSearchParams(location.search).get('routingShell')==='legacy')return;
   function start(){try{P2MRoutingShell.mount(document);}catch(error){console.error('[pin2map Routing shell DEV]',error);}}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});
   else start();
