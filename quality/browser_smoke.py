@@ -182,6 +182,28 @@ with sync_playwright() as pw:
             if not failure_calls:
                 raise AssertionError(f"{label}: expected a failing OSRM request")
             print(f"PASS {label}: HTTP 503 routing failure shown and failed mode disabled")
+            # Recovery through the public UI: clear the failed route, then
+            # select the two pins again. A new route must succeed.
+            page.locator("#routeClear").evaluate("(el) => el.click()")
+            page.unroute("**/route/v1/driving/**", fail_osrm)
+            recovery_calls = []
+            def recover_osrm(route):
+                recovery_calls.append(route.request.url)
+                route.fulfill(status=200, content_type="application/json", body='{"code":"Ok","routes":[{"distance":180,"duration":45,"geometry":{"type":"LineString","coordinates":[[9.1829,48.7758],[9.1840,48.7768]]},"legs":[{"distance":180,"duration":45,"steps":[{"geometry":{"coordinates":[[9.1829,48.7758],[9.1840,48.7768]]}}]}]}]}')
+            page.route("**/route/v1/driving/**", recover_osrm)
+            page.locator(".leaflet-marker-icon").nth(0).click()
+            page.locator(".leaflet-popup [data-route-start]").click()
+            page.locator(".leaflet-marker-icon").nth(1).click()
+            page.locator(".leaflet-popup [data-route-target]").click()
+            page.wait_for_function("""() => {
+                const b = document.querySelector('[data-route-mode="driving"]');
+                const summary = document.getElementById('routeSummary');
+                return b && !b.disabled && !b.classList.contains('p2m-route-failed')
+                    && summary?.textContent.includes('0.2 km');
+            }""", timeout=15000)
+            if len(recovery_calls) != 1:
+                raise AssertionError(f"{label}: expected one successful recovery request, got {len(recovery_calls)}")
+            print(f"PASS {label}: route recovered after clearing failed route")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
