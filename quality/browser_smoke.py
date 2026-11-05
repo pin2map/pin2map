@@ -76,6 +76,26 @@ with sync_playwright() as pw:
             if not readiness["routeToggleDisabled"] or readiness["routeTogglePressed"] != "false":
                 raise AssertionError(f"{label}: no-route toggle state incorrect: {readiness}")
             print(f"PASS {label}: initial no-route UI state and Leaflet loaded")
+            # Exercise the actual mode-selection event listener with a real
+            # DOM click. No endpoints exist, so no network route is requested.
+            # This is a component interaction, not a full user journey.
+            mode_result = page.evaluate("""() => {
+                const driving = document.querySelector('[data-route-mode="driving"]');
+                const bicycle = document.querySelector('[data-route-mode="bicycle"]');
+                if (!driving || !bicycle) return {error:'missing mode controls'};
+                try {
+                    bicycle.click();
+                    if (!bicycle.classList.contains('active'))
+                        throw Error('bicycle mode not activated');
+                    driving.click();
+                    if (!driving.classList.contains('active'))
+                        throw Error('driving mode not restored');
+                    return {ok:true};
+                } catch (e) { return {error:String(e)}; }
+            }""")
+            if not mode_result.get("ok"):
+                raise AssertionError(f"{label}: mode-switch interaction failed: {mode_result}")
+            print(f"PASS {label}: driving/bicycle mode event handling")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
