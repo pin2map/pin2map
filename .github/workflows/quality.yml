@@ -23,6 +23,11 @@ jobs:
         run: python quality/test_guardrails.py
       - name: Check registered domain modules
         run: python quality/check_architecture.py
+      - name: Self-test change scope guard
+        run: python quality/test_change_scope.py
+      - name: Block unverified application changes
+        if: github.event_name == 'pull_request'
+        run: python quality/check_change_scope.py
       - name: Check legacy baseline structure
         run: python quality/check_baseline.py
       - name: Explicit release limitation
