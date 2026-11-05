@@ -87,3 +87,7 @@ Die Punkte R01–R06 beruhen auf Nutzeranweisungen und Screenshots. Als „Vorsc
 ## Nachtrag – Vereinheitlichung Desktop/iPhone (05.11.2026)
 
 **Neueste verbindliche Entscheidung hat Vorrang vor älteren Screenshots und R04:** Die rechte Aktionsspalte besteht **auf Desktop und iPhone gleichermaßen aus drei runden, ausschließlich ikonbasierten Buttons** in der Reihenfolge Umkehren, Beenden, Schließen. Keine rechteckigen Desktop-Textbuttons. Die bisherigen Lucide-/Farbvorgaben gelten weiterhin. Sonstige Unterschiede der verfügbaren Fläche und Abmessungen bleiben responsiv.
+
+## Nachtrag – kompakte, geräteübergreifend ähnliche Dialogbreite (05.11.2026)
+
+**Verbindliche Nutzerentscheidung:** Der Routing-Dialog soll auf Desktop und iPhone annähernd gleich schmal/breit erscheinen; auf großen Bildschirmen darf er nicht zu einem wesentlich breiteren Dialog anwachsen. Maßgeblicher Ausgangspunkt ist die bestehende iPhone-Dialogbreite. Die bestehende iPhone-Position (leicht nach rechts versetzt, Zoom-Buttons frei) und Höhe bleiben erhalten. Auf beiden Geräten dieselbe grundlegende Elementanordnung und drei runde Icon-only-Aktionsbuttons rechts. **Keinen frei erfundenen festen Pixelwert festlegen**: zunächst reale Bestandsmaße aus CSS und Referenzbildern bestimmen, dann geräteübergreifende Breitenbegrenzung festlegen und im Browser messen. Bei sehr kleinen Viewports darf die Oberfläche nicht abgeschnitten werden.
