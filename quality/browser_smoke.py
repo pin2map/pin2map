@@ -222,6 +222,26 @@ with sync_playwright() as pw:
             if len(invalid_calls) != 1:
                 raise AssertionError(f"{label}: expected one invalid OSRM response request, got {len(invalid_calls)}")
             print(f"PASS {label}: HTTP 200 NoRoute payload rejected")
+            # Malformed JSON must also fail safely without uncaught errors.
+            page.locator("#routeClear").evaluate("(el) => el.click()")
+            page.unroute("**/route/v1/driving/**", invalid_osrm)
+            malformed_calls = []
+            def malformed_osrm(route):
+                malformed_calls.append(route.request.url)
+                route.fulfill(status=200, content_type="application/json", body='{"code":')
+            page.route("**/route/v1/driving/**", malformed_osrm)
+            page.locator(".leaflet-marker-icon").nth(0).click()
+            page.locator(".leaflet-popup [data-route-start]").click()
+            page.locator(".leaflet-marker-icon").nth(1).click()
+            page.locator(".leaflet-popup [data-route-target]").click()
+            page.wait_for_function("""() => {
+                const b = document.querySelector('[data-route-mode="driving"]');
+                return b?.disabled && b.classList.contains('p2m-route-failed')
+                    && document.getElementById('routeSummary')?.textContent.includes('Routing nicht möglich');
+            }""", timeout=15000)
+            if len(malformed_calls) != 1:
+                raise AssertionError(f"{label}: malformed JSON request count {len(malformed_calls)}")
+            print(f"PASS {label}: malformed routing JSON handled without crash")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
