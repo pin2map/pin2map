@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Real Chromium smoke tests of the shipped single-file app.
 
-Includes routing panel interaction tests, but NOT route calculation or ADR-007/008 certification.
+Checks initial routing UI state and dependency readiness, but NOT active-route interaction or ADR-007/008 certification.
 Produces screenshots and fails on missing app content or page load errors.
 """
 import pathlib, sys
@@ -61,50 +61,25 @@ with sync_playwright() as pw:
             if modes.count() < 4:
                 raise AssertionError(f"{label}: expected 4 routing mode controls, found {modes.count()}")
             print(f"PASS {label}: routing DOM contract; {len(required)} unique controls, {modes.count()} modes")
-            # Exercise real event handlers with synthetic route endpoints.
-            # No network routing is invoked: this checks UI state transitions only.
-            routing = page.evaluate("""() => {
-                if (typeof syncRoutePanelToggle !== 'function' ||
-                    typeof setRoutePanelHidden !== 'function' ||
-                    typeof routeStartItem === 'undefined' ||
-                    typeof routeTargetItem === 'undefined') {
-                    return {error: 'routing globals or handlers unavailable'};
-                }
-                const startBefore = routeStartItem, targetBefore = routeTargetItem;
-                const panel = document.getElementById('routeInfo');
-                const toggle = document.getElementById('routePanelToggle');
-                try {
-                    routeStartItem = {label:'QA start'};
-                    routeTargetItem = {label:'QA destination'};
-                    syncRoutePanelToggle();
-                    if (toggle.disabled || !toggle.classList.contains('route-toggle-visible'))
-                        throw Error('routing toggle not enabled for active route');
-                    setRoutePanelHidden(false);
-                    document.getElementById('routePanelHide').click();
-                    if (!panel.classList.contains('route-panel-hidden') ||
-                        toggle.getAttribute('aria-pressed') !== 'false')
-                        throw Error('hide button did not hide routing panel');
-                    toggle.click();
-                    if (panel.classList.contains('route-panel-hidden') ||
-                        toggle.getAttribute('aria-pressed') !== 'true')
-                        throw Error('toggle did not reopen routing panel');
-                    return {ok: true};
-                } catch (e) {
-                    return {error: String(e)};
-                } finally {
-                    routeStartItem = startBefore;
-                    routeTargetItem = targetBefore;
-                    setRoutePanelHidden(false);
-                    syncRoutePanelToggle();
-                }
-            }""")
-            if not routing.get("ok"):
-                raise AssertionError(f"{label}: routing panel interaction failed: {routing}")
-            print(f"PASS {label}: routing hide/reopen event handlers")
+            # A no-route state is testable without manipulating closure-private state.
+            # Do not pretend that routeStartItem is a window global: it is private
+            # to the app's IIFE. Active-route interactions need a real fixture.
+            readiness = page.evaluate("""() => ({
+                leaflet: !!window.L,
+                routeToggleDisabled: document.getElementById('routePanelToggle').disabled,
+                routeTogglePressed: document.getElementById('routePanelToggle').getAttribute('aria-pressed'),
+                routeInfoPresent: !!document.getElementById('routeInfo'),
+                leafletError: (document.getElementById('formStatus')?.textContent || '').includes('Kartenbibliothek')
+            })""")
+            if not readiness["leaflet"]:
+                raise AssertionError(f"{label}: Leaflet dependency not loaded; cannot claim app interaction coverage: {readiness}")
+            if not readiness["routeToggleDisabled"] or readiness["routeTogglePressed"] != "false":
+                raise AssertionError(f"{label}: no-route toggle state incorrect: {readiness}")
+            print(f"PASS {label}: initial no-route UI state and Leaflet loaded")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
             page.close()
     finally:
         browser.close()
-print("LIMITATION: screenshots are evidence only; no visual-diff, route calculation or architecture certification.")
+print("LIMITATION: screenshots are evidence only; no visual-diff, active-route interaction, route calculation or architecture certification.")
