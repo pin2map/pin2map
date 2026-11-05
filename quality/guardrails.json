@@ -18,7 +18,11 @@
         "window\\s*\\.\\s*document",
         "getElementById\\s*\\(",
         "querySelector(All)?\\s*\\(",
-        "\\bL\\s*\\.\\s*(map|polyline|marker|geoJSON)\\s*\\("
+        "\\bL\\s*\\.\\s*(map|polyline|marker|geoJSON)\\s*\\(",
+        "\\b(?:window|globalThis|document|navigator|location|localStorage|sessionStorage|indexedDB|FileReader|XMLHttpRequest|WebSocket|EventSource|MutationObserver|ResizeObserver|IntersectionObserver)\\b",
+        "\\bfetch\\s*\\(",
+        "\\b(?:alert|confirm|prompt|requestAnimationFrame|cancelAnimationFrame)\\s*\\(",
+        "\\b(?:L|leaflet)\\s*\\."
       ]
     }
   },
