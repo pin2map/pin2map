@@ -1,5 +1,5 @@
 /* RoutingView layout scaffold. Loaded only in isolated prototype, not production. */
-.p2m-routing-view { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; height:100%; min-height:0; }
+.p2m-routing-view { display:grid; grid-template-columns:minmax(0,1fr) 38px; gap:8px; height:100%; min-height:0; }
 .p2m-routing-main { display:flex; flex-direction:column; min-width:0; min-height:0; }
 .p2m-routing-header { display:flex; align-items:center; gap:8px; flex:none; }
 .p2m-routing-modes { display:flex; align-items:center; gap:4px; flex:none; }
@@ -16,10 +16,10 @@
 .is-active .p2m-routing-number { background:#c52222; color:white; }
 .p2m-routing-check { color:#c52222; }
 .p2m-routing-legs { margin-top:6px; }
-.p2m-routing-actions { display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:8px; flex:none; }
-.p2m-routing-action { display:flex; align-items:center; justify-content:center; gap:5px; border:0; border-radius:6px; padding:8px; background:#e5e7eb; cursor:pointer; }
+.p2m-routing-actions { display:flex; flex-direction:column; justify-content:space-between; align-items:center; gap:8px; flex:none; }
+.p2m-routing-action { display:flex; align-items:center; justify-content:center; gap:5px; border:0; border-radius:50%; width:36px; height:36px; padding:0; background:#e5e7eb; cursor:pointer; }
 .p2m-routing-action.is-danger { background:#b91c1c; color:white; }
-@media (max-width:600px) {
+.p2m-routing-action-caption { display:none; }\n@media (max-width:600px) {
   .p2m-routing-actions { align-items:center; }
   .p2m-routing-action { width:36px; height:36px; padding:0; border-radius:50%; }
   .p2m-routing-action-caption { display:none; }
