@@ -204,6 +204,24 @@ with sync_playwright() as pw:
             if len(recovery_calls) != 1:
                 raise AssertionError(f"{label}: expected one successful recovery request, got {len(recovery_calls)}")
             print(f"PASS {label}: route recovered after clearing failed route")
+            # A successful HTTP status with invalid route payload must
+            # not leave a success summary or an enabled failed mode.
+            page.unroute("**/route/v1/driving/**", recover_osrm)
+            invalid_calls = []
+            def invalid_osrm(route):
+                invalid_calls.append(route.request.url)
+                route.fulfill(status=200, content_type="application/json", body='{"code":"NoRoute","routes":[]}')
+            page.route("**/route/v1/driving/**", invalid_osrm)
+            page.locator('[data-route-mode="bicycle"]').evaluate("(el) => el.click()")
+            page.locator('[data-route-mode="driving"]').evaluate("(el) => el.click()")
+            page.wait_for_function("""() => {
+                const b = document.querySelector('[data-route-mode="driving"]');
+                return b?.disabled && b.classList.contains('p2m-route-failed')
+                    && document.getElementById('routeSummary')?.textContent.includes('Routing nicht möglich');
+            }""", timeout=15000)
+            if len(invalid_calls) != 1:
+                raise AssertionError(f"{label}: expected one invalid OSRM response request, got {len(invalid_calls)}")
+            print(f"PASS {label}: HTTP 200 NoRoute payload rejected")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
