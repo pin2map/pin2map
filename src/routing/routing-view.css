@@ -19,7 +19,8 @@
 .p2m-routing-actions { display:flex; flex-direction:column; justify-content:space-between; align-items:center; gap:8px; flex:none; }
 .p2m-routing-action { display:flex; align-items:center; justify-content:center; gap:5px; border:0; border-radius:50%; width:36px; height:36px; padding:0; background:#e5e7eb; cursor:pointer; }
 .p2m-routing-action.is-danger { background:#b91c1c; color:white; }
-.p2m-routing-action-caption { display:none; }\n@media (max-width:600px) {
+.p2m-routing-action-caption { display:none; }
+@media (max-width:600px) {
   .p2m-routing-actions { align-items:center; }
   .p2m-routing-action { width:36px; height:36px; padding:0; border-radius:50%; }
   .p2m-routing-action-caption { display:none; }
