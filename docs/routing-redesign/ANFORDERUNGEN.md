@@ -39,7 +39,7 @@
 
 - Gemeinsame rechte Spalte für **alle** Routing-Arten.
 - Von oben nach unten: **Umkehren** (bisher A→B), **Beenden** (rot), **Schließen ×** (bisher runder X-Button).
-- Alle drei **rechteckig**, gleiche grundsätzliche Größe/Anmutung; Beenden weiterhin roter Hintergrund mit weißer Schrift.
+- **Überholt durch Nutzerentscheidung vom 05.11.2026:** Auch auf Desktop sind alle drei Buttons **rund und ausschließlich mit Symbol**. Beenden bleibt rot mit weißem Symbol. Desktop und iPhone sollen grundsätzlich ähnlich aussehen.
 - Positionierung wie ÖPNV-Gesamtansicht Referenz.
 - **Bestehende Semantik** von Schließen vs. Beenden erhalten; exakt im Bestand überprüfen.
 
@@ -49,7 +49,7 @@
 - Rechte Aktionsbuttons **fest**, **rechts untereinander**, **rund und nur mit Symbol**: oben Umkehren ↩ (hell), mittig Beenden roter Kreis mit weißem X, unten Schließen ✔ (hell). Diese Symbolformen sind Referenzabsicht; konkrete Lucide-Icons noch festlegen.
 - Aktionsbuttons dürfen beim Scrollen **nicht mitscrollen**.
 - Verbindungsliste/Etappen in scrollbarem Inhaltsbereich; Dialog/Bedienbuttons bleiben an Position.
-- Desktop- und iPhone-Varianten sind ausdrücklich verschieden. Keine ungetestete Änderung von Größe/Position oder Überdeckung.
+- Desktop- und iPhone-Varianten sind in der grundlegenden Darstellung **ähnlich**; insbesondere sind die drei Aktionsbuttons auf beiden Geräten rund und ausschließlich mit Symbolen. Keine ungetestete Änderung von Größe/Position oder Überdeckung.
 
 ## R06 – Auto/Fahrrad/Fuß
 
@@ -83,3 +83,7 @@
 ## Historie und Verbindlichkeit
 
 Die Punkte R01–R06 beruhen auf Nutzeranweisungen und Screenshots. Als „Vorschlag“ oder „offen“ bezeichnete Punkte sind **nicht** automatisch freigegeben. Diese Datei ist eine konsolidierte Spezifikation; die Bilddateien und das Chat-Original bleiben eigenständige Belege.
+
+## Nachtrag – Vereinheitlichung Desktop/iPhone (05.11.2026)
+
+**Neueste verbindliche Entscheidung hat Vorrang vor älteren Screenshots und R04:** Die rechte Aktionsspalte besteht **auf Desktop und iPhone gleichermaßen aus drei runden, ausschließlich ikonbasierten Buttons** in der Reihenfolge Umkehren, Beenden, Schließen. Keine rechteckigen Desktop-Textbuttons. Die bisherigen Lucide-/Farbvorgaben gelten weiterhin. Sonstige Unterschiede der verfügbaren Fläche und Abmessungen bleiben responsiv.
