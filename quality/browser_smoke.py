@@ -151,4 +151,4 @@ with sync_playwright() as pw:
             page.close()
     finally:
         browser.close()
-print("LIMITATION: screenshots are evidence only; no visual-diff, route calculation or architecture certification.")
+print("LIMITATION: screenshots are evidence only; no visual-diff, live routing service verification or architecture certification.")
