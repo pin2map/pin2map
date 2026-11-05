@@ -46,6 +46,21 @@ with sync_playwright() as pw:
             }""")
             if visible["count"] < 1:
                 raise AssertionError(f"{label}: no visible app elements with viewport overlap; diagnostics={visible}; js_errors={errors[:5]}")
+            # Verify the existing routing controls are present and uniquely identified.
+            # This is a DOM contract test, not an end-to-end routing calculation.
+            required = [
+                "routeInfo", "routeSummary", "routePanelHide", "routeClear",
+                "routeVisiblePins", "routeOrderToggle", "routeOrderOptimal",
+                "routeReverse", "routeDetailsToggle", "routeEndpoints",
+                "routeEdit", "routeLegs", "routePanelToggle"
+            ]
+            missing = [ident for ident in required if page.locator(f'[id="{ident}"]').count() != 1]
+            if missing:
+                raise AssertionError(f"{label}: routing DOM contract failed (missing or duplicate ids): {missing}")
+            modes = page.locator('[data-route-mode]')
+            if modes.count() < 4:
+                raise AssertionError(f"{label}: expected 4 routing mode controls, found {modes.count()}")
+            print(f"PASS {label}: routing DOM contract; {len(required)} unique controls, {modes.count()} modes")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
