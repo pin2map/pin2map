@@ -47,7 +47,7 @@
     const buttons = Array.from(modes.querySelectorAll('[data-route-mode]'));
     const sync = () => {
       const active = buttons.find(b => b.classList.contains('active')) || buttons[0];
-      buttons.forEach(b => { b.classList.toggle('p2m-shell-mode-visible', b === active); });
+      buttons.forEach(b => { b.classList.toggle('p2m-shell-mode-visible', panel.classList.contains('p2m-shell-modes-open') || b === active); });
       panel.dataset.p2mMode = modeMap[active.dataset.routeMode] || 'car';
     };
     const collapse = () => { panel.classList.remove('p2m-shell-modes-open'); sync(); };
