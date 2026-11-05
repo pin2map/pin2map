@@ -164,6 +164,24 @@ with sync_playwright() as pw:
             if page.locator("#routeLegs .route-leg").count() != 1:
                 raise AssertionError(f"{label}: expected one rendered route leg")
             print(f"PASS {label}: mocked OSRM route fetched, drawn and summarized")
+            # Failure regression: switch the same mocked endpoint to HTTP 503,
+            # then trigger a fresh route request through a real mode change.
+            page.unroute("**/route/v1/driving/**", mock_osrm)
+            failure_calls = []
+            def fail_osrm(route):
+                failure_calls.append(route.request.url)
+                route.fulfill(status=503, content_type="application/json", body='{"message":"Service unavailable"}')
+            page.route("**/route/v1/driving/**", fail_osrm)
+            page.locator('[data-route-mode="bicycle"]').evaluate("(el) => el.click()")
+            page.locator('[data-route-mode="driving"]').evaluate("(el) => el.click()")
+            page.wait_for_function("""() => {
+                const b = document.querySelector('[data-route-mode="driving"]');
+                return b && b.classList.contains('p2m-route-failed')
+                    && b.disabled && document.getElementById('routeSummary')?.textContent.includes('Routing nicht möglich');
+            }""", timeout=15000)
+            if not failure_calls:
+                raise AssertionError(f"{label}: expected a failing OSRM request")
+            print(f"PASS {label}: HTTP 503 routing failure shown and failed mode disabled")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
