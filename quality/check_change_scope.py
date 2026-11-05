@@ -12,7 +12,7 @@ def git(*args):
 base = os.environ.get("GITHUB_BASE_REF", "main")
 try:
     git("fetch", "--no-tags", "--depth=1", "origin", base)
-    changed = git("diff", "--name-only", f"origin/{base}...HEAD").splitlines()
+    changed = git("diff", "--name-only", f"origin/{base}", "HEAD").splitlines()
 except (subprocess.CalledProcessError, OSError) as exc:
     sys.exit(f"BLOCKED: Cannot establish changed-file inventory: {exc}")
 
