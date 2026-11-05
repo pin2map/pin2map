@@ -1,0 +1,26 @@
+name: RoutingView isolated tests
+on:
+  push:
+    branches:
+      - dev/adr008-routing-integration
+    paths:
+      - 'src/routing/routing-view.js'
+      - 'src/routing/routing-view.css'
+      - 'tests/routing-view.test.js'
+      - '.github/workflows/routing-view-tests.yml'
+  workflow_dispatch:
+jobs:
+  routing-view:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check
+        run: node --check src/routing/routing-view.js && node --check tests/routing-view.test.js
+      - name: Run routing view unit tests
+        run: node --test tests/routing-view.test.js
