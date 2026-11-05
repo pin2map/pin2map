@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
-"""Self-test of the production-change classification used by the PR gate."""
-from pathlib import Path
-src = Path(__file__).with_name("check_change_scope.py").read_text()
-assert 'p == "index.html"' in src
-assert 'p.endswith(".html")' in src
-assert 'sys.exit("BLOCKED:' in src
-print("PASS: change-scope gate present (structural smoke only)")
+"""Executable mutation tests for fail-closed change classification."""
+from check_change_scope import classify
+
+cases = [
+    (["index.html"], ["index.html"]),
+    (["app.js"], ["app.js"]),
+    (["assets/app.css"], ["assets/app.css"]),
+    (["unknown.bin"], ["unknown.bin"]),
+    (["quality/check_architecture.py"], []),
+    (["tests/test_route.py"], []),
+    ([".github/workflows/quality.yml"], []),
+    (["quality/test.py", "index.html"], ["index.html"]),
+    (["README.md"], []),
+]
+for changed, expected in cases:
+    actual = classify(changed)
+    assert actual == expected, f"{changed}: expected {expected}, got {actual}"
+print(f"PASS: {len(cases)} change-scope mutation cases")
