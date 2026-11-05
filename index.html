@@ -4368,7 +4368,21 @@ var p2mRoutingDomain=(function(){
   while(pass++<maxPasses){var bestGain=0,bestA=-1,bestB=-1;for(var a=1;a<order.length-2;a++)for(var b=a+1;b<order.length-1;b++){var before=matrix[order[a-1]][order[a]]+matrix[order[b]][order[b+1]],after=matrix[order[a-1]][order[b]]+matrix[order[a]][order[b+1]],gain=before-after;if(gain>bestGain+0.1){bestGain=gain;bestA=a;bestB=b}}if(bestA<0)break;var rev=order.slice(bestA,bestB+1).reverse();order.splice.apply(order,[bestA,bestB-bestA+1].concat(rev))}
   return order;
  }
- return Object.freeze({durationLabel:durationLabel,airDistanceMeters:airDistanceMeters,optimizeWaypointIndices:optimizeWaypointIndices});
+ function normalizeOsrmRoute(data){
+  if(!data||data.code!=='Ok'||!Array.isArray(data.routes)||!data.routes.length)throw new Error(data&&data.message||'Keine Route');
+  var route=data.routes[0],legs=route.legs||[];
+  var segments=legs.map(function(leg){
+   var out=[];
+   (leg.steps||[]).forEach(function(step){
+    var coords=step.geometry&&step.geometry.coordinates||[];
+    if(out.length&&coords.length&&out[out.length-1][0]===coords[0][0]&&out[out.length-1][1]===coords[0][1])coords=coords.slice(1);
+    out=out.concat(coords);
+   });
+   return out;
+  });
+  return {geometry:route.geometry,distance:route.distance,duration:route.duration,legs:legs,segments:segments,rawRoute:route};
+ }
+ return Object.freeze({durationLabel:durationLabel,airDistanceMeters:airDistanceMeters,optimizeWaypointIndices:optimizeWaypointIndices,normalizeOsrmRoute:normalizeOsrmRoute});
 })();
 function formatRouteDuration(sec){return p2mRoutingDomain.durationLabel(sec)}
 function routeModeIcon(){return routeMode==='bicycle'?'🚴‍♂️':routeMode==='pedestrian'?'🥾':routeMode==='transit'?'🚃':'🚗'}
@@ -4624,8 +4638,8 @@ function calculateRoute(){
   var url='https://router.project-osrm.org/route/v1/driving/'+coords+'?alternatives=false&steps=true&geometries=geojson&overview=full';
   fetch(url,{headers:{'Accept':'application/json'}}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){
    if(myGeneration!==routeRequestGeneration)return;
-   if(d.code!=='Ok'||!d.routes||!d.routes.length)throw new Error(d.message||'Keine Route');var rt=d.routes[0];
-   var osrmSegments=(rt.legs||[]).map(function(leg){var out=[];(leg.steps||[]).forEach(function(st){var c=st.geometry&&st.geometry.coordinates||[];if(out.length&&c.length&&out[out.length-1][0]===c[0][0]&&out[out.length-1][1]===c[0][1])c=c.slice(1);out=out.concat(c)});return out});showCalculatedRoute(routeItems,rt.geometry,rt.distance,rt.duration,rt.legs||[],osrmSegments);p2mDrawDriveTimeMarkers(rt)
+   var normalized=p2mRoutingDomain.normalizeOsrmRoute(d);
+   showCalculatedRoute(routeItems,normalized.geometry,normalized.distance,normalized.duration,normalized.legs,normalized.segments);p2mDrawDriveTimeMarkers(normalized.rawRoute)
   }).catch(function(){if(myGeneration!==routeRequestGeneration)return;document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();p2mShowRouteFailure('driving')});return
  }
  /* V8.24: Fuß/Fahrrad abschnittsweise routen und fertige Etappen sofort anzeigen. So hängt die Gesamtzahl der Pins nicht
