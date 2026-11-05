@@ -102,11 +102,13 @@
           const b = el('button', 'p2m-routing-alternative' + (active ? ' is-active' : ''));
           b.type = 'button';
           b.setAttribute('aria-pressed', String(active));
-          if (active) b.appendChild(el('span', 'p2m-routing-check', '✓'));
           b.appendChild(el('span', 'p2m-routing-number', index + 1));
-          b.appendChild(el('span', 'p2m-routing-times', route.times || ''));
-          b.appendChild(el('span', 'p2m-routing-duration', route.duration || ''));
-          b.appendChild(el('span', 'p2m-routing-transfers', route.transfers || ''));
+          const details = el('span', 'p2m-routing-alternative-details');
+          details.appendChild(el('span', 'p2m-routing-times', route.times || ''));
+          const meta = el('span', 'p2m-routing-meta');
+          meta.textContent = [route.duration, route.transfers].filter(Boolean).join(' · ');
+          details.appendChild(meta);
+          b.appendChild(details);
           b.addEventListener('click', function () { emit('selectAlternative', route.id); });
           alternatives.appendChild(b);
         });
