@@ -99,17 +99,17 @@ with sync_playwright() as pw:
             # Build a deterministic two-pin map through the real list UI.
             # Numeric coordinates bypass geocoding. No private JS state is changed.
             page.locator("#back").click(force=True)
-            page.locator("#input").fill("# 📍 [Red] QA\n48.7758, 9.1829 (Stuttgart)\n48.8566, 2.3522 (Paris)")
+            page.locator("#input").fill("# 📍 [Red] QA\n48.7758, 9.1829 (Stuttgart)\n48.7768, 9.1840 (Stuttgart Ost)")
             page.locator("#go").evaluate("(el) => el.click()")
             page.wait_for_selector(".leaflet-marker-icon", state="attached", timeout=20000)
             page.wait_for_function("document.querySelectorAll('.leaflet-marker-icon').length >= 2", timeout=20000)
             markers = page.locator(".leaflet-marker-icon")
             if markers.count() < 2:
                 raise AssertionError(f"{label}: fixture pins not rendered")
-            markers.nth(0).click(force=True)
-            page.locator("[data-route-start]").first.click(force=True)
-            markers.nth(1).click(force=True)
-            page.locator("[data-route-target]").first.click(force=True)
+            markers.nth(0).click()
+            page.locator(".leaflet-popup [data-route-start]").click()
+            markers.nth(1).click()
+            page.locator(".leaflet-popup [data-route-target]").click()
             page.wait_for_function("!document.getElementById('routePanelToggle').disabled", timeout=15000)
             page.locator("#routePanelHide").click(force=True)
             if "route-panel-hidden" not in (page.locator("#routeInfo").get_attribute("class") or ""):
@@ -124,4 +124,4 @@ with sync_playwright() as pw:
             page.close()
     finally:
         browser.close()
-print("LIMITATION: screenshots are evidence only; no visual-diff, active-route interaction, route calculation or architecture certification.")
+print("LIMITATION: screenshots are evidence only; no visual-diff, route calculation or architecture certification.")
