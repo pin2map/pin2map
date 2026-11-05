@@ -4597,10 +4597,24 @@ function calculateTransitRoute(routeItems){
 }
 /* Leaflet adapter: convert map layers to plain coordinate values at the boundary. */
 function routeAirDistance(a,b){var A=a._pinLayer.getLatLng(),B=b._pinLayer.getLatLng();return p2mRoutingDomain.airDistanceMeters({lat:A.lat,lng:A.lng},{lat:B.lat,lng:B.lng})}
+/* ADR-008: Valhalla response adapter, converts provider-specific shape and units. */
+var p2mValhallaAdapter=(function(){
+ function normalizeTrip(d,routeItems,decode){
+  if(!d||!d.trip||!d.trip.legs||!d.trip.legs.length)throw new Error('Keine Route');
+  var coords=[],legs=[];
+  d.trip.legs.forEach(function(leg){
+   var segment=decode(leg.shape||'');
+   if(coords.length&&segment.length)segment=segment.slice(1);
+   coords=coords.concat(segment);
+   legs.push({distance:(leg.summary&&leg.summary.length||0)*1000,duration:(leg.summary&&leg.summary.time||0)});
+  });
+  var sum=d.trip.summary||{};
+  return {geometry:{type:'LineString',coordinates:coords},distance:(sum.length||0)*1000,duration:sum.time||0,legs:legs,routeItems:routeItems};
+ }
+ return Object.freeze({normalizeTrip:normalizeTrip});
+})();
 function valhallaTripResult(d,routeItems){
- if(!d.trip||!d.trip.legs||!d.trip.legs.length)throw new Error('Keine Route');
- var coords=[],legs=[];d.trip.legs.forEach(function(leg){var c=decodeValhallaPolyline(leg.shape||'');if(coords.length&&c.length)c.shift();coords=coords.concat(c);legs.push({distance:(leg.summary&&leg.summary.length||0)*1000,duration:(leg.summary&&leg.summary.time||0)})});
- var sum=d.trip.summary||{};return {geometry:{type:'LineString',coordinates:coords},distance:(sum.length||0)*1000,duration:sum.time||0,legs:legs,routeItems:routeItems}
+ return p2mValhallaAdapter.normalizeTrip(d,routeItems,decodeValhallaPolyline);
 }
 function optimizeRouteOrder(){
  if(routeOptimizeBusy||routeOrderMode!=='optimal'||routeMode==='transit'||!routeStartItem||!routeTargetItem||routeWaypoints.length<2)return Promise.resolve(false);
