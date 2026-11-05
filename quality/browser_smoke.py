@@ -111,12 +111,22 @@ with sync_playwright() as pw:
             markers.nth(1).click()
             page.locator(".leaflet-popup [data-route-target]").click()
             page.wait_for_function("!document.getElementById('routePanelToggle').disabled", timeout=15000)
-            page.locator("#routePanelHide").click(force=True)
-            if "route-panel-hidden" not in (page.locator("#routeInfo").get_attribute("class") or ""):
-                raise AssertionError(f"{label}: routing hide control did not hide dialog")
-            page.locator("#routePanelToggle").click(force=True)
-            if "route-panel-hidden" in (page.locator("#routeInfo").get_attribute("class") or ""):
-                raise AssertionError(f"{label}: routing toggle did not reopen dialog")
+            # Observe each click and its DOM mutation in one browser task.
+            # An in-flight asynchronous routing request can otherwise reopen
+            # the panel between Playwright's separate click and assertion.
+            panel_result = page.evaluate("""() => {
+                const panel = document.getElementById('routeInfo');
+                const toggle = document.getElementById('routePanelToggle');
+                document.getElementById('routePanelHide').click();
+                const hidden = panel.classList.contains('route-panel-hidden');
+                const pressedHidden = toggle.getAttribute('aria-pressed');
+                toggle.click();
+                const reopened = !panel.classList.contains('route-panel-hidden');
+                const pressedOpen = toggle.getAttribute('aria-pressed');
+                return {hidden, pressedHidden, reopened, pressedOpen};
+            }""")
+            if panel_result != {"hidden": True, "pressedHidden": "false", "reopened": True, "pressedOpen": "true"}:
+                raise AssertionError(f"{label}: routing panel click contract failed: {panel_result}")
             print(f"PASS {label}: real two-pin routing selection and hide/reopen")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
