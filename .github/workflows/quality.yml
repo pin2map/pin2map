@@ -1,0 +1,31 @@
+name: Quality checks (baseline; NOT release approval)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [qs-setup]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  baseline-quality:
+    name: baseline-quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify quality rules catch deliberate violations
+        run: python quality/test_guardrails.py
+      - name: Check registered domain modules
+        run: python quality/check_architecture.py
+      - name: Check legacy baseline structure
+        run: python quality/check_baseline.py
+      - name: Explicit release limitation
+        run: |
+          echo "Baseline only: no ADR-007 certification, browser tests or regression approval."
+          echo "DO NOT configure this job alone as sufficient production release approval."
