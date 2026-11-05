@@ -4345,7 +4345,21 @@ function exportRouteGpx(){
  parts.push('<trk><name>'+xmlEsc(name)+'</name><type>'+xmlEsc(mode)+'</type><trkseg>');x.coords.forEach(function(c){if(isFinite(c[0])&&isFinite(c[1]))parts.push('<trkpt lat="'+c[1].toFixed(7)+'" lon="'+c[0].toFixed(7)+'"></trkpt>')});parts.push('</trkseg></trk></gpx>');
  var blob=new Blob([parts.join('\n')],{type:'application/gpx+xml;charset=utf-8'}),a=document.createElement('a'),url=URL.createObjectURL(blob),start=x.items[0]?routeItemName(x.items[0]):'Route';a.href=url;a.download=safeFilePart(start+' - '+mode)+'.gpx';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1500);mapStatus.textContent='✓ GPX-Datei erstellt.';
 }
-function formatRouteDuration(sec){var m=Math.round(sec/60),h=Math.floor(m/60),r=m%60;return h?(h+' h '+(r?r+' min':'')):(m+' min')}
+/* ADR-008: pure routing domain; accepts only values, never DOM/Leaflet/network. */
+var p2mRoutingDomain=(function(){
+ function durationLabel(seconds){
+  var minutes=Math.round(seconds/60),hours=Math.floor(minutes/60),rest=minutes%60;
+  return hours?(hours+' h '+(rest?rest+' min':'')):(minutes+' min');
+ }
+ function airDistanceMeters(a,b){
+  var radians=Math.PI/180;
+  var x=(b.lng-a.lng)*radians*Math.cos((a.lat+b.lat)*radians/2);
+  var y=(b.lat-a.lat)*radians;
+  return Math.sqrt(x*x+y*y)*6371000;
+ }
+ return Object.freeze({durationLabel:durationLabel,airDistanceMeters:airDistanceMeters});
+})();
+function formatRouteDuration(sec){return p2mRoutingDomain.durationLabel(sec)}
 function routeModeIcon(){return routeMode==='bicycle'?'🚴‍♂️':routeMode==='pedestrian'?'🥾':routeMode==='transit'?'🚃':'🚗'}
 function updateRouteOrderButtons(){
  var fixed=document.getElementById('routeOrderToggle'),opt=document.getElementById('routeOrderOptimal');
@@ -4556,7 +4570,8 @@ function calculateTransitRoute(routeItems){
   var toggle=document.getElementById('routeDetailsToggle');if(toggle){toggle.disabled=!legs.length;toggle.title='Teilstrecken anzeigen';toggle.setAttribute('aria-label','Teilstrecken anzeigen')}var hint=document.getElementById('routeHint');hint.textContent='';hint.style.display='none';updateRouteModeButtons();document.getElementById('routeInfo').style.display='flex';autoZoomLoadedLayers();mapStatus.textContent=''
  }).catch(function(e){document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();p2mShowRouteFailure('transit')})
 }
-function routeAirDistance(a,b){var A=a._pinLayer.getLatLng(),B=b._pinLayer.getLatLng(),r=Math.PI/180,x=(B.lng-A.lng)*r*Math.cos((A.lat+B.lat)*r/2),y=(B.lat-A.lat)*r;return Math.sqrt(x*x+y*y)*6371000}
+/* Leaflet adapter: convert map layers to plain coordinate values at the boundary. */
+function routeAirDistance(a,b){var A=a._pinLayer.getLatLng(),B=b._pinLayer.getLatLng();return p2mRoutingDomain.airDistanceMeters({lat:A.lat,lng:A.lng},{lat:B.lat,lng:B.lng})}
 function valhallaTripResult(d,routeItems){
  if(!d.trip||!d.trip.legs||!d.trip.legs.length)throw new Error('Keine Route');
  var coords=[],legs=[];d.trip.legs.forEach(function(leg){var c=decodeValhallaPolyline(leg.shape||'');if(coords.length&&c.length)c.shift();coords=coords.concat(c);legs.push({distance:(leg.summary&&leg.summary.length||0)*1000,duration:(leg.summary&&leg.summary.time||0)})});
