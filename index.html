@@ -4119,6 +4119,17 @@ function saveAreaName(){
 document.getElementById('areaNameCancel').onclick=function(){document.getElementById('areaNameEditor').style.display='none';pendingAreaRename=null};
 document.getElementById('areaNameSave').onclick=saveAreaName;
 document.getElementById('areaNameInput').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveAreaName()}else if(e.key==='Escape'){document.getElementById('areaNameCancel').click()}});
+/* ADR-008: isolated domain and Leaflet pin adapter; development branch only. */
+const P2MRoutingDomain=Object.freeze({
+ approximateDistance(a,b){const r=Math.PI/180,x=(b.lng-a.lng)*r*Math.cos((a.lat+b.lat)*r/2),y=(b.lat-a.lat)*r;return Math.sqrt(x*x+y*y)*6371000},
+ driveStepDistance(a,b){const rad=Math.PI/180,lat1=a[1]*rad,lat2=b[1]*rad,dlat=lat2-lat1,dlon=(b[0]-a[0])*rad;const h=Math.sin(dlat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dlon/2)**2;return 12742000*Math.asin(Math.min(1,Math.sqrt(h)))},
+ optimizeDrivingIndices(points){const n=points.length;if(n<2)throw new RangeError('At least start and target required');const matrix=Array.from({length:n},()=>Array(n).fill(0));for(let i=0;i<n;i++)for(let j=0;j<n;j++)matrix[i][j]=i===j?0:this.approximateDistance(points[i],points[j]);const unused=[];for(let q=1;q<n-1;q++)unused.push(q);const order=[0];let cur=0;while(unused.length){let bi=0,best=Infinity;for(let k=0;k<unused.length;k++){const dd=matrix[cur][unused[k]];if(dd<best){best=dd;bi=k}}cur=unused.splice(bi,1)[0];order.push(cur)}order.push(n-1);const maxPasses=Math.max(1,(n-2)*(n-2));let pass=0;while(pass++<maxPasses){let bestGain=0,bestA=-1,bestB=-1;for(let a=1;a<order.length-2;a++)for(let b=a+1;b<order.length-1;b++){const before=matrix[order[a-1]][order[a]]+matrix[order[b]][order[b+1]];const after=matrix[order[a-1]][order[b]]+matrix[order[a]][order[b+1]];const gain=before-after;if(gain>bestGain+0.1){bestGain=gain;bestA=a;bestB=b}}if(bestA<0)break;order.splice(bestA,bestB-bestA+1,...order.slice(bestA,bestB+1).reverse())}return order}
+});
+const P2MRoutingPinAdapter=Object.freeze({
+ read(item){const ll=item._pinLayer.getLatLng();return {lat:ll.lat,lng:ll.lng}},
+ optimizeItems(items,domain=P2MRoutingDomain){const coords=items.map(item=>this.read(item));return domain.optimizeDrivingIndices(coords).map(i=>items[i])}
+});
+
 var routeStartItem=null,routeTargetItem=null,routeWaypoints=[],routeLayer=null,routeMode='driving',routeOrderMode='fixed',routeOptimizeBusy=false,routeFixedWaypoints=null,pendingProjectRoute=null,routeRequestGeneration=0,lastRouteExport=null,routeLegColors=true,routeLegGeometries=[],routeIsReversed=false,routeAllActive=false;
 var routeLegPalette=['#ff0000','#0a84ff','#ff9500','#34c759','#af52de','#00a7a7','#ff2d55','#5856d6','#8e8e93','#64d2ff'];
 var routeLastLegPalette=['#0a84ff','#ff9500','#34c759','#00a7a7','#5856d6','#8e8e93','#64d2ff'];
@@ -4130,11 +4141,7 @@ function p2mClearDriveTimeMarkers(){
  if(p2mDriveTimeLayer&&map&&map.hasLayer(p2mDriveTimeLayer))map.removeLayer(p2mDriveTimeLayer);
  p2mDriveTimeLayer=null;
 }
-function p2mDriveStepDistance(a,b){
- var rad=Math.PI/180,lat1=a[1]*rad,lat2=b[1]*rad,dlat=lat2-lat1,dlon=(b[0]-a[0])*rad;
- var h=Math.sin(dlat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dlon/2)**2;
- return 12742000*Math.asin(Math.min(1,Math.sqrt(h)));
-}
+function p2mDriveStepDistance(a,b){return P2MRoutingDomain.driveStepDistance(a,b)}
 function p2mDrivePositionAt(coords,fraction){
  if(!coords||!coords.length)return null;
  if(coords.length===1)return coords[0];
@@ -4556,7 +4563,7 @@ function calculateTransitRoute(routeItems){
   var toggle=document.getElementById('routeDetailsToggle');if(toggle){toggle.disabled=!legs.length;toggle.title='Teilstrecken anzeigen';toggle.setAttribute('aria-label','Teilstrecken anzeigen')}var hint=document.getElementById('routeHint');hint.textContent='';hint.style.display='none';updateRouteModeButtons();document.getElementById('routeInfo').style.display='flex';autoZoomLoadedLayers();mapStatus.textContent=''
  }).catch(function(e){document.getElementById('routeInfo').style.display='flex';updateRouteModeButtons();p2mShowRouteFailure('transit')})
 }
-function routeAirDistance(a,b){var A=a._pinLayer.getLatLng(),B=b._pinLayer.getLatLng(),r=Math.PI/180,x=(B.lng-A.lng)*r*Math.cos((A.lat+B.lat)*r/2),y=(B.lat-A.lat)*r;return Math.sqrt(x*x+y*y)*6371000}
+function routeAirDistance(a,b){return P2MRoutingDomain.approximateDistance(P2MRoutingPinAdapter.read(a),P2MRoutingPinAdapter.read(b))}
 function valhallaTripResult(d,routeItems){
  if(!d.trip||!d.trip.legs||!d.trip.legs.length)throw new Error('Keine Route');
  var coords=[],legs=[];d.trip.legs.forEach(function(leg){var c=decodeValhallaPolyline(leg.shape||'');if(coords.length&&c.length)c.shift();coords=coords.concat(c);legs.push({distance:(leg.summary&&leg.summary.length||0)*1000,duration:(leg.summary&&leg.summary.time||0)})});
