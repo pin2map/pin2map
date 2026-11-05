@@ -23,6 +23,8 @@ jobs:
         run: python quality/test_guardrails.py
       - name: Test extracted pure routing domain
         run: python quality/test_routing_domain.py
+      - name: Test Valhalla provider adapter
+        run: python quality/test_valhalla_adapter.py
       - name: Test ADR-007 removal checker
         run: python quality/test_adr007_check.py
       - name: Inspect registered ADR-007 replacements
