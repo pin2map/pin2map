@@ -96,6 +96,27 @@ with sync_playwright() as pw:
             if not mode_result.get("ok"):
                 raise AssertionError(f"{label}: mode-switch interaction failed: {mode_result}")
             print(f"PASS {label}: driving/bicycle mode event handling")
+            # Build a deterministic two-pin map through the real list UI.
+            # Numeric coordinates bypass geocoding. No private JS state is changed.
+            page.locator("#input").fill("# 📍 [Red] QA\\n48.7758, 9.1829 (Stuttgart)\\n48.8566, 2.3522 (Paris)")
+            page.locator("#go").evaluate("(el) => el.click()")
+            page.wait_for_selector(".leaflet-marker-icon", state="attached", timeout=20000)
+            page.wait_for_function("document.querySelectorAll('.leaflet-marker-icon').length >= 2", timeout=20000)
+            markers = page.locator(".leaflet-marker-icon")
+            if markers.count() < 2:
+                raise AssertionError(f"{label}: fixture pins not rendered")
+            markers.nth(0).click(force=True)
+            page.locator("[data-route-start]").first.click(force=True)
+            markers.nth(1).click(force=True)
+            page.locator("[data-route-target]").first.click(force=True)
+            page.wait_for_function("!document.getElementById('routePanelToggle').disabled", timeout=15000)
+            page.locator("#routePanelHide").click(force=True)
+            if "route-panel-hidden" not in (page.locator("#routeInfo").get_attribute("class") or ""):
+                raise AssertionError(f"{label}: routing hide control did not hide dialog")
+            page.locator("#routePanelToggle").click(force=True)
+            if "route-panel-hidden" in (page.locator("#routeInfo").get_attribute("class") or ""):
+                raise AssertionError(f"{label}: routing toggle did not reopen dialog")
+            print(f"PASS {label}: real two-pin routing selection and hide/reopen")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
