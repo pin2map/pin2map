@@ -4586,7 +4586,8 @@ function optimizeRouteOrder(){
   }).catch(function(){routeOptimizeBusy=false;updateRouteOrderButtons();mapStatus.textContent='⚠️ Netzoptimierung nicht verfügbar – feste Reihenfolge bleibt erhalten.';return false})
  }
  /* Auto: ADR-008 domain optimizes plain coordinates; Leaflet access stays in adapter. */
- var ordered=P2MRoutingPinAdapter.optimizeItems(all);
+ var ordered;
+ try{ordered=P2MRoutingPinAdapter.optimizeItems(all)}catch(e){routeOptimizeBusy=false;updateRouteOrderButtons();mapStatus.textContent='⚠️ Routenoptimierung fehlgeschlagen – Reihenfolge bleibt erhalten.';return Promise.resolve(false)}
  var nw=ordered.slice(1,-1),changed=nw.some(function(x,i){return x!==routeWaypoints[i]});routeWaypoints=nw;routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();return Promise.resolve(changed)
 }
 function calculateRoute(){
