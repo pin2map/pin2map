@@ -1,0 +1,55 @@
+name: Quality checks (baseline; NOT release approval)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [qs-setup]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  baseline-quality:
+    name: baseline-quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify quality rules catch deliberate violations
+        run: python quality/test_guardrails.py
+      - name: Test ADR-007 removal checker
+        run: python quality/test_adr007_check.py
+      - name: Inspect registered ADR-007 replacements
+        run: python quality/adr007_check.py
+      - name: Check registered domain modules
+        run: python quality/check_architecture.py
+      - name: Self-test change scope guard
+        run: python quality/test_change_scope.py
+      - name: Block unverified application changes
+        if: github.event_name == 'pull_request'
+        run: python quality/check_change_scope.py
+      - name: Check legacy baseline structure
+        run: python quality/check_baseline.py
+      - name: Compile QA Python scripts before browser setup
+        run: python -m compileall -q quality
+      - name: Install browser test dependencies
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Run Chromium desktop and mobile smoke tests
+        run: python quality/browser_smoke.py
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-smoke-screenshots
+          path: quality-artifacts/
+          if-no-files-found: warn
+      - name: Explicit release limitation
+        run: |
+          echo "Baseline only: browser smoke tests run; no ADR-007/ADR-008 certification or routing regression approval."
+          echo "DO NOT configure this job alone as sufficient production release approval."
