@@ -26,19 +26,29 @@ with sync_playwright() as pw:
             page.screenshot(path=str(out / f"{label}.png"), full_page=True, timeout=20000)
             if not body_text.strip():
                 raise AssertionError(f"{label}: empty body text")
-            if not page.locator("body").is_visible():
-                state = page.locator("body").evaluate("""el => ({
-                    display: getComputedStyle(el).display,
-                    visibility: getComputedStyle(el).visibility,
-                    opacity: getComputedStyle(el).opacity,
-                    rect: {width: el.getBoundingClientRect().width, height: el.getBoundingClientRect().height},
-                    classes: el.className,
-                    htmlClasses: document.documentElement.className
-                })""")
-                raise AssertionError(f"{label}: body not visible; computed state={state}; js_errors={errors[:5]}")
-            print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
+            # Absolutely positioned applications can have a zero-height body.
+            # Require an actual visible descendant with nontrivial viewport overlap.
+            visible = page.evaluate("""() => {
+                const vw = innerWidth, vh = innerHeight;
+                let count = 0, examples = [];
+                for (const el of document.body.querySelectorAll('*')) {
+                    const st = getComputedStyle(el);
+                    if (st.display === 'none' || st.visibility !== 'visible' || Number(st.opacity) === 0) continue;
+                    const r = el.getBoundingClientRect();
+                    const w = Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0));
+                    const h = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+                    if (w >= 30 && h >= 20) {
+                        count++;
+                        if (examples.length < 6) examples.push({tag: el.tagName, id: el.id, width: Math.round(w), height: Math.round(h)});
+                    }
+                }
+                return {count, examples};
+            }""")
+            if visible["count"] < 1:
+                raise AssertionError(f"{label}: no visible app elements with viewport overlap; diagnostics={visible}; js_errors={errors[:5]}")
             if errors:
-                print(f"NOTICE {label}: JS errors observed (not yet release-blocking): {errors[:3]}")
+                raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
+            print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
             page.close()
     finally:
         browser.close()
