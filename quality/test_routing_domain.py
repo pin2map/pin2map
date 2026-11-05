@@ -18,6 +18,13 @@ assert.equal(d.durationLabel(0), '0 min');
 assert.equal(d.airDistanceMeters({lat:48.7758,lng:9.1829},{lat:48.7758,lng:9.1829}),0);
 const metres=d.airDistanceMeters({lat:48.7758,lng:9.1829},{lat:48.7768,lng:9.1840});
 assert.ok(metres > 100 && metres < 200, metres);
+const points=[
+ {lat:0,lng:0}, {lat:0,lng:0.03}, {lat:0,lng:0.01}, {lat:0,lng:0.04}
+];
+assert.deepEqual(d.optimizeWaypointIndices(points),[0,2,1,3]);
+assert.deepEqual(d.optimizeWaypointIndices([{lat:0,lng:0},{lat:0,lng:0.01}]),[0,1]);
+assert.deepEqual(d.optimizeWaypointIndices([{lat:0,lng:0},{lat:0,lng:0.01},{lat:0,lng:0.02}]),[0,1,2]);
+assert.deepEqual(points,[{lat:0,lng:0},{lat:0,lng:0.03},{lat:0,lng:0.01},{lat:0,lng:0.04}]);
 assert.equal(Object.isFrozen(d),true);
 console.log('PASS: pure route domain duration, coordinates, immutability');
 """
