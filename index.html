@@ -4357,7 +4357,18 @@ var p2mRoutingDomain=(function(){
   var y=(b.lat-a.lat)*radians;
   return Math.sqrt(x*x+y*y)*6371000;
  }
- return Object.freeze({durationLabel:durationLabel,airDistanceMeters:airDistanceMeters});
+ function optimizeWaypointIndices(points){
+  var n=points.length,matrix=Array.from({length:n},function(){return Array(n).fill(0)});
+  for(var i=0;i<n;i++)for(var j=0;j<n;j++)matrix[i][j]=i===j?0:airDistanceMeters(points[i],points[j]);
+  var unused=[];for(var q=1;q<n-1;q++)unused.push(q);
+  var order=[0],cur=0;
+  while(unused.length){var bi=0,best=Infinity;for(var k=0;k<unused.length;k++){var dd=matrix[cur][unused[k]];if(dd<best){best=dd;bi=k}}cur=unused.splice(bi,1)[0];order.push(cur)}
+  order.push(n-1);
+  var maxPasses=Math.max(1,(n-2)*(n-2)),pass=0;
+  while(pass++<maxPasses){var bestGain=0,bestA=-1,bestB=-1;for(var a=1;a<order.length-2;a++)for(var b=a+1;b<order.length-1;b++){var before=matrix[order[a-1]][order[a]]+matrix[order[b]][order[b+1]],after=matrix[order[a-1]][order[b]]+matrix[order[a]][order[b+1]],gain=before-after;if(gain>bestGain+0.1){bestGain=gain;bestA=a;bestB=b}}if(bestA<0)break;var rev=order.slice(bestA,bestB+1).reverse();order.splice.apply(order,[bestA,bestB-bestA+1].concat(rev))}
+  return order;
+ }
+ return Object.freeze({durationLabel:durationLabel,airDistanceMeters:airDistanceMeters,optimizeWaypointIndices:optimizeWaypointIndices});
 })();
 function formatRouteDuration(sec){return p2mRoutingDomain.durationLabel(sec)}
 function routeModeIcon(){return routeMode==='bicycle'?'🚴‍♂️':routeMode==='pedestrian'?'🥾':routeMode==='transit'?'🚃':'🚗'}
@@ -4594,9 +4605,7 @@ function optimizeRouteOrder(){
   }).catch(function(){routeOptimizeBusy=false;updateRouteOrderButtons();mapStatus.textContent='⚠️ Netzoptimierung nicht verfügbar – feste Reihenfolge bleibt erhalten.';return false})
  }
  /* Auto: kompakte lokale Voroptimierung; das eigentliche Routing bleibt OSRM. */
- var n=all.length,matrix=Array.from({length:n},function(){return Array(n).fill(0)});for(var i=0;i<n;i++)for(var j=0;j<n;j++)matrix[i][j]=i===j?0:routeAirDistance(all[i],all[j]);
- var unused=[];for(var q=1;q<n-1;q++)unused.push(q);var order=[0],cur=0;while(unused.length){var bi=0,best=Infinity;for(var k=0;k<unused.length;k++){var dd=matrix[cur][unused[k]];if(dd<best){best=dd;bi=k}}cur=unused.splice(bi,1)[0];order.push(cur)}order.push(n-1);
- var maxPasses=Math.max(1,(n-2)*(n-2)),pass=0;while(pass++<maxPasses){var bestGain=0,bestA=-1,bestB=-1;for(var a=1;a<order.length-2;a++)for(var b=a+1;b<order.length-1;b++){var before=matrix[order[a-1]][order[a]]+matrix[order[b]][order[b+1]],after=matrix[order[a-1]][order[b]]+matrix[order[a]][order[b+1]],gain=before-after;if(gain>bestGain+0.1){bestGain=gain;bestA=a;bestB=b}}if(bestA<0)break;var rev=order.slice(bestA,bestB+1).reverse();order.splice.apply(order,[bestA,bestB-bestA+1].concat(rev))}
+ var order=p2mRoutingDomain.optimizeWaypointIndices(all.map(function(it){var ll=it._pinLayer.getLatLng();return {lat:ll.lat,lng:ll.lng}}));
  var nw=order.slice(1,-1).map(function(i){return all[i]}),changed=nw.some(function(x,i){return x!==routeWaypoints[i]});routeWaypoints=nw;routeOptimizeBusy=false;updateRouteOrderButtons();renderRouteEditor();updateAppleMapsButton();return Promise.resolve(changed)
 }
 function calculateRoute(){
