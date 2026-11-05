@@ -98,7 +98,8 @@ with sync_playwright() as pw:
             print(f"PASS {label}: driving/bicycle mode event handling")
             # Build a deterministic two-pin map through the real list UI.
             # Numeric coordinates bypass geocoding. No private JS state is changed.
-            page.locator("#back").click(force=True)\n            page.locator("#input").fill("# 📍 [Red] QA\\n48.7758, 9.1829 (Stuttgart)\\n48.8566, 2.3522 (Paris)")
+            page.locator("#back").click(force=True)
+            page.locator("#input").fill("# 📍 [Red] QA\\n48.7758, 9.1829 (Stuttgart)\\n48.8566, 2.3522 (Paris)")
             page.locator("#go").evaluate("(el) => el.click()")
             page.wait_for_selector(".leaflet-marker-icon", state="attached", timeout=20000)
             page.wait_for_function("document.querySelectorAll('.leaflet-marker-icon').length >= 2", timeout=20000)
