@@ -7,6 +7,10 @@ on:
       - 'src/routing/routing-view.js'
       - 'src/routing/routing-view.css'
       - 'tests/routing-view.test.js'
+      - 'tests/routing-shell-integration.test.js'
+      - 'src/routing/routing-shell.js'
+      - 'src/routing/routing-shell.css'
+      - 'index.html'
       - '.github/workflows/routing-view-tests.yml'
   workflow_dispatch:
 jobs:
@@ -21,6 +25,6 @@ jobs:
         with:
           node-version: '22'
       - name: Syntax check
-        run: node --check src/routing/routing-view.js && node --check tests/routing-view.test.js
+        run: node --check src/routing/routing-view.js && node --check tests/routing-view.test.js && node --check src/routing/routing-shell.js && node --check tests/routing-shell-integration.test.js
       - name: Run routing view unit tests
-        run: node --test tests/routing-view.test.js
+        run: node --test tests/routing-view.test.js tests/routing-shell-integration.test.js
