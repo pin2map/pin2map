@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "project": "pin2map",
+  "protected_paths": [
+    "quality/",
+    "tests/",
+    ".github/workflows/"
+  ],
+  "architecture": {
+    "adr007": {
+      "require_removal_inventory_for_frontend_replacement": true,
+      "forbid_hidden_legacy_ui": true,
+      "forbid_compatibility_bridges": true
+    },
+    "adr008": {
+      "domain_forbidden_patterns": [
+        "document\\s*\\.",
+        "window\\s*\\.\\s*document",
+        "getElementById\\s*\\(",
+        "querySelector(All)?\\s*\\(",
+        "\\bL\\s*\\.\\s*(map|polyline|marker|geoJSON)\\s*\\("
+      ]
+    }
+  },
+  "release": {
+    "browser_tests_required_for_ui_changes": true,
+    "manual_approval_required": true,
+    "missing_test_blocks_release": true
+  }
+}
