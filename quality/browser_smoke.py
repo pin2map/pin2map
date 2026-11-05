@@ -18,6 +18,13 @@ with sync_playwright() as pw:
         for label, width, height in [("desktop", 1280, 800), ("mobile", 390, 844)]:
             page = browser.new_page(viewport={"width": width, "height": height}, device_scale_factor=1)
             errors = []
+            # Deterministic OSRM fixture: no external routing dependency.
+            # Preserve the real fetch -> parse -> render application path.
+            osrm_calls = []
+            def mock_osrm(route):
+                osrm_calls.append(route.request.url)
+                route.fulfill(status=200, content_type="application/json", body='{"code":"Ok","routes":[{"distance":180,"duration":45,"geometry":{"type":"LineString","coordinates":[[9.1829,48.7758],[9.1840,48.7768]]},"legs":[{"distance":180,"duration":45,"steps":[{"geometry":{"coordinates":[[9.1829,48.7758],[9.1840,48.7768]]}}]}]}]}')
+            page.route("**/route/v1/driving/**", mock_osrm)
             page.on("pageerror", lambda error: errors.append(str(error)))
             response = page.goto(url, wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(2500)
@@ -128,6 +135,16 @@ with sync_playwright() as pw:
             if panel_result != {"hidden": True, "pressedHidden": "false", "reopened": True, "pressedOpen": "true"}:
                 raise AssertionError(f"{label}: routing panel click contract failed: {panel_result}")
             print(f"PASS {label}: real two-pin routing selection and hide/reopen")
+            page.wait_for_function("""() => {
+                const summary = document.getElementById('routeSummary');
+                return summary && summary.textContent.includes('0,2 km')
+                    && document.querySelectorAll('.leaflet-overlay-pane path').length > 0;
+            }""", timeout=15000)
+            if len(osrm_calls) != 1:
+                raise AssertionError(f"{label}: expected one OSRM request, got {len(osrm_calls)}")
+            if page.locator("#routeLegs .route-leg").count() != 1:
+                raise AssertionError(f"{label}: expected one rendered route leg")
+            print(f"PASS {label}: mocked OSRM route fetched, drawn and summarized")
             if errors:
                 raise AssertionError(f"{label}: uncaught JavaScript errors: {errors[:5]}")
             print(f"PASS {label}: browser loaded; title={title!r}; text_chars={len(body_text)}; js_errors={len(errors)}")
